@@ -5,3 +5,5 @@ describe Rubyplot::Artist do
     
   end
 end
+
+
