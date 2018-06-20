@@ -9,10 +9,18 @@ describe Rubyplot do
   context "#line" do  
     it "creates a simple line graph" do
       a = Rubyplot.new
-      a.line @x1, @y1
+      a.line @x1, @y1 
       a.save "file_name.bmp"
 
       expect(equal_files("file_name.bmp", "line_graph.bmp")).to eq(true)
+    end
+
+    it "creates a line graph with points marked" do
+      a = Rubyplot.new
+      a.line @x1, @y1, points: true
+      a.save "file_name.bmp"
+
+      expect(equal_files("file_name.bmp", "line_points_graph.bmp")).to eq(true)
     end
   end
 
