@@ -42,7 +42,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/line_very_small_test.png')
   end
 
-  it 'hang value test' do
+  it 'Hang value test' do
     plot = Rubyplot::Line.new(320)
     plot.title = 'Hang Value Graph Test'
     plot.data('test', [0, 0, 100])
