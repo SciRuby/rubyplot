@@ -1,5 +1,4 @@
 require 'rubyplot'
-
 def random_lines
   plot = Rubyplot::Line.new
   plot.title = 'A Line Graph'

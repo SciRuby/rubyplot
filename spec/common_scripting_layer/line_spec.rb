@@ -1,6 +1,8 @@
 require 'spec_helper'
-describe 'Graph' do
-  it 'Make a line plot of a graph' do
+describe :Graph do
+  # Matplotlib reference -> https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D
+
+  it 'makes a line plot of a graph' do
     random_lines
     plot = Rubyplot::Line.new
     plot.title = 'A Line Graph'
@@ -11,13 +13,13 @@ describe 'Graph' do
     # Data inputted and normalized like the usual cases.
     plot.data(:Marco, [20, 23, 19, 8])
     plot.data(:John, [1, 53, 76, 18])
-    # Starting the ultimate Write script of the whole thinplot.
+    # Starting the Write script of the plot.
     plot.write('spec/reference_images/line_test_1.png')
 
     expect(compare_with_reference?('line.png', 'line_test_1.png', 10)).to eq(true)
   end
 
-  it 'Fails to match with the reference image' do
+  it 'fails to match with the reference image as the data values are different' do
     plot = Rubyplot::Line.new
     plot.title = 'A Line Graph'
     plot.labels = {
@@ -27,12 +29,13 @@ describe 'Graph' do
     # Data inputted and normalized like the usual cases.
     plot.data(:Marco, [20, 23, 19, 8])
     plot.data(:John, [1, 53, 76, 19])
-    # Starting the ultimate Write script of the whole thinplot.
+    # Notice that the data values for John label is different from previous spec
+
     plot.write('spec/reference_images/line_test_2.png')
     expect(compare_with_reference?('line.png', 'line_test_2.png', 10)).to eq(false)
   end
 
-  it 'Tests Very Small Plot' do
+  it 'makes a line plot of small size' do
     setup_data
     plot = Rubyplot::Line.new(200)
     plot.title = 'Very Small Line Chart 200px'
@@ -42,7 +45,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/line_very_small_test.png')
   end
 
-  it 'Hang value test' do
+  it 'makes a graph with zero datapoints to test gometry code' do
     plot = Rubyplot::Line.new(320)
     plot.title = 'Hang Value Graph Test'
     plot.data('test', [0, 0, 100])
@@ -50,7 +53,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/line_hang_value_test.png')
   end
 
-  it 'test_line_small_values' do
+  it 'tests line chart for small value datapoints' do
     @datasets = [
       [:small, [0.1, 0.14356, 0.0, 0.5674839, 0.456]],
       [:small2, [0.2, 0.3, 0.1, 0.05, 0.9]]
@@ -71,7 +74,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/line_small_values_small_plot_test.png')
   end
 
-  it 'test_line_starts_with_zero' do
+  it 'tests line chart that starts with zero data point' do
     @datasets = [
       [:first0, [0, 5, 10, 8, 18]],
       [:normal, [1, 2, 3, 4, 5]]
@@ -92,7 +95,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/line_small_value_small_plot_test.png')
   end
 
-  it 'test_line_large_values' do
+  it 'tests line charts with large data values' do
     @datasets = [
       [:large, [100_005, 35_000, 28_000, 27_000]],
       [:large2, [35_000, 28_000, 27_000, 100_005]],

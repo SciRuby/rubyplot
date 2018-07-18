@@ -1,5 +1,5 @@
-describe 'Bezier' do
-  it 'Creates a Bezier graph' do
+describe :Bezier do
+  it 'creates a Bezier graph' do
     # Just make a very simple plot that just makes a series plot
     plot = Rubyplot::Bezier.new
     plot.data(:series_numbers, [-1, 10, 24, 39])
@@ -8,7 +8,7 @@ describe 'Bezier' do
     expect(compare_with_reference?('bezier.png', 'bezier-test-1.png', 10)).to eq(true)
   end
 
-  it 'Colors the Bezier draw area inside the Plot' do
+  it 'colors the Bezier draw area inside the Plot' do
     # Just make a very simple plot that just makes a series plot
     plot = Rubyplot::Bezier.new
     plot.data(:series_numbers, [-1, 10, 24, 39])

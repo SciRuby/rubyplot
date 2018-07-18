@@ -1,4 +1,4 @@
-describe 'Error Bars!' do
+describe :ErrorBars do
   before do
     @open = [10, 15, 24, 18]
     @high = [20, 25, 30, 18]
@@ -6,7 +6,7 @@ describe 'Error Bars!' do
     @close = [15, 24, 18, 4]
   end
 
-  it 'Creates an error bars plot' do
+  it 'creates an error bars plot' do
     plot = Rubyplot::ErrorBars.new
     plot.data(@open, @high, @low, @close)
     plot.write('spec/reference_images/error_bars_test_1.png')

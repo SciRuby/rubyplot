@@ -1,6 +1,6 @@
 require 'spec_helper'
-describe 'Graph' do
-  it 'Makes a dot plot of a graph' do
+describe :dot do
+  it 'makes a dot plot' do
     random_dots
     plot = Rubyplot::Dot.new
     plot.labels = {
@@ -18,7 +18,7 @@ describe 'Graph' do
     expect(compare_with_reference?('dot.png', 'dot_test_1.png', 10)).to eq(true)
   end
 
-  it 'Fails to match with the reference image' do
+  it 'fails to match with the reference image as the labels are slightly different' do
     plot = Rubyplot::Dot.new
     plot.labels = {
       0 => '5/6',
@@ -34,20 +34,20 @@ describe 'Graph' do
     expect(compare_with_reference?('dot.png', 'dot_test_2.png', 10)).to eq(false)
   end
 
-  it 'Test titles' do
+  it 'test titles of a dot graph' do
     plot = setup_basic_dot_graph(400)
     plot.title = 'Base Title'
     plot.write('spec/reference_images/dot_title_test.png')
   end
 
-  it 'test_set_marker_count' do
+  it 'test set_marker_count' do
     plot = setup_basic_dot_graph(400)
     plot.title = 'Set marker'
     plot.marker_count = 10
     plot.write('spec/reference_images/dot_set_marker_test.png')
   end
 
-  it 'test_x_y_labels' do
+  it 'tests x_y_labels' do
     plot = setup_basic_dot_graph(400)
     plot.title = 'X Y Labels'
     plot.x_axis_label = 'Score (%)'
@@ -55,7 +55,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/dot_x_y_labels_test.png')
   end
 
-  it 'test_wide_graph' do
+  it 'tests wide_graph' do
     plot = setup_basic_dot_graph('800x400')
     plot.title = 'Wide Graph'
     plot.write('spec/reference_images/dot_wide_graph_test.png')
@@ -65,7 +65,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/dot_wide_graph_small_plot_test.png')
   end
 
-  it 'test_tall_graph' do
+  it 'tests tall_graph' do
     plot = setup_basic_dot_graph('400x600')
     plot.title = 'Tall Graph'
     plot.write('spec/reference_images/dot_tall_graph_test.png')
@@ -87,7 +87,7 @@ describe 'Graph' do
     plot.write('spec/reference_images/dot_pos_neplot_test.png')
   end
 
-  it 'test_nearly_zero' do
+  it 'tests nearly_zero' do
     plot = Rubyplot::Dot.new
     plot.title = 'Nearly Zero Graph'
     plot.labels = {

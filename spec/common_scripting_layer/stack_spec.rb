@@ -11,6 +11,7 @@ describe 'Stacked Area' do
       2 => '5/24'
     }
   end
+  # Matplotlib reference -> https://matplotlib.org/gallery/lines_bars_and_markers/stackplot_demo.html#sphx-glr-gallery-lines-bars-and-markers-stackplot-demo-py
 
   it 'creates a Stacked Area graph' do
     plot = Rubyplot::StackedArea.new
@@ -27,7 +28,10 @@ describe 'Stacked Area' do
     plot.write('spec/reference_images/stacked_area_test_1.png')
   end
 
-  it 'Tests Many random datapoints' do
+  it 'creates stacked are graph with preset colors' do
+    # This test performs an equality check that fails because the colors in
+    # stacked_area_test_1.png and stacked_area_test_2.png are different
+    # even though they are the same because of the data and geometry.
     plot = Rubyplot::StackedArea.new
     plot.title = 'Visual Stacked Area Graph Test'
     plot.labels = {

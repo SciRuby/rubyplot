@@ -9,8 +9,9 @@ describe 'Pie' do
       [:Australia, [90]]
     ]
   end
+  # Matplotlib reference -> https://matplotlib.org/api/_as_gen/matplotlib.pyplot.pie.html?highlight=pie#matplotlib.pyplot.pie
 
-  it 'Sets up a basic reference image for histogram with random numbers' do
+  it 'sets up a basic reference image for histogram with random numbers' do
     plot = Rubyplot::Pie.new
     plot.title = 'Visual Pie Graph Test'
     @datasets.each do |data|
@@ -21,7 +22,7 @@ describe 'Pie' do
     expect(compare_with_reference?('pie.png', 'pie_test_1.png', 10)).to eq(true)
   end
 
-  it 'test pie graph nearly equal' do
+  it 'makes a pie chart nearly equal proportions' do
     plot = Rubyplot::Pie.new
     plot.title = 'Pie Graph Nearly Equal'
 
@@ -33,7 +34,7 @@ describe 'Pie' do
     plot.write('test/output/pie_nearly_equal.png')
   end
 
-  it 'pie graph equal' do
+  it 'makes a pie chart with equal proportions' do
     plot = Rubyplot::Pie.new
     plot.title = 'Pie Graph Equal'
 
@@ -43,7 +44,7 @@ describe 'Pie' do
     plot.write('test/output/pie_equal.png')
   end
 
-  it 'test pie graph zero' do
+  it 'makes a pie graph with zero as a datapoint' do
     plot = Rubyplot::Pie.new
     plot.title = 'Pie Graph One Zero'
 

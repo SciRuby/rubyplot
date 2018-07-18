@@ -1,6 +1,6 @@
 require 'spec_helper'
-describe 'Bar' do
-  it 'Sets up a basic reference image for bar graph with random numbers' do
+describe :Bar do
+  it 'sets up a basic reference image for bar graph with random numbers' do
     random_bar_graph
     plot = Rubyplot::Bar.new(600)
     plot.title = 'Random Bar Numbers'
@@ -11,7 +11,7 @@ describe 'Bar' do
     expect(compare_with_reference?('bar.png', 'bar_test_1.png', 10)).to eq(true)
   end
 
-  it 'Fails to match with the reference image' do
+  it 'fails to match with the reference image as the data values are slightly different' do
     random_bar_graph
     plot = Rubyplot::Bar.new(600)
     plot.title = 'Random Bar Numbers'
@@ -23,7 +23,7 @@ describe 'Bar' do
     expect(compare_with_reference?('bar.png', 'bar_test_2.png', 10)).to eq(false)
   end
 
-  it 'Bar graph with Title Margin' do
+  it 'constucts a bar graph with title margin' do
     # This margin width separates the actual plot from the title.
     bar_graph_with_title_margin
     plot = Rubyplot::Bar.new(600)
@@ -37,7 +37,7 @@ describe 'Bar' do
     expect(compare_with_reference?('bar_title.png', 'bar_title_test.png', 10)).to eq(true)
   end
 
-  it 'Geometry adjustment test for large numbers' do
+  it 'tests the bar graph geometry for large numbers' do
     # Checks if the graph values don't go off the chart on setting very high values.
     plot = Rubyplot::Bar.new(600)
     plot.title = 'Large Number'
@@ -46,7 +46,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_geometry_test.png')
   end
 
-  it 'Sets X_Y_labels for the Graphs' do
+  it 'sets X_Y_labels for a graph' do
     plot = setup_basic_bar_graph(400)
     plot.title = 'X Y Labels'
     plot.x_axis_label = 'Score (%)'
@@ -54,7 +54,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_x_y_labels_test.png')
   end
 
-  it 'Makes Wide Graphs' do
+  it 'makes wide graph with dimensions preset by users' do
     plot = setup_basic_bar_graph('800x400')
     plot.title = 'Wide Graph'
     plot.write('spec/reference_images/bar_wide_graph_test.png')
@@ -64,7 +64,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_wide_graph_small_test.png')
   end
 
-  it 'Makes Tall Graphs' do
+  it 'makes a tall graph' do
     plot = setup_basic_bar_graph('400x600')
     plot.title = 'Tall Graph'
     plot.write('spec/reference_images/bar_tall_graph_test.png')
@@ -74,7 +74,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_tall_graph_small_test.png')
   end
 
-  it 'Tests Both Positive and Negative Values' do
+  it 'makes a bar graph with both positive and negative values' do
     plot = Rubyplot::Bar.new
     plot.title = 'Pos/Neg Bar Graph Test'
     plot.labels = {
@@ -89,7 +89,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_pos_neplot_test.png')
   end
 
-  it 'Tests Negative Values' do
+  it 'makes a bar graph with negative values only' do
     plot = Rubyplot::Bar.new
     plot.title = 'Pos/Neg Bar Graph Test'
     plot.labels = {
@@ -104,7 +104,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_neg_plot_test_test.png')
   end
 
-  it 'Test Min Max Ranges' do
+  it 'tests min max ranges' do
     # This plot has a preset minimum and maximum range for the y axis.
     plot = Rubyplot::Bar.new
     plot.title = 'Nearly Zero Graph'
@@ -123,7 +123,7 @@ describe 'Bar' do
     plot.write('spec/reference_images/bar_nearly_zero_max_10_test.png')
   end
 
-  it 'Test Legend Overlap' do
+  it 'tests legend overlap of a bar graph' do
     # This test has too many legends and some of those have too much text.
     # With this test we want to show that having too many legends is not an issue
     # and the legends self adjust in the plot.

@@ -6,6 +6,7 @@ describe 'Stacked Bar' do
       [:Train, [22, 29, 35, 38]]
     ]
   end
+  # Matplotlib reference -> https://matplotlib.org/gallery/lines_bars_and_markers/bar_stacked.html#sphx-glr-gallery-lines-bars-and-markers-bar-stacked-py
 
   it 'creates a Stacked Bar graph' do
     plot = Rubyplot::StackedBar.new
@@ -20,11 +21,12 @@ describe 'Stacked Bar' do
       plot.data(data[0], data[1])
     end
     plot.write('spec/reference_images/stacked_bar_test_1.png')
+    expect(compare_with_reference?('stacked_bar.png', 'stacked_bar_test_1.png', 10)).to eq(true)
   end
 
-  it 'Tests Many random datapoints' do
+  it 'creates a Stacked Bar graph with preset size from the user' do
     plot = Rubyplot::StackedBar.new(400)
-    plot.title = 'Visual Stacked Bar Graph Test'
+    plot.title = 'Stacked Bar'
     plot.labels = {
       0 => '5/6',
       1 => '5/15',

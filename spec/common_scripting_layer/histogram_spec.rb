@@ -1,4 +1,4 @@
-context 'Histogram' do
+context :Histogram do
   it 'Sets up a basic reference image for histogram with random numbers' do
     plot = Rubyplot::Histogram.new(600)
     plot.title = 'Random Histogram Numbers'
@@ -9,7 +9,7 @@ context 'Histogram' do
     expect(compare_with_reference?('histogram.png', 'histogram_test_1.png', 10)).to eq(true)
   end
 
-  it 'Fails to match with the reference image' do
+  it 'fails to match with the reference image as the data values are different' do
     plot = Rubyplot::Histogram.new(600)
     plot.title = 'Random Histogram Numbers'
     plot.marker_count = 8
@@ -20,7 +20,7 @@ context 'Histogram' do
     expect(compare_with_reference?('histogram.png', 'histogram_test_2.png', 10)).to eq(false)
   end
 
-  it 'Geometry adjustment test for large numbers' do
+  it 'makes histogram with large datapoints' do
     # Checks if the graph values don't go off the chart on setting very high values.
     plot = Rubyplot::Histogram.new(600)
     plot.title = 'Large Number'
@@ -30,7 +30,7 @@ context 'Histogram' do
     plot.write('spec/reference_images/histogram_geometry_test.png')
   end
 
-  it 'Tests Setting X Axis label values also' do
+  it 'tests setting x axis labels for histogram' do
     plot = Rubyplot::Histogram.new
     plot.title = 'Pos/Neg Bar Graph Test'
     plot.labels = {
