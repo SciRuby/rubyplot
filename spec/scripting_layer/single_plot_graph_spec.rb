@@ -43,7 +43,7 @@ describe Rubyplot::Figure do
     end
   end
 
-  context '#scatter' do
+  context '#scatter!', focus: true do
     it 'creates a simple scatter graph' do
       a = Rubyplot::Figure.new
       a.scatter! @x1, @y1
