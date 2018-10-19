@@ -46,7 +46,9 @@ describe Rubyplot::Figure do
   context '#scatter!', focus: true do
     it 'creates a simple scatter graph' do
       a = Rubyplot::Figure.new
-      a.scatter! @x1, @y1
+      a.scatter! do |p|
+        p.data @x1, @y1
+      end
       a.save 'spec/reference_images/file_name.bmp'
 
       expect(compare_with_reference?('file_name.bmp', 'single_plot_graph/' \

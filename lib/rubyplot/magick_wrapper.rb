@@ -1,4 +1,7 @@
-require 'magick_wrapper/artist'
-require 'magick_wrapper/themes'
+require 'rmagick'
+
+require_relative 'magick_wrapper/artist'
+require_relative 'magick_wrapper/themes'
+require_relative 'magick_wrapper/plot'
 
 

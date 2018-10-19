@@ -1,16 +1,17 @@
-require 'magick/draw'
+require_relative 'magick/draw'
 
-require 'artist/constants'
-require 'artist/attributes'
-require 'artist/geometry'
-require 'artist/math_methods'
+require_relative 'artist/constants'
+require_relative 'artist/attributes'
+require_relative 'artist/geometry'
+require_relative 'artist/math_methods'
 
 module Rubyplot
   module MagickWrapper
     class Artist
-      include Artist::MagickWrapper::Constants
-      include Artist::MagickWrapper::Attributes
-      include Artist::MagickWrapper::MathMethods
+      include Constants
+      include Attributes
+      include MathMethods
+      include Magick
       
       # If one numerical argument is given, the graph is drawn at 4/3 ratio
       # according to the given width (800 results in 800x600, 400 gives 400x300,
@@ -137,7 +138,7 @@ module Rubyplot
 
       # Resets the themes to defaults.
       def reset_themes
-        @d = Draw.new
+        @d = Magick::Draw.new
         # Scale down from defaut scale to scale used to calculate drawing.
         @d = @d.scale(@scale, @scale)
       end
