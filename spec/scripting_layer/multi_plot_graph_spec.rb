@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Rubyplot::Figure do
+describe Rubyplot::SPI do
   before do
     @x1 = [-10, 0, 5, 28]
     @y1 = [1, 2, 3, 4]
@@ -19,7 +19,7 @@ describe Rubyplot::Figure do
       @y2 = [10, 20, -40]
     end
     it 'creates a line and scatter graph' do
-      a = Rubyplot::Figure.new
+      a = Rubyplot::SPI.new
       a.title = 'My cool graph'
       a.line! @x1, @y1
       a.scatter! @x2, @y2
