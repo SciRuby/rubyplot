@@ -62,7 +62,6 @@ module  Rubyplot
           @labels = {}
 
           super
-
           # Translate our values so that we can use the base methods for drawing
           # the standard chart stuff
           @geometry.column_count = @x_spread
@@ -97,11 +96,6 @@ module  Rubyplot
         # x_data_points.length != y_data_points.length::
         #   Error means that the x and y axis point arrays do not match in length
         #
-        # ==== Examples
-        # g = Rubyplot::Scatter.new
-        # g.data(:apples, [1,2,3], [3,2,1])
-        # g.data('oranges', [1,1,1], [2,3,4])
-        # g.data('bitter_melon', [3,5,6], [6,7,8], '#000000')
         #
         def data(x_data_points = [], y_data_points = [], label: :default, color: :default)
           # Call the existing data routine for the y axis data

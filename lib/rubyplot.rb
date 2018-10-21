@@ -3,6 +3,7 @@ require 'rubyplot/version'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/axes'
+require 'rubyplot/spi'
 
 require 'rubyplot/magick_wrapper'
 

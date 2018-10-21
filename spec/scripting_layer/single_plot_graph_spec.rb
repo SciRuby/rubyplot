@@ -44,7 +44,7 @@ describe Rubyplot::SPI do
     end
   end
 
-  context '#scatter!', focus: true do
+  context '#scatter!' do
     it 'creates a simple scatter graph' do
       a = Rubyplot::SPI.new
       a.scatter! do |p|

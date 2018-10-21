@@ -42,7 +42,7 @@ module Rubyplot
       # Subclasses can override this, call super, then set values separately.
       #
       # This makes it possible to set defaults in a subclass but still allow
-      # developers to change this values in their program.
+      # developers to change the values in their program.
       def initialize_variables
         # Internal for calculations
         @data = []
@@ -73,20 +73,21 @@ module Rubyplot
         @plot_colors = []
       end
 
-      # Parameters are an array where the first element is the name of the dataset
-      # and the value is an array of values to plot.
-      #
-      # Can be called multiple times with different datasets for a multi-valued
-      # graph.
-      #
-      # Example:
-      #   data("Arafat", [95, 45, 78, 89, 88, 76])
+      def label= label
+        
+      end
+
+      def color= color
+        
+      end
+
       def data(data_points = [], label: :default, color: :default)
         name = (label == :default) ? ' ' : label.to_s
         data_points = Array(data_points) # make sure it's an array
         # TODO: Adding an empty color array which can be developed later
         # to make graphs super customizable with regards to coloring of
         # individual data points.
+
         @data << [name, data_points, color]
         # Set column count if this is larger than previous column counts
         @geometry.column_count = data_points.length > @geometry.column_count ?
@@ -273,7 +274,7 @@ module Rubyplot
 
       # Draw the optional labels for the x axis and y axis.
       def draw_axis_labels!
-        unless @geometry.x_axis_label .nil?
+        unless @geometry.x_axis_label.nil?
           # X Axis
           # Centered vertically and horizontally by setting the
           # height to 1.0 and the width to the width of the graph.
@@ -343,9 +344,9 @@ module Rubyplot
         end
 
         current_x_offset = center(sum(label_widths.first))
-        current_y_offset = @geometry.legend_at_bottom ? @graph_height + title_margin : (@geometry.hide_title ?
-                                                                                          @geometry.top_margin + title_margin :
-                                                                                          @geometry.top_margin + title_margin + @title_caps_height)
+        current_y_offset = @geometry.legend_at_bottom ? @graph_height + title_margin : (
+          @geometry.hide_title ? @geometry.top_margin + title_margin :
+            @geometry.top_margin + title_margin + @title_caps_height)
 
         @legend_labels.each_with_index do |legend_label, _index|
           # Draw label
