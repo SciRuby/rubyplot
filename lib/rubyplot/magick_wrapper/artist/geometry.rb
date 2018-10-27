@@ -127,6 +127,7 @@ module Rubyplot
           @y_axis_increment = nil
 
           @x_axis_increment = nil
+          # FIXME: refactor to reflect the @data in Artist.
           @norm_data = nil
 
           @additional_line_values = []

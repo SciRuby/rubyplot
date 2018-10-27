@@ -6,14 +6,15 @@ module Rubyplot
         # TODO: Add spec for this method.
         def normalize
           @geometry.norm_data = []
-          @data.each do |data_row|
+          #@data.each do |data_row|
+          data_row = @data
             norm_data_points = []
-            data_row[DATA_VALUES_INDEX].each do |data_point|
+            data_row[:y_values].each do |data_point|
               norm_data_points << ((data_point.to_f - @geometry.minimum_value.to_f) / @spread)
               # Add support for nil values in data etc.
             end
-            @geometry.norm_data << [data_row[DATA_LABEL_INDEX], norm_data_points]
-          end
+            @geometry.norm_data << [data_row[:label], norm_data_points]
+          #end
         end
 
         def clip_value_if_greater_than(value, max_value) # :nodoc:
@@ -67,7 +68,11 @@ module Rubyplot
         # correctly in the drawn graph.
         def sort_norm_data
           @geometry.norm_data =
-            @geometry.norm_data.sort_by { |a| -a[DATA_VALUES_INDEX].inject(0) { |sum, num| sum + num.to_f } }
+            @geometry.norm_data.sort_by { |a|
+            -a[DATA_VALUES_INDEX].inject(0) { |sum, num|
+              sum + num.to_f
+            }
+          }
         end
 
         # Returns the height of the capital letter 'X' for the current font and

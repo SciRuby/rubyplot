@@ -5,7 +5,7 @@ module Rubyplot
                   :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
                   :title_shift, :title
 
-    attr_reader :figure
+    attr_reader :figure, :plots
 
     def initialize
       @x_title = ''
@@ -23,12 +23,20 @@ module Rubyplot
       @bounding_box = true
       @x_axis_padding = :default
       @y_axis_padding = :default
+      @plots = []
     end
 
     def scatter! *args, &block
       plot = with_backend :scatter, *args
       yield(plot) if block_given?
+      @plots << plot
     end
+
+    def write file_name
+      @plots[0].write file_name
+    end
+
+    private
 
     def with_backend plot_type, *args
       plot_name = plot_type.to_s.capitalize

@@ -53,7 +53,7 @@ module  Rubyplot
         #
         # g = Rubyplot::Scatter.new
         #
-        def initialize
+        def initialize(*)
           super
           @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
         end
@@ -102,8 +102,7 @@ module  Rubyplot
           super(y_data_points, label: label, color: color)
 
           # append the x data to the last entry that was just added in the @data member
-          last_elem = @data.length - 1
-          @data[last_elem] << x_data_points
+          @data[:x_values] = x_data_points
 
           if @geometry.maximum_x_value.nil? && @geometry.minimum_x_value.nil?
             @geometry.maximum_x_value = @geometry.minimum_x_value = x_data_points.first
@@ -121,26 +120,26 @@ module  Rubyplot
           @x_spread = @x_spread > 0 ? @x_spread : 1
         end
 
+        # FIXME: eventually move this normalization to Axes.
         def normalize(force = nil)
           if @geometry.norm_data.nil? || force
             @geometry.norm_data = []
             return unless @geometry.has_data
 
-            @data.each do |data_row|
-              norm_data_points = [data_row[DATA_LABEL_INDEX]]
-              norm_data_points << data_row[DATA_VALUES_INDEX].map do |r|
+            #           @data.each do |data_row|
+            data_row = @data
+              norm_data_points = [data_row[:label]]
+              norm_data_points << data_row[:y_values].map do |r|
                 (r.to_f - @geometry.minimum_value.to_f) / @spread
               end
 
-              norm_data_points << data_row[DATA_COLOR_INDEX]
-              norm_data_points << data_row[DATA_VALUES_X_INDEX].map do |r|
+              norm_data_points << data_row[:color]
+              norm_data_points << data_row[:x_values].map do |r|
                 (r.to_f - @geometry.minimum_x_value.to_f) / @x_spread
               end
               @geometry.norm_data << norm_data_points
             end
-          end
-          # ~ @norm_y_baseline = (@geometry.baseline_y_value.to_f / @geometry.maximum_value.to_f) if @geometry.baseline_y_value
-          # ~ @norm_x_baseline = (@geometry.baseline_x_value.to_f / @geometry.maximum_x_value.to_f) if @geometry.baseline_x_value
+  #        end
         end
 
         def draw
@@ -148,7 +147,8 @@ module  Rubyplot
           return unless @geometry.has_data
 
           # Check to see if more than one datapoint was given. NaN can result otherwise.
-          @x_increment = @geometry.column_count > 1 ? (@graph_width / (@geometry.column_count - 1).to_f) : @graph_width
+          @x_increment = @geometry.column_count > 1 ?
+                           (@graph_width / (@geometry.column_count - 1).to_f) : @graph_width
 
           @geometry.norm_data.each_with_index do |data_row, row_num|
             data_row[DATA_VALUES_INDEX].each_with_index do |data_point, index|

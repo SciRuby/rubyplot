@@ -5,6 +5,9 @@ require_relative 'artist/attributes'
 require_relative 'artist/geometry'
 require_relative 'artist/math_methods'
 
+# FIXME: formerly the scatter could take multiple 'data' calls but now takes only
+# one.
+
 module Rubyplot
   module MagickWrapper
     class Artist
@@ -37,6 +40,14 @@ module Rubyplot
         self.theme = Themes::CLASSIC_WHITE
       end
 
+      def label= label
+        @data[:label] = label
+      end
+
+      def color= color
+        @data[:color] = color
+      end
+
       # Set instance variables for this object.
       #
       # Subclasses can override this, call super, then set values separately.
@@ -45,7 +56,12 @@ module Rubyplot
       # developers to change the values in their program.
       def initialize_variables
         # Internal for calculations
-        @data = []
+        # FIXME: right now uses array of hashes for storing data. maybe
+        # simply use multiple axes objects later?
+        @data = {
+          label: :default,
+          color: :default
+        }
 
         @raw_rows = 800.0 * (@rows / @columns)
         @labels = {}
@@ -73,22 +89,13 @@ module Rubyplot
         @plot_colors = []
       end
 
-      def label= label
-        
-      end
-
-      def color= color
-        
-      end
-
       def data(data_points = [], label: :default, color: :default)
         name = (label == :default) ? ' ' : label.to_s
         data_points = Array(data_points) # make sure it's an array
         # TODO: Adding an empty color array which can be developed later
         # to make graphs super customizable with regards to coloring of
         # individual data points.
-
-        @data << [name, data_points, color]
+        @data[:y_values] = data_points
         # Set column count if this is larger than previous column counts
         @geometry.column_count = data_points.length > @geometry.column_count ?
                                    data_points.length : @geometry.column_count
@@ -153,13 +160,13 @@ module Rubyplot
       # the colors for data labels if user doesn't specify the colors for data labels.
       def construct_colors_array
         return unless @plot_colors.empty?
-        0.upto(@geometry.norm_data.size - 1) do |i|
-          if (@data[i][DATA_COLOR_INDEX] == :default)
+        # 0.upto(@geometry.norm_data.size - 1) do |i|
+          if (@data[:color] == :default)
             @plot_colors.push(@geometry.theme_options[:label_colors][i])
           else
-            @plot_colors.push(Rubyplot::Color::COLOR_INDEX[@data[i][DATA_COLOR_INDEX]])
+            @plot_colors.push(Rubyplot::Color::COLOR_INDEX[@data[:color]])
           end
-        end
+        # end
       end
 
       # Sets the colors for the data labels of the plot.
@@ -324,7 +331,8 @@ module Rubyplot
       # Draws a legend with the names of the datasets matched
       # to the colors used to draw them.
       def draw_legend!
-        @legend_labels = @data.collect { |item| item[DATA_LABEL_INDEX] }
+        # FIXME: reflect single data behaviour
+        @legend_labels = [@data[:label]]#@data.collect { |item| item[DATA_LABEL_INDEX] }
 
         legend_square_width = @legend_box_size # small square with color of this item
 

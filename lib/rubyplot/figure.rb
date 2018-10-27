@@ -10,15 +10,15 @@ module Rubyplot
     end
 
     def add_subplots nrows, ncols
-      @subplots = Array.new(nrows) { Array.new(ncols) { Rubyplot::Axes.new } }
+      @subplots = Array.new(nrows) { Array.new(ncols) { nil } }
     end
 
     def add_subplot nrow, ncol
-      @subplots[nrow][ncol]
+      @subplots[nrow][ncol] = Rubyplot::Axes.new
     end
 
     def write file_name
-      
+      @subplots[0][0].write file_name
     end
   end
 end

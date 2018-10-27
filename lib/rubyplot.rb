@@ -1,5 +1,7 @@
-require 'rubyplot/version'
+require 'bigdecimal'
 
+require 'rubyplot/version'
+require 'rubyplot/color'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/axes'
