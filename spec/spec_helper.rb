@@ -4,15 +4,6 @@ require 'rubyplot'
 SPEC_ROOT = File.dirname(__FILE__) + "/"
 
 class RubyplotSpec
-  def self.describe(*args, &block)
-    %i[gr magick].each do |backend|
-      Rubyplot.backend = backend
-      Dir.mkdir("temp")
-      ::RSpec.describe *args, &block
-      FileUtils.rm_rf("temp")
-    end
-  end
-
   # methods for generating plots for testing
   # FIXME: figure out a better way of testing plots. This is too jugaadu.
   module Generators

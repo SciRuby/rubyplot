@@ -128,18 +128,18 @@ module  Rubyplot
 
             #           @data.each do |data_row|
             data_row = @data
-              norm_data_points = [data_row[:label]]
-              norm_data_points << data_row[:y_values].map do |r|
-                (r.to_f - @geometry.minimum_value.to_f) / @spread
-              end
-
-              norm_data_points << data_row[:color]
-              norm_data_points << data_row[:x_values].map do |r|
-                (r.to_f - @geometry.minimum_x_value.to_f) / @x_spread
-              end
-              @geometry.norm_data << norm_data_points
+            norm_data_points = [data_row[:label]]
+            norm_data_points << data_row[:y_values].map do |r|
+              (r.to_f - @geometry.minimum_value.to_f) / @spread
             end
-  #        end
+
+            norm_data_points << data_row[:color]
+            norm_data_points << data_row[:x_values].map do |r|
+              (r.to_f - @geometry.minimum_x_value.to_f) / @x_spread
+            end
+            @geometry.norm_data << norm_data_points
+          end
+          #        end
         end
 
         def draw

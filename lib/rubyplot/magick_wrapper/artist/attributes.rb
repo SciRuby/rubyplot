@@ -70,6 +70,8 @@ module Rubyplot
         # Accessor base image
         attr_accessor :base_image
 
+        # Axes object to which this plot belongs.
+        attr_reader :axes
       end # module Attributes
     end # class Artist
   end # module MagickWrapper

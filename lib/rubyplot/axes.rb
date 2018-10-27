@@ -43,12 +43,12 @@ module Rubyplot
       plot =
       case Rubyplot.backend
       when :magick
-        Kernel.const_get("Rubyplot::MagickWrapper::Plot::#{plot_name}").new *args
+        Kernel.const_get("Rubyplot::MagickWrapper::Plot::#{plot_name}").new self, *args
       when :gr
-        Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_name}").new *args
+        Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_name}").new self, *args
       end
 
       plot
     end
-  end
-end
+  end # class Axes
+end # module Rubyplot
