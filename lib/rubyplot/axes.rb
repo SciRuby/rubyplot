@@ -5,9 +5,18 @@ module Rubyplot
                   :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
                   :title_shift, :title
 
-    attr_reader :figure, :plots
+    # Rubyplot::Figure object to which this Axes belongs.
+    attr_reader :figure
 
-    def initialize
+    attr_reader :plots
+
+    # Position of this Axes object in the subplots.
+    attr_reader :position
+
+    def initialize figure, position
+      @figure = figure
+      @position = position
+      
       @x_title = ''
       @y_title = ''
       @x_range = [0, 0]
@@ -27,7 +36,7 @@ module Rubyplot
     end
 
     def scatter! *args, &block
-      plot = with_backend :scatter, *args
+      plot = with_backend "Scatter", *args
       yield(plot) if block_given?
       @plots << plot
     end
@@ -39,13 +48,12 @@ module Rubyplot
     private
 
     def with_backend plot_type, *args
-      plot_name = plot_type.to_s.capitalize
       plot =
       case Rubyplot.backend
       when :magick
-        Kernel.const_get("Rubyplot::MagickWrapper::Plot::#{plot_name}").new self, *args
+        Kernel.const_get("Rubyplot::MagickWrapper::Plot::#{plot_type}").new self, *args
       when :gr
-        Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_name}").new self, *args
+        Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_type}").new self, *args
       end
 
       plot

@@ -12,9 +12,10 @@ require 'rubyplot/magick_wrapper'
 require 'rubyplot/gr_wrapper'
 
 module Rubyplot
-  class << self
-    attr_accessor :backend
+  def self.backend
+    b = ENV['RUBYPLOT_BACKEND']
+    return b.to_sym if b == "magick" || b == "gr"
+    :magick
   end
 end
 
-Rubyplot.backend = :magick

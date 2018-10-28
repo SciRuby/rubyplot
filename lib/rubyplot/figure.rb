@@ -14,11 +14,11 @@ module Rubyplot
     end
 
     def add_subplot nrow, ncol
-      @subplots[nrow][ncol] = Rubyplot::Axes.new
+      @subplots[nrow][ncol] = Rubyplot::Axes.new self, nrow*@ncols + ncol
     end
 
     def write file_name
       @subplots[0][0].write file_name
     end
-  end
-end
+  end # class Figure
+end # module Rubyplot

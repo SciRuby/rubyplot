@@ -60,7 +60,6 @@ module  Rubyplot
 
         def setup_drawing
           @labels = {}
-
           super
           # Translate our values so that we can use the base methods for drawing
           # the standard chart stuff

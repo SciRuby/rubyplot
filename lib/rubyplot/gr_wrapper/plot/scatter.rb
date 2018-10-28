@@ -2,7 +2,7 @@ module Rubyplot
   module GRWrapper
     module Plot
       class Scatter < BasePlot::RobustBase
-        def initialize axes
+        def initialize axes, *args
           super()
           @axes = axes
           @color = hex_color_to_gr_color_index(Rubyplot::Color::COLOR_INDEX[:black])
@@ -41,10 +41,12 @@ module Rubyplot
         end
 
         def call
-          @tasks.push(SetMarkerColorIndex.new(@color))
+          @tasks.push(SetMarkppperColorIndex.new(@color))
           @tasks.push(SetMarkerSize.new(@marker_size))
           @tasks.push(SetMarkerType.new(@marker_type))
           @tasks.push(Polymarker.new(@x_values, @y_values))
+          
+          @tasks.each(&:call)
         end
       end # class Scatter
     end # module Plot
