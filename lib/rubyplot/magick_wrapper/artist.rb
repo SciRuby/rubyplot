@@ -7,7 +7,6 @@ require_relative 'artist/math_methods'
 
 # FIXME: formerly the scatter could take multiple 'data' calls but now takes only
 # one.
-
 module Rubyplot
   module MagickWrapper
     class Artist
@@ -25,6 +24,7 @@ module Rubyplot
       # Looks for Bitstream Vera as the default font. Expects an environment var
       # of MAGICK_FONT_PATH to be set. (Uses RMagick's default font otherwise.)
       def initialize(axes, target_width = DEFAULT_TARGET_WIDTH)
+        @axes = axes
         if Numeric === target_width
           @columns = target_width.to_f
           @rows = target_width.to_f * 0.75
@@ -40,12 +40,20 @@ module Rubyplot
         self.theme = Themes::CLASSIC_WHITE
       end
 
+      # FIXME: since these methods are common among backends, consider moving
+      # them to a separate backend.
       def label= label
         @data[:label] = label
       end
 
       def color= color
         @data[:color] = color
+      end
+
+      def marker_size= marker_size
+      end
+
+      def marker_type= marker_type
       end
 
       # Set instance variables for this object.
@@ -66,7 +74,6 @@ module Rubyplot
         @raw_rows = 800.0 * (@rows / @columns)
         @labels = {}
         @sort = false
-        @title = nil
         @title_font = nil
 
         @scale = @columns / @geometry.raw_columns
@@ -162,7 +169,7 @@ module Rubyplot
         return unless @plot_colors.empty?
         # 0.upto(@geometry.norm_data.size - 1) do |i|
           if (@data[:color] == :default)
-            @plot_colors.push(@geometry.theme_options[:label_colors][i])
+            @plot_colors.push(@geometry.theme_options[:label_colors][0])
           else
             @plot_colors.push(Rubyplot::Color::COLOR_INDEX[@data[:color]])
           end
@@ -229,8 +236,8 @@ module Rubyplot
       def setup_graph_measurements
         @marker_caps_height = calculate_caps_height(@marker_font_size)
 
-        @title_caps_height = @geometry.hide_title || @title.nil? ? 0 :
-                               calculate_caps_height(@title_font_size) * @title.lines.to_a.size
+        @title_caps_height = @geometry.hide_title || @axes.title.nil? ? 0 :
+                               calculate_caps_height(@title_font_size) * @axes.title.lines.to_a.size
         # Initially the title is nil.
 
         @legend_caps_height = calculate_caps_height(@legend_font_size)
@@ -313,7 +320,7 @@ module Rubyplot
 
       # Draws a title on the graph.
       def draw_title!
-        return if @geometry.hide_title || @title.nil?
+        return if @geometry.hide_title || @axes.title.nil?
 
         @d.fill = @font_color
         @d.font = @title_font || @font if @title_font || @font
@@ -324,7 +331,7 @@ module Rubyplot
         @d = @d.scale_annotation(@base_image,
                                  @geometry.raw_columns, 1.0,
                                  0, @geometry.top_margin,
-                                 @title, @scale)
+                                 @axes.title, @scale)
       end
 
       ##

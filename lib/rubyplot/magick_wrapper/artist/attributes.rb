@@ -25,9 +25,6 @@ module Rubyplot
         # A label for the left side of the graph
         attr_accessor :y_axis_label
 
-        # The large title of the graph displayed at the top
-        attr_accessor :title
-
         # Font used for titles, labels, etc.
         # The font= method below fulfills the role of the writer, so we only need
         # a reader here.

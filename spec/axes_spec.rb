@@ -2,7 +2,7 @@ require 'spec_helper'
 ["magick"].each do |b|
   ENV['RUBYPLOT_BACKEND'] = b
   
-  describe "Rubyplot::Axes b: #{Rubyplot.backend}.", focus: true do
+  describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     context "#line!" do
       
     end
@@ -15,7 +15,7 @@ require 'spec_helper'
       end
 
       after do
-        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
+#        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
       end
 
       it "adds a simple scatter plot." do
@@ -33,16 +33,36 @@ require 'spec_helper'
           eq_image("fixtures/scatter/scatter.png", 10))
       end
 
-
       it "adds a green cross scatter plot." do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
-        axes.scatter! do |p|
+        axes.scatter!(400) do |p|
           p.data @x1, @y1
           p.color = :green
           p.marker_size = 2
-          p.type = :diagonal_cross
+          p.marker_type = :diagonal_cross
         end
+
+        fig.write(SPEC_ROOT + "temp/scatter/scatter_green.png")
+
+        # expect("temp/scatter/scatter_green.png").to(
+        #   eq_image("fixtures/scatter/scatter_green.png", 10))
+      end
+
+      it "adds scatter with all negative values", focus: true do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.scatter!(400) do |p|
+          p.data [-1, -1, -4, -4], [-5, -1, -3, -4]
+          p.label = "apples"
+        end
+        axes.title = "all negative scatter graph test."
+
+        fig.write(SPEC_ROOT + "temp/scatter/scatter_all_neg.png")
+      end
+
+      it "adds multiple scatter plots" do
+        
       end
     end
   end

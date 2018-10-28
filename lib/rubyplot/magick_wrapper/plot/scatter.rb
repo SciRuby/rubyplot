@@ -125,7 +125,6 @@ module  Rubyplot
             @geometry.norm_data = []
             return unless @geometry.has_data
 
-            #           @data.each do |data_row|
             data_row = @data
             norm_data_points = [data_row[:label]]
             norm_data_points << data_row[:y_values].map do |r|
@@ -138,7 +137,6 @@ module  Rubyplot
             end
             @geometry.norm_data << norm_data_points
           end
-          #        end
         end
 
         def draw
@@ -160,9 +158,14 @@ module  Rubyplot
 
               # Reset each time to avoid thin-line errors
               @d = @d.stroke_opacity 1.0
-              @d = @d.stroke_width @geometry.stroke_width || clip_value_if_greater_than(@columns / (@geometry.norm_data.first[1].size * 4), 5.0)
+              @d = @d.stroke_width(@geometry.stroke_width ||
+                                   clip_value_if_greater_than(
+                                     @columns / (
+                                       @geometry.norm_data.first[1].size * 4), 5.0))
 
-              circle_radius = @geometry.circle_radius || clip_value_if_greater_than(@columns / (@geometry.norm_data.first[1].size * 2.5), 5.0)
+              circle_radius = @geometry.circle_radius ||
+                              clip_value_if_greater_than(
+                                @columns / (@geometry.norm_data.first[1].size * 2.5), 5.0)
               @d = @d.circle(new_x, new_y, new_x - circle_radius, new_y)
             end
           end

@@ -1,9 +1,14 @@
 module Rubyplot
   class Axes
-    attr_accessor :x_title, :y_title, :x_range, :y_range,
+    attr_accessor :x_title
+
+    attr_accessor :y_title, :x_range, :y_range,
                   :x_tick_count, :y_tick_count, :text_font, :grid,
                   :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
-                  :title_shift, :title
+                  :title_shift
+
+    # Main title for this Axes.
+    attr_accessor :title
 
     # Rubyplot::Figure object to which this Axes belongs.
     attr_reader :figure
