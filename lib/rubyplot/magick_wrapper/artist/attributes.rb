@@ -2,9 +2,6 @@ module Rubyplot
   module MagickWrapper    
     class Artist
       module Attributes
-        # Blank space below the title
-        attr_accessor :title_margin
-
         # Blank space below the legend
         attr_accessor :legend_margin
 

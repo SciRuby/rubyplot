@@ -1,11 +1,13 @@
 module Rubyplot
   class Axes
+    TITLE_MARGIN = 20.0
+    
     attr_accessor :x_title
 
     attr_accessor :y_title, :x_range, :y_range,
                   :x_tick_count, :y_tick_count, :text_font, :grid,
                   :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
-                  :title_shift
+                  :title_shift, :title_margin
 
     # Main title for this Axes.
     attr_accessor :title
@@ -32,6 +34,7 @@ module Rubyplot
       @origin = %i[default default]
       @title = nil
       @title_shift = 0
+      @title_margin = TITLE_MARGIN
       @text_font = :default
       @grid = true
       @bounding_box = true

@@ -86,7 +86,6 @@ module Rubyplot
         @title_font_size = 36.0
 
         @legend_margin = LEGEND_MARGIN
-        @title_margin = TITLE_MARGIN
 
         @legend_box_size = 20.0
 
@@ -274,9 +273,13 @@ module Rubyplot
         @graph_width = @geometry.raw_columns - @graph_left - @graph_right_margin
 
         # When @hide title, leave a title_margin space for aesthetics.
-        @graph_top = @geometry.legend_at_bottom ? @geometry.top_margin : (@geometry.top_margin +
-                                                                          (@geometry.hide_title ? title_margin : @title_caps_height + title_margin) +
-                                                                          (@legend_caps_height + legend_margin))
+        @graph_top = @geometry.legend_at_bottom ?
+                       @geometry.top_margin :
+                       (@geometry.top_margin +
+                        (@geometry.hide_title ?
+                           @axes.title_margin :
+                           @title_caps_height + @axes.title_margin) +
+                        (@legend_caps_height + legend_margin))
 
         x_axis_label_height = @geometry.x_axis_label .nil? ? 0.0 :
                                 @marker_caps_height + LABEL_MARGIN
@@ -359,9 +362,9 @@ module Rubyplot
         end
 
         current_x_offset = center(sum(label_widths.first))
-        current_y_offset = @geometry.legend_at_bottom ? @graph_height + title_margin : (
-          @geometry.hide_title ? @geometry.top_margin + title_margin :
-            @geometry.top_margin + title_margin + @title_caps_height)
+        current_y_offset = @geometry.legend_at_bottom ? @graph_height + @axes.title_margin : (
+          @geometry.hide_title ? @geometry.top_margin + @axes.title_margin :
+            @geometry.top_margin + @axes.title_margin + @title_caps_height)
 
         @legend_labels.each_with_index do |legend_label, _index|
           # Draw label

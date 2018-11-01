@@ -17,7 +17,7 @@ module Rubyplot
 
         def initialize(*args)
           super
-          @geometry = Rubyplot::BarGeometry.new
+          @geometry = Plot::Bar::Geometry.new
         end
 
         def draw
@@ -37,7 +37,8 @@ module Rubyplot
         #
         # Default value is 0.9.
         def spacing_factor=(space_percent)
-          raise ArgumentError, 'geometry.spacing_factor must be between 0.00 and 1.00' unless (space_percent >= 0) && (space_percent <= 1)
+          raise ArgumentError, 'geometry.spacing_factor must be between 0.00 and 1.00' unless
+            (space_percent >= 0) && (space_percent <= 1)
           @geometry.spacing_factor = (1 - space_percent)
         end
 
