@@ -15,7 +15,6 @@ module Rubyplot
           # FIXME: writer to canvas is also part of this class, similar to Magick backend.
           #  In the future both should be abstracted to another rendering class.
           def write file_name
-            puts "file: #{file_name}"
             BeginPrint.new(file_name).call
             
             # FIXME: remove @identity varible.

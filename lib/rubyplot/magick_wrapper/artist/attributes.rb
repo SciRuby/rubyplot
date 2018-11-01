@@ -19,12 +19,6 @@ module Rubyplot
         # Used internally for horizontal graph types.
         attr_accessor :has_left_labels
 
-        # A label for the bottom of the graph
-        attr_accessor :x_axis_label
-
-        # A label for the left side of the graph
-        attr_accessor :y_axis_label
-
         # Font used for titles, labels, etc.
         # The font= method below fulfills the role of the writer, so we only need
         # a reader here.
