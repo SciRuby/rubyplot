@@ -46,6 +46,12 @@ module Rubyplot
       @plots << plot
     end
 
+    def bar! *args, &block
+      plot = with_backend "Bar", *args
+      yield(plot) if block_given?
+      @plots << plot
+    end
+
     def write file_name
       @plots[0].write file_name
     end

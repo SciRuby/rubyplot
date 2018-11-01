@@ -7,7 +7,7 @@ require 'spec_helper'
       
     end
 
-    context "#bar!" do
+    context "#bar!", focus: true do
       before do
         @temp_dir = SPEC_ROOT + "temp/bar"
         @fix_dir = SPEC_ROOT + "fixtures/bar"
@@ -198,8 +198,8 @@ require 'spec_helper'
         axes.title = "My graph."
         [
           [[1, 2, 3, 4, 4, 3], 'Apples oranges Watermelon'],
-          [[4, 8, 7, 9, 8, 9], "Oranges"]
-          [[2, 3, 1, 5, 6, 8], "Watermelon"]
+          [[4, 8, 7, 9, 8, 9], "Oranges"],
+          [[2, 3, 1, 5, 6, 8], "Watermelon"],
           [[9, 9, 10, 8, 7, 9], "Peaches"]
         ].each do |d, name|
           axes.bar! do |p|

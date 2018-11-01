@@ -51,3 +51,4 @@ build-iPhoneSimulator/
 spec/fixtures/
 *.so
 Gemfile.lock
+spec/temp/
