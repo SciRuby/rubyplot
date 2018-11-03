@@ -72,7 +72,6 @@ module Rubyplot
         }
 
         @raw_rows = 800.0 * (@rows / @columns)
-        @labels = {}
         @sort = false
         @title_font = nil
 
@@ -244,11 +243,15 @@ module Rubyplot
         # For now, the labels feature only focuses on the dot graph so it makes sense to only have
         # this as an attribute for this kind of graph and not for others.
         if @geometry.has_left_labels
-          longest_left_label_width = calculate_width(@marker_font_size,
-                                                     labels.values.inject('') { |value, memo| value.to_s.length > memo.to_s.length ? value : memo }) * 1.25
+          longest_left_label_width = calculate_width(
+            @marker_font_size,
+            @axes.x_ticks.values.inject('') { |value, memo|
+              value.to_s.length > memo.to_s.length ? value : memo
+            }) * 1.25
         else
-          longest_left_label_width = calculate_width(@marker_font_size,
-                                                     label(@geometry.maximum_value.to_f, @geometry.increment))
+          longest_left_label_width = calculate_width(
+            @marker_font_size,
+            label(@geometry.maximum_value.to_f, @geometry.increment))
         end
 
         # Shift graph if left line numbers are hidden
@@ -261,9 +264,11 @@ module Rubyplot
                       (@geometry.y_axis_label .nil? ? 0.0 : @marker_caps_height + LABEL_MARGIN * 2)
 
         # Make space for half the width of the rightmost column label.
-        last_label = @labels.keys.max.to_i
-        extra_room_for_long_label = last_label >= (@geometry.column_count - 1) && @geometry.center_labels_over_point ?
-                                      calculate_width(@marker_font_size, @labels[last_label]) / 2.0 : 0
+        last_label = @axes.x_ticks.keys.max.to_i
+        extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
+                                    @geometry.center_labels_over_point ?
+                                      calculate_width(@marker_font_size,
+                                                      @axes.x_ticks[last_label]) / 2.0 : 0
 
         # Margins
         @graph_right_margin = @geometry.right_margin + extra_room_for_long_label
@@ -443,9 +448,7 @@ module Rubyplot
         (0..@geometry.marker_count).each do |index|
           y = @graph_top + @graph_height - index.to_f * @geometry.increment_scaled
           y_next = @graph_top + @graph_height - (index.to_f + 1) * @geometry.increment_scaled
-
           @d = @d.fill(@marker_color)
-
           @d = @d.line(@graph_left, y, @graph_right, y) if !@geometry.hide_line_markers || (index == 0)
           # If the user specified a marker shadow color, draw a shadow just below it
           unless @marker_shadow_color.nil?
@@ -497,14 +500,14 @@ module Rubyplot
 
       # Draws column labels below graph, centered over x_offset
       def draw_label(x_offset, index)
-        if !@labels[index].nil? && @geometry.labels_seen[index].nil?
+        if !@axes.x_ticks[index].nil? && @geometry.labels_seen[index].nil?
           y_offset = @graph_bottom + LABEL_MARGIN
 
           # TESTME
           # TODO: See if index.odd? is the best stragegy
           y_offset += @label_stagger_height if index.odd?
 
-          label_text = labels[index].to_s
+          label_text = @axes.x_ticks[index].to_s
 
           # TESTME
           # FIXME: Consider chart types other than bar

@@ -24,7 +24,7 @@ module Rubyplot
           # Labels will be centered over the left of the bar if
           # there are more labels than columns. This is basically the same
           # as where it would be for a line graph.
-          @geometry.center_labels_over_point = (@labels.keys.length > @geometry.column_count)
+          @geometry.center_labels_over_point = (@axes.x_ticks.keys.length > @geometry.column_count)
           super
           return unless @geometry.has_data
           draw_bars
@@ -79,7 +79,9 @@ module Rubyplot
               @d = @d.fill @plot_colors[row_index]
               # Use incremented x and scaled y
               # x
-              left_x = @graph_left + (@bar_width * (row_index + point_index + ((@data.length - 1) * point_index))) + padding
+              left_x = @graph_left + (
+                @bar_width *
+                (row_index + point_index + ((@data.length - 1) * point_index))) + padding
               right_x = left_x + @bar_width * @bar_spacing
               # y
               conv = []
@@ -98,7 +100,8 @@ module Rubyplot
                          (@geometry.center_labels_over_point ? @bar_width / 2.0 : 0.0),
                          point_index)
               if @geometry.show_labels_for_bar_values
-                val = (@geometry.label_formatting || '%.2f') % @geometry.norm_data[row_index][3][point_index]
+                val = (@geometry.label_formatting || '%.2f') %
+                      @geometry.norm_data[row_index][3][point_index]
                 draw_value_label(left_x + (right_x - left_x) / 2, conv[0] - 30, val.commify, true)
               end
             end

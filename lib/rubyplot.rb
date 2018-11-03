@@ -18,4 +18,3 @@ module Rubyplot
     :magick
   end
 end
-

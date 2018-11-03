@@ -7,6 +7,7 @@ describe Rubyplot::SPI do
     @x2 = [2, 4, 16]
     @y2 = [10, 20, -40]
   end
+  
   after do
     File.delete 'spec/reference_images/file_name.bmp'
   end

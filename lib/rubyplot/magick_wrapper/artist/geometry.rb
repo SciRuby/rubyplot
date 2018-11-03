@@ -55,9 +55,6 @@ module Rubyplot
 
         attr_accessor :font_color
 
-        # Prevent drawing of the legend
-        attr_accessor :hide_legend
-
         # Prevent drawing of line numbers
         attr_accessor :hide_line_numbers
 
@@ -107,7 +104,7 @@ module Rubyplot
         attr_accessor :legend_at_bottom, :legend_box_size, :legend_margin
 
         # Helper variables to hide geometry objects
-        attr_accessor :hide_line_markers, :hide_legend, :hide_title, :hide_line_numbers
+        attr_accessor :hide_line_markers, :hide_title, :hide_line_numbers
         attr_accessor :show_labels_for_bar_values
         attr_accessor :center_labels_over_point, :label_truncation_style
 
@@ -137,7 +134,7 @@ module Rubyplot
           @label_stagger_height = 0
           @label_truncation_style = :absolute
           @label_max_size = 0
-          @hide_line_markers = @hide_legend = @hide_title = false
+          @hide_line_markers = @hide_title = false
           @hide_line_numbers = @legend_at_bottom = @show_labels_for_bar_values = false
           @center_labels_over_point = true
 

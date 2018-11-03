@@ -9,6 +9,14 @@ module Rubyplot
                   :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
                   :title_shift, :title_margin
 
+    # A hash of names for the individual columns, where the key is the array
+    # index for the column this label represents.
+    #
+    # Not all columns need to be named.
+    #
+    # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
+    attr_accessor :x_ticks
+
     # Main title for this Axes.
     attr_accessor :title
 
@@ -40,6 +48,7 @@ module Rubyplot
       @bounding_box = true
       @x_axis_padding = :default
       @y_axis_padding = :default
+      @x_ticks = {}
       @plots = []
     end
 

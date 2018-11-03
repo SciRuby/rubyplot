@@ -4,15 +4,7 @@ module Rubyplot
       module Attributes
         # Blank space below the legend
         attr_accessor :legend_margin
-
-        # A hash of names for the individual columns, where the key is the array
-        # index for the column this label represents.
-        #
-        # Not all columns need to be named.
-        #
-        # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
-        attr_accessor :labels
-
+        
         # Used internally for horizontal graph types.
         attr_accessor :has_left_labels
 
@@ -22,9 +14,6 @@ module Rubyplot
         attr_reader :font
 
         attr_accessor :font_color
-
-        # Prevent drawing of the legend
-        attr_accessor :hide_legend
 
         # Prevent drawing of line numbers
         attr_accessor :hide_line_numbers
