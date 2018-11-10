@@ -68,6 +68,10 @@ module Rubyplot
       add_plot "Area", *args, &block
     end
 
+    def bubble! *args, &block
+      add_plot "Bubble", *args, &block
+    end
+
     def write file_name
       @plots[0].write file_name
     end

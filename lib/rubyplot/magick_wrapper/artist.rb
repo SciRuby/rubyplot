@@ -251,7 +251,7 @@ module Rubyplot
         else
           longest_left_label_width = calculate_width(
             @marker_font_size,
-            label(@geometry.maximum_value.to_f, @geometry.increment))
+            label_string(@geometry.maximum_value.to_f, @geometry.increment))
         end
 
         # Shift graph if left line numbers are hidden
@@ -471,7 +471,7 @@ module Rubyplot
           @d = @d.scale_annotation(@base_image,
                                    @graph_left - LABEL_MARGIN, 1.0,
                                    0.0, y,
-                                   label(marker_label, @geometry.increment), @scale)
+                                   label_string(marker_label, @geometry.increment), @scale)
         end
         @d = @d.stroke_antialias true
         # string = 'hello' + '.png'
@@ -543,7 +543,7 @@ module Rubyplot
 
       # Return a formatted string representing a number value that should be
       # printed as a label.
-      def label(value, increment)
+      def label_string(value, increment)
         label =
           if increment
             if increment >= 10 || (increment * 1) == (increment * 1).to_i.to_f

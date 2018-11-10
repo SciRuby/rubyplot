@@ -13,7 +13,50 @@ require 'spec_helper'
       ]
     end
 
-    context "#area!", focus: true do
+    context "#bubble!", focus: true do
+      before do 
+        @temp_dir = SPEC_ROOT + "temp/bubble"
+        @fix_dir = SPEC_ROOT + "fixtures/bubble"
+        FileUtils.mkdir_p @temp_dir
+      end
+
+      it "plots a single bubble plot", focus: true do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.bubble! do |p|
+          p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [45, 10, 21, 9]
+          p.label = "apples"
+          p.color = :blue
+        end
+        axes.title = "simple bubble plot."
+        
+        file = "/#{Rubyplot.backend}_simple_bubble.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/bubble" + file).to eq_image("fixtures/bubble" + file)
+      end
+
+      it "plots multiple bubble plots on same axes." do 
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.bubble! do |p|
+          p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [45, 10, 21, 9]
+          p.label = "apples"
+        end
+        axes.bubble! do |p|
+          p.data [20, 30, -6, -3], [-1, 5, -27, -3], [13, 10, 20, 10]
+          p.label = "peaches"
+        end
+        axes.title = "simple bubble plot."
+        
+        file = "/#{Rubyplot.backend}_multiple_bubble.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/bubble" + file).to eq_image("fixtures/bubble" + file)       
+      end
+    end
+
+    context "#area!" do
       before do 
         @temp_dir = SPEC_ROOT + "temp/area"
         @fix_dir = SPEC_ROOT + "fixtures/area"

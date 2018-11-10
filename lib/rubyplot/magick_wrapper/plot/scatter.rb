@@ -239,7 +239,7 @@ module  Rubyplot
           @d = @d.stroke_antialias true
         end
 
-        def label(value, increment)
+        def label_string(value, increment)
           if @geometry.y_axis_label_format
             @geometry.y_axis_label_format.call(value)
           else
@@ -251,7 +251,7 @@ module  Rubyplot
           if @geometry.x_axis_label_format
             @geometry.x_axis_label_format.call(value)
           else
-            label(value, increment)
+            label_string(value, increment)
           end
         end
 

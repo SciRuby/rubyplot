@@ -3,18 +3,28 @@ module Rubyplot
     class Artist
       module MathMethods
         # Make copy of data with values scaled between 0-100
-        # TODO: Add spec for this method.
+        # norm_data gets populated here.
+        # FIXME: change this method to reflect arch change.
         def normalize
           @geometry.norm_data = []
           #@data.each do |data_row|
           data_row = @data
+          norm_data_points = []
+          data_row[:y_values].each do |data_point|
+            norm_data_points << ((data_point.to_f - @geometry.minimum_value.to_f) / @spread)
+            # Add support for nil values in data etc.
+          end
+          @geometry.norm_data << [data_row[:label], norm_data_points]
+          #end
+          @geometry.norm_data[0] << @data[:color]
+          if @data[:x_values]
             norm_data_points = []
-            data_row[:y_values].each do |data_point|
+            data_row[:x_values].each do |data_point|
               norm_data_points << ((data_point.to_f - @geometry.minimum_value.to_f) / @spread)
               # Add support for nil values in data etc.
             end
-            @geometry.norm_data << [data_row[:label], norm_data_points]
-          #end
+            @geometry.norm_data[0] << norm_data_points
+          end
         end
 
         def clip_value_if_greater_than(value, max_value) # :nodoc:
