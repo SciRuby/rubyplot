@@ -53,21 +53,19 @@ module Rubyplot
     end
 
     def scatter! *args, &block
-      plot = with_backend "Scatter", *args
-      yield(plot) if block_given?
-      @plots << plot
+      add_plot "Scatter", *args, &block
     end
 
     def bar! *args, &block
-      plot = with_backend "Bar", *args
-      yield(plot) if block_given?
-      @plots << plot
+      add_plot "Bar", *args, &block
     end
 
     def line! *args, &block
-      plot = with_backend "Line", *args
-      yield(plot) if block_given?
-      @plots << plot
+      add_plot "Line", *args, &block
+    end
+
+    def area! *args, &block
+      add_plot "Area", *args, &block
     end
 
     def write file_name
@@ -75,6 +73,12 @@ module Rubyplot
     end
 
     private
+
+    def add_plot plot_type, *args, &block
+      plot = with_backend plot_type, *args
+      yield(plot) if block_given?
+      @plots << plot
+    end
 
     def with_backend plot_type, *args
       plot =

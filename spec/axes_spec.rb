@@ -12,6 +12,63 @@ require 'spec_helper'
         ["Venus", [90, 34, 23, 12, 78, 89, 98, 88]]
       ]
     end
+
+    context "#area!", focus: true do
+      before do 
+        @temp_dir = SPEC_ROOT + "temp/area"
+        @fix_dir = SPEC_ROOT + "fixtures/area"
+        FileUtils.mkdir_p @temp_dir
+      end
+
+      it "plots a single simple Area graph" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.area! do |p|
+          p.data [25, 36, 86, 39, 25, 31, 79, 88]
+          p.label = "Jimmy"
+        end
+        axes.title = "Visual simple area graph test."
+        axes.x_ticks = {
+          0 => '0',
+          2 => '2',
+          4 => '4',
+          6 => '6'
+        }
+
+        file = "/#{Rubyplot.backend}_simple_area.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/area" + file).to eq_image("fixtures/area" + file)
+      end
+
+      it "plots multiple area plots on the same Axes" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        [
+          ["Jimmy", [25, 36, 86, 39, 25, 31, 79, 88]],
+          ["Charles", [80, 54, 67, 54, 68, 70, 90, 95]],
+          ["Julie", [22, 29, 35, 38, 36, 40, 46, 57]],
+          ["Jane", [3, 95, 95, 90, 85, 80, 88, 100]]
+        ].each do |n, data|
+          axes.area! do |p|
+            p.data data
+            p.label = n
+          end
+        end
+        axes.title = "Multiple area plots on same axes."
+        axes.x_ticks = {
+          0 => '0',
+          2 => '2',
+          4 => '4',
+          6 => '6'
+        }
+
+        file = "/#{Rubyplot.backend}_multiple_area.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/area" + file).to eq_image("fixtures/area" + file)
+      end
+    end
     
     context "#line!" do
       before do 
@@ -305,7 +362,7 @@ require 'spec_helper'
           p.label = "peaches"
         end
         axes.title = "Pos/neg bar graph test."
-        axes.labels = {
+        axes.x_ticks = {
           0 => '5/6',
           1 => '5/15',
           2 => '5/24',
@@ -322,7 +379,7 @@ require 'spec_helper'
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.title = "all negative bar graph."
-        axes.labels = {
+        axes.x_ticks = {
           0 => '5/6',
           1 => '5/15',
           2 => '5/24',
@@ -357,7 +414,7 @@ require 'spec_helper'
             p.label = name
           end
         end
-        axes.labels = {
+        axes.x_ticks = {
           0 => '5/6',
           1 => '5/15',
           2 => '5/24',
@@ -385,7 +442,7 @@ require 'spec_helper'
             p.label = name
           end
         end
-        axes.labels = { 0 => '2003', 2 => '2004', 4 => '2005' }
+        axes.x_ticks = { 0 => '2003', 2 => '2004', 4 => '2005' }
 
         file = "/#{Rubyplot.backend}_adjust_legens.png"
         fig.write(@temp_dir + file)
