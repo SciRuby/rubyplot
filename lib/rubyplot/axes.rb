@@ -16,6 +16,7 @@ module Rubyplot
     #
     # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
     attr_accessor :x_ticks
+    attr_accessor :y_ticks
 
     # Main title for this Axes.
     attr_accessor :title
@@ -70,6 +71,10 @@ module Rubyplot
 
     def bubble! *args, &block
       add_plot "Bubble", *args, &block
+    end
+
+    def dot! *args, &block
+      add_plot "Dot", *args, &block      
     end
 
     def write file_name

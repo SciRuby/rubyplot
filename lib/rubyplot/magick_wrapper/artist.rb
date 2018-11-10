@@ -240,12 +240,14 @@ module Rubyplot
 
         @legend_caps_height = calculate_caps_height(@legend_font_size)
 
-        # For now, the labels feature only focuses on the dot graph so it makes sense to only have
-        # this as an attribute for this kind of graph and not for others.
+        # For now, the labels feature only focuses on the dot graph so it
+        # makes sense to only have this as an attribute for this kind of
+        # graph and not for others.
+        # FIXME: move this out of Artist.
         if @geometry.has_left_labels
           longest_left_label_width = calculate_width(
             @marker_font_size,
-            @axes.x_ticks.values.inject('') { |value, memo|
+            @axes.y_ticks.values.inject('') { |value, memo|
               value.to_s.length > memo.to_s.length ? value : memo
             }) * 1.25
         else

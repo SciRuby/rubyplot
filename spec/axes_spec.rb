@@ -13,14 +13,72 @@ require 'spec_helper'
       ]
     end
 
-    context "#bubble!", focus: true do
+    context "#dot!", focus: true do
+      before do 
+        @temp_dir = SPEC_ROOT + "temp/dot"
+        @fix_dir = SPEC_ROOT + "fixtures/dot"
+        FileUtils.mkdir_p @temp_dir
+      end
+
+      it "plots a single dot plot" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.dot! do |p|
+          p.data [0,5,8,15]
+          p.label = "Car"
+          p.color = :maroon
+          p.minimum_value = 0 # FIXME: change this!
+        end
+        axes.y_ticks = {
+          0 => '5/6',
+          1 => '5/15',
+          2 => '5/24',
+          3 => '5/30'
+        }
+
+        file = "/#{Rubyplot.backend}_simple_dot.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/dot" + file).to eq_image("fixtures/dot" + file)
+      end
+
+      it "plots multiple dot plots" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        [
+         [[0, 5, 8, 15], "cars", :maroon],
+         [[10, 3, 2, 8], "buses", :grey],
+         [[2, 15, 8, 11],"science", :yellow]
+        ].each do |data, label, color|
+          axes.dot! do |p|
+            p.data data
+            p.label = label
+            p.color = color
+            p.minimum_value = 0
+          end
+        end
+        axes.y_ticks = {
+          0 => '5/6',
+          1 => '5/15',
+          2 => '5/24',
+          3 => '5/30'
+        }
+
+        file = "/#{Rubyplot.backend}_simple_dot.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/dot" + file).to eq_image("fixtures/dot" + file)
+      end
+    end
+
+    context "#bubble!" do
       before do 
         @temp_dir = SPEC_ROOT + "temp/bubble"
         @fix_dir = SPEC_ROOT + "fixtures/bubble"
         FileUtils.mkdir_p @temp_dir
       end
 
-      it "plots a single bubble plot", focus: true do
+      it "plots a single bubble plot" do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bubble! do |p|
