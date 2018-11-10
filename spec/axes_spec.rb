@@ -13,7 +13,100 @@ require 'spec_helper'
       ]
     end
 
-    context "#dot!", focus: true do
+    context "#stacked_bar!" do
+      before do 
+        @temp_dir = SPEC_ROOT + "temp/stacked_bar"
+        @fix_dir = SPEC_ROOT + "fixtures/stacked_bar"
+        FileUtils.mkdir_p @temp_dir
+      end
+
+      it "plots a single stacked bar graph with default colors" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.stacked_bar! do |p|
+          p.data [25, 36, 86, 39]
+          p.label = "moon"
+        end
+        axes.title = "net earnings in different months."
+        axes.x_ticks = {
+          0 => 'Jan',
+          1 => 'Feb',
+          2 => 'March',
+          3 => 'April',
+          4 => 'May',
+          5 => 'June',
+          6 => 'July',
+          7 => 'August',
+          8 => 'September',
+          9 => 'October',
+          10 => 'November',
+          11 => 'December'
+        }
+        
+        file = "/#{Rubyplot.backend}_simple_stacked_bar.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/stacked_bar" + file).to eq_image("fixtures/stacked_bar" + file)
+      end
+
+      it "plots multiple stacked bar graphs with default colors" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        [
+          ["Charles", [20, 10, 5, 12, 11, 6, 10, 7]],
+          ["Adam", [5, 10, 20, 6, 9, 12, 14, 8]],
+          ["Daniel", [19, 9, 6, 11, 12, 7, 15, 8]]
+        ].each do |label, data|
+          axes.stacked_bar! do |p|
+            p.data data
+            p.label = label
+          end          
+        end
+        axes.title = "net earnings in different months."
+        axes.x_ticks = {
+          0 => 'Jan',
+          1 => 'Feb',
+          2 => 'March',
+          3 => 'April',
+          4 => 'May',
+          5 => 'June',
+          6 => 'July',
+          7 => 'August',
+          8 => 'September',
+          9 => 'October',
+          10 => 'November',
+          11 => 'December'
+        }
+        
+        file = "/#{Rubyplot.backend}_multiple_stacked_bar.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/stacked_bar" + file).to eq_image("fixtures/stacked_bar" + file)
+      end
+
+      it "plots stacked bar in a small size" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        [
+          ["Car", [25, 36, 86, 39]],
+          ["Bus", [80, 54, 67, 54]],
+          ["Train", [22, 29, 35, 38]]
+        ].each do |label, data|
+          axes.stacked_bar!(400) do |p| 
+            p.data data
+            p.label = label
+          end
+        end
+        axes.title = "stacked bar."
+        
+        file = "/#{Rubyplot.backend}_small_stacked_bar.png"
+        fig.write(@temp_dir + file)
+
+        #expect("temp/stacked_bar" + file).to eq_image("fixtures/stacked_bar" + file)        
+      end
+    end
+
+    context "#dot!" do
       before do 
         @temp_dir = SPEC_ROOT + "temp/dot"
         @fix_dir = SPEC_ROOT + "fixtures/dot"
@@ -64,7 +157,7 @@ require 'spec_helper'
           3 => '5/30'
         }
 
-        file = "/#{Rubyplot.backend}_simple_dot.png"
+        file = "/#{Rubyplot.backend}_multiple_dot.png"
         fig.write(@temp_dir + file)
 
         #expect("temp/dot" + file).to eq_image("fixtures/dot" + file)

@@ -62,7 +62,8 @@ module Rubyplot
               @geometry.marker_count ||= 5
             end
             # TODO: Round maximum marker value to a round number like 100, 0.1, 0.5, etc.
-            @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ? significant(@spread / @geometry.marker_count) : 1
+            @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ?
+                                    significant(@spread / @geometry.marker_count) : 1
 
             number_of_lines = @geometry.marker_count
             increment = @geometry.increment

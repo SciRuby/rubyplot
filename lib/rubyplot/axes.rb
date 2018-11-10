@@ -77,6 +77,10 @@ module Rubyplot
       add_plot "Dot", *args, &block      
     end
 
+    def stacked_bar! *args, &block
+      add_plot "StackedBar", *args, &block
+    end
+
     def write file_name
       @plots[0].write file_name
     end
