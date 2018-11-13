@@ -1,6 +1,7 @@
 module Rubyplot  
   class Artist
-    attr_reader :geometry
+    attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
+                :title_font_size
     
     def initialize axes, *args
       @axes = axes
@@ -9,8 +10,13 @@ module Rubyplot
         color: :default
       }
       @theme = Rubyplot::Themes::CLASSIC_WHITE
-      @backend = backend
       @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
+      vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
+      @font = File.exist?(vera_font_path) ? vera_font_path : nil
+      @marker_font_size = 21.0
+      @legend_font_size = 20.0
+      @title_font_size = 36.0
+      @backend = backend
     end
     
     def data y_values
@@ -44,7 +50,7 @@ module Rubyplot
     def backend
       case Rubyplot.backend
       when :magick
-        Rubyplot::Backend::MagickWrapper.new
+        Rubyplot::Backend::MagickWrapper.new self
       end
     end
 
@@ -92,12 +98,10 @@ module Rubyplot
     # It calcuates the measurments in pixels to figure out the positioning
     # gap pixels of Legends, Labels and Titles from the picture edge. 
     def setup_graph_measurements
-      @marker_caps_height = calculate_caps_height(@marker_font_size)
+      @marker_caps_height = @backend.caps_height @marker_font_size
       @title_caps_height = @geometry.hide_title || @axes.title.nil? ? 0 :
-                             calculate_caps_height(@title_font_size) * @axes.title.lines.to_a.size
-      # Initially the title is nil.
-
-      @legend_caps_height = calculate_caps_height(@legend_font_size)
+                             @backend.caps_height(@title_font_size) * @axes.title.lines.to_a.size
+      @legend_caps_height = @backend.caps_height(@legend_font_size)
 
       # For now, the labels feature only focuses on the dot graph so it
       # makes sense to only have this as an attribute for this kind of
@@ -176,15 +180,36 @@ module Rubyplot
         @geometry.x_min_value = x_values.min < @geometry.x_min_value ?
                                       x_values.min : @geometry.x_min_value
       end
-
-      def calculate_spread
-
-      end
     end
   end
 
   module Backend
     class MagickWrapper
+      def initialize artist
+        @artist = artist
+        @draw = Magick::Draw.new
+      end
+
+      # Returns the height of the capital letter 'X' for the current font and
+      # size.
+      #
+      # Not scaled since it deals with dimensions that the regular scaling will
+      # handle.
+      def caps_height font_size
+        @draw.pointsize = font_size
+        @draw.font = @artist.font if @font
+        @draw.get_type_metrics(@base_image, 'X').height
+      end
+
+      # Returns the width of a string at this pointsize.
+      #
+      # Not scaled since it deals with dimensions that the regular
+      # scaling will handle.
+      def string_width font_size, text
+        @draw.pointsize = font_size
+        @draw.font = @artist.font if @font
+        @draw.get_type_metrics(@base_image, text.to_s).height
+      end
     end
   end
 end
