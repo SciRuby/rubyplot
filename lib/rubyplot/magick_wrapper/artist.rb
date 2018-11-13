@@ -40,16 +40,6 @@ module Rubyplot
         self.theme = Themes::CLASSIC_WHITE
       end
 
-      # FIXME: since these methods are common among backends, consider moving
-      # them to a separate backend.
-      def label= label
-        @data[:label] = label
-      end
-
-      def color= color
-        @data[:color] = color
-      end
-
       def marker_size= marker_size
       end
 
@@ -206,6 +196,9 @@ module Rubyplot
         return unless @geometry.has_data
         setup_drawing
         construct_colors_array
+        # ideal scenario should be to just instruct the backend to write
+        # text at so-and-so place in some particular manner instead of specifically
+        # legend and title etc.
         draw_legend!
         draw_line_markers!
         draw_title!
@@ -438,7 +431,8 @@ module Rubyplot
             end
             @geometry.marker_count ||= 4
           end
-          @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ? significant(@spread / @geometry.marker_count) : 1
+          @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ?
+                                  significant(@spread / @geometry.marker_count) : 1
         else
           # TODO: Make this work for negative values
           @geometry.marker_count = (@spread / @geometry.y_axis_increment).to_i
@@ -451,7 +445,8 @@ module Rubyplot
           y = @graph_top + @graph_height - index.to_f * @geometry.increment_scaled
           y_next = @graph_top + @graph_height - (index.to_f + 1) * @geometry.increment_scaled
           @d = @d.fill(@marker_color)
-          @d = @d.line(@graph_left, y, @graph_right, y) if !@geometry.hide_line_markers || (index == 0)
+          @d = @d.line(@graph_left, y, @graph_right, y) if
+            !@geometry.hide_line_markers || (index == 0)
           # If the user specified a marker shadow color, draw a shadow just below it
           unless @marker_shadow_color.nil?
             @d = @d.fill(@marker_shadow_color)
@@ -577,6 +572,6 @@ module Rubyplot
         parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
         parts.join('.')
       end
-    end
-  end
-end
+    end # class Artist
+  end # module MagickWrapper
+end # module Rubyplot

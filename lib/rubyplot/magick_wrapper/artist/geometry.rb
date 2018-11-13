@@ -75,14 +75,16 @@ module Rubyplot
         # guessed for you.
         #
         # Set it after you have given all your data to the graph object.
-        attr_accessor :minimum_value
+        # PREV: minimum_value
+        attr_accessor :y_min_value
 
         # You can manually set a maximum value, such as a percentage-based graph
         # that always goes to 100.
         #
         # If you use this, you must set it after you have given all your data to
         # the graph object.
-        attr_accessor :maximum_value
+        # PREV: maximum_value
+        attr_accessor :y_max_value
 
         # Blank space on the sides of the actual plot. Set in pixels
         # to make appropriate space for the actual plot.

@@ -49,5 +49,5 @@ module Rubyplot
         end
       end
     end
-  end
-end
+  end # module MagickWrapper
+end # module Rubyplot

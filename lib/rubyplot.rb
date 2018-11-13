@@ -1,10 +1,14 @@
 require 'bigdecimal'
 
-require 'rubyplot/version'
+require 'rmagick'
+
 require 'rubyplot/color'
+require 'rubyplot/version'
+require 'rubyplot/themes'
+require 'rubyplot/artist'
+require 'rubyplot/backend'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'
-require 'rubyplot/axes'
 require 'rubyplot/spi'
 
 require 'grruby.so'

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-Rubyplot.describe Rubyplot::Figure do
+describe Rubyplot::Figure do
   context "#add_subplot" do
     it "creates a singular subplot inside the Figure" do
       fig = Rubyplot::Figure.new

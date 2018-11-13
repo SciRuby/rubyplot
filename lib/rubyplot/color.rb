@@ -28,6 +28,7 @@ module Rubyplot
     # A list of color symbols inspired by xkcd survey
     # https://xkcd.com/color/rgb/
     COLOR_INDEX = {
+      default: '#000000',
       cloudy_blue: '#acc2d9',
       dark_pastel_green: '#56ae57',
       dust: '#b2996e',

@@ -31,7 +31,7 @@ module Rubyplot
           value > max_value ? max_value : value
         end
 
-        # Calculates the spread of the data.
+        # Calnnculates the spread of the data.
         def calculate_spread
           @spread = @geometry.maximum_value.to_f - @geometry.minimum_value.to_f
         end
