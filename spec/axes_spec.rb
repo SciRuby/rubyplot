@@ -656,7 +656,7 @@ require 'spec_helper'
 #        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
       end
 
-      it "adds a simple scatter plot." do
+      it "adds a simple scatter plot.", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.scatter!(400) do |p|
@@ -689,7 +689,7 @@ require 'spec_helper'
         #   eq_image("fixtures/scatter/scatter_green.png", 10))
       end
 
-      it "adds scatter with all negative values", focus: true do
+      it "adds scatter with all negative values" do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.scatter!(400) do |p|

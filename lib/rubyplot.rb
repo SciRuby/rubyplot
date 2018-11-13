@@ -1,6 +1,7 @@
 require 'bigdecimal'
 
 require 'rubyplot/version'
+require 'rubyplot/themes'
 require 'rubyplot/color'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'

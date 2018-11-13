@@ -11,8 +11,8 @@ module Rubyplot
           attr_accessor :disable_significant_rounding_x_axis
           attr_accessor :enable_vertical_line_markers
           attr_accessor :marker_x_count
-          attr_accessor :maximum_x_value
-          attr_accessor :minimum_x_value
+          attr_accessor :x_max_value
+          attr_accessor :x_min_value
           attr_accessor :stroke_width
           attr_accessor :use_vertical_x_labels
           attr_accessor :x_axis_label_format
@@ -29,7 +29,7 @@ module Rubyplot
             @enable_vertical_line_markers = false
 
             @marker_x_count = nil
-            @maximum_x_value = @minimum_x_value = nil
+            @x_max_value = @x_min_value = nil
 
             @stroke_width = nil
             @use_vertical_x_labels = false
