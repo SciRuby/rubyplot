@@ -1,7 +1,7 @@
 module Rubyplot  
   class Artist
     attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
-                :title_font_size
+                :title_font_size, :scale, :font_color, :marker_color
     
     def initialize axes, *args
       @axes = axes
@@ -16,7 +16,10 @@ module Rubyplot
       @marker_font_size = 21.0
       @legend_font_size = 20.0
       @title_font_size = 36.0
+      @scale = @height / @geometry.raw_columns
       @backend = backend
+      @backend.scale(@scale)
+      setup_default_theme
     end
     
     def data y_values
@@ -43,14 +46,39 @@ module Rubyplot
     # Write an image to a file by communicating with the backend.
     def write file_name
       setup_drawing
+      construct_colors_array
     end
 
     private
+    
+    def setup_default_theme
+      defaults = {
+        marker_color: 'white',
+        font_color: 'black',
+        background_image: nil
+      }
+      @geometry.theme_options = defaults.merge options
+      @marker_color = @geometry.theme_options[:marker_color]
+      @font_color = @geometry.theme_options[:font_color] || @marker_color
+      @backend.set_base_image_gradient(
+        @geometry.theme_options[:background_colors][0],
+        @geometry.theme_options[:background_colors][1],
+        @geometry.theme_options[:background_direction])
+    end
     
     def backend
       case Rubyplot.backend
       when :magick
         Rubyplot::Backend::MagickWrapper.new self
+      end
+    end
+
+    def construct_colors_array
+      return unless @plot_colors.empty?
+      if (@data[:color] == :default)
+        @plot_colors.push(@geometry.theme_options[:label_colors][0])
+      else
+        @plot_colors.push(Rubyplot::Color::COLOR_INDEX[@data[:color]])
       end
     end
 
@@ -106,23 +134,21 @@ module Rubyplot
       # For now, the labels feature only focuses on the dot graph so it
       # makes sense to only have this as an attribute for this kind of
       # graph and not for others.
-      # FIXME: move this out of Artist.
       if @geometry.has_left_labels
-        longest_left_label_width = calculate_width(
-          @marker_font_size,
-          @axes.y_ticks.values.inject('') { |value, memo|
-            value.to_s.length > memo.to_s.length ? value : memo
-          }) * 1.25
+        text = @axes.y_ticks.values.inject('') { |value, memo|
+          value.to_s.length > memo.to_s.length ? value : memo
+        }
+        longest_left_label_width = @backend.string_width(
+          @marker_font_size, text) * 1.25
       else
-        longest_left_label_width = calculate_width(
+        longest_left_label_width = @backend.string_width(
           @marker_font_size,
-          label_string(@geometry.maximum_value.to_f, @geometry.increment))
+          label_string(@geometry.y_max_value.to_f, @geometry.increment))
       end
 
       # Shift graph if left line numbers are hidden
       line_number_width = @geometry.hide_line_numbers && !@geometry.has_left_labels ?
                             0.0 : (longest_left_label_width + LABEL_MARGIN * 2)
-
       # Pixel offset from the left edge of the plot
       @graph_left = @geometry.left_margin +
                     line_number_width +
@@ -132,9 +158,8 @@ module Rubyplot
       last_label = @axes.x_ticks.keys.max.to_i
       extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
                                   @geometry.center_labels_over_point ?
-                                    calculate_width(@marker_font_size,
+                                    @backend.string_width(@marker_font_size,
                                                     @axes.x_ticks[last_label]) / 2.0 : 0
-
       # Margins
       @graph_right_margin = @geometry.right_margin + extra_room_for_long_label
       @graph_bottom_margin = @geometry.bottom_margin + @marker_caps_height + LABEL_MARGIN
@@ -158,6 +183,41 @@ module Rubyplot
       @graph_bottom = @raw_rows - @graph_bottom_margin - x_axis_label_height - @label_stagger_height
       @graph_height = @graph_bottom - @graph_top
     end
+
+    # Return a formatted string representing a number value that should be
+    # printed as a label.
+    def label_string(value, increment)
+      label =
+        if increment
+          if increment >= 10 || (increment * 1) == (increment * 1).to_i.to_f
+            format('%0i', value)
+          elsif increment >= 1.0 || (increment * 10) == (increment * 10).to_i.to_f
+            format('%0.1f', value)
+          elsif increment >= 0.1 || (increment * 100) == (increment * 100).to_i.to_f
+            format('%0.2f', value)
+          elsif increment >= 0.01 || (increment * 1000) == (increment * 1000).to_i.to_f
+            format('%0.3f', value)
+          elsif increment >= 0.001 || (increment * 10_000) == (increment * 10_000).to_i.to_f
+            format('%0.4f', value)
+          else
+            value.to_s
+          end
+        elsif ((@y_spread.to_f %
+                (@geometry.marker_count.to_f == 0 ?
+                   1 : @geometry.marker_count.to_f) == 0) ||
+               !@geometry.y_axis_increment .nil?)
+          value.to_i.to_s
+        elsif @y_spread > 10.0
+          format('%0i', value)
+        elsif @y_spread >= 3.0
+          format('%0.2f', value)
+        else
+          value.to_s
+        end
+      parts = label.split('.')
+      parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
+      parts.join('.')
+    end
   end
 
   module Plot
@@ -169,7 +229,6 @@ module Rubyplot
       end
       
       def data x_values, y_values
-        puts "self #{self}"
         super y_values
         @data[:x_values] = x_values
         if @geometry.x_max_value.nil? && @geometry.x_min_value.nil?
@@ -209,6 +268,35 @@ module Rubyplot
         @draw.pointsize = font_size
         @draw.font = @artist.font if @font
         @draw.get_type_metrics(@base_image, text.to_s).height
+      end
+
+      # Scale backend canvas to required proportion.
+      def scale scale
+        @draw.scale(@scale, @scale)
+      end
+
+      def set_based_image_gradient top_color, bottom_color, direct=:top_bottom
+        @base_image = render_gradient top_color, bottom_color, direct
+      end
+
+      private
+      # Render a gradient and return an Image.
+      def render_gradient top_color, bottom_color, direct
+        gradient_fill = case direct
+                        when :bottom_top
+                          GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
+                        when :left_right
+                          GradientFill.new(0, 0, 0, 100, top_color, bottom_color)
+                        when :right_left
+                          GradientFill.new(0, 0, 0, 100, bottom_color, top_color)
+                        when :topleft_bottomright
+                          GradientFill.new(0, 100, 100, 0, top_color, bottom_color)
+                        when :topright_bottomleft
+                          GradientFill.new(0, 0, 100, 100, bottom_color, top_color)
+                        else
+                          GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
+                        end
+        Image.new(@columns, @rows, gradient_fill)
       end
     end
   end

@@ -206,6 +206,9 @@ module Rubyplot
         return unless @geometry.has_data
         setup_drawing
         construct_colors_array
+        # ideal scenario should be to just instruct the backend to write
+        # text at so-and-so place in some particular manner instead of specifically
+        # legend and title etc.
         draw_legend!
         draw_line_markers!
         draw_title!
@@ -577,6 +580,6 @@ module Rubyplot
         parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
         parts.join('.')
       end
-    end
-  end
-end
+    end # class Artist
+  end # module MagickWrapper
+end # module Rubyplot

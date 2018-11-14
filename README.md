@@ -1,6 +1,8 @@
 # rubyplot
 An advanced plotting library for Ruby.
 
+Rubyplot aims to be the most advanced visualization solution for Rubyists.
+
 # Roadmap
 
 The library in its current form is heavily under development.
