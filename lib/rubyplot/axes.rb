@@ -1,7 +1,18 @@
 module Rubyplot  
   class Artist
+    # Space around text elements. Mostly used for vertical spacing.
+    # This way the vertical text doesn't overlap.
+    LEGEND_MARGIN = TITLE_MARGIN = 20.0
+    LABEL_MARGIN = 10.0
+    DEFAULT_MARGIN = 20.0
+
+    THOUSAND_SEPARATOR = ','.freeze
+    
     attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
-                :title_font_size, :scale, :font_color, :marker_color
+                :title_font_size, :scale, :font_color, :marker_color, :axes,
+                :legend_margin
+
+    attr_reader :label_stagger_height
     
     def initialize axes, *args
       @axes = axes
@@ -15,11 +26,13 @@ module Rubyplot
       @font = File.exist?(vera_font_path) ? vera_font_path : nil
       @marker_font_size = 21.0
       @legend_font_size = 20.0
+      @legend_margin = LEGEND_MARGIN
       @title_font_size = 36.0
-      @scale = @height / @geometry.raw_columns
+      @scale = @axes.width / @geometry.raw_columns
       @backend = backend
       @backend.scale(@scale)
       setup_default_theme
+      @plot_colors = []
     end
     
     def data y_values
@@ -47,9 +60,23 @@ module Rubyplot
     def write file_name
       setup_drawing
       construct_colors_array
+      prepare_legend
+      @backend.write file_name
+    end
+
+    def label= label
+      @data[:label] = label
+    end
+
+    def color= color
+      @data[:color] = color
     end
 
     private
+
+    def prepare_legend
+      @legend = Rubyplot::Legend.new @axes, @data[:label]
+    end
     
     def setup_default_theme
       defaults = {
@@ -57,7 +84,7 @@ module Rubyplot
         font_color: 'black',
         background_image: nil
       }
-      @geometry.theme_options = defaults.merge options
+      @geometry.theme_options = defaults.merge Themes::CLASSIC_WHITE
       @marker_color = @geometry.theme_options[:marker_color]
       @font_color = @geometry.theme_options[:font_color] || @marker_color
       @backend.set_base_image_gradient(
@@ -174,13 +201,14 @@ module Rubyplot
                       (@geometry.hide_title ?
                          @axes.title_margin :
                          @title_caps_height + @axes.title_margin) +
-                      (@legend_caps_height + legend_margin))
+                      (@legend_caps_height + @legend_margin))
 
       x_axis_label_height = @geometry.x_axis_label .nil? ? 0.0 :
                               @marker_caps_height + LABEL_MARGIN
 
       # The actual height of the graph inside the whole image in pixels.
-      @graph_bottom = @raw_rows - @graph_bottom_margin - x_axis_label_height - @label_stagger_height
+      @graph_bottom = @axes.raw_rows - @graph_bottom_margin -
+                      x_axis_label_height - @geometry.label_stagger_height
       @graph_height = @graph_bottom - @graph_top
     end
 
@@ -218,6 +246,11 @@ module Rubyplot
       parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
       parts.join('.')
     end
+  end # class Artist
+
+  class Legend < Rubyplot::Artist
+    def initialize axes, legends, colors
+    end
   end
 
   module Plot
@@ -244,6 +277,8 @@ module Rubyplot
 
   module Backend
     class MagickWrapper
+      include ::Magick
+      
       def initialize artist
         @artist = artist
         @draw = Magick::Draw.new
@@ -272,11 +307,16 @@ module Rubyplot
 
       # Scale backend canvas to required proportion.
       def scale scale
-        @draw.scale(@scale, @scale)
+        @draw.scale(scale, scale)
       end
 
-      def set_based_image_gradient top_color, bottom_color, direct=:top_bottom
+      def set_base_image_gradient top_color, bottom_color, direct=:top_bottom
         @base_image = render_gradient top_color, bottom_color, direct
+      end
+
+      def write file_name
+        @draw.draw(@base_image)
+        @base_image.write(file_name)
       end
 
       private
@@ -296,7 +336,7 @@ module Rubyplot
                         else
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
-        Image.new(@columns, @rows, gradient_fill)
+        Image.new(@artist.axes.width, @artist.axes.height, gradient_fill)
       end
     end
   end
@@ -340,6 +380,9 @@ module Rubyplot
     # Height in pixels of the graph
     attr_reader :height
 
+    # data variables for something
+    attr_reader :raw_rows
+
     def initialize figure, position
       @figure = figure
       @position = position
@@ -365,6 +408,8 @@ module Rubyplot
 
       @width = DEFAULT_TARGET_WIDTH
       @height = @width * 0.75
+
+      @raw_rows = 800.0 * (@width/@height)
     end
 
     # Set the dimensions in pixels of the graph. Format: "widthxheight". so "800x600".
