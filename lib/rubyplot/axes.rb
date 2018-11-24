@@ -10,10 +10,12 @@ module Rubyplot
     
     attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
                 :title_font_size, :scale, :font_color, :marker_color, :axes,
-                :legend_margin
+                :legend_margin, :backend
+              
+   attr_reader :label_stagger_height
+   # FIXME: possibly disposable attrs
+   attr_reader :graph_height, :title_caps_height
 
-    attr_reader :label_stagger_height
-    
     def initialize axes, *args
       @axes = axes
       @data = {
@@ -29,7 +31,7 @@ module Rubyplot
       @legend_margin = LEGEND_MARGIN
       @title_font_size = 36.0
       @scale = @axes.width / @geometry.raw_columns
-      @backend = backend
+      @backend = create_backend
       @backend.scale(@scale)
       setup_default_theme
       @plot_colors = []
@@ -75,7 +77,7 @@ module Rubyplot
     private
 
     def prepare_legend
-      @legend = Rubyplot::Legend.new @axes, @data[:label]
+      @legend = Rubyplot::Artist::Legend.new @axes, self, [@data[:label]], [@data[:color]]
     end
     
     def setup_default_theme
@@ -93,7 +95,7 @@ module Rubyplot
         @geometry.theme_options[:background_direction])
     end
     
-    def backend
+    def create_backend
       case Rubyplot.backend
       when :magick
         Rubyplot::Backend::MagickWrapper.new self
@@ -248,10 +250,79 @@ module Rubyplot
     end
   end # class Artist
 
-  class Legend < Rubyplot::Artist
-    def initialize axes, legends, colors
-    end
-  end
+  class Artist
+    class Legend
+      attr_reader :legend_box_size, :font, :font_size, :font_color
+      
+      # legends - [String] Array of strings that has legend names.
+      # colors - [String] Array of corresponding colors
+      def initialize axes, artist, legends, colors
+        @axes = axes
+        @artist = artist
+        @legends = legends
+        @colors = colors
+        @legend_box_size = 20.0 # size of the color box of the legend.
+        @font_size = 20.0
+        @font = @artist.font
+        @font_color = @artist.font_color
+        calculate_legend_size
+        calculate_offsets
+      end
+
+      def draw
+        draw_legend_text
+        draw_legend_color_indicator
+      end
+
+      private
+
+      def draw_legend_text
+        @legends.each do |legend|
+          @artist.backend.draw_text(legend,
+                                    font_color: @font_color,
+                                    font: @font,
+                                   )
+        end
+      end
+
+      def draw_legend_color_indicator
+        
+      end
+      
+      # FIXME: should work for multiple legends.
+      def calculate_offsets
+        @current_x_offset = (@artist.geometry.raw_columns -
+                             @label_widths.first.inject(:+))/2
+        @current_y_offset = if @artist.geometry.legend_at_bottom
+                              @artist.graph_height + @axes.title_margin
+                            else
+                              if @artist.geometry.hide_title
+                                @artist.geometry.top_margin + @axes.title_margin
+                              else
+                                @artist.geometry.top_margin +
+                                  @axes.title_margin + @artist.title_caps_height
+                              end                       
+                            end
+      end
+      
+      def calculate_legend_size
+        # FIXME: below array consists of two arrays. If the legend overflows into another line,
+        # it removes the element from the first array and put it in the second array.
+        # so basically first array is for legends which have not overflowed and the second
+        # is one which have. possibly rethink this data structure.
+        @label_widths = [[]] # for calculating line wrap
+        @legends.each do |legend|
+          width, _ = @artist.backend.get_text_width_height legend
+          label_width = width + @legend_box_size * 2.7 # FIXME: make value a global constant
+          @label_widths.last.push label_width
+
+          if @label_widths.last.inject(:+) > (@artist.geometry.raw_columns * 0.9)
+            @label_widths.push [@label_widths.last.pop]
+          end
+        end
+      end
+    end # class Legend
+  end # class Artist
 
   module Plot
     class Scatter < Rubyplot::Artist
@@ -299,6 +370,7 @@ module Rubyplot
       #
       # Not scaled since it deals with dimensions that the regular
       # scaling will handle.
+      # FIXME: duplicate with get_text_width_height
       def string_width font_size, text
         @draw.pointsize = font_size
         @draw.font = @artist.font if @font
@@ -312,6 +384,12 @@ module Rubyplot
 
       def set_base_image_gradient top_color, bottom_color, direct=:top_bottom
         @base_image = render_gradient top_color, bottom_color, direct
+      end
+
+      # Get the width and height of the text in pixels.
+      def get_text_width_height text
+        metrics = @draw.get_type_metrics(@base_image, text)
+        [metrics.width, metrics.height]
       end
 
       def write file_name
