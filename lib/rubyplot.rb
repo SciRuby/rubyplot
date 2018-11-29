@@ -4,6 +4,8 @@ require 'rmagick'
 
 require 'rubyplot/version'
 require 'rubyplot/themes'
+require 'rubyplot/artist'
+require 'rubyplot/backend'
 require 'rubyplot/color'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'

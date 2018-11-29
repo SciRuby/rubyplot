@@ -1,0 +1,97 @@
+module Rubyplot  
+  module Backend
+    class MagickWrapper
+      include ::Magick
+      
+      def initialize artist
+        @artist = artist
+        @draw = Magick::Draw.new
+      end
+
+      # Returns the height of the capital letter 'X' for the current font and
+      # size.
+      #
+      # Not scaled since it deals with dimensions that the regular scaling will
+      # handle.
+      def caps_height font_size
+        @draw.pointsize = font_size
+        @draw.font = @artist.font if @font
+        @draw.get_type_metrics(@base_image, 'X').height
+      end
+
+      # Returns the width of a string at this pointsize.
+      #
+      # Not scaled since it deals with dimensions that the regular
+      # scaling will handle.
+      # FIXME: duplicate with get_text_width_height
+      def string_width font_size, text
+        @draw.pointsize = font_size
+        @draw.font = @artist.font if @font
+        @draw.get_type_metrics(@base_image, text.to_s).height
+      end
+
+      # Scale backend canvas to required proportion.
+      def scale scale
+        @draw.scale(scale, scale)
+      end
+
+      def set_base_image_gradient top_color, bottom_color, direct=:top_bottom
+        @base_image = render_gradient top_color, bottom_color, direct
+      end
+
+      # Get the width and height of the text in pixels.
+      def get_text_width_height text
+        metrics = @draw.get_type_metrics(@base_image, text)
+        [metrics.width, metrics.height]
+      end
+
+      def draw_text text,font_color:,font: nil,pointsize:,stroke:,font_weight:,
+        gravity:,width:,height:,x:,y:
+               @draw.fill = font_color
+        @draw.font = font if font
+        @draw.pointsize = pointsize
+        @draw.stroke stroke
+        @draw.font_weight = font_weight
+        @draw.gravity = gravity
+        @draw.annotate(@base_image, width.to_i, height.to_i, x.to_i, y.to_i,
+                       text.gsub('%', '%%'))
+      end
+
+      def draw_rectangle x1:,y1:,x2:,y2:,fill: '#000000', stroke: 'transparent'
+        @draw.stroke stroke.to_s
+        @draw.fill fill.to_s
+        @draw.rectangle x1, y1, x2, y2
+      end
+
+      def draw_line x1:,y1:,x2:,y2:,fill: '#000000', stroke: 'transparent'
+        @draw.fill fill
+        @draw.line x1, y1, x2, y2
+      end
+
+      def write file_name
+        @draw.draw(@base_image)
+        @base_image.write(file_name)
+      end
+
+      private
+      # Render a gradient and return an Image.
+      def render_gradient top_color, bottom_color, direct
+        gradient_fill = case direct
+                        when :bottom_top
+                          GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
+                        when :left_right
+                          GradientFill.new(0, 0, 0, 100, top_color, bottom_color)
+                        when :right_left
+                          GradientFill.new(0, 0, 0, 100, bottom_color, top_color)
+                        when :topleft_bottomright
+                          GradientFill.new(0, 100, 100, 0, top_color, bottom_color)
+                        when :topright_bottomleft
+                          GradientFill.new(0, 0, 100, 100, bottom_color, top_color)
+                        else
+                          GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
+                        end
+        Image.new(@artist.axes.width, @artist.axes.height, gradient_fill)
+      end
+    end # class MagickWrapper
+  end # module Backend
+end # module Rubyplot

@@ -454,7 +454,8 @@ module Rubyplot
           y = @graph_top + @graph_height - index.to_f * @geometry.increment_scaled
           y_next = @graph_top + @graph_height - (index.to_f + 1) * @geometry.increment_scaled
           @d = @d.fill(@marker_color)
-          @d = @d.line(@graph_left, y, @graph_right, y) if !@geometry.hide_line_markers || (index == 0)
+          @d = @d.line(@graph_left, y, @graph_right, y) if
+            !@geometry.hide_line_markers || (index == 0)
           # If the user specified a marker shadow color, draw a shadow just below it
           unless @marker_shadow_color.nil?
             @d = @d.fill(@marker_shadow_color)
