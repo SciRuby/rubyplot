@@ -41,7 +41,7 @@ module Rubyplot
       @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
       vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
       @font = File.exist?(vera_font_path) ? vera_font_path : nil
-      @marker_font_size = 21.0
+      @marker_font_size = 15.0
       @legend_font_size = 20.0
       @legend_margin = LEGEND_MARGIN
       @title_font_size = 36.0

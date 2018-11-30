@@ -29,6 +29,9 @@ module Rubyplot
         @legends.each do |legend|
           scaled_width = @artist.geometry.raw_columns * @artist.scale
           scaled_width = scaled_width >=1 ? scaled_width : 1
+          puts "scaled_width: #{scaled_width}"
+          puts "x: #{@current_x_offset + (@legend_box_size * 1.7)}"
+          puts "y: #{@current_y_offset}"
           @artist.backend.draw_text(legend,
                                     font_color: @font_color,
                                     font: @font,

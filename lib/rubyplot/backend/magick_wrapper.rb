@@ -2,6 +2,8 @@ module Rubyplot
   module Backend
     class MagickWrapper
       include ::Magick
+
+      attr_reader :draw
       
       def initialize artist
         @artist = artist
@@ -45,8 +47,9 @@ module Rubyplot
         [metrics.width, metrics.height]
       end
 
-      def draw_text(text,font_color:,font: nil,pointsize:,stroke:,font_weight:,
-                    gravity:,width:,height:,x:,y:)
+      def draw_text(text,font_color:,font: nil,pointsize:,stroke:,
+                    font_weight: Magick::NormalWeight,
+                    gravity: Magick::WestGravity,width:,height:,x:,y:)
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize

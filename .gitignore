@@ -53,3 +53,9 @@ spec/fixtures/
 Gemfile.lock
 spec/temp/
 TAGS
+c++
+cc
+g++
+gcc
+mpicc
+mpicxx

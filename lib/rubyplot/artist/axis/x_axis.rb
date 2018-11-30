@@ -31,7 +31,7 @@ module Rubyplot
             y: @y1,
             label: count * value_distance,
             length: 6,
-            label_distance: 2
+            label_distance: 10
           )
         end
       end

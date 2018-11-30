@@ -14,8 +14,12 @@ module Rubyplot
         # @param label [String] Label below the tick.
         # @param label_distance [Integer] Distance between the label and tick.
         def initialize(artist,x:,y:,length:,label:,label_distance:)
-          @artist, @x, @y, @length, @label, @label_distance =
-                                   artist, x, y, length, label, label_distance
+          @artist = artist
+          @x = x
+          @y = y
+          @length = length
+          @label_text = label
+          @label_distance = label_distance
         end
       end # class Base
     end # class Tick
