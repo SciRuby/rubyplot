@@ -45,9 +45,9 @@ module Rubyplot
         [metrics.width, metrics.height]
       end
 
-      def draw_text text,font_color:,font: nil,pointsize:,stroke:,font_weight:,
-        gravity:,width:,height:,x:,y:
-               @draw.fill = font_color
+      def draw_text(text,font_color:,font: nil,pointsize:,stroke:,font_weight:,
+                    gravity:,width:,height:,x:,y:)
+        @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
         @draw.stroke stroke

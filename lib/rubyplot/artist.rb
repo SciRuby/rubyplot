@@ -1,6 +1,8 @@
 require_relative 'artist/legend'
 require_relative 'artist/line'
+require_relative 'artist/tick'
 require_relative 'artist/axis'
+require_relative 'artist/text'
 
 module Rubyplot  
   class Artist
@@ -19,6 +21,15 @@ module Rubyplot
    attr_reader :label_stagger_height
    # FIXME: possibly disposable attrs
    attr_reader :graph_height, :title_caps_height
+
+   # left margin of the actual plot
+   attr_reader :graph_left
+
+   # top margin of the actual plot to leave space for the title
+   attr_reader :graph_top
+
+   # total width of the actual graph
+   attr_reader :graph_width
 
     def initialize axes, *args
       @axes = axes
@@ -52,6 +63,7 @@ module Rubyplot
       @geometry.column_count = y_values.length > @geometry.column_count ?
                                  y_values.length : @geometry.column_count
 
+      # FIXME: move this to XAxis and YAxis later.
       # Pre-normalize => Set the max and min values of the data.
       y_values.each do |val|
         # Initialize the maximum and minimum values so that the spread starts
@@ -89,16 +101,12 @@ module Rubyplot
     private
 
     def prepare_xy_axes
-      y = @graph_top + @graph_height# - index.to_f * @geometry.increment_scaled
-      @x_axis = Rubyplot::Artist::Axis.new(
-        @axes,
-        self,
-        x1: @graph_left,
-        y1: @graph_height,#y,
-        x2: @graph_width,#@graph_right,
-        y2: @graph_height
-      )
+      @x_axis = Rubyplot::Artist::XAxis.new(
+        @axes, self, @geometry.x_min_value, @geometry.x_max_value)
+      @y_axis = Rubyplot::Artist::YAxis.new(
+        @axes, self, @geometry.y_min_value, @geometry.y_max_value)
       @x_axis.draw
+      @y_axis.draw
     end
 
     # Draw horizontal background lines and labels.
@@ -107,6 +115,7 @@ module Rubyplot
     end
 
     def prepare_title
+      
     end
 
     def prepare_legend

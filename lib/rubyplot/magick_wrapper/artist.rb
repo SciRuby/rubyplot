@@ -441,7 +441,8 @@ module Rubyplot
             end
             @geometry.marker_count ||= 4
           end
-          @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ? significant(@spread / @geometry.marker_count) : 1
+          @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ?
+                                  significant(@spread / @geometry.marker_count) : 1
         else
           # TODO: Make this work for negative values
           @geometry.marker_count = (@spread / @geometry.y_axis_increment).to_i
