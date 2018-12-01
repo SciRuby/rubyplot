@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Legend
       attr_reader :legend_box_size, :font, :font_size, :font_color
       

@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Axis
       class Base
         attr_writer :label, :ticks, :major_ticks_count, :min_val, :max_val

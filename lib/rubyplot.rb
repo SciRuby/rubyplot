@@ -9,7 +9,6 @@ require 'rubyplot/backend'
 require 'rubyplot/color'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'
-require 'rubyplot/axes'
 require 'rubyplot/spi'
 
 require 'grruby.so'

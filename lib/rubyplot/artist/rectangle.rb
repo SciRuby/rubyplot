@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Rectangle
       
     end # class Rectangle

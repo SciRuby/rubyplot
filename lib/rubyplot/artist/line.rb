@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Line
       def initialize axes, artist, x_values:,y_values:,color:
         @axes = axes

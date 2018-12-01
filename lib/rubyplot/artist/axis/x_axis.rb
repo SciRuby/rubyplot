@@ -1,7 +1,7 @@
 require_relative 'base'
 
 module Rubyplot
-  class Artist
+  module Artist
     class XAxis < Axis::Base
       def initialize(*)
         super

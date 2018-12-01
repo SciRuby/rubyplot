@@ -5,8 +5,7 @@ module Rubyplot
 
       attr_reader :draw
       
-      def initialize artist
-        @artist = artist
+      def initialize
         @draw = Magick::Draw.new
       end
 
@@ -15,9 +14,9 @@ module Rubyplot
       #
       # Not scaled since it deals with dimensions that the regular scaling will
       # handle.
-      def caps_height font_size
+      def caps_height font, font_size
         @draw.pointsize = font_size
-        @draw.font = @artist.font if @font
+        @draw.font = font if font
         @draw.get_type_metrics(@base_image, 'X').height
       end
 
@@ -26,9 +25,9 @@ module Rubyplot
       # Not scaled since it deals with dimensions that the regular
       # scaling will handle.
       # FIXME: duplicate with get_text_width_height
-      def string_width font_size, text
+      def string_width font, font_size, text
         @draw.pointsize = font_size
-        @draw.font = @artist.font if @font
+        @draw.font = font if font
         @draw.get_type_metrics(@base_image, text.to_s).height
       end
 
@@ -37,8 +36,8 @@ module Rubyplot
         @draw.scale(scale, scale)
       end
 
-      def set_base_image_gradient top_color, bottom_color, direct=:top_bottom
-        @base_image = render_gradient top_color, bottom_color, direct
+      def set_base_image_gradient top_color, bottom_color, width, height, direct=:top_bottom
+        @base_image = render_gradient top_color, bottom_color, width, height, direct
       end
 
       # Get the width and height of the text in pixels.
@@ -49,7 +48,7 @@ module Rubyplot
 
       def draw_text(text,font_color:,font: nil,pointsize:,stroke:,
                     font_weight: Magick::NormalWeight,
-                    gravity: Magick::WestGravity,width:,height:,x:,y:)
+                    gravity: Magick::ForgetGravity,width:,height:,x:,y:)
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
@@ -78,7 +77,7 @@ module Rubyplot
 
       private
       # Render a gradient and return an Image.
-      def render_gradient top_color, bottom_color, direct
+      def render_gradient top_color, bottom_color, width, height, direct
         gradient_fill = case direct
                         when :bottom_top
                           GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
@@ -93,7 +92,7 @@ module Rubyplot
                         else
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
-        Image.new(@artist.axes.width, @artist.axes.height, gradient_fill)
+        Image.new(width, height, gradient_fill)
       end
     end # class MagickWrapper
   end # module Backend

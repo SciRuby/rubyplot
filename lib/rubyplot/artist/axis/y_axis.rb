@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class YAxis < Axis::Base
       def initialize(*)
         super

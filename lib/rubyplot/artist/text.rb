@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Text
       # (X,Y) of upper left corner of the rectangle.
       attr_reader :x, :y, :height, :width, :color, :font, :pointsize,

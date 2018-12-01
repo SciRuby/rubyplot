@@ -1,6 +1,6 @@
 module Rubyplot
-  class Artist
+  module Artist
     class YTick < Tick::Base
     end # class YTick
-  end # class Artist
+  end # module Artist
 end # module Rubyplot

@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class XTick < Tick::Base
       def initialize(*)
         super

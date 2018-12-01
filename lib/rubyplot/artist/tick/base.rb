@@ -1,5 +1,5 @@
 module Rubyplot
-  class Artist
+  module Artist
     class Tick
       class Base
         # Distance between tick mark and number.
