@@ -2,6 +2,13 @@ module Rubyplot
   module Backend
     class MagickWrapper
       include ::Magick
+      GRAVITY_MEASURE = {
+        nil => Magick::ForgetGravity,
+        :center => Magick::CenterGravity,
+        :west => Magick::WestGravity,
+        :east => Magick::EastGravity,
+        :north => Magick::NorthGravity
+      }
 
       attr_reader :draw
       
@@ -47,16 +54,18 @@ module Rubyplot
       end
 
       def draw_text(text,font_color:,font: nil,pointsize:,stroke:,
-                    font_weight: Magick::NormalWeight,
-                    gravity: Magick::ForgetGravity,width:,height:,x:,y:)
+                    font_weight: Magick::NormalWeight, gravity: nil,
+                    width:,height:,x:,y:,rotation: nil)
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
         @draw.stroke stroke
         @draw.font_weight = font_weight
-        @draw.gravity = gravity
+        @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+        @draw.rotation = rotation if rotation
         @draw.annotate(@base_image, width.to_i, height.to_i, x.to_i, y.to_i,
                        text.gsub('%', '%%'))
+        @draw.rotation = 90.0 if rotation
       end
 
       def draw_rectangle x1:,y1:,x2:,y2:,fill: '#000000', stroke: 'transparent'

@@ -3,13 +3,13 @@ module Rubyplot
     class Text
       # (X,Y) of upper left corner of the rectangle.
       attr_reader :x, :y, :height, :width, :color, :font, :pointsize,
-                  :stroke, :weight, :gravity, :text
+                  :stroke, :weight, :gravity, :text, :backend
       
-      def initialize(text, artist, x:, y:, height:, width:,font: nil,
+      def initialize(text, owner, x:, y:, height:, width:,font: nil,
                      color: '#000000',pointsize:,stroke: 'transparent',
-                     weight: nil,gravity: nil)
+                     weight: nil,gravity: nil, internal_label: "", rotation: nil)
         @text = text
-        @artist = artist
+        @owner = owner
         @x = x
         @y = y
         @height = height
@@ -18,10 +18,13 @@ module Rubyplot
         @color = color
         @pointsize = pointsize
         @stroke = stroke
+        @internal_label = internal_label
+        @backend = @owner.backend
+        @rotation = rotation
       end
 
       def draw
-        @artist.backend.draw_text(
+        @backend.draw_text(
           @text,
           font_color: @color,
           font: @font,
@@ -30,7 +33,8 @@ module Rubyplot
           width: @width,
           height: @height,
           x: @x,
-          y: @y
+          y: @y,
+          rotation: @rotation
         )
       end
     end # class Text

@@ -32,13 +32,11 @@ module Rubyplot
       # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
       attr_accessor :x_ticks
       attr_accessor :y_ticks
-
       # Main title for this Axes.
       attr_accessor :title
-
       # Rubyplot::Figure object to which this Axes belongs.
       attr_reader :figure
-
+      # Array of plots contained in this Axes.
       attr_reader :plots
       # Position of this Axes object in the subplots.
       attr_reader :position
@@ -52,18 +50,15 @@ module Rubyplot
 
       attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
-                  :legend_margin, :backend
+                  :legend_margin, :backend, :marker_caps_height, :marker_font_size
       
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
-      attr_reader :graph_height, :title_caps_height
-
+      attr_reader :graph_height, :title_caps_height, :graph_bottom
       # left margin of the actual plot
       attr_reader :graph_left
-
       # top margin of the actual plot to leave space for the title
       attr_reader :graph_top
-
       # total width of the actual graph
       attr_reader :graph_width
 
@@ -119,7 +114,6 @@ module Rubyplot
       # Write an image to a file by communicating with the backend.
       def draw
         setup_drawing
-        construct_colors_array
         prepare_legend
         prepare_xy_axes
         prepare_title
@@ -183,23 +177,36 @@ module Rubyplot
 
         plot
       end
-
       
       def prepare_xy_axes
         @x_axis = Rubyplot::Artist::XAxis.new(
-          @axes, self, @geometry.x_min_value, @geometry.x_max_value)
+          self, @x_title, @geometry.x_min_value, @geometry.x_max_value)
         @y_axis = Rubyplot::Artist::YAxis.new(
-          @axes, self, @geometry.y_min_value, @geometry.y_max_value)
+          self, @y_title, @geometry.y_min_value, @geometry.y_max_value)
         @x_axis.draw
         @y_axis.draw
       end
 
       def prepare_title
-        
+        return if @geometry.hide_title || @title.nil?
+        t = Rubyplot::Artist::Text.new(
+          @title,
+          self,
+          x: 0,
+          y: @geometry.top_margin,
+          height: 1.0,
+          width: @geometry.raw_columns,
+          font: @font,
+          color: @font_color,
+          pointsize: @title_font_size * @scale,
+          internal_label: "axes title."
+        )
+        @texts << t
+        @texts.each(&:draw)
       end
 
       def prepare_legend
-        @legends << Rubyplot::Artist::Legend.new(@axes, self, [@data[:label]], [@plot_colors[0]])
+        @legends = @plots.map(&:create_legend)
         @legends.each { |l| l.draw }
       end
       
@@ -218,15 +225,6 @@ module Rubyplot
           @width,
           @height,
           @geometry.theme_options[:background_direction])
-      end
-      
-      def construct_colors_array
-        return unless @plot_colors.empty?
-        if (@data[:color] == :default)
-          @plot_colors.push(@geometry.theme_options[:label_colors][0])
-        else
-          @plot_colors.push(Rubyplot::Color::COLOR_INDEX[@data[:color]])
-        end
       end
 
       # Calculates size of drawable area and generates normalized data.
@@ -253,18 +251,9 @@ module Rubyplot
 
       # Normalize data with values scaled between 0-100.
       def normalize
-        @geometry.norm_data = []
-        norm_data = [@data[:label]]
-        norm_data << @data[:y_values].map do |val|
-          (val.to_f - @geometry.y_min_value.to_f) / @y_spread
+        @plots.each do |p|
+          p.normalize @x_spread, @y_spread
         end
-        norm_data << @data[:color]
-        if @data[:x_values]
-          norm_data << @data[:x_values].map do |data_point|
-            (data_point.to_f - @geometry.x_min_value.to_f) / @x_spread
-          end
-        end
-        @geometry.norm_data << norm_data
       end
 
       ##
@@ -273,23 +262,23 @@ module Rubyplot
       # It calcuates the measurments in pixels to figure out the positioning
       # gap pixels of Legends, Labels and Titles from the picture edge. 
       def setup_graph_measurements
-        @marker_caps_height = @backend.caps_height @marker_font_size
-        @title_caps_height = @geometry.hide_title || @axes.title.nil? ? 0 :
-                               @backend.caps_height(@title_font_size) * @axes.title.lines.to_a.size
-        @legend_caps_height = @backend.caps_height(@legend_font_size)
+        @marker_caps_height = @backend.caps_height @font, @marker_font_size
+        @title_caps_height = @geometry.hide_title || @title.nil? ? 0 :
+                               @backend.caps_height(@font, @title_font_size) * @title.lines.to_a.size
+        @legend_caps_height = @backend.caps_height @font, @legend_font_size
 
         # For now, the labels feature only focuses on the dot graph so it
         # makes sense to only have this as an attribute for this kind of
         # graph and not for others.
         if @geometry.has_left_labels
-          text = @axes.y_ticks.values.inject('') { |value, memo|
+          text = @y_ticks.values.inject('') { |value, memo|
             value.to_s.length > memo.to_s.length ? value : memo
           }
           longest_left_label_width = @backend.string_width(
             @marker_font_size, text) * 1.25
         else
           longest_left_label_width = @backend.string_width(
-            @marker_font_size,
+            @font, @marker_font_size,
             label_string(@geometry.y_max_value.to_f, @geometry.increment))
         end
 
@@ -301,11 +290,11 @@ module Rubyplot
                       line_number_width +
                       (@geometry.y_axis_label.nil? ? 0.0 : @marker_caps_height + LABEL_MARGIN * 2)
         # Make space for half the width of the rightmost column label.
-        last_label = @axes.x_ticks.keys.max.to_i
+        last_label = @x_ticks.keys.max.to_i
         extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
                                     @geometry.center_labels_over_point ?
                                       @backend.string_width(@marker_font_size,
-                                                            @axes.x_ticks[last_label]) / 2.0 : 0
+                                                            @x_ticks[last_label]) / 2.0 : 0
         # Margins
         @graph_right_margin = @geometry.right_margin + extra_room_for_long_label
         @graph_bottom_margin = @geometry.bottom_margin + @marker_caps_height + LABEL_MARGIN
@@ -318,15 +307,15 @@ module Rubyplot
                        @geometry.top_margin :
                        (@geometry.top_margin +
                         (@geometry.hide_title ?
-                           @axes.title_margin :
-                           @title_caps_height + @axes.title_margin) +
+                           @title_margin :
+                           @title_caps_height + @title_margin) +
                         (@legend_caps_height + @legend_margin))
 
         x_axis_label_height = @geometry.x_axis_label .nil? ? 0.0 :
                                 @marker_caps_height + LABEL_MARGIN
 
         # The actual height of the graph inside the whole image in pixels.
-        @graph_bottom = @axes.raw_rows - @graph_bottom_margin -
+        @graph_bottom = @raw_rows - @graph_bottom_margin -
                         x_axis_label_height - @geometry.label_stagger_height
         @graph_height = @graph_bottom - @graph_top
       end

@@ -35,7 +35,8 @@ module Rubyplot
     end
 
     def write file_name
-      @subplots[0][0].write file_name
+      @subplots.each { |i| i.each { |j| j.draw } }
+      @backend.write(file_name)
     end
   end # class Figure
 end # module Rubyplot
