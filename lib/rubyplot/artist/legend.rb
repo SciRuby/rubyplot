@@ -44,12 +44,12 @@ module Rubyplot
                                        y1: @current_y_offset - @legend_box_size/2.0,
                                        x2: @current_x_offset + @legend_box_size,
                                        y2: @current_y_offset + @legend_box_size/2.0,
-                                       fill: @color,
+                                       color: @color,
                                        stroke: 'transparent'
                                       )
       end
       
-      # FIXME: should work for multiple legends.
+      # FIXME: should work for multiple legeuidends.
       def calculate_offsets
         @current_x_offset = (@axes.geometry.raw_columns -
                              @label_widths.first.inject(:+))/2

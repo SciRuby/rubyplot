@@ -70,8 +70,8 @@ module Rubyplot
         
         @x_title = ''
         @y_title = ''
-        @x_range = [0, 0]
-        @y_range = [0, 0]
+        @x_range = [nil, nil]
+        @y_range = [nil, nil]
         @x_tick_count = :default
         @y_tick_count = :default
         
@@ -136,7 +136,9 @@ module Rubyplot
       end
 
       def line! *args, &block
-        add_plot "Line", *args, &block
+        plot = Rubyplot::Artist::Plot::Line.new self
+        yield(plot) if block_given?
+        @plots << plot
       end
 
       def area! *args, &block
@@ -181,9 +183,9 @@ module Rubyplot
       
       def prepare_xy_axes
         @x_axis = Rubyplot::Artist::XAxis.new(
-          self, @x_title, @geometry.x_min_value, @geometry.x_max_value)
+          self, @x_title, @x_range[0], @x_range[1])
         @y_axis = Rubyplot::Artist::YAxis.new(
-          self, @y_title, @geometry.y_min_value, @geometry.y_max_value)
+          self, @y_title, @y_range[0], @y_range[1])
         @x_axis.draw
         @y_axis.draw
       end
@@ -243,9 +245,9 @@ module Rubyplot
 
       # Calculate spread of the data.
       def calculate_spread
-        @y_spread = @geometry.y_max_value.to_f - @geometry.y_min_value.to_f
-        unless @geometry.x_min_value.nil? && @geometry.x_max_value.nil?
-          @x_spread = @geometry.x_max_value.to_f - @geometry.x_min_value.to_f
+        @y_spread = @y_range[1].to_f - @y_range[0].to_f
+        unless @x_range[0].nil? && @x_range[1].nil?
+          @x_spread = @x_range[1].to_f - @x_range[0].to_f
           @x_spread = @x_spread > 0 ? @x_spread : 1
         end
       end
@@ -280,7 +282,7 @@ module Rubyplot
         else
           longest_left_label_width = @backend.string_width(
             @font, @marker_font_size,
-            label_string(@geometry.y_max_value.to_f, @geometry.increment))
+            label_string(@y_range[1].to_f, @geometry.increment))
         end
 
         # Shift graph if left line numbers are hidden
@@ -291,11 +293,14 @@ module Rubyplot
                       line_number_width +
                       (@geometry.y_axis_label.nil? ? 0.0 : @marker_caps_height + LABEL_MARGIN * 2)
         # Make space for half the width of the rightmost column label.
-        last_label = @x_ticks.keys.max.to_i
-        extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
-                                    @geometry.center_labels_over_point ?
-                                      @backend.string_width(@marker_font_size,
-                                                            @x_ticks[last_label]) / 2.0 : 0
+        # last_label = @x_ticks.keys.max.to_i
+        # extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
+        #                             @geometry.center_labels_over_point ?
+        #                               @backend.string_width(
+        #                               @font,
+        #                               @marker_font_size,
+        #                               @x_ticks[last_label]) / 2.0 : 0
+        extra_room_for_long_label = 0
         # Margins
         @graph_right_margin = @geometry.right_margin + extra_room_for_long_label
         @graph_bottom_margin = @geometry.bottom_margin + @marker_caps_height + LABEL_MARGIN

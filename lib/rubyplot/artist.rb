@@ -1,6 +1,6 @@
 require_relative 'artist/base'
 require_relative 'artist/legend'
-require_relative 'artist/line'
+require_relative 'artist/line2d'
 require_relative 'artist/tick'
 require_relative 'artist/axis'
 require_relative 'artist/text'

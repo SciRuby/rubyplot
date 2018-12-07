@@ -15,7 +15,8 @@ module Rubyplot
         end
 
         def draw
-          @axes.backend.draw_line(x1: @x1, y1: @y1, x2: @x2, y2: @y2)
+          Rubyplot::Artist::Line2D.new(
+            self, x1: @x1, y1: @y1, x2: @x2, y2: @y2, stroke_width: 2.0)
         end
       end # class Base
     end # class Axis

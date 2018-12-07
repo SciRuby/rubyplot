@@ -88,7 +88,6 @@ module Rubyplot
             # Initially the previous x,y points are nil and then
             # they are set with values.
             prev_x = prev_y = nil
-
             @one_point = contains_one_point_only?(data_row)
 
             @d = @d.fill @plot_colors[row_num]
@@ -118,20 +117,26 @@ module Rubyplot
               # @d = @d.fill data_row[DATA_COLOR_INDEX]
               @d = @d.stroke_opacity 1.0
               @d = @d.stroke_width line_width ||
-                                   clip_value_if_greater_than(@columns / (@geometry.norm_data.first[DATA_VALUES_INDEX].size * 4), 5.0)
+                                   clip_value_if_greater_than(
+                                     @columns / (
+                                       @geometry.norm_data.first[DATA_VALUES_INDEX].size * 4), 5.0)
 
               circle_radius = dot_radius ||
-                              clip_value_if_greater_than(@columns / (@geometry.norm_data.first[DATA_VALUES_INDEX].size * 2.5), 5.0)
+                              clip_value_if_greater_than(
+                                @columns / (
+                                  @geometry.norm_data.first[DATA_VALUES_INDEX].size * 2.5), 5.0)
 
               if !@geometry.hide_lines && !prev_x.nil? && !prev_y.nil?
                 @d = @d.line(prev_x, prev_y, new_x, new_y)
               elsif @one_point
                 # Show a circle if there's just one_point
-                @d = DotRenderers.renderer(@geometry.dot_style).render(@d, new_x, new_y, circle_radius)
+                @d = DotRenderers.renderer(
+                  @geometry.dot_style).render(@d, new_x, new_y, circle_radius)
               end
 
               unless @geometry.hide_dots
-                @d = DotRenderers.renderer(@geometry.dot_style).render(@d, new_x, new_y, circle_radius)
+                @d = DotRenderers.renderer(
+                  @geometry.dot_style).render(@d, new_x, new_y, circle_radius)
               end
 
               prev_x = new_x

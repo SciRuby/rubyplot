@@ -68,14 +68,17 @@ module Rubyplot
         @draw.rotation = 90.0 if rotation
       end
 
-      def draw_rectangle x1:,y1:,x2:,y2:,fill: '#000000', stroke: 'transparent'
-        @draw.stroke stroke.to_s
-        @draw.fill fill.to_s
+      def draw_rectangle x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent'
+        @draw.stroke stroke
+        @draw.fill color
         @draw.rectangle x1, y1, x2, y2
       end
 
-      def draw_line x1:,y1:,x2:,y2:,fill: '#000000', stroke: 'transparent'
-        @draw.fill fill
+      def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
+                    stroke_opacity:, stroke_width:)
+        @draw.stroke_opacity stroke_opacity
+        @draw.stroke_width stroke_width
+        @draw.fill color
         @draw.line x1, y1, x2, y2
       end
 

@@ -275,7 +275,7 @@ require 'spec_helper'
         
       end
       
-      it "makes a simple line plot" do
+      it "makes a simple line plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.line! do |p|
@@ -284,10 +284,6 @@ require 'spec_helper'
           p.color = :blue
         end
         axes.title = "A line graph."
-        axes.x_ticks = {
-          0 => "Ola Ruby",
-          1 => "Hello Ruby"
-        }
 
         file = "/#{Rubyplot.backend}_simple_line.png"
         fig.write(@temp_dir + file)
@@ -656,7 +652,7 @@ require 'spec_helper'
 #        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
       end
 
-      it "adds a simple scatter plot.", focus: true do
+      it "adds a simple scatter plot." do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.scatter!(400) do |p|
@@ -704,8 +700,24 @@ require 'spec_helper'
       it "adds multiple scatter plots" do
         
       end
-    end
-  end
-end
+    end # context "#scatter!"
+
+    context "#x_ticks=" do
+      it "assigns strings to X ticks" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.scatter! do |p|
+          p.data [1,2,3,4], [1,2,3,4]
+          p.label = "apples"
+        end
+        axes.x_ticks = {
+          0 => "hello 0",
+          1 => "hello 1"
+        }
+        fig.write SPEC_ROOT + "temp/scatter/x_ticks_string.png"
+      end
+    end # context "#x_ticks="
+  end # Rubyplot::Axes
+end # describe backends
 
 
