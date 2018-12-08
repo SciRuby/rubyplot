@@ -31,7 +31,7 @@ module Rubyplot
             @axes,
             x: count * @major_ticks_distance + @x1,
             y: @y1,
-            label: (count * value_distance).to_s,
+            label: (count * value_distance),
             length: 6,
             label_distance: 10
           )

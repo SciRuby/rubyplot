@@ -16,7 +16,7 @@ module Rubyplot
 
         def draw
           Rubyplot::Artist::Line2D.new(
-            self, x1: @x1, y1: @y1, x2: @x2, y2: @y2, stroke_width: 2.0)
+            self, x1: @x1, y1: @y1, x2: @x2, y2: @y2, stroke_width: 2.0).draw
         end
       end # class Base
     end # class Axis

@@ -7,8 +7,7 @@ module Rubyplot
         
         def initialize(*)
           super
-          @hide_lines = false
-          
+          @hide_lines = false         
         end
 
         def data x_values, y_values=[]
@@ -33,13 +32,14 @@ module Rubyplot
         end
 
         def draw_lines
+          prev_x = prev_y = nil
           @normalized_data[:x_values].each_with_index do |ix, idx_ix|
-            prev_x = prev_y = nil
             iy = @normalized_data[:y_values][idx_ix]
             new_x = ix * @axes.graph_width + @axes.graph_left
             new_y = @axes.graph_top + (@axes.graph_height - iy * @axes.graph_height)
-            unless prev_x.nil? && prev_y.nil?
+            if !(prev_x.nil? && prev_y.nil?)
               Rubyplot::Artist::Line2D.new(
+                self,
                 x1: prev_x,
                 y1: prev_y,
                 x2: new_x,
