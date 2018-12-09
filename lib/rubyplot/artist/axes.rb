@@ -38,12 +38,6 @@ module Rubyplot
       attr_reader :figure
       # Array of plots contained in this Axes.
       attr_reader :plots
-      # Position of this Axes object in the subplots.
-      attr_reader :position
-      # Width in pixels of the graph
-      attr_reader :width
-      # Height in pixels of the graph
-      attr_reader :height
       # data variables for something
       attr_reader :raw_rows
       attr_reader :backend
@@ -54,19 +48,12 @@ module Rubyplot
       
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
-      attr_reader :graph_height, :title_caps_height, :graph_bottom
-      # left margin of the actual plot
-      attr_reader :graph_left
-      # top margin of the actual plot to leave space for the title
-      attr_reader :graph_top
-      # total width of the actual graph
-      attr_reader :graph_width
+      attr_reader :title_caps_height
+      attr_reader :top_spacing
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
-      # @param position [Integer] Position among the rest of the Axes in the Figure.
-      def initialize figure, width, height, position
+      def initialize figure
         @figure = figure
-        @position = position
         
         @x_title = ''
         @y_title = ''
@@ -86,8 +73,6 @@ module Rubyplot
         @y_axis_padding = :default
         @x_ticks = {}
         @plots = []
-        @width = width
-        @height = height
 
         @raw_rows = @width * (@height/@width)
 
@@ -161,6 +146,25 @@ module Rubyplot
 
       def write file_name
         @plots[0].write file_name
+      end
+      
+      # Absolute X co-ordinate of the Axes. Top left corner.
+      def abs_x
+        @figure.top_spacing * @figure.abs_height + @figure.abs_x
+      end
+      
+      # Absolute Y co-ordinate of the Axes. Top left corner.
+      def abs_y
+        @figure.top_spacing * @figure.abs_height + @figure.abs_y
+      end
+      # Absolute width of the Axes in pixels.
+      def abs_width
+        (@figure.left_spacing + @figure.right_spacing) * @figure.abs_width
+      end
+
+      # Absolute height of the Axes in pixels.
+      def abs_height
+        (@figure.top_spacing + @figure.bottom_spacing) * @figure.abs_height
       end
 
       private
@@ -241,7 +245,7 @@ module Rubyplot
       # * X/Y offsets
       def setup_drawing
         calculate_spread
-        normalize
+        normalize # FIXME: maybe doesnt need to go here.
         setup_graph_measurements
       end
 
@@ -267,6 +271,11 @@ module Rubyplot
       # It calcuates the measurments in pixels to figure out the positioning
       # gap pixels of Legends, Labels and Titles from the picture edge. 
       def setup_graph_measurements
+        calculate_font_spaces
+        calculate_top_spacing
+        calculate_left_spacing
+        calculate_bottom_spacing
+        calculate_right_spacing
         @marker_caps_height = @backend.caps_height @font, @marker_font_size
         @title_caps_height = @geometry.hide_title || @title.nil? ? 0 :
                                @backend.caps_height(@font, @title_font_size) * @title.lines.to_a.size
@@ -326,6 +335,12 @@ module Rubyplot
         @graph_bottom = @raw_rows - @graph_bottom_margin -
                         x_axis_label_height - @geometry.label_stagger_height
         @graph_height = @graph_bottom - @graph_top
+      end
+
+      # Consider the various fonts that in use in this graph and calculate the
+      # ratio of the space that they will occupy w.r.t the Axes.
+      def calculate_font_spaces
+        
       end
 
       # Return a formatted string representing a number value that should be
