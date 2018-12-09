@@ -449,7 +449,7 @@ require 'spec_helper'
         #        FileUtils.rm_rf SPEC_ROOT + "temp/bar"
       end
 
-      it "adds a simple bar plot" do
+      it "adds a simple bar plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bar!(600) do |p| 
@@ -524,7 +524,6 @@ require 'spec_helper'
       end
 
        skip "adds multiple bar plots for wide graph" do
-
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         data.each do |name, nums|

@@ -22,6 +22,8 @@ module Rubyplot
       @backend = Rubyplot::Backend::MagickWrapper.new
       @width = DEFAULT_TARGET_WIDTH
       @height = @width * 0.75
+      @x = 0
+      @y = 0
       add_subplots @nrows, @ncols
     end
 

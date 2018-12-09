@@ -132,7 +132,9 @@ module Rubyplot
       end
 
       def bar! *args, &block
-        add_plot "Bar", *args, &block
+        plot = Rubyplot::Artist::Plot::Bar.new self
+        yield(plot) if block_given?
+        @plots << plot
       end
 
       def line! *args, &block
