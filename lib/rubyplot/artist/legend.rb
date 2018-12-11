@@ -1,11 +1,12 @@
 module Rubyplot
   module Artist
-    class Legend
+    class Legend < Artist::Base
       attr_reader :legend_box_size, :font, :font_size, :font_color
       
       # text - [String] String containing name of this legend.
       # colors - [String] String of corresponding color.
-      def initialize axes, text, color
+      def initialize(axes, text:, color:,abs_x:,abs_y:)
+        super(axes.backend, abs_x, abs_y)
         @axes = axes
         @text = text
         @color = color
@@ -13,6 +14,8 @@ module Rubyplot
         @font_size = 20.0
         @font = @axes.font
         @font_color = @axes.font_color
+        configure_legend_color_box
+        configure_legend_text
         calculate_legend_size
         calculate_offsets
       end
@@ -23,6 +26,14 @@ module Rubyplot
       end
 
       private
+
+      def configure_legend_color_box
+        
+      end
+
+      def configure_legend_text
+        
+      end
 
       def draw_legend_text
         scaled_width = @axes.geometry.raw_columns * @axes.scale

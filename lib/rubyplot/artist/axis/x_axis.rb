@@ -28,7 +28,7 @@ module Rubyplot
       def configure_axis_line
         @line = Rubyplot::Artist::Line2D.new(
           self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
-          stroke_width: 1.0)
+        )#stroke_width: @stroke_width)
       end
       
       def populate_major_x_ticks
@@ -51,9 +51,8 @@ module Rubyplot
           @title,
           self,
           pointsize: @axes.marker_font_size,
-          abs_y: @axes.origin[1],
-          abs_x: @axes.origin[0] + (@axes.abs_x + @axes.abs_y)/2,
-          gravity: :center
+          abs_y: @axes.origin[1] + 20,
+          abs_x: @axes.origin[0] + (@abs_x2 - @abs_x1)/2,
         )
       end
     end # class XAxis

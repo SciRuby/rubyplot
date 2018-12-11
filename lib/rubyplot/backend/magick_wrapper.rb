@@ -60,7 +60,6 @@ module Rubyplot
       end
 
       def set_base_image_gradient top_color, bottom_color, width, height, direct=:top_bottom
-        puts "w: #{width} h: #{height} d: #{direct} "
         @base_image = render_gradient top_color, bottom_color, width, height, direct
       end
 
@@ -76,11 +75,10 @@ module Rubyplot
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
-        @draw.stroke stroke
         @draw.font_weight = font_weight
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.rotation = rotation if rotation
-        @draw.text(x.to_i, y.to_i, text.gsub('%', '%%'))
+        @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation
       end
 
@@ -91,8 +89,8 @@ module Rubyplot
       end
 
       def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
-                    stroke_opacity: 1.0, stroke_width: 2.0)
-        # @draw.stroke_opacity stroke_opacity
+                    stroke_opacity: 0.0, stroke_width: 2.0)
+        @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
         @draw = @draw.line x1, y1, x2, y2

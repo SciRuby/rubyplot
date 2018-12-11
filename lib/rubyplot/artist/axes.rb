@@ -40,7 +40,6 @@ module Rubyplot
       attr_reader :plots
       # data variables for something
       attr_reader :raw_rows
-      attr_reader :backend
 
       attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
@@ -55,6 +54,8 @@ module Rubyplot
       attr_accessor :x_axis_margin
       # Margin between the Y axis and the left of the Axes artist.
       attr_accessor :y_axis_margin
+      # Position of the legend box.
+      attr_accessor :legend_box_position
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       def initialize figure
@@ -76,8 +77,6 @@ module Rubyplot
         @text_font = :default
         @grid = true
         @bounding_box = true
-        @x_axis_padding = :default
-        @y_axis_padding = :default
         @x_ticks = {}
         @plots = []
 
@@ -87,18 +86,36 @@ module Rubyplot
         @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
         vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
         @font = File.exist?(vera_font_path) ? vera_font_path : nil
+        @font_color = "#000000"
         @marker_font_size = 15.0
         @legend_font_size = 20.0
         @legend_margin = LEGEND_MARGIN
-        @title_font_size = 36.0
+        @title_font_size = 25.0
         @backend = @figure.backend
-        #@backend.scale(@scale)
         @plot_colors = []
         @legends = []
         @lines = []
         @texts = []
         @x_axis = nil
         @y_axis = nil
+
+        @legend_box_position = :top
+      end
+
+      # X co-ordinate of the legend box depending on value of @legend_box_position.
+      def legend_box_ix
+        case @legend_box_position
+        when :top
+          abs_y + width / 2
+        end
+      end
+
+      # Y co-ordinate of the legend box depending on value of @legend_box_position.
+      def legend_box_iy
+        case @legend_box_position
+        when :top
+          abs_x + @x_axis_margin + @legend_margin
+        end
       end
       
       # Write an image to a file by communicating with the backend.
@@ -106,9 +123,9 @@ module Rubyplot
         configure_title
         calculate_xy_axes_origin
         configure_xy_axes
-        # configure_legends
+        configure_legends
         # configure_plotting_data
-        # actually_draw
+        actually_draw
         # @plots.each(&:draw)
       end
 
@@ -189,24 +206,6 @@ module Rubyplot
           end
 
         plot
-      end
-
-      def prepare_title
-        return if @geometry.hide_title || @title.nil?
-        t = Rubyplot::Artist::Text.new(
-          @title,
-          self,
-          x: 0,
-          y: @geometry.top_margin,
-          height: 1.0,
-          width: @geometry.raw_columns,
-          font: @font,
-          color: @font_color,
-          pointsize: @title_font_size,
-          internal_label: "axes title."
-        )
-        @texts << t
-        @texts.each(&:draw)
       end
 
       def prepare_legend
@@ -316,8 +315,8 @@ module Rubyplot
         @title = Rubyplot::Artist::Text.new(
           @title,
           self,
-          abs_x: abs_x,
-          abs_y: abs_y,
+          abs_x: abs_x + width / 2,
+          abs_y: abs_y + @title_margin,
           font: @font,
           color: @font_color,
           pointsize: @title_font_size,
@@ -328,22 +327,28 @@ module Rubyplot
       def calculate_xy_axes_origin
         @origin[0] = abs_x + @x_axis_margin
         @origin[1] = abs_y + height - @y_axis_margin
-        puts "origin: #{@origin}"
-        puts "h: #{height}"
-        puts "w: #{width}"
       end
 
       # Figure out co-ordinatees of the XAxis and YAxis
       def configure_xy_axes
         @x_axis = Rubyplot::Artist::XAxis.new(
           self, @x_title, @x_range[0], @x_range[1])
-        @x_axis.draw
-        # @y_axis = Rubyplot::Artist::YAxis.new(
-        #   self, @y_title, @y_range[0], @y_range[1])
+        @y_axis = Rubyplot::Artist::YAxis.new(
+          self, @y_title, @y_range[0], @y_range[1])
       end
 
       # Figure out co-ordinates of the legends
       def configure_legends
+        @legend_box = Rubyplot::Artist::LegendBox.new(
+          self, abs_x: legend_box_ix, abs_y: legend_box_iy)
+      end
+
+      # Call the respective draw methods on each of the elements of this Axes.
+      def actually_draw
+        @x_axis.draw
+        @y_axis.draw
+        @title.draw
+        @legend_box.draw
       end
 
       # Return a formatted string representing a number value that should be

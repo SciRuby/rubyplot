@@ -659,6 +659,7 @@ require 'spec_helper'
           p.label = "data1"
           p.color = :plum_purple
         end
+        axes.title = "Nice plot"
         axes.x_title = "X data"
         axes.y_title = "Y data"
 

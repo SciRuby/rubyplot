@@ -3,28 +3,48 @@ module Rubyplot
     class YAxis < Axis::Base
       def initialize(*)
         super
-        @x1 = @axes.graph_left
-        @y1 = @axes.graph_height + @axes.graph_top
-        @x2 = @axes.graph_left
-        @y2 = @axes.graph_top
-        if @title
-          @title = Rubyplot::Artist::Text.new(
-            @title,
-            self,
-            rotation: -90.0,
-            gravity: :center,
-            x: @axes.geometry.left_margin + @axes.marker_caps_height/2.0,
-            y: @axes.graph_top + @axes.graph_height/2.0,
-            width: 1.0,
-            height: @axes.raw_rows,
-            pointsize: @axes.marker_font_size * @axes.scale
-          )
-        end
+        @abs_x1 = @axes.origin[0]
+        @abs_y1 = @axes.origin[1]
+        @abs_x2 = @axes.origin[0]
+        @abs_y2 = @axes.origin[1] - (@axes.height - @axes.x_axis_margin)
+        @y_ticks = []
+        configure_axis_line
+        configure_title
+        populate_major_y_ticks
       end
 
       def draw
-        super
         @title.draw
+        @line.draw
+        #@y_ticks.each(&:draw)
+      end
+
+      private
+
+      def configure_axis_line
+        @line = Rubyplot::Artist::Line2D.new(
+          self,
+          abs_x1: @abs_x1,
+          abs_y1: @abs_y1,
+          abs_x2: @abs_x2,
+          abs_y2: @abs_y2,
+          stroke_width: @stroke_width
+        )
+      end
+      
+      def configure_title
+        @title = Rubyplot::Artist::Text.new(
+          @title,
+          self,
+          rotation: -90.0,
+          abs_x: @axes.origin[0] - 10,
+          abs_y: (@abs_y1 - @abs_y2) / 2,
+          pointsize: @axes.marker_font_size
+        )
+      end
+
+      def populate_major_y_ticks
+        
       end
     end # class YAxis
   end # class Artist
