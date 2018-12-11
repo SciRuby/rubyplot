@@ -2,21 +2,18 @@ module Rubyplot
   module Artist
     class Axis
       class Base
+        # Length in pixels of the arrow after the last major tick.
+        FINISH_ARROW_LENGTH = 10.0
+        
         attr_writer :label, :ticks, :major_ticks_count, :min_val, :max_val, :title
-        attr_reader :backend
+        attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend
         
         def initialize axes, title, min_val, max_val
           @axes = axes
-          @title = title.empty? ? '' : title
-          @major_ticks_distance = 40.0
+          @title = title
           @min_val = min_val
           @max_val = max_val
           @backend = @axes.backend
-        end
-
-        def draw
-          Rubyplot::Artist::Line2D.new(
-            self, x1: @x1, y1: @y1, x2: @x2, y2: @y2, stroke_width: 2.0).draw
         end
       end # class Base
     end # class Axis

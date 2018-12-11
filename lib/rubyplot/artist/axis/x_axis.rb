@@ -5,32 +5,40 @@ module Rubyplot
     class XAxis < Axis::Base
       def initialize(*)
         super
-        @x1 = @axes.graph_left
-        @y1 = @axes.graph_height + @axes.graph_top
-        @x2 = @axes.graph_width
-        @y2 = @axes.graph_height + @axes.graph_top
+        @abs_x1 = @axes.origin[0]
+        @abs_y1 = @axes.origin[1]
+        @abs_x2 = @axes.abs_x + @axes.width - @axes.y_axis_margin
+        @abs_y2 = @axes.origin[1]
+        @major_ticks_count = 5
+        @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
         @x_ticks = []
-        @major_ticks_count = ((@x2 - @x1) / @major_ticks_distance).to_i
+        configure_axis_line
         populate_major_x_ticks
-        set_title
+        configure_title
       end
 
       def draw
-        super
+        @line.draw
         @x_ticks.each(&:draw)
-        @title.draw if @title
+        @title.draw
       end
 
       private
 
+      def configure_axis_line
+        @line = Rubyplot::Artist::Line2D.new(
+          self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
+          stroke_width: 1.0)
+      end
+      
       def populate_major_x_ticks
         value_distance = (@max_val - @min_val) / @major_ticks_count.to_f
         @major_ticks_count.times do |count|
           count += 1
           @x_ticks << Rubyplot::Artist::XTick.new(
             @axes,
-            x: count * @major_ticks_distance + @x1,
-            y: @y1,
+            abs_x: count * @major_ticks_distance + @abs_x1,
+            abs_y: @abs_y1,
             label: (count * value_distance),
             length: 6,
             label_distance: 10
@@ -38,19 +46,15 @@ module Rubyplot
         end
       end
 
-      def set_title
-        if @title
-          @title = Rubyplot::Artist::Text.new(
-            @title,
-            self,
-            pointsize: @axes.marker_font_size * @axes.scale,
-            width: @axes.geometry.raw_columns,
-            height: 1.0,
-            y: @axes.graph_bottom + Artist::Axes::LABEL_MARGIN*2 + @axes.marker_caps_height,
-            x: @axes.graph_left + (@x2-@x1)/2.0,
-            gravity: :center
-          )
-        end
+      def configure_title
+        @title = Rubyplot::Artist::Text.new(
+          @title,
+          self,
+          pointsize: @axes.marker_font_size,
+          abs_y: @axes.origin[1],
+          abs_x: @axes.origin[0] + (@axes.abs_x + @axes.abs_y)/2,
+          gravity: :center
+        )
       end
     end # class XAxis
   end # class Artist

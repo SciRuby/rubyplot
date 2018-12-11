@@ -1,19 +1,17 @@
 module Rubyplot
   module Artist
-    class Text
+    class Text < Artist::Base
       # (X,Y) of upper left corner of the rectangle.
-      attr_reader :x, :y, :height, :width, :color, :font, :pointsize,
+      attr_reader :color, :font, :pointsize,
                   :stroke, :weight, :gravity, :text, :backend
       
-      def initialize(text, owner, x:, y:, height:, width:,font: nil,
+      def initialize(text, owner, abs_x:, abs_y:,font: nil,
                      color: '#000000',pointsize:,stroke: 'transparent',
                      weight: nil,gravity: nil, internal_label: "", rotation: nil)
         @text = text
         @owner = owner
-        @x = x
-        @y = y
-        @height = height
-        @width = width
+        @abs_x = abs_x
+        @abs_y = abs_y
         @font = font
         @color = color
         @pointsize = pointsize
@@ -23,6 +21,16 @@ module Rubyplot
         @rotation = rotation
       end
 
+      # Height in pixels of this text
+      def height
+        @backend.text_height(@text, @font, @font_size)
+      end
+
+      # Width in pixels of this text
+      def width
+        @backend.text_width(@text, @font, @font_size)
+      end
+
       def draw
         @backend.draw_text(
           @text,
@@ -30,10 +38,8 @@ module Rubyplot
           font: @font,
           pointsize: @pointsize,
           stroke: @stroke,
-          width: @width,
-          height: @height,
-          x: @x,
-          y: @y,
+          x: @abs_x,
+          y: @abs_y,
           rotation: @rotation
         )
       end

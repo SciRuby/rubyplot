@@ -38,12 +38,29 @@ module Rubyplot
         @draw.get_type_metrics(@base_image, text.to_s).height
       end
 
+      # Height in pixels of particular text.
+      # @param text [String] Text to be measured.
+      def text_height text, font, font_size
+        @draw.pointsize = font_size
+        @draw.font = font if font
+        @draw.get_type_metrics(@base_image, text.to_s).height
+      end
+
+      # Width in pixels of particular text.
+      # @param text [String] Text to be measured.
+      def text_width text, font, font_size
+        @draw.pointsize = font_size
+        @draw.font = font if font
+        @draw.get_type_metrics(@base_image, text.to_s).width
+      end
+
       # Scale backend canvas to required proportion.
       def scale scale
         @draw.scale(scale, scale)
       end
 
       def set_base_image_gradient top_color, bottom_color, width, height, direct=:top_bottom
+        puts "w: #{width} h: #{height} d: #{direct} "
         @base_image = render_gradient top_color, bottom_color, width, height, direct
       end
 
@@ -55,7 +72,7 @@ module Rubyplot
 
       def draw_text(text,font_color:,font: nil,pointsize:,stroke:,
                     font_weight: Magick::NormalWeight, gravity: nil,
-                    width:,height:,x:,y:,rotation: nil)
+                    x:,y:,rotation: nil)
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
@@ -63,8 +80,7 @@ module Rubyplot
         @draw.font_weight = font_weight
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.rotation = rotation if rotation
-        @draw.annotate(@base_image, width.to_i, height.to_i, x.to_i, y.to_i,
-                       text.gsub('%', '%%'))
+        @draw.text(x.to_i, y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation
       end
 
@@ -75,11 +91,11 @@ module Rubyplot
       end
 
       def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
-                    stroke_opacity:, stroke_width:)
-        @draw.stroke_opacity stroke_opacity
+                    stroke_opacity: 1.0, stroke_width: 2.0)
+        # @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
-        @draw.line x1, y1, x2, y2
+        @draw = @draw.line x1, y1, x2, y2
       end
 
       def draw_circle(x:,y:,radius:,stroke_opacity:,stroke_width:,color:)

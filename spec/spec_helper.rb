@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'pry'
 require 'rubyplot'
 
 SPEC_ROOT = File.dirname(__FILE__) + "/"
