@@ -1,13 +1,14 @@
 module Rubyplot
   module Artist
     class Rectangle < Base
-      attr_reader :width, :height, :color
+      attr_reader :width, :height, :border_color, :fill_color
 
-      def initialize(owner,abs_x:,abs_y:,width:,height:,color:)
+      def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
         super(owner.backend, abs_x, abs_y)
         @height = height
         @width = width
-        @color = color
+        @border_color = border_color
+        @fill_color = fill_color
       end
 
       def draw
@@ -16,7 +17,8 @@ module Rubyplot
           y1: @abs_y,
           x2: @abs_x + @width,
           y2: @abs_y + @height,
-          color: @color
+          border_color: @border_color,
+          fill_color: @fill_color
         )
       end
     end # class Rectangle

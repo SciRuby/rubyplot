@@ -1,94 +1,56 @@
 module Rubyplot
   module Artist
     class Legend < Artist::Base
+      TOP_MARGIN = 2.5
+      BOTTOM_MARGIN = 2.5
+      # Space between the color box and the legend text.
+      BOX_AND_TEXT_SPACE = 5.0
       attr_reader :legend_box_size, :font, :font_size, :font_color
-      
-      # text - [String] String containing name of this legend.
-      # colors - [String] String of corresponding color.
-      def initialize(axes, text:, color:,abs_x:,abs_y:)
-        super(axes.backend, abs_x, abs_y)
+
+      def initialize(legend_box, axes, text:, color:,abs_x:,abs_y:)
+        super(legend_box.backend, abs_x, abs_y)
+        @legend_box = legend_box
         @axes = axes
         @text = text
         @color = color
-        @legend_box_size = 20.0 # size of the color box of the legend.
+        @legend_box_size = @legend_box.per_legend_height -
+                           (TOP_MARGIN + BOTTOM_MARGIN) # size of the color box of the legend.
         @font_size = 20.0
         @font = @axes.font
         @font_color = @axes.font_color
         configure_legend_color_box
         configure_legend_text
-        calculate_legend_size
-        calculate_offsets
       end
 
       def draw
-        draw_legend_text
-        draw_legend_color_indicator # FIXME: make a new Artist::Rectangle object.
+        @legend_color_box.draw
+        @text.draw
       end
 
       private
 
       def configure_legend_color_box
-        
+        @legend_color_box = Rubyplot::Artist::Rectangle.new(
+          self,
+          abs_x: @abs_x,
+          abs_y: @abs_y + TOP_MARGIN,
+          width: @legend_box_size,
+          height: @legend_box_size,
+          border_color: @color,
+          fill_color: @color
+        )
       end
 
       def configure_legend_text
-        
-      end
-
-      def draw_legend_text
-        scaled_width = @axes.geometry.raw_columns * @axes.scale
-        scaled_width = scaled_width >=1 ? scaled_width : 1
-        @axes.backend.draw_text(@text,
-                                  font_color: @font_color,
-                                  font: @font,
-                                  pointsize: @font_size * @axes.scale,
-                                  stroke: 'transparent',
-                                  width: scaled_width,
-                                  height: 1.0,
-                                  x: @current_x_offset + (@legend_box_size * 1.7),
-                                  y: @current_y_offset
-                                 )
-      end
-
-      def draw_legend_color_indicator
-        @axes.backend.draw_rectangle(x1: @current_x_offset,
-                                       y1: @current_y_offset - @legend_box_size/2.0,
-                                       x2: @current_x_offset + @legend_box_size,
-                                       y2: @current_y_offset + @legend_box_size/2.0,
-                                       color: @color,
-                                       stroke: 'transparent'
-                                      )
-      end
-      
-      # FIXME: should work for multiple legeuidends.
-      def calculate_offsets
-        @current_x_offset = (@axes.geometry.raw_columns -
-                             @label_widths.first.inject(:+))/2
-        @current_y_offset = if @axes.geometry.legend_at_bottom
-                              @axes.graph_height + @axes.title_margin
-                            else
-                              if @axes.geometry.hide_title
-                                @axes.geometry.top_margin + @axes.title_margin
-                              else
-                                @axes.geometry.top_margin +
-                                  @axes.title_margin + @axes.title_caps_height
-                              end                       
-                            end
-      end
-      
-      def calculate_legend_size
-        # FIXME: below array consists of two arrays. If the legend overflows into another line,
-        # it removes the element from the first array and put it in the second array.
-        # so basically first array is for legends which have not overflowed and the second
-        # is one which have. possibly rethink this data structure.
-        @label_widths = [[]] # for calculating line wrap
-        width, _ = @axes.backend.get_text_width_height @text
-        label_width = width + @legend_box_size * 2.7 # FIXME: make value a global constant
-        @label_widths.last.push label_width
-
-        if @label_widths.last.inject(:+) > (@axes.geometry.raw_columns * 0.9)
-          @label_widths.push [@label_widths.last.pop]
-        end
+        @text = Rubyplot::Artist::Text.new(
+          @text,
+          self,
+          abs_x: @abs_x + @legend_box_size + BOX_AND_TEXT_SPACE,
+          abs_y: @legend_color_box.abs_y + @legend_box_size - 2.5,
+          font: @font,
+          color: @font_color,
+          pointsize: @font_size
+        )
       end
     end # class Legend
   end # class Artist

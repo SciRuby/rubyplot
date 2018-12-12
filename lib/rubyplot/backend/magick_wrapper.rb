@@ -82,10 +82,22 @@ module Rubyplot
         @draw.rotation = 90.0 if rotation
       end
 
-      def draw_rectangle x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent'
-        @draw.stroke stroke
-        @draw.fill color
-        @draw.rectangle x1, y1, x2, y2
+      # Draw a rectangle.
+      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: '#000000',stroke: 'transparent',
+                         fill_color: nil, stroke_width: 1.0)
+        if fill_color # solid rectangle
+          @draw.stroke stroke
+          @draw.fill fill_color
+          @draw.stroke_width stroke_width
+          @draw.rectangle x1, y1, x2, y2
+        else # just edges
+          @draw.stroke_width stroke_width
+          @draw.fill border_color
+          @draw.line x1, y1, x1 + (x2-x1), y1 # top line
+          @draw.line x1 + (x2-x1), y1, x2, y2 # right line
+          @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
+          @draw.line x1, y1, x1, y1 + (y2-y1) # left line          
+        end
       end
 
       def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
@@ -93,7 +105,7 @@ module Rubyplot
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
-        @draw = @draw.line x1, y1, x2, y2
+        @draw.line x1, y1, x2, y2
       end
 
       def draw_circle(x:,y:,radius:,stroke_opacity:,stroke_width:,color:)

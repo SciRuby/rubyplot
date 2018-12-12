@@ -20,6 +20,14 @@ module Rubyplot
           @stroke_opacity = 1.0
         end
 
+        def label
+          @data[:label]
+        end
+
+        def color
+          @data[:color]
+        end
+
         def label= label
           @data[:label] = label
         end
