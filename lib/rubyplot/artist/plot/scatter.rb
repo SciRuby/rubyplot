@@ -10,22 +10,20 @@ module Rubyplot
         end
 
         def draw
-          @x_increment = if @axes.geometry.column_count > 1
-                           (@axes.graph_width / (@axes.geometry.column_count-1)).to_f
-                         else
-                           @axes.graph_width
-                         end
+          puts "data: #{@data}"
+          puts "norm: #{@normalized_data}"
+          y_axis_length = (@axes.y_axis.abs_y2 - @axes.y_axis.abs_y1).abs
           @normalized_data[:y_values].each_with_index do |iy, idx_y|
             ix = @normalized_data[:x_values][idx_y]
             next if iy.nil? || ix.nil?
-            relative_ix = ix * @axes.graph_width + @axes.graph_left
-            relative_iy = @axes.graph_top + (@axes.graph_height -
-                                             iy * @axes.graph_height)
+            abs_x = ix * (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs + @axes.abs_x +
+                    @axes.y_axis_margin
+            abs_y = (y_axis_length - iy * y_axis_length) + @axes.abs_y
             Rubyplot::Artist::Circle.new(
               self,
-              relative_ix,
-              relative_iy,
-              @circle_radius,
+              abs_x: abs_x,
+              abs_y: abs_y,
+              radius: @circle_radius,
               stroke_opacity: @stroke_opacity,
               stroke_width: @stroke_width
             ).draw

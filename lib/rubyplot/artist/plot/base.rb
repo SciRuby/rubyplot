@@ -17,7 +17,7 @@ module Rubyplot
             :x_values => nil
           }
           @stroke_width = 4.0
-          @stroke_opacity = 1.0
+          @stroke_opacity = 0.0
         end
 
         def label
@@ -53,18 +53,18 @@ module Rubyplot
           @axes.geometry.has_data = true
         end
 
-        # Normalize original data between the spread of the data.
-        def normalize x_spread, y_spread
+        # Normalize original data to values between 0-100.
+        def normalize
+          x_min = @axes.x_range[0] < 0 ? @axes.x_range[0] : 0
+          y_min = @axes.y_range[0] < 0 ? @axes.y_range[0] : 0
+          x_spread = @axes.x_range[1] - x_min
+          y_spread = @axes.y_range[1] - y_min
           @normalized_data[:x_values] = @data[:x_values].map do |x|
-            (x.to_f - @axes.x_range[0]) / x_spread
+            (x.to_f - x_min) / x_spread 
           end
           @normalized_data[:y_values] = @data[:y_values].map do |y|
-            (y.to_f - @axes.y_range[0]) / y_spread
+            (y.to_f - y_min) / y_spread
           end
-        end
-
-        def create_legend
-          Rubyplot::Artist::Legend.new(@axes, @data[:label], @data[:color])
         end
       end # class Base
     end # module Plot

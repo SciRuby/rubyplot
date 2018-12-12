@@ -1,11 +1,10 @@
 module Rubyplot
   module Artist
     class Circle < Base
-      def initialize(owner, x, y, radius, stroke_opacity: 1.0,
+      def initialize(owner, abs_x:, abs_y:, radius: , stroke_opacity: 0.0,
                      color: '#000000', stroke_width:)
+        super(owner.backend, abs_x, abs_y)
         @owner = owner
-        @x = x
-        @y = y
         @radius = radius
         @stroke_width = stroke_width
         @stroke_opacity = stroke_opacity
@@ -15,7 +14,7 @@ module Rubyplot
 
       def draw
         @backend.draw_circle(
-          x: @x, y: @y, radius: @radius, stroke_opacity: @stroke_opacity,
+          x: @abs_x, y: @abs_y, radius: @radius, stroke_opacity: @stroke_opacity,
           stroke_width: @stroke_width, color: @color
         )
       end

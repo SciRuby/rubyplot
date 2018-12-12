@@ -1,6 +1,10 @@
 # Developer notes
 
 ## Co-ordinate system
+
+Rubyplot assumes that the co-ordinate system has the origin at the top left corner
+of the graph. This helps in keeping all pixel co-ordinates positive values.
+
 Each Artist contains a `(abs_x, abs_y)` pair that denotes the absolute position of the 
 Artist on the canvas. For `Figure` and `Axes` this pair denotes the top left corner.
 

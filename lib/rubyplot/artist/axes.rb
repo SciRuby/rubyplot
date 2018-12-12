@@ -56,6 +56,10 @@ module Rubyplot
       attr_accessor :y_axis_margin
       # Position of the legend box.
       attr_accessor :legend_box_position
+      # Rubyplot::Artist::XAxis object.
+      attr_reader :x_axis
+      # Rubyplot::Artist::YAxis object.
+      attr_reader :y_axis
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       def initialize figure
@@ -124,9 +128,8 @@ module Rubyplot
         calculate_xy_axes_origin
         configure_xy_axes
         configure_legends
-        # configure_plotting_data
+        configure_plotting_data
         actually_draw
-        # @plots.each(&:draw)
       end
 
       def scatter! *args, &block
@@ -212,103 +215,6 @@ module Rubyplot
         @legends = @plots.map(&:create_legend)
         @legends.each { |l| l.draw }
       end
-     
-      # Calculates size of drawable area and generates normalized data.
-      #
-      # * line markers
-      # * legend
-      # * title
-      # * labels
-      # * X/Y offsets
-      def setup_drawing
-        calculate_spread
-        normalize # FIXME: maybe doesnt need to go here.
-        setup_graph_measurements
-      end
-
-      # Calculate spread of the data.
-      def calculate_spread
-        @y_spread = @y_range[1].to_f - @y_range[0].to_f
-        unless @x_range[0].nil? && @x_range[1].nil?
-          @x_spread = @x_range[1].to_f - @x_range[0].to_f
-          @x_spread = @x_spread > 0 ? @x_spread : 1
-        end
-      end
-
-      # Normalize data with values scaled between 0-100.
-      def normalize
-        @plots.each do |p|
-          p.normalize @x_spread, @y_spread
-        end
-      end
-
-      ##
-      # Calculates size of drawable area, general font dimensions, etc.
-      # This is the most crucial part of the code and is based on geometry.
-      # It calcuates the measurments in pixels to figure out the positioning
-      # gap pixels of Legends, Labels and Titles from the picture edge. 
-      def setup_graph_measurements
-        @marker_caps_height = @backend.caps_height @font, @marker_font_size
-        @title_caps_height = @geometry.hide_title || @title.nil? ? 0 :
-                               @backend.caps_height(@font, @title_font_size) *
-                               @title.lines.to_a.size
-        @legend_caps_height = @backend.caps_height @font, @legend_font_size
-
-        # For now, the labels feature only focuses on the dot graph so it
-        # makes sense to only have this as an attribute for this kind of
-        # graph and not for others.
-        if @geometry.has_left_labels
-          text = @y_ticks.values.inject('') { |value, memo|
-            value.to_s.length > memo.to_s.length ? value : memo
-          }
-          longest_left_label_width = @backend.string_width(
-            @marker_font_size, text) * 1.25
-        else
-          longest_left_label_width = @backend.string_width(
-            @font, @marker_font_size,
-            label_string(@y_range[1].to_f, @geometry.increment))
-        end
-
-        # Shift graph if left line numbers are hidden
-        line_number_width = @geometry.hide_line_numbers && !@geometry.has_left_labels ?
-                              0.0 : (longest_left_label_width + LABEL_MARGIN * 2)
-        # Pixel offset from the left edge of the plot
-        @graph_left = @geometry.left_margin +
-                      line_number_width +
-                      (@geometry.y_axis_label.nil? ? 0.0 : @marker_caps_height + LABEL_MARGIN * 2)
-        # Make space for half the width of the rightmost column label.
-        # last_label = @x_ticks.keys.max.to_i
-        # extra_room_for_long_label = last_label >= (@geometry.column_count - 1) &&
-        #                             @geometry.center_labels_over_point ?
-        #                               @backend.string_width(
-        #                               @font,
-        #                               @marker_font_size,
-        #                               @x_ticks[last_label]) / 2.0 : 0
-        extra_room_for_long_label = 0
-        # Margins
-        @graph_right_margin = @geometry.right_margin + extra_room_for_long_label
-        @graph_bottom_margin = @geometry.bottom_margin + @marker_caps_height + LABEL_MARGIN
-
-        @graph_right = @geometry.raw_columns - @graph_right_margin
-        @graph_width = @geometry.raw_columns - @graph_left - @graph_right_margin
-
-        # When @hide title, leave a title_margin space for aesthetics.
-        @graph_top = @geometry.legend_at_bottom ?
-                       @geometry.top_margin :
-                       (@geometry.top_margin +
-                        (@geometry.hide_title ?
-                           @title_margin :
-                           @title_caps_height + @title_margin) +
-                        (@legend_caps_height + @legend_margin))
-
-        x_axis_label_height = @geometry.x_axis_label .nil? ? 0.0 :
-                                @marker_caps_height + LABEL_MARGIN
-
-        # The actual height of the graph inside the whole image in pixels.
-        @graph_bottom = @raw_rows - @graph_bottom_margin -
-                        x_axis_label_height - @geometry.label_stagger_height
-        @graph_height = @graph_bottom - @graph_top
-      end
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
@@ -343,12 +249,21 @@ module Rubyplot
           self, abs_x: legend_box_ix, abs_y: legend_box_iy)
       end
 
+      # Make adjustments to the data that will be plotted. Maps the data
+      # contained in the plot to actual pixel values.
+      def configure_plotting_data
+        @plots.each do |plot|
+          plot.normalize
+        end
+      end
+
       # Call the respective draw methods on each of the elements of this Axes.
       def actually_draw
         @x_axis.draw
         @y_axis.draw
         @title.draw
         @legend_box.draw
+        @plots.each(&:draw)
       end
 
       # Return a formatted string representing a number value that should be
