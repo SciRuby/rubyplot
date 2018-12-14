@@ -11,11 +11,11 @@ module Rubyplot
       RIGHT_SPACING_RATIO = 0.1
 
       attr_accessor :border_color
-      
+
       def initialize(axes, abs_x:, abs_y:)
         super(axes.backend, abs_x, abs_y)
         @axes = axes
-        @border_color = "#000000"
+        @border_color = '#000000'
         @legends = []
         configure_dimensions
         configure_legends
@@ -80,6 +80,9 @@ module Rubyplot
           )
         end
       end
-    end # class LegendBox
-  end # module Artist 
-end # module Rubyplot
+    end
+    # class LegendBox
+  end
+  # module Artist
+end
+# module Rubyplot

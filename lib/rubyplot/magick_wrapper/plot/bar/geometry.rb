@@ -8,8 +8,13 @@ module Rubyplot
             super
             @spacing_factor = 0.9
           end
-        end # class Geometry
-      end # class Bar
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+        end
+        # class Geometry
+      end
+      # class Bar
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

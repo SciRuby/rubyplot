@@ -14,18 +14,22 @@ module Rubyplot
         end
 
         # Set the spacing factor for this bar plot.
-        def spacing_factor= sf
+        def spacing_factor=(s_f)
           raise ValueError, '@spacing_factor must be between 0.00 and 1.00' unless
-            (sf >= 0) && (sf <= 1)
-          @spacing_factor = sf
+            (s_f >= 0) && (s_f <= 1)
+
+          @spacing_factor = s_f
         end
-        
+
         def draw
           super
           return unless @axes.geometry.has_data
         end
-      end # class Bar
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
-
+      end
+      # class Bar
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

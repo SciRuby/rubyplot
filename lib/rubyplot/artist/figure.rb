@@ -1,7 +1,7 @@
 module Rubyplot
   module Artist
     class Figure < Artist::Base
-      DEFAULT_TARGET_WIDTH = 800  
+      DEFAULT_TARGET_WIDTH = 800
 
       # Title on the figure.
       attr_reader :title
@@ -45,16 +45,16 @@ module Rubyplot
         add_subplots @nrows, @ncols
       end
 
-      def add_subplots nrows, ncols
+      def add_subplots(nrows, ncols)
         @subplots = Array.new(nrows) { Array.new(ncols) { nil } }
       end
 
-      def add_subplot nrow, ncol
+      def add_subplot(nrow, ncol)
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(self)
       end
 
-      def write file_name
-        @subplots.each { |i| i.each { |j| j.draw } }
+      def write(file_name)
+        @subplots.each { |i| i.each(&:draw) }
         @backend.write(file_name)
       end
 
@@ -75,6 +75,9 @@ module Rubyplot
           @theme_options[:background_direction]
         )
       end
-    end # class Figure
-  end # module Artist
-end # module Rubyplot
+    end
+    # class Figure
+  end
+  # module Artist
+end
+# module Rubyplot

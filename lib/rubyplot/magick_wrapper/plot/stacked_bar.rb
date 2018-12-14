@@ -4,7 +4,7 @@ module Rubyplot
   module MagickWrapper
     module Plot
       class StackedBar < Artist
-        #DATA_VALUES_INDEX = Rubyplot::MagickArtist::DATA_VALUES_INDEX
+        # DATA_VALUES_INDEX = Rubyplot::MagickArtist::DATA_VALUES_INDEX
         #
         # A stacked bar graph (or stacked bar chart) is a chart that uses bars to show
         # comparisons between categories of data, but with ability to break down and
@@ -67,7 +67,8 @@ module Rubyplot
                              (@bar_width * @bar_spacing / 2.0)
               draw_label(label_center, point_index)
 
-              next if data_point == 0
+              next if data_point.zero?
+
               # Use incremented x and scaled y
               left_x = @graph_left + (@bar_width * point_index) + @padding
               left_y = @graph_top + (@graph_height -
@@ -90,12 +91,12 @@ module Rubyplot
         def max_stack_height
           # Get the sum of values in each stack to the get the stack height
           max_hash = {}
-          #@data.each do |data_set|
-            @data[:y_values].each_with_index do |data_point, i|
-              max_hash[i] = 0.0 unless max_hash[i]
-              max_hash[i] += data_point.to_f
-            end
-         # end
+          # @data.each do |data_set|
+          @data[:y_values].each_with_index do |data_point, i|
+            max_hash[i] = 0.0 unless max_hash[i]
+            max_hash[i] += data_point.to_f
+          end
+          # end
 
           @geometry.maximum_value = 0
           max_hash.keys.each do |key|
@@ -103,7 +104,11 @@ module Rubyplot
           end
           @geometry.minimum_value = 0
         end
-      end # class StackedBar
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+      end
+      # class StackedBar
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

@@ -11,22 +11,22 @@ module Rubyplot
         DEFAULT_TARGET_WIDTH = 800
 
         # Blank space above the graph
-        attr_accessor :top_margin
+        # attr_accessor :top_margin
 
         # Blank space below the graph
-        attr_accessor :bottom_margin
+        # attr_accessor :bottom_margin
 
         # Blank space to the right of the graph
-        attr_accessor :right_margin
+        # attr_accessor :right_margin
 
         # Blank space to the left of the graph
-        attr_accessor :left_margin
+        # attr_accessor :left_margin
 
         # Blank space below the title
         attr_accessor :title_margin
 
         # Blank space below the legend
-        attr_accessor :legend_margin
+        # attr_accessor :legend_margin
 
         # A hash of names for the individual columns, where the key is the array
         # index for the column this label represents.
@@ -34,10 +34,10 @@ module Rubyplot
         # Not all columns need to be named.
         #
         # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
-        attr_accessor :labels
+        # attr_accessor :labels
 
         # Used internally for horizontal graph types.
-        attr_accessor :has_left_labels
+        # attr_accessor :has_left_labels
 
         # A label for the bottom of the graph
         attr_accessor :x_axis_label
@@ -56,7 +56,7 @@ module Rubyplot
         attr_accessor :font_color
 
         # Prevent drawing of line numbers
-        attr_accessor :hide_line_numbers
+        # attr_accessor :hide_line_numbers
 
         # Optionally set the size of the font. Based on an 800x600px graph.
         # Default is 20.
@@ -65,7 +65,7 @@ module Rubyplot
         attr_accessor :legend_font_size
 
         # The number of horizontal lines shown for reference
-        attr_accessor :marker_count
+        # attr_accessor :marker_count
 
         # The color of the auxiliary lines
         attr_accessor :marker_color
@@ -92,7 +92,7 @@ module Rubyplot
 
         # Label values
         attr_accessor :labels, :labels_seen, :has_left_labels, :label_formatting
-        attr_accessor :label_truncation_style, :label_max_size, :label_stagger_height
+        # attr_accessor :label_truncation_style, :label_max_size, :label_stagger_height
         attr_accessor :label_stagger_height, :label_max_size
 
         # Offset
@@ -161,7 +161,11 @@ module Rubyplot
           @right_margin = DEFAULT_MARGIN
           @labels_seen = {}
         end
-      end # class Geometry
-    end # class Artist
-  end # module MagickWrapper
-end # module Rubyplot
+      end
+      # class Geometry
+    end
+    # class Artist
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

@@ -16,7 +16,7 @@ module Rubyplot
       def draw
         @title.draw
         @line.draw
-        #@y_ticks.each(&:draw)
+        # @y_ticks.each(&:draw)
       end
 
       private
@@ -31,7 +31,7 @@ module Rubyplot
           stroke_width: @stroke_width
         )
       end
-      
+
       def configure_title
         @title = Rubyplot::Artist::Text.new(
           @title,
@@ -43,9 +43,10 @@ module Rubyplot
         )
       end
 
-      def populate_major_y_ticks
-        
-      end
-    end # class YAxis
-  end # class Artist
-end # module Rubyplot
+      def populate_major_y_ticks; end
+    end
+    # class YAxis
+  end
+  # class Artist
+end
+# module Rubyplot

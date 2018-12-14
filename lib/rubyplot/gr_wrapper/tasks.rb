@@ -4,8 +4,8 @@ module Rubyplot
       def hex_color_to_gr_color_index(rgbstring)
         rgb = rgbstring.match /#(..)(..)(..)/
         GR.inqcolorfromrgb((rgb[1].hex.to_f/255.0),
-                           (rgb[2].hex.to_f/255.0),
-                           (rgb[3].hex.to_f/255.0))
+          (rgb[2].hex.to_f/255.0),
+          (rgb[3].hex.to_f/255.0))
       end
 
       class BeginPrint
@@ -43,6 +43,7 @@ module Rubyplot
           @x_coordinates = x_coordinates
           @y_coordinates = y_coordinates
         end
+
         def call
           GR.polymarker(@x_coordinates, @y_coordinates)
         end
@@ -53,6 +54,7 @@ module Rubyplot
           @x_coordinates = x_coordinates
           @y_coordinates = y_coordinates
         end
+
         def call
           GR.polyline(@x_coordinates, @y_coordinates)
         end
@@ -221,9 +223,10 @@ module Rubyplot
         end
       end
 
+      # rubocop:disable Metrics/ParameterLists
       class Axes
         def initialize(x_major_tick, y_major_tick, x_origin, y_origin, major_x,
-                       major_y, tick_size)
+          major_y, tick_size)
           @x_major_tick = x_major_tick
           @y_major_tick = y_major_tick
           @x_origin = x_origin
@@ -235,13 +238,13 @@ module Rubyplot
 
         def call
           GR.axes(@x_major_tick, @y_major_tick, @x_origin, @y_origin, @major_x,
-                  @major_y, @tick_size)
+            @major_y, @tick_size)
         end
       end
 
       class Grid
         def initialize(x_major_tick, y_major_tick, x_origin, y_origin, major_x,
-                       major_y)
+          major_y)
           @x_major_tick = x_major_tick
           @y_major_tick = y_major_tick
           @x_origin = x_origin
@@ -252,7 +255,7 @@ module Rubyplot
 
         def call
           GR.grid(@x_major_tick, @y_major_tick, @x_origin, @y_origin, @major_x,
-                  @major_y)
+            @major_y)
         end
       end
 
@@ -280,7 +283,7 @@ module Rubyplot
 
         def call
           GR.drawarc(@x_min, @x_max, @y_min, @y_max, @starting_angle,
-                     @ending_angle)
+            @ending_angle)
         end
       end
 
@@ -296,9 +299,10 @@ module Rubyplot
 
         def call
           GR.fillarc(@x_min, @x_max, @y_min, @y_max, @starting_angle,
-                     @ending_angle)
+            @ending_angle)
         end
       end
+      # rubocop:enable Metrics/ParameterLists
 
       GR_FONTS = {
         times_roman: 101,
@@ -402,6 +406,9 @@ module Rubyplot
         pattern: 2,
         hatch: 3
       }.freeze
-    end # module Tasks
-  end # module GRWrapper
-end # module Rubyplot
+    end
+    # module Tasks
+  end
+  # module GRWrapper
+end
+# module Rubyplot

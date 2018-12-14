@@ -1,8 +1,9 @@
 module Rubyplot
   module Artist
     class Circle < Base
-      def initialize(owner, abs_x:, abs_y:, radius: , stroke_opacity: 0.0,
-                     color: '#000000', stroke_width:)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(owner, abs_x:, abs_y:, radius:, stroke_opacity: 0.0,
+        color: '#000000', stroke_width:)
         super(owner.backend, abs_x, abs_y)
         @owner = owner
         @radius = radius
@@ -11,6 +12,7 @@ module Rubyplot
         @color = color
         @backend = @owner.backend
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def draw
         @backend.draw_circle(
@@ -18,6 +20,9 @@ module Rubyplot
           stroke_width: @stroke_width, color: @color
         )
       end
-    end # class Circle
-  end # module Artist
-end # module Rubyplot
+    end
+    # class Circle
+  end
+  # module Artist
+end
+# module Rubyplot

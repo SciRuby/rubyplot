@@ -27,6 +27,7 @@ module Rubyplot
           @geometry.center_labels_over_point = (@axes.x_ticks.keys.length > @geometry.column_count)
           super
           return unless @geometry.has_data
+
           draw_bars
         end
 
@@ -39,6 +40,7 @@ module Rubyplot
         def spacing_factor=(space_percent)
           raise ArgumentError, 'geometry.spacing_factor must be between 0.00 and 1.00' unless
             (space_percent >= 0) && (space_percent <= 1)
+
           @geometry.spacing_factor = (1 - space_percent)
         end
 
@@ -60,17 +62,14 @@ module Rubyplot
           if @geometry.minimum_value >= 0
             # all bars go from zero to positiv
             @mode = :positive
+          elsif @geometry.maximum_value <= 0 # all bars go from 0 to negative
+            @mode = :negative
           else
-            # all bars go from 0 to negativ
-            if @geometry.maximum_value <= 0
-              @mode = :negative
-            else
-              # bars either go from zero to negativ or to positive
-              @mode = :both
-              @spread = @spread
-              @minimum_value = @geometry.minimum_value
-              @zero = -@geometry.minimum_value / @spread
-            end
+            # bars either go from zero to negativ or to positive
+            @mode = :both
+            @spread = @spread
+            @minimum_value = @geometry.minimum_value
+            @zero = -@geometry.minimum_value / @spread
           end
 
           # iterate over all normalised data
@@ -98,12 +97,12 @@ module Rubyplot
               # Subtract half a bar width to center left if requested
               draw_label(label_center -
                          (@geometry.center_labels_over_point ? @bar_width / 2.0 : 0.0),
-                         point_index)
-              if @geometry.show_labels_for_bar_values
-                val = (@geometry.label_formatting || '%.2f') %
-                      @geometry.norm_data[row_index][3][point_index]
-                draw_value_label(left_x + (right_x - left_x) / 2, conv[0] - 30, val.commify, true)
-              end
+                point_index)
+              next unless @geometry.show_labels_for_bar_values
+
+              val = (@geometry.label_formatting || '%.2f') %
+                    @geometry.norm_data[row_index][3][point_index]
+              draw_value_label(left_x + (right_x - left_x) / 2, conv[0] - 30, val.commify, true)
             end
           end
 
@@ -111,7 +110,7 @@ module Rubyplot
           draw_label(@graph_right, @geometry.column_count) if @geometry.center_labels_over_point
           @d.draw(@base_image)
         end
-        
+
         def get_left_y_right_y_scaled(data_point, result)
           case @mode
           when :positive then # Case one
@@ -125,19 +124,23 @@ module Rubyplot
           when :both then # Case three
             # positive and negative values -> bars go in both the +ve and -ve direction
             val = data_point - @geometry.minimum_value / @spread
-            if data_point >= @zero
+            if data_point >= @zero || data_points < @zero
               result[0] = @graph_top + @graph_height * (1 - (val - @zero)) + 1
               result[1] = @graph_top + @graph_height * (1 - @zero) - 1
-            else
-              result[0] = @graph_top + @graph_height * (1 - (val - @zero)) + 1
-              result[1] = @graph_top + @graph_height * (1 - @zero) - 1
+              # else
+              # result[0] = @graph_top + @graph_height * (1 - (val - @zero)) + 1
+              # result[1] = @graph_top + @graph_height * (1 - @zero) - 1
             end
           else
             result[0] = 0.0
             result[1] = 0.0
           end
         end
-      end # class Bar
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+      end
+      # class Bar
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

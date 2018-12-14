@@ -7,7 +7,7 @@ module Rubyplot
         # FIXME: change this method to reflect arch change.
         def normalize
           @geometry.norm_data = []
-          #@data.each do |data_row|
+          # @data.each do |data_row|
           data_row = @data
           norm_data_points = []
           data_row[:y_values].each do |data_point|
@@ -15,7 +15,7 @@ module Rubyplot
             # Add support for nil values in data etc.
           end
           @geometry.norm_data << [data_row[:label], norm_data_points]
-          #end
+          # end
           @geometry.norm_data[0] << @data[:color]
           if @data[:x_values]
             norm_data_points = []
@@ -52,9 +52,10 @@ module Rubyplot
           value * @scale
         end
 
-        def significant(i)
-          return 1.0 if i == 0 # Keep from going into infinite loop
-          inc = BigDecimal(i.to_s)
+        def significant(var)
+          return 1.0 if var.zero? # Keep from going into infinite loop
+
+          inc = BigDecimal(var.to_s)
           factor = BigDecimal('1.0')
           while inc < 10
             inc *= 10
@@ -67,10 +68,7 @@ module Rubyplot
           end
 
           res = inc.floor * factor
-          if res.to_i.to_f == res
-            res.to_i
-          else
-            res
+          if res.to_i.to_f == res then res.to_i else res
           end
         end
 
@@ -79,10 +77,10 @@ module Rubyplot
         def sort_norm_data
           @geometry.norm_data =
             @geometry.norm_data.sort_by { |a|
-            -a[DATA_VALUES_INDEX].inject(0) { |sum, num|
-              sum + num.to_f
+              -a[DATA_VALUES_INDEX].inject(0) { |sum, num|
+                sum + num.to_f
+              }
             }
-          }
         end
 
         # Returns the height of the capital letter 'X' for the current font and
@@ -102,6 +100,7 @@ module Rubyplot
         # scaling will handle.
         def calculate_width(font_size, text)
           return 0 if text.nil?
+
           @d.pointsize = font_size
           @d.font = @font if @font
           @d.get_type_metrics(@base_image, text.to_s).width

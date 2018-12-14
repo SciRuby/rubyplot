@@ -1,10 +1,10 @@
 module Rubyplot
-  module MagickWrapper    
+  module MagickWrapper
     class Artist
       module Attributes
         # Blank space below the legend
         attr_accessor :legend_margin
-        
+
         # Used internally for horizontal graph types.
         attr_accessor :has_left_labels
 
@@ -49,7 +49,11 @@ module Rubyplot
 
         # Axes object to which this plot belongs.
         attr_reader :axes
-      end # module Attributes
-    end # class Artist
-  end # module MagickWrapper
-end # module Rubyplot
+      end
+      # module Attributes
+    end
+    # class Artist
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

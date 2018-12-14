@@ -7,9 +7,7 @@ module Rubyplot
       LEGEND_MARGIN = TITLE_MARGIN = 20.0
       LABEL_MARGIN = 10.0
       DEFAULT_MARGIN = 20.0
-
       THOUSAND_SEPARATOR = ','.freeze
-
       # FIXME: most of the below accessors should just be name= methods which
       # will access the required Artist and set the variable in there directly.
       # Title of the X axis
@@ -19,16 +17,11 @@ module Rubyplot
       # Range of X axis.
       attr_accessor :x_range
       # Range of Y axis.
-      attr_accessor :y_range,
-                    :x_tick_count, :y_tick_count, :text_font, :grid,
-                    :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
-                    :title_shift, :title_margin
-
-      # A hash of names for the individual columns, where the key is the array
-      # index for the column this label represents.
-      #
+      attr_accessor :y_range, :x_tick_count, :y_tick_count, :text_font, :grid, :bounding_box, :x_axis_padding,
+        :y_axis_padding, :origin, :title_shift, :title_margin
+      # A hash of names for the individual columns, where the key is the
+      # array index for the column this label represents.
       # Not all columns need to be named.
-      #
       # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
       attr_accessor :x_ticks
       attr_accessor :y_ticks
@@ -40,11 +33,8 @@ module Rubyplot
       attr_reader :plots
       # data variables for something
       attr_reader :raw_rows
-
-      attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
-                  :title_font_size, :scale, :font_color, :marker_color, :axes,
-                  :legend_margin, :backend, :marker_caps_height, :marker_font_size
-      
+      attr_reader :geometry, :font, :legend_font_size, :title_font_size, :scale, :font_color
+      attr_reader :marker_color, :axes, :legend_margin, :backend, :marker_caps_height, :marker_font_size
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
       attr_reader :title_caps_height
@@ -62,47 +52,33 @@ module Rubyplot
       attr_reader :y_axis
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
-      def initialize figure
+      def initialize(figure)
         @figure = figure
-        
-        @x_title = ''
-        @y_title = ''
-        @x_axis_margin = 40.0
-        @y_axis_margin = 40.0
-        @x_range = [nil, nil]
-        @y_range = [nil, nil]
-        @x_tick_count = :default
-        @y_tick_count = :default
-        
+        @x_title = @y_title = ''
+        @x_axis_margin = @y_axis_margin = 40.0
+        @x_range = @y_range = [nil, nil]
+        @x_tick_count = @y_tick_count = :default
         @origin = [nil, nil]
-        @title = ""
+        @title = ''
         @title_shift = 0
         @title_margin = TITLE_MARGIN
         @text_font = :default
-        @grid = true
-        @bounding_box = true
+        @grid = @bounding_box = true
         @x_ticks = {}
         @plots = []
-
         @raw_rows = width * (height/width)
-
         @theme = Rubyplot::Themes::CLASSIC_WHITE
         @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
         vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
         @font = File.exist?(vera_font_path) ? vera_font_path : nil
-        @font_color = "#000000"
+        @font_color = '#000000'
         @marker_font_size = 15.0
         @legend_font_size = 20.0
         @legend_margin = LEGEND_MARGIN
         @title_font_size = 25.0
         @backend = @figure.backend
-        @plot_colors = []
-        @legends = []
-        @lines = []
-        @texts = []
-        @x_axis = nil
-        @y_axis = nil
-
+        @plot_colors = @legends = @lines = @texts = []
+        @x_axis = @y_axis = nil
         @legend_box_position = :top
       end
 
@@ -121,7 +97,7 @@ module Rubyplot
           abs_x + @x_axis_margin + @legend_margin
         end
       end
-      
+
       # Write an image to a file by communicating with the backend.
       def draw
         configure_title
@@ -132,54 +108,54 @@ module Rubyplot
         actually_draw
       end
 
-      def scatter! *args, &block
+      def scatter!(*_args)
         plot = Rubyplot::Artist::Plot::Scatter.new self
         yield(plot) if block_given?
         @plots << plot
       end
 
-      def bar! *args, &block
+      def bar!(*_args)
         plot = Rubyplot::Artist::Plot::Bar.new self
         yield(plot) if block_given?
         @plots << plot
       end
 
-      def line! *args, &block
+      def line!(*_args)
         plot = Rubyplot::Artist::Plot::Line.new self
         yield(plot) if block_given?
         @plots << plot
       end
 
-      def area! *args, &block
-        add_plot "Area", *args, &block
+      def area!(*args, &block)
+        add_plot 'Area', *args, &block
       end
 
-      def bubble! *args, &block
-        add_plot "Bubble", *args, &block
+      def bubble!(*args, &block)
+        add_plot 'Bubble', *args, &block
       end
 
-      def dot! *args, &block
-        add_plot "Dot", *args, &block      
+      def dot!(*args, &block)
+        add_plot 'Dot', *args, &block
       end
 
-      def stacked_bar! *args, &block
-        add_plot "StackedBar", *args, &block
+      def stacked_bar!(*args, &block)
+        add_plot 'StackedBar', *args, &block
       end
 
-      def write file_name
+      def write(file_name)
         @plots[0].write file_name
       end
-      
+
       # Absolute X co-ordinate of the Axes. Top left corner.
       def abs_x
         @figure.top_spacing * @figure.height + @figure.abs_x
       end
-      
+
       # Absolute Y co-ordinate of the Axes. Top left corner.
       def abs_y
         @figure.top_spacing * @figure.height + @figure.abs_y
       end
-      
+
       # Absolute width of the Axes in pixels.
       def width
         (1 - (@figure.left_spacing + @figure.right_spacing)) * @figure.width
@@ -193,13 +169,13 @@ module Rubyplot
 
       private
 
-      def add_plot plot_type, *args, &block
+      def add_plot(plot_type, *args)
         plot = with_backend plot_type, *args
         yield(plot) if block_given?
         @plots << plot
       end
 
-      def with_backend plot_type, *args
+      def with_backend(plot_type, *args)
         plot =
           case Rubyplot.backend
           when :magick
@@ -207,26 +183,19 @@ module Rubyplot
           when :gr
             Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_type}").new self, *args
           end
-
         plot
       end
 
       def prepare_legend
         @legends = @plots.map(&:create_legend)
-        @legends.each { |l| l.draw }
+        @legends.each(&:draw)
       end
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
         @title = Rubyplot::Artist::Text.new(
-          @title,
-          self,
-          abs_x: abs_x + width / 2,
-          abs_y: abs_y + @title_margin,
-          font: @font,
-          color: @font_color,
-          pointsize: @title_font_size,
-          internal_label: "axes title."
+          @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin, font: @font, color: @font_color,
+                        pointsize: @title_font_size, internal_label: 'axes title.'
         )
       end
 
@@ -237,24 +206,20 @@ module Rubyplot
 
       # Figure out co-ordinatees of the XAxis and YAxis
       def configure_xy_axes
-        @x_axis = Rubyplot::Artist::XAxis.new(
-          self, @x_title, @x_range[0], @x_range[1])
-        @y_axis = Rubyplot::Artist::YAxis.new(
-          self, @y_title, @y_range[0], @y_range[1])
+        @x_axis = Rubyplot::Artist::XAxis.new(self, @x_title, @x_range[0], @x_range[1])
+        @y_axis = Rubyplot::Artist::YAxis.new(self, @y_title, @y_range[0], @y_range[1])
       end
 
       # Figure out co-ordinates of the legends
       def configure_legends
         @legend_box = Rubyplot::Artist::LegendBox.new(
-          self, abs_x: legend_box_ix, abs_y: legend_box_iy)
+          self, abs_x: legend_box_ix, abs_y: legend_box_iy
+        )
       end
 
-      # Make adjustments to the data that will be plotted. Maps the data
-      # contained in the plot to actual pixel values.
+      # Make adjustments to the data that will be plotted. Maps the data contained in the plot to actual pixel values.
       def configure_plotting_data
-        @plots.each do |plot|
-          plot.normalize
-        end
+        @plots.each(&:normalize)
       end
 
       # Call the respective draw methods on each of the elements of this Axes.
@@ -266,33 +231,31 @@ module Rubyplot
         @plots.each(&:draw)
       end
 
-      # Return a formatted string representing a number value that should be
-      # printed as a label.
+      # Return a formatted string representing a number value that should be printed as a label.
       def label_string(value, increment)
         label =
           if increment
             if increment >= 10 || (increment * 1) == (increment * 1).to_i.to_f
-              format('%0i', value)
+              '%0i' % value
             elsif increment >= 1.0 || (increment * 10) == (increment * 10).to_i.to_f
-              format('%0.1f', value)
+              '%0.1f' % value
             elsif increment >= 0.1 || (increment * 100) == (increment * 100).to_i.to_f
-              format('%0.2f', value)
+              '%0.2f' % value
             elsif increment >= 0.01 || (increment * 1000) == (increment * 1000).to_i.to_f
-              format('%0.3f', value)
+              '%0.3f' % value
             elsif increment >= 0.001 || (increment * 10_000) == (increment * 10_000).to_i.to_f
-              format('%0.4f', value)
+              '%0.4f' % value
             else
               value.to_s
             end
-          elsif ((@y_spread.to_f %
-                  (@geometry.marker_count.to_f == 0 ?
-                     1 : @geometry.marker_count.to_f) == 0) ||
-                 !@geometry.y_axis_increment .nil?)
+          elsif (@y_spread.to_f %
+                  (@geometry.marker_count.to_f.zero ? 1 : @geometry.marker_count.to_f)).zero? ||
+                !@geometry.y_axis_increment .nil?
             value.to_i.to_s
           elsif @y_spread > 10.0
-            format('%0i', value)
+            '%0i' % value
           elsif @y_spread >= 3.0
-            format('%0.2f', value)
+            '%0.2f' % value
           else
             value.to_s
           end
@@ -300,6 +263,9 @@ module Rubyplot
         parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
         parts.join('.')
       end
-    end # class Axes
-  end # moudle Artist
-end # module Rubyplot
+    end
+    # class Axes
+  end
+  # moudle Artist
+end
+# module Rubyplot

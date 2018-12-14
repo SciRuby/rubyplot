@@ -4,8 +4,8 @@ module Rubyplot
       class Base < Artist::Base
         attr_reader :axes, :data
         attr_writer :stroke_width, :stroke_opacity
-        
-        def initialize axes
+
+        def initialize(axes)
           @axes = axes
           @backend = @axes.backend
           @data = {
@@ -13,8 +13,8 @@ module Rubyplot
             color: :default
           }
           @normalized_data = {
-            :y_values => nil,
-            :x_values => nil
+            y_values: nil,
+            x_values: nil
           }
           @stroke_width = 4.0
           @stroke_opacity = 0.0
@@ -28,20 +28,21 @@ module Rubyplot
           @data[:color]
         end
 
-        def label= label
+        def label=(label)
           @data[:label] = label
         end
 
-        def color= color
+        def color=(color)
           @data[:color] = Rubyplot::Color::COLOR_INDEX[color]
         end
 
-        def data x_values, y_values
+        def data(x_values, y_values)
           @data[:x_values] = x_values
           @data[:y_values] = y_values
           # Set column count if this is larger than previous column counts
-          @axes.geometry.column_count = y_values.length > @axes.geometry.column_count ?
-                                     y_values.length : @axes.geometry.column_count
+          @axes.geometry.column_count =if y_values.length > @axes.geometry.column_count then y_values.length
+                                       else @axes.geometry.column_count
+                                       end
           if @axes.y_range[0].nil? && @axes.y_range[1].nil?
             @axes.y_range[0] = y_values.min
             @axes.y_range[1] = y_values.max
@@ -60,14 +61,17 @@ module Rubyplot
           x_spread = @axes.x_range[1] - x_min
           y_spread = @axes.y_range[1] - y_min
           @normalized_data[:x_values] = @data[:x_values].map do |x|
-            (x.to_f - x_min) / x_spread 
+            (x.to_f - x_min) / x_spread
           end
           @normalized_data[:y_values] = @data[:y_values].map do |y|
             (y.to_f - y_min) / y_spread
           end
         end
-      end # class Base
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
-
+      end
+      # class Base
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

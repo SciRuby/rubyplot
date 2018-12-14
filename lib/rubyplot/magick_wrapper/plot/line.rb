@@ -5,19 +5,19 @@ require_relative 'line/geometry'
 # FIXME: refactor this module and make it a part of Line.
 module DotRenderers
   class Circle
-    def render(d, new_x, new_y, circle_radius)
-      d.circle(new_x, new_y, new_x - circle_radius, new_y)
+    def render(dis, new_x, new_y, circle_radius)
+      dis.circle(new_x, new_y, new_x - circle_radius, new_y)
     end
   end
 
   class Square
-    def render(d, new_x, new_y, circle_radius)
+    def render(dis, new_x, new_y, circle_radius)
       offset = (circle_radius * 0.8).to_i
-      corner_1 = new_x - offset
-      corner_2 = new_y - offset
-      corner_3 = new_x + offset
-      corner_4 = new_y + offset
-      d.rectangle(corner_1, corner_2, corner_3, corner_4)
+      corner1 = new_x - offset
+      corner2 = new_y - offset
+      corner3 = new_x + offset
+      corner4 = new_y + offset
+      dis.rectangle(corner1, corner2, corner3, corner4)
     end
   end
 
@@ -46,7 +46,8 @@ module Rubyplot
         #  g = Rubyplot::Line.new(false) # Defaults to 800px wide, no lines
         def initialize(*args)
           raise ArgumentError, 'Wrong number of arguments' if args.length > 2
-          if args.empty? || (!(Numeric === args.first) && !(String === args.first))
+
+          if args.empty? || ((Numeric != args.first) && (String != args.first))
             super
           else
             super args.shift # TODO: Figure out a better alternative here.
@@ -81,8 +82,7 @@ module Rubyplot
           return unless @geometry.has_data
 
           # Check to see if more than one datapoint was given. NaN can result otherwise.
-          @x_increment = @geometry.column_count > 1 ?
-                           (@graph_width / (@geometry.column_count - 1).to_f) : @graph_width
+          @x_increment = @geometry.column_count > 1 ? (@graph_width / (@geometry.column_count - 1).to_f) : @graph_width
 
           @geometry.norm_data.each_with_index do |data_row, row_num|
             # Initially the previous x,y points are nil and then
@@ -100,10 +100,10 @@ module Rubyplot
                 new_x = get_x_coord(x_data[index], @graph_width, @graph_left)
                 @labels.each do |label_pos, _|
                   draw_label(@graph_left + ((label_pos -
-                                             @geometry.minimum_x_value) *
+                                             @geometry.min_x_value) *
                                             @graph_width) /
-                                           (@geometry.maximum_x_value -
-                                            @geometry.minimum_x_value), label_pos)
+                                           (@geometry.max_x_value -
+                                            @geometry.min_x_value), label_pos)
                 end
               end
               unless data_point
@@ -119,24 +119,28 @@ module Rubyplot
               @d = @d.stroke_width line_width ||
                                    clip_value_if_greater_than(
                                      @columns / (
-                                       @geometry.norm_data.first[DATA_VALUES_INDEX].size * 4), 5.0)
+                                       @geometry.norm_data.first[DATA_VALUES_INDEX].size * 4), 5.0
+                                     )
 
               circle_radius = dot_radius ||
                               clip_value_if_greater_than(
                                 @columns / (
-                                  @geometry.norm_data.first[DATA_VALUES_INDEX].size * 2.5), 5.0)
+                                  @geometry.norm_data.first[DATA_VALUES_INDEX].size * 2.5), 5.0
+                                )
 
               if !@geometry.hide_lines && !prev_x.nil? && !prev_y.nil?
                 @d = @d.line(prev_x, prev_y, new_x, new_y)
               elsif @one_point
                 # Show a circle if there's just one_point
                 @d = DotRenderers.renderer(
-                  @geometry.dot_style).render(@d, new_x, new_y, circle_radius)
+                  @geometry.dot_style
+                ).render(@d, new_x, new_y, circle_radius)
               end
 
               unless @geometry.hide_dots
                 @d = DotRenderers.renderer(
-                  @geometry.dot_style).render(@d, new_x, new_y, circle_radius)
+                  @geometry.dot_style
+                ).render(@d, new_x, new_y, circle_radius)
               end
 
               prev_x = new_x
@@ -183,7 +187,7 @@ module Rubyplot
         #   In this example the lables are drawn at x positions 2, 4, and 6:
         #   g.labels = {0 => '2003', 2 => '2004', 4 => '2005', 6 => '2006'}
         #   The 0 => '2003' label will be ignored since it is outside the chart range.
-        def dataxy(_name, x_data_points = [], y_data_points = [], _color = nil)
+        def dataxy(_name, x_data_points=[], y_data_points=[], _color=nil)
           raise ArgumentError, 'x_data_points is nil!' if x_data_points.empty?
 
           if x_data_points.all? { |p| p.is_a?(Array) && p.size == 2 }
@@ -206,14 +210,12 @@ module Rubyplot
             next if x_data_point.nil?
 
             # Setup max/min so spread starts at the low end of the data points
-            if @geometry.maximum_x_value.nil? && @geometry.minimum_x_value.nil?
-              @geometry.maximum_x_value = @geometry.minimum_x_value = x_data_point
+            if @geometry.max_x_value.nil? && @geometry.min_x_value.nil?
+              @geometry.max_x_value = @geometry.min_x_value = x_data_point
             end
 
-            @geometry.maximum_x_value = x_data_point > @geometry.maximum_x_value ?
-                                          x_data_point : @geometry.maximum_x_value
-            @geometry.minimum_x_value = x_data_point < @geometry.minimum_x_value ?
-                                          x_data_point : @geometry.minimum_x_value
+            @geometry.max_x_value = x_data_point > @geometry.max_x_value ? x_data_point : @geometry.max_x_value
+            @geometry.min_x_value = x_data_point < @geometry.min_x_value ? x_data_point : @geometry.min_x_value
           end
         end
 
@@ -226,11 +228,12 @@ module Rubyplot
           @data.each_with_index do |data_row, index|
             norm_x_data_points = []
             next if data_row[DATA_VALUES_X_INDEX].nil?
+
             data_row[DATA_VALUES_X_INDEX].each do |x_data_point|
               norm_x_data_points << ((x_data_point.to_f -
-                                      @geometry.minimum_x_value.to_f) /
-                                     (@geometry.maximum_x_value.to_f -
-                                      @geometry.minimum_x_value.to_f))
+                                      @geometry.min_x_value.to_f) /
+                                     (@geometry.max_x_value.to_f -
+                                      @geometry.min_x_value.to_f))
             end
             @geometry.norm_data[index] << norm_x_data_points
           end
@@ -250,6 +253,7 @@ module Rubyplot
               # more than one point, bail
               return false
             end
+
             # there is at least one data point
             one_point = true
           end

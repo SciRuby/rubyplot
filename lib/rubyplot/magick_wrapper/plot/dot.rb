@@ -20,7 +20,7 @@ module Rubyplot
               y_pos = @graph_top + (@items_width * point_index) +
                       padding + (@items_width.to_f / 2.0).round
 
-              if row_index == 0
+              if row_index.zero?
                 @d = @d.stroke(@marker_color)
                 @d = @d.fill(@marker_color)
                 @d = @d.stroke_width 1.0
@@ -62,8 +62,10 @@ module Rubyplot
               @geometry.marker_count ||= 5
             end
             # TODO: Round maximum marker value to a round number like 100, 0.1, 0.5, etc.
-            @geometry.increment = @spread > 0 && @geometry.marker_count > 0 ?
-                                    significant(@spread / @geometry.marker_count) : 1
+            @geometry.increment = if @spread > 0 && @geometry.marker_count > 0
+                                    significant(@spread / @geometry.marker_count)
+                                  else 1
+                                  end
 
             number_of_lines = @geometry.marker_count
             increment = @geometry.increment
@@ -82,10 +84,11 @@ module Rubyplot
               @d.gravity = CenterGravity
               # TODO: Center text over line
               @d = @d.scale_annotation(@base_image,
-                                       0, 0, # Width of box to draw text in
-                                       x, @graph_bottom + (LABEL_MARGIN * 2.0), # Coordinates of text
-                                       label(marker_label, increment), @scale)
-            end # unless
+                0, 0, # Width of box to draw text in
+                x, @graph_bottom + (LABEL_MARGIN * 2.0), # Coordinates of text
+                label(marker_label, increment), @scale)
+            end
+            # unless
             @d = @d.stroke_antialias true
           end
         end
@@ -100,13 +103,17 @@ module Rubyplot
             @d.pointsize = scale_fontsize(@marker_font_size)
             @d.gravity = EastGravity
             @d = @d.scale_annotation(@base_image,
-                                     1, 1,
-                                     -@graph_left + LABEL_MARGIN * 2.0, y_offset,
-                                     @axes.y_ticks[index], @scale)
+              1, 1,
+              -@graph_left + LABEL_MARGIN * 2.0, y_offset,
+              @axes.y_ticks[index], @scale)
             @geometry.labels_seen[index] = 1
           end
         end
-      end # class Dot
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+      end
+      # class Dot
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

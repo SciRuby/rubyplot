@@ -7,7 +7,7 @@ module Rubyplot
       marker_color: 'white', # The color of the marker used to make marker lines on plot.
       font_color: 'white', # Font Color used to write on the plot.
       background_colors: %w[black #4a465a], # The Background colors that form the gradient
-      label_colors:  %w[#ffe119 #0082c8 #f58231 #911eb4 #aaffc3 #808000 #ffd8b1 #000080 #808080]
+      label_colors: %w[#ffe119 #0082c8 #f58231 #911eb4 #aaffc3 #808000 #ffd8b1 #000080 #808080]
     }.freeze
 
     TRACKS = {

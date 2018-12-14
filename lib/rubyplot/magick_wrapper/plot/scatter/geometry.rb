@@ -37,8 +37,13 @@ module Rubyplot
             @x_label_margin = nil
             @y_axis_label_format = nil
           end
-        end # class Geometry
-      end # class Scatter
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+        end
+        # class Geometry
+      end
+      # class Scatter
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

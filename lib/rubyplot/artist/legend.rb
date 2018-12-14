@@ -7,6 +7,7 @@ module Rubyplot
       BOX_AND_TEXT_SPACE = 5.0
       attr_reader :legend_box_size, :font, :font_size, :font_color
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(legend_box, axes, text:, color:,abs_x:,abs_y:)
         super(legend_box.backend, abs_x, abs_y)
         @legend_box = legend_box
@@ -21,6 +22,7 @@ module Rubyplot
         configure_legend_color_box
         configure_legend_text
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def draw
         @legend_color_box.draw
@@ -52,6 +54,9 @@ module Rubyplot
           pointsize: @font_size
         )
       end
-    end # class Legend
-  end # class Artist
-end # module Rubyplot
+    end
+    # class Legend
+  end
+  # class Artist
+end
+# module Rubyplot

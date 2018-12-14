@@ -18,8 +18,13 @@ module Rubyplot
             @all_colors_array = Magick.colors
             @plot_colors = []
           end
-        end # class Geometry
-      end # class StackedBar
-    end # module Plot
-  end # module MagickWrapper
-end # module Rubyplot
+        end
+        # class Geometry
+      end
+      # class StackedBar
+    end
+    # module Plot
+  end
+  # module MagickWrapper
+end
+# module Rubyplot

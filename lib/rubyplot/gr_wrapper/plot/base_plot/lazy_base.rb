@@ -10,9 +10,7 @@ module Rubyplot
           end
 
           def call
-            @tasks.each do |task|
-              task.call()
-            end
+            @tasks.each(&:call)
           end
         end
       end
