@@ -10,8 +10,6 @@ module Rubyplot
         end
 
         def draw
-          puts "data: #{@data}"
-          puts "norm: #{@normalized_data}"
           y_axis_length = (@axes.y_axis.abs_y2 - @axes.y_axis.abs_y1).abs
           @normalized_data[:y_values].each_with_index do |iy, idx_y|
             ix = @normalized_data[:x_values][idx_y]
