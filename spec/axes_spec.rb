@@ -275,11 +275,11 @@ require 'spec_helper'
         
       end
       
-      it "makes a simple line plot" do
+      it "makes a simple line plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.line! do |p|
-          p.data [5, 8, 13, 15]
+          p.data [2, 4, 7, 9], [1,2,3,4]
           p.label = "Marco"
           p.color = :blue
         end
