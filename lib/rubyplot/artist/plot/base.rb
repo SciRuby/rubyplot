@@ -54,13 +54,16 @@ module Rubyplot
           y_min = @axes.y_range[0] < 0 ? @axes.y_range[0] : 0
           x_spread = @axes.x_range[1] - x_min
           y_spread = @axes.y_range[1] - y_min
-          @normalized_data[:x_values] = @data[:x_values].map do |x|
-
-            (x.to_f - x_min) / x_spread 
-          end if @data[:x_values]
-          @normalized_data[:y_values] = @data[:y_values].map do |y|
-            (y.to_f - y_min) / y_spread
-          end if @data[:y_values]
+          if @data[:x_values]
+            @normalized_data[:x_values] = @data[:x_values].map do |x|
+              (x.to_f - x_min) / x_spread
+            end
+          end
+          if @data[:y_values]
+            @normalized_data[:y_values] = @data[:y_values].map do |y|
+              (y.to_f - y_min) / y_spread
+            end
+          end
         end
 
         protected

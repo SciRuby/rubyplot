@@ -38,11 +38,12 @@ module Rubyplot
           @normalized_data[:x_values].each_with_index do |ix, idx_ix|
             iy = @normalized_data[:y_values][idx_ix]
             next if ix.nil? || iy.nil?
+
             new_x = ix * (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs + @axes.abs_x +
                     @axes.y_axis_margin
             new_y = (y_axis_length - iy * y_axis_length) + @axes.abs_y
 
-            if !(prev_x.nil? && prev_y.nil?)
+            unless prev_x.nil? && prev_y.nil?
               Rubyplot::Artist::Line2D.new(
                 self,
                 abs_x1: prev_x,
@@ -51,7 +52,6 @@ module Rubyplot
                 abs_y2: new_y,
                 stroke_opacity: @stroke_opacity,
                 stroke_width: @stroke_width
-
               ).draw
             end
             prev_x = new_x

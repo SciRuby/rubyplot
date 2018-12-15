@@ -37,6 +37,7 @@ module Rubyplot
         def draw
           super
           return unless @axes.geometry.has_data
+
           configure_bars
         end
 
@@ -47,9 +48,9 @@ module Rubyplot
           x_axis_length = @axes.x_axis.abs_x2 - @axes.x_axis.abs_x1
           @bar_width = coords_width / @data[:y_values].to_f
           padding = @bar_width * @spacing_ratio / 2
-          @normalized_data[:y_values].each_with_index do |iy, index|
+          @normalized_data[:y_values].each_with_index do |_iy, index|
             ix = @normalized_data[:x_values][index]
-            left_x = ix * x_axis_length 
+            ix * x_axis_length
           end
         end
       end
