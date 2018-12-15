@@ -20,18 +20,9 @@ module Rubyplot
       attr_accessor :x_range
       # Range of Y axis.
       attr_accessor :y_range,
-                    :x_tick_count, :y_tick_count, :text_font, :grid,
+                    :text_font, :grid,
                     :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
                     :title_shift, :title_margin
-
-      # A hash of names for the individual columns, where the key is the array
-      # index for the column this label represents.
-      #
-      # Not all columns need to be named.
-      #
-      # Example: 0 => 2005, 3 => 2006, 5 => 2007, 7 => 2008
-      attr_accessor :x_ticks
-      attr_accessor :y_ticks
       # Main title for this Axes.
       attr_accessor :title
       # Rubyplot::Figure object to which this Axes belongs.
@@ -71,8 +62,6 @@ module Rubyplot
         @y_axis_margin = 40.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
-        @x_tick_count = :default
-        @y_tick_count = :default
         
         @origin = [nil, nil]
         @title = ""
@@ -81,7 +70,6 @@ module Rubyplot
         @text_font = :default
         @grid = true
         @bounding_box = true
-        @x_ticks = {}
         @plots = []
 
         @raw_rows = width * (height/width)
@@ -124,6 +112,7 @@ module Rubyplot
       
       # Write an image to a file by communicating with the backend.
       def draw
+        consolidate_plots
         configure_title
         calculate_xy_axes_origin
         configure_xy_axes
@@ -189,6 +178,10 @@ module Rubyplot
       # FIXME: expand for multiple axes on same figure. width too.
       def height
         (1 - (@figure.top_spacing + @figure.bottom_spacing)) * @figure.height
+      end
+
+      def x_ticks= ticks_hash
+        @x_ticks = ticks_hash
       end
 
       private
@@ -299,6 +292,12 @@ module Rubyplot
         parts = label.split('.')
         parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
         parts.join('.')
+      end
+
+      def consolidate_plots
+        bars = @plots.map { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
+        @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
+        @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bars)
       end
     end # class Axes
   end # moudle Artist

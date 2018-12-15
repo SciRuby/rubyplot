@@ -449,11 +449,10 @@ require 'spec_helper'
         #        FileUtils.rm_rf SPEC_ROOT + "temp/bar"
       end
 
-      it "adds a simple bar plot" do
+      it "adds a simple bar plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bar!(600) do |p| 
-          p.marker_count = 8
           p.data [5,12,9,6,7]
           p.label = "data"
           p.color = :yellow
@@ -523,7 +522,7 @@ require 'spec_helper'
         # expect(@temp_dir + file).to eq_image(@fix_dir + file)
       end
 
-       skip "adds multiple bar plots for wide graph" do
+       skip "adds multiple bar plots for wide graph", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         data.each do |name, nums|
