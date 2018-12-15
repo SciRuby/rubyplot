@@ -43,14 +43,8 @@ module Rubyplot
           @axes.geometry.column_count =if y_values.length > @axes.geometry.column_count then y_values.length
                                        else @axes.geometry.column_count
                                        end
-          if @axes.y_range[0].nil? && @axes.y_range[1].nil?
-            @axes.y_range[0] = y_values.min
-            @axes.y_range[1] = y_values.max
-          end
-          if @axes.x_range[1].nil? && @axes.x_range[0].nil?
-            @axes.x_range[0] = x_values.min
-            @axes.x_range[1] = x_values.max
-          end
+          set_yrange
+          set_xrange
           @axes.geometry.has_data = true
         end
 
@@ -61,10 +55,27 @@ module Rubyplot
           x_spread = @axes.x_range[1] - x_min
           y_spread = @axes.y_range[1] - y_min
           @normalized_data[:x_values] = @data[:x_values].map do |x|
-            (x.to_f - x_min) / x_spread
-          end
+
+            (x.to_f - x_min) / x_spread 
+          end if @data[:x_values]
           @normalized_data[:y_values] = @data[:y_values].map do |y|
             (y.to_f - y_min) / y_spread
+          end if @data[:y_values]
+        end
+
+        protected
+
+        def set_xrange
+          if @axes.x_range[1].nil? && @axes.x_range[0].nil?
+            @axes.x_range[0] = @data[:x_values].min
+            @axes.x_range[1] = @data[:x_values].max
+          end
+        end
+
+        def set_yrange
+          if @axes.y_range[0].nil? && @axes.y_range[1].nil?
+            @axes.y_range[0] = @data[:y_values].min
+            @axes.y_range[1] = @data[:y_values].max
           end
         end
       end
