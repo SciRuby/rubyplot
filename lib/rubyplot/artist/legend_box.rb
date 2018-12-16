@@ -15,7 +15,7 @@ module Rubyplot
       def initialize(axes, abs_x:, abs_y:)
         super(axes.backend, abs_x, abs_y)
         @axes = axes
-        @border_color = "#000000"
+        @border_color = :black
         @legends = []
         configure_dimensions
         configure_legends

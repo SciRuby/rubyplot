@@ -9,7 +9,7 @@ module Rubyplot
           @axes = axes
           @backend = @axes.backend
           @data = {
-            label: :default,
+            label: "",
             color: :default
           }
           @normalized_data = {
@@ -33,7 +33,7 @@ module Rubyplot
         end
 
         def color= color
-          @data[:color] = Rubyplot::Color::COLOR_INDEX[color]
+          @data[:color] = color
         end
 
         def data x_values, y_values

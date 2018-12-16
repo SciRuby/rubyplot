@@ -295,9 +295,9 @@ module Rubyplot
       end
 
       def consolidate_plots
-        bars = @plots.map { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
+        bars = @plots.grep(Rubyplot::Artist::Plot::Bar)
         @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
-        @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bars)
+        @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bar_plots: bars)
       end
     end # class Axes
   end # moudle Artist

@@ -275,7 +275,7 @@ require 'spec_helper'
         
       end
       
-      it "makes a simple line plot", focus: true do
+      it "makes a simple line plot", focus: false do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.line! do |p|
@@ -650,7 +650,7 @@ require 'spec_helper'
 #        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
       end
 
-      it "adds a simple scatter plot.", focus: true do
+      it "adds a simple scatter plot.", focus: false do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.scatter!(400) do |p|
