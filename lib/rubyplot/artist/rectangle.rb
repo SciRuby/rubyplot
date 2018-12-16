@@ -9,8 +9,8 @@ module Rubyplot
         super(owner.backend, abs_x, abs_y)
         @height = height
         @width = width
-        @border_color = border_color
-        @fill_color = fill_color
+        @border_color = Rubyplot::Color::COLOR_INDEX[border_color]
+        @fill_color = Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
       end
       # rubocop:enable Metrics/ParameterLists
 

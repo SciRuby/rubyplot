@@ -18,7 +18,7 @@ module Rubyplot
 
       def draw
         @line.draw
-        @x_ticks.each(&:draw)
+        @major_ticks.each(&:draw)
         @title.draw
       end
 
@@ -32,7 +32,9 @@ module Rubyplot
       end
 
       def populate_major_x_ticks
-        value_distance = @max_val / @major_ticks_count.to_f
+
+        puts "max_val #{@max_val} #{@major_ticks_count}"
+        value_distance = (@max_val) / @major_ticks_count.to_f
         @major_ticks_count.times do |count|
           count += 1
           @major_ticks << Rubyplot::Artist::XTick.new(
