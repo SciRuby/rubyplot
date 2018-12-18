@@ -972,7 +972,7 @@ module Rubyplot
       blue: '#0000FF',
       green: '#008000',
       purple: '#7e1e9c',
-      vivid_orange: '#ff7f0e'
+      vivid_orange: '#ff7f0e',
     }.freeze
   end
 end
