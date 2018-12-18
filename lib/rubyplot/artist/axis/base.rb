@@ -6,8 +6,8 @@ module Rubyplot
         FINISH_ARROW_LENGTH = 10.0
         
         attr_reader :label, :ticks, :major_ticks_count, :min_val, :max_val, :title
-        attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend
-        attr_reader :stroke_width
+        attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend, :length
+        attr_reader :stroke_width, :major_ticks
         
         def initialize axes, title, min_val, max_val
           @axes = axes
@@ -16,6 +16,7 @@ module Rubyplot
           @max_val = max_val
           @stroke_width = 1.0
           @backend = @axes.backend
+          @major_ticks = []
         end
       end # class Base
     end # class Axis

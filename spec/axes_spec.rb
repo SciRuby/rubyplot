@@ -275,11 +275,11 @@ require 'spec_helper'
         
       end
       
-      it "makes a simple line plot" do
+      it "makes a simple line plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.line! do |p|
-          p.data [5, 8, 13, 15]
+          p.data [2, 4, 7, 9], [1,2,3,4]
           p.label = "Marco"
           p.color = :blue
         end
@@ -449,11 +449,10 @@ require 'spec_helper'
         #        FileUtils.rm_rf SPEC_ROOT + "temp/bar"
       end
 
-      it "adds a simple bar plot" do
+      it "adds a simple bar plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bar!(600) do |p| 
-          p.marker_count = 8
           p.data [5,12,9,6,7]
           p.label = "data"
           p.color = :yellow
@@ -523,11 +522,11 @@ require 'spec_helper'
         # expect(@temp_dir + file).to eq_image(@fix_dir + file)
       end
 
-       skip "adds multiple bar plots for wide graph" do
-        fig = Rubyplot::Figure.new
+      it "adds multiple bar plots for wide graph", focus: true do
+        fig = Rubyplot::Figure.new(height: 400, width: 800)
         axes = fig.add_subplot 0,0
-        data.each do |name, nums|
-          axes.bar!("800x400") do |p| 
+        @planet_data.each do |name, nums|
+          axes.bar! do |p| 
             p.data nums
             p.label = name
           end
@@ -536,7 +535,7 @@ require 'spec_helper'
         file = "/#{Rubyplot.backend}_wide_multiple_bars.png"
         fig.write(@temp_dir + file)
 
-        expect(@temp_dir + file).to eq_image(@fix_dir + file)
+        # expect(@temp_dir + file).to eq_image(@fix_dir + file)
       end
 
       skip "plots both positive and negative values" do
@@ -651,10 +650,10 @@ require 'spec_helper'
 #        FileUtils.rm_rf SPEC_ROOT + "temp/scatter"
       end
 
-      it "adds a simple scatter plot.", focus: true do
+      it "adds a simple scatter plot." do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
-        axes.scatter!(400) do |p|
+        axes.scatter! do |p|
           p.data @x1, @y1
           p.label = "data1"
           p.color = :plum_purple

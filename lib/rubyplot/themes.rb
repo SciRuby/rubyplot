@@ -41,6 +41,7 @@ silver falu_red royal_blue crimson]
       background_colors: %I[white white],
       label_colors: %I[strong_blue vivid_orange dark_lime_green strong_red slightly_desaturated_violet \
 dark_grey strong_yellow strong_cyan yellow maroon grey]
+
     }.freeze
   end
 end
