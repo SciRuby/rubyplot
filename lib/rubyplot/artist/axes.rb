@@ -19,9 +19,9 @@ module Rubyplot
       # Range of Y axis.
 
       attr_accessor :y_range,
-        :text_font, :grid,
-        :bounding_box, :x_axis_padding, :y_axis_padding, :origin,
-        :title_shift, :title_margin
+                    :text_font, :grid,
+                    :bounding_box, :origin,
+                    :title_shift, :title_margin
 
       # Main title for this Axes.
       attr_accessor :title
@@ -29,10 +29,12 @@ module Rubyplot
       attr_reader :figure
       # Array of plots contained in this Axes.
       attr_reader :plots
-      # data variables for something
-      attr_reader :raw_rows
-      attr_reader :geometry, :font, :legend_font_size, :title_font_size, :scale, :font_color
-      attr_reader :marker_color, :axes, :legend_margin, :backend, :marker_caps_height, :marker_font_size
+
+      attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
+                  :title_font_size, :scale, :font_color, :marker_color, :axes,
+                  :legend_margin, :backend, :marker_caps_height, :marker_font_size
+      
+
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
       attr_reader :title_caps_height
@@ -103,7 +105,9 @@ module Rubyplot
 
       # Write an image to a file by communicating with the backend.
       def draw
+        assign_plot_defaults
         consolidate_plots
+        gather_plot_data
         configure_title
         calculate_xy_axes_origin
         configure_xy_axes
@@ -175,7 +179,22 @@ module Rubyplot
 
       private
 
-      def add_plot(plot_type, *args)
+
+      def assign_plot_defaults
+        assign_label_colors
+      end
+
+      def assign_label_colors
+        @plots.each_with_index do |p, i|
+          if p.color == :default
+            p.color = @figure.theme_options[:label_colors][
+              i % @figure.theme_options[:label_colors].size]
+          end
+        end
+      end
+
+      def add_plot plot_type, *args, &block
+
         plot = with_backend plot_type, *args
         yield(plot) if block_given?
         @plots << plot
@@ -190,11 +209,6 @@ module Rubyplot
             Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_type}").new self, *args
           end
         plot
-      end
-
-      def prepare_legend
-        @legends = @plots.map(&:create_legend)
-        @legends.each(&:draw)
       end
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
@@ -271,9 +285,30 @@ module Rubyplot
       end
 
       def consolidate_plots
-        bars = @plots.map { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
-        @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
-        @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bars)
+        bars = @plots.grep(Rubyplot::Artist::Plot::Bar)
+        if !bars.empty?
+          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
+          @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bar_plots: bars)
+        end
+      end
+
+      def gather_plot_data
+        set_xrange
+        set_yrange
+      end
+
+      def set_xrange
+        if @x_range[0].nil? && @x_range[1].nil?
+          @x_range[0] = @plots.map { |p| p.x_min }.min
+          @x_range[1] = @plots.map { |p| p.x_max }.max
+        end
+      end
+
+      def set_yrange
+        if @y_range[0].nil? && @y_range[1].nil?
+          @y_range[0] = @plots.map { |p| p.y_min }.min
+          @y_range[1] = @plots.map { |p| p.y_max }.max
+        end
       end
     end
     # class Axes

@@ -624,7 +624,8 @@ module Rubyplot
       lemon_yellow: '#fdff38',
       pistachio: '#c0fa8b',
       dull_yellow: '#eedc5b',
-      dark_lime_green: '#7ebd01',
+      strong_green: '#7ebd01',
+      dark_lime_green: '#2ca02c',
       denim_blue: '#3b5b92',
       teal_blue: '#01889f',
       lightish_blue: '#3d7afd',
@@ -756,6 +757,9 @@ module Rubyplot
       dark_beige: '#ac9362',
       emerald: '#01a049',
       pale_red: '#d9544d',
+      strong_red: '#d62728',
+      strong_cyan: '#d62728',
+      strong_yellow: '#bcbd22',
       light_magenta: '#fa5ff7',
       sky: '#82cafc',
       light_cyan: '#acfffc',
@@ -879,6 +883,7 @@ module Rubyplot
       goldenrod: '#fac205',
       dark_yellow: '#d5b60a',
       dark_grey: '#363737',
+      slightly_desaturated_violet: '#9467bd',
       army_green: '#4b5d16',
       grey_blue: '#6b8ba4',
       seafoam: '#80f9ad',
@@ -966,7 +971,8 @@ module Rubyplot
       pink: '#ff81c0',
       blue: '#0000FF',
       green: '#008000',
-      purple: '#7e1e9c'
+      purple: '#7e1e9c',
+      vivid_orange: '#ff7f0e'
     }.freeze
   end
 end
