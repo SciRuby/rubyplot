@@ -11,6 +11,7 @@ module Rubyplot
         @abs_y2 = @axes.origin[1]
         @major_ticks_count = 5
         @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
+        @length = (@abs_x2 - @abs_x1).abs
         configure_axis_line
         populate_major_x_ticks
         configure_title
@@ -26,12 +27,11 @@ module Rubyplot
 
       def configure_axis_line
         @line = Rubyplot::Artist::Line2D.new(
-          self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2)
-        #stroke_width: @stroke_width)
+          self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
+          stroke_width: @stroke_width)
       end
       
       def populate_major_x_ticks
-        puts "max_val #{@max_val} #{@major_ticks_count}"
         value_distance = (@max_val) / @major_ticks_count.to_f
         @major_ticks_count.times do |count|
           count += 1

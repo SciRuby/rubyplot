@@ -3,6 +3,12 @@ module Rubyplot
     class Rectangle < Base
       attr_reader :width, :height, :border_color, :fill_color
 
+      # Create a Rectangle for drawing on the canvas.
+      #
+      # @param abs_x [Float] Absolute X co-ordinate of the upper left corner.
+      # @param abs_y [Float] Absolute Y co-ordinate of the upper left corner.
+      # @param width [Float] Width in pixels of the rectangle.
+      # @param height [Float] Height in pixels of the rectangle.
       def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
         super(owner.backend, abs_x, abs_y)
         @height = height
