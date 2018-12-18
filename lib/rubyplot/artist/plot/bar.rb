@@ -6,20 +6,22 @@ module Rubyplot
         attr_accessor :bar_spacing
         # Width of each bar in pixels.
         attr_accessor :bar_width
-        # Height of each bar in pixels.
-        attr_accessor :bar_height
         # Number between 0 and 1.0 denoting spacing between the bars.
         # 0.0 means no spacing at all 1.0 means that each bars' width
         # is nearly 0 (so each bar is a simple line with no X dimension).
         # Denotes the total left + right side space.
         attr_reader :spacing_ratio
-        # X co-ordinate of the lower left corner of the bar.
+        # X co-ordinates of the lower left corner of the bar.
         attr_accessor :abs_x_left
-        # Y co-ordinate of the lower left corner of the bar.
+        # Y co-ordinates of the lower left corner of the bar.
         attr_accessor :abs_y_left
+        
         def initialize(*)
           super
           @spacing_ratio = 0.1
+          @abs_x_left = []
+          @abs_y_left = []
+          @rectangles = []
         end
 
         # Set the spacing factor for this bar plot.
@@ -43,14 +45,26 @@ module Rubyplot
         def draw
           return unless @axes.geometry.has_data
 
-          setup_bar_heights
+          setup_bar_rectangles
+          @rectangles.each(&:draw)
         end
 
         private
 
 
-        def setup_bar_heights
-          
+        def setup_bar_rectangles
+          @normalized_data[:y_values].each_with_index do |iy, i|
+            height = iy * @axes.y_axis.length
+            @rectangles << Rubyplot::Artist::Rectangle.new(
+              self,
+              abs_x: @abs_x_left[i],
+              abs_y: @abs_y_left[i] - height,
+              width: @bar_width,
+              height: height,
+              border_color: @data[:color],
+              fill_color: @data[:color]
+            )
+          end
         end
       end
       # class Bar

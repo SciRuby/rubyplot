@@ -28,13 +28,17 @@ module Rubyplot
       attr_reader :theme_options
       attr_reader :marker_color
       attr_reader :font_color
-      def initialize
+      
+      # Initialize a Rubyplot::Artist::Figure object.
+      # @param height [Integer] nil Height in pixels of the complete Figure.
+      # @param width [Integer] nil Width in pixels of the complete Figure.
+      def initialize(height: nil, width: nil)
         @title = ''
         @nrows = 1
         @ncols = 1
         @backend = Rubyplot::Backend::MagickWrapper.new
-        @width = DEFAULT_TARGET_WIDTH
-        @height = @width * 0.75
+        @width = width || DEFAULT_TARGET_WIDTH
+        @height = height || @width * 0.75
         @abs_x = 0
         @abs_y = 0
         @top_spacing = 0.05
@@ -57,6 +61,8 @@ module Rubyplot
         @subplots.each { |i| i.each(&:draw) }
         @backend.write(file_name)
       end
+
+      private
 
       def setup_default_theme
         defaults = {

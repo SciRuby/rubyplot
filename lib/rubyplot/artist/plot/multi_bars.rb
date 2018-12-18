@@ -15,6 +15,14 @@ module Rubyplot
         def initialize(*args, bar_plots:)
           super(args[0])
           @bar_plots = bar_plots
+          @x_min = @bar_plots.map(&:x_min).min
+          @y_min = @bar_plots.map(&:y_min).min
+          @x_max = @bar_plots.map(&:x_max).max
+          @y_max = @bar_plots.map(&:y_max).max
+        end
+
+        def normalize
+          @bar_plots.each(&:normalize)
         end
 
         def draw
@@ -48,8 +56,11 @@ module Rubyplot
 
         def set_bar_dims bar_plot, index
           bar_plot.bar_width = @max_bars_width / @bars_per_slot
-          bar_plot.abs_x_left = @padding / 2 + index * bar_plot.bar_width
-          bar_plot.abs_y_left = @axes.x_axis.abs_y1
+          @num_max_slots.times do |i|
+            bar_plot.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin +
+                                     i * @max_slot_width + @padding / 2 + index * bar_plot.bar_width
+            bar_plot.abs_y_left[i] = @axes.x_axis.abs_y1 - @axes.x_axis.stroke_width
+          end
         end
       end
       # class MultiBars
