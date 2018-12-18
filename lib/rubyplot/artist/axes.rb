@@ -29,12 +29,10 @@ module Rubyplot
       attr_reader :figure
       # Array of plots contained in this Axes.
       attr_reader :plots
-
       attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
                   :legend_margin, :backend, :marker_caps_height, :marker_font_size
       
-
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
       attr_reader :title_caps_height
@@ -210,6 +208,7 @@ module Rubyplot
           end
         plot
       end
+
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title

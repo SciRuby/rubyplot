@@ -8,7 +8,6 @@ module Rubyplot
         attr_reader :label, :ticks, :major_ticks_count, :min_val, :max_val, :title
 
         attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend, :length
-
         attr_reader :stroke_width, :major_ticks
 
         def initialize(axes, title, min_val, max_val)

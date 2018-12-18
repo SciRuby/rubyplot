@@ -27,13 +27,15 @@ module Rubyplot
 
       def configure_axis_line
         @line = Rubyplot::Artist::Line2D.new(
+
           self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
           stroke_width: @stroke_width)
 
       end
 
       def populate_major_x_ticks
-        value_distance = @max_val / @major_ticks_count.to_f
+
+        value_distance = (@max_val) / @major_ticks_count.to_f
         @major_ticks_count.times do |count|
           count += 1
           @major_ticks << Rubyplot::Artist::XTick.new(

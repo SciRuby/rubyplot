@@ -13,6 +13,7 @@ module Rubyplot
           @normalized_data[:y_values].each_with_index do |iy, idx_y|
             ix = @normalized_data[:x_values][idx_y]
             next if iy.nil? || ix.nil?
+
             abs_x = ix * @axes.x_axis.length + @axes.abs_x + @axes.y_axis_margin
             abs_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
             Rubyplot::Artist::Circle.new(

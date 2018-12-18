@@ -44,11 +44,13 @@ module Rubyplot
 
         def draw
           return unless @axes.geometry.has_data
+
           setup_bar_rectangles
           @rectangles.each(&:draw)
         end
 
         private
+
 
         def setup_bar_rectangles
           @normalized_data[:y_values].each_with_index do |iy, i|

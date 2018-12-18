@@ -43,7 +43,6 @@ module Rubyplot
           @bars_per_slot = @bar_plots.size
           @bar_plots.each_with_index do |bar, index|
             set_bar_dims bar, index
-
           end
         end
 
