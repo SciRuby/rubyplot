@@ -457,6 +457,7 @@ require 'spec_helper'
           p.label = "data"
           p.color = :yellow
         end
+        axes.x_ticks = ["five", "twelve", "nine", "six", "seven"]
         axes.title = "Random bar numbers"
 
         file = "/#{Rubyplot.backend}_simple_bar.png"

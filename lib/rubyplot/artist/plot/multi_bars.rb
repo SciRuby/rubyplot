@@ -26,7 +26,7 @@ module Rubyplot
 
         def draw
           configure_plot_geometry_data
-          #configure_x_ticks
+          configure_default_x_ticks if @axes.x_axis.x_ticks.nil?
           @bar_plots.each(&:draw)
         end
 
@@ -45,12 +45,8 @@ module Rubyplot
           end
         end
 
-        def configure_x_ticks
-          if @axes.x_ticks # user supplied ticks
-            
-          else # default ticks
-            
-          end
+        def configure_default_x_ticks
+          labels = @axes.x_ticks || Array.new(@num_max_slots) { |i| i.to_s }
         end
 
         def set_bar_dims bar_plot, index

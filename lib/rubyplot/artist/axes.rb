@@ -12,10 +12,6 @@ module Rubyplot
 
       # FIXME: most of the below accessors should just be name= methods which
       # will access the required Artist and set the variable in there directly.
-      # Title of the X axis
-      attr_accessor :x_title
-      # Title of the Y axis.
-      attr_accessor :y_title
       # Range of X axis.
       attr_accessor :x_range
       # Range of Y axis.
@@ -60,8 +56,7 @@ module Rubyplot
         @y_axis_margin = 40.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
-        
-        @origin = [nil, nil]
+
         @title = ""
         @title_shift = 0
         @title_margin = TITLE_MARGIN
@@ -86,8 +81,10 @@ module Rubyplot
         @legends = []
         @lines = []
         @texts = []
-        @x_axis = nil
-        @y_axis = nil
+        @origin = [nil, nil]
+        calculate_xy_axes_origin
+        @x_axis = Rubyplot::Artist::XAxis.new(self)
+        @y_axis = Rubyplot::Artist::YAxis.new(self)
 
         @legend_box_position = :top
       end
@@ -114,8 +111,6 @@ module Rubyplot
         consolidate_plots
         gather_plot_data
         configure_title
-        calculate_xy_axes_origin
-        configure_xy_axes
         configure_legends
         configure_plotting_data
         actually_draw
@@ -180,10 +175,18 @@ module Rubyplot
         (1 - (@figure.top_spacing + @figure.bottom_spacing)) * @figure.height
       end
 
-      def x_ticks= ticks_hash
-        @x_ticks = ticks_hash
+      def x_ticks= x_ticks
+        @x_axis.x_ticks = x_ticks
       end
 
+      def x_title= x_title
+        @x_axis.title = x_title
+      end
+
+      def y_title= y_title
+        @y_axis.title = y_title
+      end
+      
       private
 
       def assign_plot_defaults
@@ -234,14 +237,6 @@ module Rubyplot
       def calculate_xy_axes_origin
         @origin[0] = abs_x + @x_axis_margin
         @origin[1] = abs_y + height - @y_axis_margin
-      end
-
-      # Figure out co-ordinatees of the XAxis and YAxis
-      def configure_xy_axes
-        @x_axis = Rubyplot::Artist::XAxis.new(
-          self, @x_title, @x_range[0], @x_range[1])
-        @y_axis = Rubyplot::Artist::YAxis.new(
-          self, @y_title, @y_range[0], @y_range[1])
       end
 
       # Figure out co-ordinates of the legends
@@ -310,6 +305,7 @@ module Rubyplot
         end
       end
 
+      # FIXME: replace x_range and y_range with XAxis::max/min_value and YAxis::max/min_value.
       def gather_plot_data
         set_xrange
         set_yrange
@@ -320,6 +316,8 @@ module Rubyplot
           @x_range[0] = @plots.map { |p| p.x_min }.min
           @x_range[1] = @plots.map { |p| p.x_max }.max
         end
+        @x_axis.min_val = @x_range[0]
+        @x_axis.max_val = @x_range[1]
       end
 
       def set_yrange
@@ -327,6 +325,8 @@ module Rubyplot
           @y_range[0] = @plots.map { |p| p.y_min }.min
           @y_range[1] = @plots.map { |p| p.y_max }.max
         end
+        @y_axis.min_val = @y_range[0]
+        @y_axis.max_val = @y_range[1]
       end
     end # class Axes
   end # moudle Artist
