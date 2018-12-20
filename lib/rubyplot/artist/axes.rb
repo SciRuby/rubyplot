@@ -45,6 +45,10 @@ module Rubyplot
       attr_reader :x_axis
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
+      # Array of X ticks.
+      attr_reader :x_ticks
+      # Number of X ticks.
+      attr_accessor :num_x_ticks
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       def initialize figure
@@ -85,6 +89,8 @@ module Rubyplot
         calculate_xy_axes_origin
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
+        @x_ticks = nil
+        @num_x_ticks = 5
 
         @legend_box_position = :top
       end
@@ -107,12 +113,13 @@ module Rubyplot
       
       # Write an image to a file by communicating with the backend.
       def draw
-        assign_plot_defaults
+        assign_default_label_colors
         consolidate_plots
         gather_plot_data
         configure_title
         configure_legends
         configure_plotting_data
+        assign_x_ticks
         actually_draw
       end
 
@@ -147,7 +154,7 @@ module Rubyplot
       end
 
       def stacked_bar! *args, &block
-        add_plot "StackedBar", *args, &block
+        appdd_plot "StackedBar", *args, &block
       end
 
       def write file_name
@@ -176,7 +183,7 @@ module Rubyplot
       end
 
       def x_ticks= x_ticks
-        @x_axis.x_ticks = x_ticks
+        @x_ticks = x_ticks
       end
 
       def x_title= x_title
@@ -189,15 +196,31 @@ module Rubyplot
       
       private
 
-      def assign_plot_defaults
-        assign_label_colors
-      end
-
-      def assign_label_colors
+      def assign_default_label_colors
         @plots.each_with_index do |p, i|
           if p.color == :default
             p.color = @figure.theme_options[:label_colors][
               i % @figure.theme_options[:label_colors].size]
+          end
+        end
+      end
+
+      def assign_x_ticks
+        unless @x_ticks
+          val_distance = @x_range[1] / @num_x_ticks.to_f
+          @x_ticks = Array.new(@num_x_ticks) { |c| (c*val_distance).to_s }
+        end
+        unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
+          inter_ticks_distance = @x_axis.length / @num_x_ticks
+          @x_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::XTick.new(
+              self,
+              abs_x: i * inter_ticks_distance + @x_axis.abs_x1,
+              abs_y: @x_axis.abs_y1,
+              label: tick_label,
+              length: 6,
+              label_distance: 10
+            )
           end
         end
       end
@@ -256,6 +279,7 @@ module Rubyplot
       # Call the respective draw methods on each of the elements of this Axes.
       def actually_draw
         @x_axis.draw
+        @x_ticks.each(&:draw)
         @y_axis.draw
         @title.draw
         @legend_box.draw

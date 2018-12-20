@@ -3,8 +3,6 @@ require_relative 'base'
 module Rubyplot
   module Artist
     class XAxis < Axis::Base
-      attr_accessor :x_ticks
-      
       def initialize axes
         super
         @abs_x1 = @axes.origin[0]
@@ -17,10 +15,8 @@ module Rubyplot
       end
 
       def draw
-        populate_major_x_ticks
         configure_title
         @line.draw
-        @x_ticks.each(&:draw)
         @title.draw
       end
 
@@ -30,27 +26,6 @@ module Rubyplot
         @line = Rubyplot::Artist::Line2D.new(
           self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
           stroke_width: @stroke_width)
-      end
-
-      # FIXME: refactor the tick population logic.
-      def populate_major_x_ticks
-        value_distance = (@max_val) / @major_ticks_count.to_f
-        if !@x_ticks
-          @x_ticks = Array.new(@major_ticks_count) { |c| (c*value_distance).to_s }
-        end
-        @x_ticks = @x_ticks[0...@major_ticks_count]
-        unless @x_ticks.all? { |x| x.is_a?(XTick) }
-          @x_ticks.map!.with_index do |tick_label, i|
-            Rubyplot::Artist::XTick.new(
-              @axes,
-              abs_x: i * @major_ticks_distance + @abs_x1,
-              abs_y: @abs_y1,
-              label: tick_label,
-              length: 6,
-              label_distance: 10
-            )
-          end
-        end
       end
 
       def configure_title

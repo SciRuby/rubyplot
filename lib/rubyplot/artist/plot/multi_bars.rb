@@ -18,6 +18,8 @@ module Rubyplot
           @y_min = @bar_plots.map(&:y_min).min
           @x_max = @bar_plots.map(&:x_max).max
           @y_max = @bar_plots.map(&:y_max).max
+          configure_plot_geometry_data
+          configure_x_ticks
         end
 
         def normalize
@@ -25,8 +27,6 @@ module Rubyplot
         end
 
         def draw
-          configure_plot_geometry_data
-          configure_default_x_ticks if @axes.x_axis.x_ticks.nil?
           @bar_plots.each(&:draw)
         end
 
@@ -45,8 +45,22 @@ module Rubyplot
           end
         end
 
-        def configure_default_x_ticks
+        def configure_x_ticks
+          @axes.num_x_ticks = @num_max_slots
           labels = @axes.x_ticks || Array.new(@num_max_slots) { |i| i.to_s }
+          if labels.size != @axes.num_x_ticks
+            labels = labels[0...@axes.num_x_ticks]
+          end
+          @axes.x_ticks = labels.map.with_index do |label, i|
+            Rubyplot::Artist::XTick.new(
+              @axes,
+              abs_x: @axes.abs_x + @axes.y_axis_margin + i * @max_slot_width + @max_slot_width / 2,
+              abs_y: @axes.x_axis.abs_y1,
+              label: label,
+              length: 6,
+              label_distance: 10
+            )
+          end
         end
 
         def set_bar_dims bar_plot, index
