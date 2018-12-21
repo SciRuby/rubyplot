@@ -55,7 +55,7 @@ module Rubyplot
             Rubyplot::Artist::XTick.new(
               @axes,
               abs_x: @axes.abs_x + @axes.y_axis_margin + i * @max_slot_width + @max_slot_width / 2,
-              abs_y: @axes.x_axis.abs_y1,
+              abs_y: @axes.origin[1],
               label: label,
               length: 6,
               label_distance: 10
@@ -68,7 +68,7 @@ module Rubyplot
           @num_max_slots.times do |i|
             bar_plot.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin +
                                      i * @max_slot_width + @padding / 2 + index * bar_plot.bar_width
-            bar_plot.abs_y_left[i] = @axes.x_axis.abs_y1 - @axes.x_axis.stroke_width
+            bar_plot.abs_y_left[i] = @axes.origin[1] - @axes.x_axis.stroke_width
           end
         end
       end # class MultiBars

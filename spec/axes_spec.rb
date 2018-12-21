@@ -171,7 +171,7 @@ require 'spec_helper'
         FileUtils.mkdir_p @temp_dir
       end
 
-      it "plots a single bubble plot" do
+      it "plots a single bubble plot", focus: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bubble! do |p|
@@ -532,7 +532,7 @@ require 'spec_helper'
             p.label = name
           end
         end
-        
+
         file = "/#{Rubyplot.backend}_wide_multiple_bars.png"
         fig.write(@temp_dir + file)
 

@@ -216,7 +216,7 @@ module Rubyplot
             Rubyplot::Artist::XTick.new(
               self,
               abs_x: i * inter_ticks_distance + @x_axis.abs_x1,
-              abs_y: @x_axis.abs_y1,
+              abs_y: @origin[1],
               label: tick_label,
               length: 6,
               label_distance: 10

@@ -6,9 +6,7 @@ module Rubyplot
       def initialize axes
         super
         @abs_x1 = @axes.origin[0]
-        @abs_y1 = @axes.origin[1]
         @abs_x2 = @axes.abs_x + @axes.width - @axes.y_axis_margin
-        @abs_y2 = @axes.origin[1]
         @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
         @length = (@abs_x2 - @abs_x1).abs
         configure_axis_line
@@ -24,7 +22,7 @@ module Rubyplot
 
       def configure_axis_line
         @line = Rubyplot::Artist::Line2D.new(
-          self, abs_x1: @abs_x1, abs_y1: @abs_y1, abs_x2: @abs_x2, abs_y2: @abs_y2,
+          self, abs_x1: @abs_x1, abs_y1: @axes.origin[1], abs_x2: @abs_x2, abs_y2: @axes.origin[1],
           stroke_width: @stroke_width)
       end
 
