@@ -115,6 +115,18 @@ module Rubyplot
         @draw.circle(x,y,x-radius,y)
       end
 
+      # Draw a polygon.
+      #
+      # @param coords [Array[Array]] Array of Arrays where first element of each sub-array is
+      #   the X co-ordinate and the second element is the Y co-ordinate.
+      def draw_polygon(coords: , fill_opacity: 0.0, color: "#000000",
+                        stroke: "transparent")
+        @draw.stroke stroke
+        @draw.fill color
+        @draw.fill_opacity fill_opacity
+        @draw.polygon *coords.flatten
+      end
+
       def write file_name
         @draw.draw(@base_image)
         @base_image.write(file_name)

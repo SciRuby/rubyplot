@@ -142,7 +142,9 @@ module Rubyplot
       end
 
       def area! *args, &block
-        add_plot "Area", *args, &block
+        plot = Rubyplot::Artist::Plot::Area.new self
+        yield(plot) if block_given?
+        @plots << plot
       end
 
       def bubble! *args, &block
@@ -209,17 +211,17 @@ module Rubyplot
 
       def assign_x_ticks
         unless @x_ticks
-          val_distance = @x_range[1] / @num_x_ticks.to_f
-          @x_ticks = Array.new(@num_x_ticks) { |c| (c*val_distance).to_s }
+          val_distance = (@x_range[1] - @x_range[0]).abs / @num_x_ticks.to_f
+          @x_ticks = (@x_range[0]..@x_range[1]).step(val_distance).map { |i| i }
         end
         unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
-          inter_ticks_distance = @x_axis.length / @num_x_ticks
+          inter_ticks_distance = @x_axis.length / (@num_x_ticks - 1)
           @x_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
               self,
               abs_x: i * inter_ticks_distance + @x_axis.abs_x1,
               abs_y: @origin[1],
-              label: tick_label,
+              label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
               label_distance: 10
             )

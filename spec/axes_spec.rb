@@ -171,7 +171,7 @@ require 'spec_helper'
         FileUtils.mkdir_p @temp_dir
       end
 
-      it "plots a single bubble plot", focus: true do
+      it "plots a single bubble plot" do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.bubble! do |p|
@@ -222,13 +222,9 @@ require 'spec_helper'
           p.label = "Jimmy"
         end
         axes.title = "Visual simple area graph test."
-        axes.x_ticks = {
-          0 => '0',
-          2 => '2',
-          4 => '4',
-          6 => '6'
-        }
-
+        axes.num_x_ticks = 5
+        axes.x_ticks = ['0', '22', '44', '66', '88',]
+        
         file = "/#{Rubyplot.backend}_simple_area.png"
         fig.write(@temp_dir + file)
 

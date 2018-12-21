@@ -33,13 +33,12 @@ module Rubyplot
 
         def draw_lines
           prev_x = prev_y = nil
-          y_axis_length = (@axes.y_axis.abs_y2 - @axes.y_axis.abs_y1).abs
           @normalized_data[:x_values].each_with_index do |ix, idx_ix|
             iy = @normalized_data[:y_values][idx_ix]
             next if ix.nil? || iy.nil?
             new_x = ix * (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs + @axes.abs_x +
                     @axes.y_axis_margin
-            new_y = (y_axis_length - iy * y_axis_length) + @axes.abs_y
+            new_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
 
             if !(prev_x.nil? && prev_y.nil?)
               Rubyplot::Artist::Line2D.new(

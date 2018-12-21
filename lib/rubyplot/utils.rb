@@ -5,6 +5,8 @@ module Rubyplot
       def format_label label
         if label.is_a? Float
           format('%0.2f', label)
+        elsif label.is_a? String
+          label
         end
       end
     end
