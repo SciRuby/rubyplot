@@ -331,6 +331,13 @@ module Rubyplot
           @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
           @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bar_plots: bars)
         end
+
+        stacked_bars = @plots.grep(Rubyplot::Artist::Plot::StackedBar)
+        if !stacked_bars.empty?
+          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
+          @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(
+            self, stacked_bars: stacked_bars)
+        end
       end
 
       # FIXME: replace x_range and y_range with XAxis::max/min_value and YAxis::max/min_value.

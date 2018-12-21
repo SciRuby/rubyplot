@@ -20,36 +20,7 @@ require 'spec_helper'
         FileUtils.mkdir_p @temp_dir
       end
 
-      it "plots a single stacked bar graph with default colors" do
-        fig = Rubyplot::Figure.new
-        axes = fig.add_subplot 0,0
-        axes.stacked_bar! do |p|
-          p.data [25, 36, 86, 39]
-          p.label = "moon"
-        end
-        axes.title = "net earnings in different months."
-        axes.x_ticks = {
-          0 => 'Jan',
-          1 => 'Feb',
-          2 => 'March',
-          3 => 'April',
-          4 => 'May',
-          5 => 'June',
-          6 => 'July',
-          7 => 'August',
-          8 => 'September',
-          9 => 'October',
-          10 => 'November',
-          11 => 'December'
-        }
-        
-        file = "/#{Rubyplot.backend}_simple_stacked_bar.png"
-        fig.write(@temp_dir + file)
-
-        #expect("temp/stacked_bar" + file).to eq_image("fixtures/stacked_bar" + file)
-      end
-
-      it "plots multiple stacked bar graphs with default colors" do
+      it "plots multiple stacked bar graphs with default colors", hell: true do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         [
@@ -63,20 +34,8 @@ require 'spec_helper'
           end          
         end
         axes.title = "net earnings in different months."
-        axes.x_ticks = {
-          0 => 'Jan',
-          1 => 'Feb',
-          2 => 'March',
-          3 => 'April',
-          4 => 'May',
-          5 => 'June',
-          6 => 'July',
-          7 => 'August',
-          8 => 'September',
-          9 => 'October',
-          10 => 'November',
-          11 => 'December'
-        }
+        axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
+                        'August', 'September', 'October', 'November', 'December']
         
         file = "/#{Rubyplot.backend}_multiple_stacked_bar.png"
         fig.write(@temp_dir + file)
@@ -85,14 +44,14 @@ require 'spec_helper'
       end
 
       it "plots stacked bar in a small size" do
-        fig = Rubyplot::Figure.new
+        fig = Rubyplot::Figure.new(height: 400, width: 400)
         axes = fig.add_subplot 0,0
         [
           ["Car", [25, 36, 86, 39]],
           ["Bus", [80, 54, 67, 54]],
           ["Train", [22, 29, 35, 38]]
         ].each do |label, data|
-          axes.stacked_bar!(400) do |p| 
+          axes.stacked_bar! do |p| 
             p.data data
             p.label = label
           end
@@ -113,21 +72,16 @@ require 'spec_helper'
         FileUtils.mkdir_p @temp_dir
       end
 
-      it "plots a single dot plot" do
+      skip "plots a single dot plot" do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         axes.dot! do |p|
           p.data [0,5,8,15]
           p.label = "Car"
           p.color = :maroon
-          p.minimum_value = 0 # FIXME: change this!
         end
-        axes.y_ticks = {
-          0 => '5/6',
-          1 => '5/15',
-          2 => '5/24',
-          3 => '5/30'
-        }
+        axes.num_y_ticks = 4
+        axes.y_ticks = ['5/6', '5/15', '5/24', '5/30']
 
         file = "/#{Rubyplot.backend}_simple_dot.png"
         fig.write(@temp_dir + file)
@@ -135,7 +89,7 @@ require 'spec_helper'
         #expect("temp/dot" + file).to eq_image("fixtures/dot" + file)
       end
 
-      it "plots multiple dot plots" do
+      skip "plots multiple dot plots" do
         fig = Rubyplot::Figure.new
         axes = fig.add_subplot 0,0
         [
