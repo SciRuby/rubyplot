@@ -146,7 +146,9 @@ module Rubyplot
       end
 
       def bubble! *args, &block
-        add_plot "Bubble", *args, &block
+        plot = Rubyplot::Artist::Plot::Bubble.new self
+        yield(plot) if block_given?
+        @plots << plot
       end
 
       def dot! *args, &block
