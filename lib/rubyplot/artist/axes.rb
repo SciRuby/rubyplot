@@ -112,13 +112,19 @@ module Rubyplot
       end
       
       # Write an image to a file by communicating with the backend.
+      # FIXME: (refactor) Currently draw first assigns default colors and then
+      # performs consolidation etc of the data and then assigns the default X ticks.
+      # The reason for this is that default labels are needed by the consolidated
+      # plots when they create the required rectangles etc. However assigning
+      # default ticks should be a part of the 'assign defaults' step and should
+      # therefore should be clubbed with the assign labels step.
       def draw
+        set_axes_ranges
+        normalize_plotting_data
         assign_default_label_colors
         consolidate_plots
-        gather_plot_data
         configure_title
         configure_legends
-        configure_plotting_data
         assign_x_ticks
         actually_draw
       end
@@ -158,7 +164,9 @@ module Rubyplot
       end
 
       def stacked_bar! *args, &block
-        appdd_plot "StackedBar", *args, &block
+        plot = Rubyplot::Artist::Plot::StackedBar.new self
+        yield(plot) if block_given?
+        @plots << plot
       end
 
       def write file_name
@@ -274,7 +282,7 @@ module Rubyplot
 
       # Make adjustments to the data that will be plotted. Maps the data
       # contained in the plot to actual pixel values.
-      def configure_plotting_data
+      def normalize_plotting_data
         @plots.each do |plot|
           plot.normalize
         end
@@ -341,7 +349,7 @@ module Rubyplot
       end
 
       # FIXME: replace x_range and y_range with XAxis::max/min_value and YAxis::max/min_value.
-      def gather_plot_data
+      def set_axes_ranges
         set_xrange
         set_yrange
       end
