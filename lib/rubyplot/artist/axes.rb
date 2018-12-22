@@ -26,7 +26,7 @@ module Rubyplot
       # Array of plots contained in this Axes.
       attr_reader :plots
 
-      attr_reader :geometry, :font, :marker_font_size, :legend_font_size,
+      attr_reader :font, :marker_font_size, :legend_font_size,
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
                   :legend_margin, :backend, :marker_caps_height, :marker_font_size
       
@@ -72,7 +72,6 @@ module Rubyplot
         @raw_rows = width * (height/width)
 
         @theme = Rubyplot::Themes::CLASSIC_WHITE
-        @geometry = Rubyplot::MagickWrapper::Plot::Scatter::Geometry.new
         vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
         @font = File.exist?(vera_font_path) ? vera_font_path : nil
         @font_color = "#000000"
@@ -296,41 +295,6 @@ module Rubyplot
         @title.draw
         @legend_box.draw
         @plots.each(&:draw)
-      end
-
-      # Return a formatted string representing a number value that should be
-      # printed as a label.
-      def label_string(value, increment)
-        label =
-          if increment
-            if increment >= 10 || (increment * 1) == (increment * 1).to_i.to_f
-              format('%0i', value)
-            elsif increment >= 1.0 || (increment * 10) == (increment * 10).to_i.to_f
-              format('%0.1f', value)
-            elsif increment >= 0.1 || (increment * 100) == (increment * 100).to_i.to_f
-              format('%0.2f', value)
-            elsif increment >= 0.01 || (increment * 1000) == (increment * 1000).to_i.to_f
-              format('%0.3f', value)
-            elsif increment >= 0.001 || (increment * 10_000) == (increment * 10_000).to_i.to_f
-              format('%0.4f', value)
-            else
-              value.to_s
-            end
-          elsif ((@y_spread.to_f %
-                  (@geometry.marker_count.to_f == 0 ?
-                     1 : @geometry.marker_count.to_f) == 0) ||
-                 !@geometry.y_axis_increment .nil?)
-            value.to_i.to_s
-          elsif @y_spread > 10.0
-            format('%0i', value)
-          elsif @y_spread >= 3.0
-            format('%0.2f', value)
-          else
-            value.to_s
-          end
-        parts = label.split('.')
-        parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
-        parts.join('.')
       end
 
       def consolidate_plots

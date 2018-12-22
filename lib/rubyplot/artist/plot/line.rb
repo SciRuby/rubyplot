@@ -16,7 +16,6 @@ module Rubyplot
         end
 
         def draw
-          return unless @axes.geometry.has_data
           if @normalized_data[:x_values].size == 1
             draw_single_point
           else

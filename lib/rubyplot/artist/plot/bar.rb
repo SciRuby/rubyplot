@@ -42,7 +42,6 @@ module Rubyplot
         end
 
         def draw
-          return unless @axes.geometry.has_data
           setup_bar_rectangles
           @rectangles.each(&:draw)
         end

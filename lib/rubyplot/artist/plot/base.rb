@@ -41,15 +41,10 @@ module Rubyplot
         def data x_values, y_values
           @data[:x_values] = x_values
           @data[:y_values] = y_values
-          # Set column count if this is larger than previous column counts
-          @axes.geometry.column_count = y_values.length > @axes.geometry.column_count ?
-                                          y_values.length : @axes.geometry.column_count
           @y_min = @data[:y_values].min
           @y_max = @data[:y_values].max
           @x_min = @data[:x_values].min
           @x_max = @data[:x_values].max
-
-          @axes.geometry.has_data = true
         end
 
         # Normalize original data to values between 0-1. Used for obtaining relative
