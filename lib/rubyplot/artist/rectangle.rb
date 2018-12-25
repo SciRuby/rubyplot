@@ -3,7 +3,6 @@ module Rubyplot
     class Rectangle < Base
       attr_reader :width, :height, :border_color, :fill_color
 
-
       # Create a Rectangle for drawing on the canvas.
       #
       # @param abs_x [Float] Absolute X co-ordinate of the upper left corner.

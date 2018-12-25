@@ -41,7 +41,6 @@ module Rubyplot
           pointsize: @axes.marker_font_size
         )
       end
-
     end
     # class YAxis
   end

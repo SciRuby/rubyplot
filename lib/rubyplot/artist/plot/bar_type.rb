@@ -2,7 +2,6 @@ module Rubyplot
   module Artist
     module Plot
       class BarType < Artist::Plot::Base
-
         def initialize(*)
           super
           @spacing_ratio = 0.1
@@ -14,7 +13,7 @@ module Rubyplot
         def data y_values
           super(Array(0...(y_values.size)), y_values)
         end
-        
+
         def num_bars
           @data[:y_values].size
         end
@@ -26,8 +25,11 @@ module Rubyplot
 
         protected
 
-        
-      end # class BarType
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
+      end
+      # class BarType
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

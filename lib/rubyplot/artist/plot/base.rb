@@ -2,16 +2,15 @@ module Rubyplot
   module Artist
     module Plot
       class Base < Artist::Base
-        attr_reader :axes, :data, :x_max, :x_min, :y_min,
-                    :y_max
+        attr_reader :axes, :data, :x_max, :x_min, :y_min, :y_max
         attr_writer :stroke_width, :stroke_opacity
-        
+
         def initialize axes
           super(axes.backend, axes.abs_x, axes.abs_y)
           @axes = axes
           @backend = @axes.backend
           @data = {
-            label: "",
+            label: '',
             color: :default
           }
           @normalized_data = {
@@ -34,7 +33,6 @@ module Rubyplot
           @data[:label] = label
         end
 
-
         def color= color
           @data[:color] = color
         end
@@ -53,12 +51,16 @@ module Rubyplot
         def normalize
           x_spread = @axes.x_range[1] - @axes.x_range[0]
           y_spread = @axes.y_range[1] - @axes.y_range[0]
-          @normalized_data[:x_values] = @data[:x_values].map do |x|
-            (x.to_f - @axes.x_range[0]) / x_spread 
-          end if @data[:x_values]
-          @normalized_data[:y_values] = @data[:y_values].map do |y|
-            (y.to_f - @axes.y_range[0]) / y_spread
-          end if @data[:y_values]
+          if @data[:x_values]
+            @normalized_data[:x_values] = @data[:x_values].map do |x|
+              (x.to_f - @axes.x_range[0]) / x_spread
+            end
+          end
+          if @data[:y_values]
+            @normalized_data[:y_values] = @data[:y_values].map do |y|
+              (y.to_f - @axes.y_range[0]) / y_spread
+            end
+          end
         end
       end
       # class Base

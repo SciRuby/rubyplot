@@ -18,7 +18,7 @@ require 'rubyplot/gr_wrapper'
 module Rubyplot
   def self.backend
     b = ENV['RUBYPLOT_BACKEND']
-    return b.to_sym if ["magick" , "gr"].include?(b)
+    return b.to_sym if %w[magick gr].include?(b)
 
     :magick
   end

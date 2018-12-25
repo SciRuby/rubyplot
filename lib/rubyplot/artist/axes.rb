@@ -14,10 +14,7 @@ module Rubyplot
       attr_accessor :x_range
       # Range of Y axis.
 
-      attr_accessor :y_range,
-                    :text_font, :grid,
-                    :bounding_box, :origin,
-                    :title_shift, :title_margin
+      attr_accessor :y_range, :text_font, :grid, :bounding_box, :origin, :title_shift, :title_margin
 
       # Main title for this Axes.
       attr_accessor :title
@@ -27,8 +24,7 @@ module Rubyplot
       attr_reader :plots
       attr_reader :font, :marker_font_size, :legend_font_size,
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
-                  :legend_margin, :backend, :marker_caps_height, :marker_font_size
-      
+                  :legend_margin, :backend, :marker_caps_height
       attr_reader :label_stagger_height
       # FIXME: possibly disposable attrs
       attr_reader :title_caps_height
@@ -59,7 +55,7 @@ module Rubyplot
         @y_axis_margin = 40.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
-        @title = ""
+        @title = ''
         @title_shift = 0
         @title_margin = TITLE_MARGIN
         @text_font = :default
@@ -141,13 +137,13 @@ module Rubyplot
         @plots << plot
       end
 
-      def area! *args, &block
+      def area!(*_args)
         plot = Rubyplot::Artist::Plot::Area.new self
         yield(plot) if block_given?
         @plots << plot
       end
 
-      def bubble! *args, &block
+      def bubble!(*_args)
         plot = Rubyplot::Artist::Plot::Bubble.new self
         yield(plot) if block_given?
         @plots << plot
@@ -157,7 +153,7 @@ module Rubyplot
         add_plot 'Dot', *args, &block
       end
 
-      def stacked_bar! *args, &block
+      def stacked_bar!(*_args)
         plot = Rubyplot::Artist::Plot::StackedBar.new self
         yield(plot) if block_given?
         @plots << plot
@@ -199,7 +195,7 @@ module Rubyplot
       def y_title= y_title
         @y_axis.title = y_title
       end
-      
+
       private
 
       def assign_default_label_colors
@@ -232,7 +228,6 @@ module Rubyplot
       end
 
       def add_plot plot_type, *args, &block
-
         plot = with_backend plot_type, *args
         yield(plot) if block_given?
         @plots << plot
@@ -248,7 +243,6 @@ module Rubyplot
           end
         plot
       end
-
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
@@ -290,16 +284,15 @@ module Rubyplot
 
       def consolidate_plots
         bars = @plots.grep(Rubyplot::Artist::Plot::Bar)
-        if !bars.empty?
+        unless bars.empty?
           @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
           @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bar_plots: bars)
         end
 
         stacked_bars = @plots.grep(Rubyplot::Artist::Plot::StackedBar)
-        if !stacked_bars.empty?
+        unless stacked_bars.empty?
           @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
-          @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(
-            self, stacked_bars: stacked_bars)
+          @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(self, stacked_bars: stacked_bars)
         end
       end
 

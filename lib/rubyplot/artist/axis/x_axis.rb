@@ -23,8 +23,8 @@ module Rubyplot
       def configure_axis_line
         @line = Rubyplot::Artist::Line2D.new(
           self, abs_x1: @abs_x1, abs_y1: @axes.origin[1], abs_x2: @abs_x2, abs_y2: @axes.origin[1],
-          stroke_width: @stroke_width)
-
+                stroke_width: @stroke_width
+        )
       end
 
       def configure_title

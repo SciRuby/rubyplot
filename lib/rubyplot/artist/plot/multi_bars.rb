@@ -10,7 +10,7 @@ module Rubyplot
       class MultiBars < Artist::Plot::Base
         # The max. width that each bar can occupy.
         attr_reader :max_bar_width
-        
+
         def initialize(*args, bar_plots:)
           super(args[0])
           @bar_plots = bar_plots
@@ -33,8 +33,7 @@ module Rubyplot
         private
 
         def configure_plot_geometry_data
-
-          @num_max_slots = @bar_plots.map { |bar| bar.num_bars }.max
+          @num_max_slots = @bar_plots.map(&:num_bars).max
           @max_slot_width = (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs / @num_max_slots
           # FIXME: figure out a way to specify inter-box space somehow.
           @spacing_ratio = @bar_plots[0].spacing_ratio
@@ -48,10 +47,8 @@ module Rubyplot
 
         def configure_x_ticks
           @axes.num_x_ticks = @num_max_slots
-          labels = @axes.x_ticks || Array.new(@num_max_slots) { |i| i.to_s }
-          if labels.size != @axes.num_x_ticks
-            labels = labels[0...@axes.num_x_ticks]
-          end
+          labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
+          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
           @axes.x_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,

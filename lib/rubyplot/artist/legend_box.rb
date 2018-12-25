@@ -72,16 +72,16 @@ module Rubyplot
 
       def configure_legends
         @axes.plots.each_with_index do |plot, count|
-          if plot.label != ""
-            @legends << Rubyplot::Artist::Legend.new(
-              self,
-              @axes,
-              text: plot.label,
-              color: plot.color,
-              abs_x: @abs_x + left_margin,
-              abs_y: @abs_y + count * per_legend_height + top_margin
-            )
-          end
+          next unless plot.label != ''
+
+          @legends << Rubyplot::Artist::Legend.new(
+            self,
+            @axes,
+            text: plot.label,
+            color: plot.color,
+            abs_x: @abs_x + left_margin,
+            abs_y: @abs_y + count * per_legend_height + top_margin
+          )
         end
       end
     end

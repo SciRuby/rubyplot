@@ -15,7 +15,7 @@ module Rubyplot
         attr_accessor :abs_x_left
         # Y co-ordinates of the lower left corner of the bar.
         attr_accessor :abs_y_left
-        
+
         def initialize(*)
           super
           @spacing_ratio = 0.1
@@ -34,7 +34,7 @@ module Rubyplot
 
         # Set Bar plot data.
         def data y_values
-          super(Array.new(y_values.size) { |i| i}, y_values)
+          super(Array.new(y_values.size) { |i| i }, y_values)
         end
 
         # Number of bars in this Bar plot
@@ -48,7 +48,6 @@ module Rubyplot
         end
 
         private
-
 
         def setup_bar_rectangles
           @normalized_data[:y_values].each_with_index do |iy, i|
