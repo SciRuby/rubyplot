@@ -13,4 +13,5 @@ script:
 
 install:
   - gem install bundler
+  - gem install rainbow -v '3.0.0'
   - bundle install
