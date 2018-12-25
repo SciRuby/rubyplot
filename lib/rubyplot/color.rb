@@ -1,29 +1,43 @@
 module Rubyplot
   module Color
     # A list of contrasting colors that is used in Bartype BasePlots by default
-    CONTRASTING_COLORS =
-      [
-        '#e6194b',
-        '#3cb44b',
-        '#ffe119',
-        '#0082c8',
-        '#f58231',
-        '#911eb4',
-        '#46f0f0',
-        '#f032e6',
-        '#d2f53c',
-        '#fabebe',
-        '#008080',
-        '#e6beff',
-        '#aa6e28',
-        '#fffac8',
-        '#800000',
-        '#aaffc3',
-        '#808000',
-        '#ffd8b1',
-        '#000080',
-        '#808080'
-      ].freeze
+    CONTRASTING_COLORS = {
+	gun_powder: '#4a465a',
+	eastern_blue: '#0083a3',
+	bittersweet: '#ff6a6a',
+	light_pink: '#ffaeb9',
+	violet: '#ee82ee',
+        bright_turquoise: '#00e5ee',
+	spring_green: '#00ff7f',
+	green_yellow: '#c0ff3e',
+	orange: '#ffa500',
+	misty_rose: '#ffe4e1',
+	silver: '#bdbdbd',
+	falu_red: '#8b2500',
+	royal_blue: '#436eee',
+	crimson: '#dc143c',
+        crimson: '#e6194b',
+        fruit_salad: '#3cb44b',
+        lemon: '#ffe119',
+        bondi_blue: '#0082c8',
+        sun: '#f58231',
+        dark_orchid: '#911eb4',
+        turquoise: '#46f0f0',
+        razzle_dazzle_rose: '#f032e6',
+        pear: '#d2f53c',
+        your_pink: '#fabebe',
+        teal: '#008080',
+        mauve: '#e6beff',
+        hot_toddy: '#aa6e28',
+        lemon_chiffon: '#fffac8',
+        maroon: '#800000',
+        magic_mint: '#aaffc3',
+        olive: '#808000',
+        sandy_beach: '#ffd8b1',
+        navy: '#000080',
+	grey: '#808080',
+	pattens_blue: '#d1edf5'
+      }.freeze
 
     # A list of color symbols inspired by xkcd survey
     # https://xkcd.com/color/rgb/
@@ -972,7 +986,8 @@ module Rubyplot
       blue: '#0000FF',
       green: '#008000',
       purple: '#7e1e9c',
-      vivid_orange: '#ff7f0e',
+      vivid_orange: '#ff7f0e'
+
     }.freeze
   end
 end
