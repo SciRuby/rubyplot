@@ -47,8 +47,12 @@ module Rubyplot
       attr_reader :y_axis
       # Array of X ticks.
       attr_reader :x_ticks
+      # Array of Y ticks.
+      attr_reader :y_ticks
       # Number of X ticks.
       attr_accessor :num_x_ticks
+      # Number of Y ticks.
+      attr_accessor :num_y_ticks
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       def initialize figure
@@ -89,7 +93,9 @@ module Rubyplot
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
         @x_ticks = nil
+        @y_ticks = nil
         @num_x_ticks = 5
+        @num_y_ticks = 4
 
         @legend_box_position = :top
       end
@@ -125,6 +131,7 @@ module Rubyplot
         configure_title
         configure_legends
         assign_x_ticks
+        assign_y_ticks
         actually_draw
       end
 
@@ -197,6 +204,10 @@ module Rubyplot
         @x_ticks = x_ticks
       end
 
+      def y_ticks= y_ticks
+        @y_ticks = y_ticks
+      end
+
       def x_title= x_title
         @x_axis.title = x_title
       end
@@ -228,6 +239,26 @@ module Rubyplot
               self,
               abs_x: i * inter_ticks_distance + @x_axis.abs_x1,
               abs_y: @origin[1],
+              label: Rubyplot::Utils.format_label(tick_label),
+              length: 6,
+              label_distance: 10
+            )
+          end
+        end
+      end
+
+      def assign_y_ticks
+        unless @y_ticks
+          val_distance = (@y_range[1] - @y_range[0]).abs / @num_y_ticks.to_f
+          @y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
+        end
+        unless @y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
+          inter_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
+          @y_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::YTick.new(
+              self,
+              abs_x: @origin[0] - @x_axis_margin,
+              abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
               label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
               label_distance: 10
@@ -291,6 +322,7 @@ module Rubyplot
       def actually_draw
         @x_axis.draw
         @x_ticks.each(&:draw)
+        @y_ticks.each(&:draw)
         @y_axis.draw
         @title.draw
         @legend_box.draw

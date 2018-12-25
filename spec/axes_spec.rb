@@ -31,12 +31,13 @@ require 'spec_helper'
           axes.stacked_bar! do |p|
             p.data data
             p.label = label
-          end          
+          end
         end
         axes.title = "net earnings in different months."
         axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
                         'August', 'September', 'October', 'November', 'December']
-        
+        axes.y_ticks = ['5', '10', '15', '20', '25', '30']
+
         file = "/#{Rubyplot.backend}_multiple_stacked_bar.png"
         fig.write(@temp_dir + file)
 
