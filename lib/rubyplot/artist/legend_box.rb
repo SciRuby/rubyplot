@@ -23,8 +23,10 @@ module Rubyplot
       end
 
       def draw
-        @bounding_box.draw
-        @legends.each(&:draw)
+        unless @legends.empty?
+          @bounding_box.draw
+          @legends.each(&:draw)
+        end
       end
 
       def top_margin
@@ -70,14 +72,16 @@ module Rubyplot
 
       def configure_legends
         @axes.plots.each_with_index do |plot, count|
-          @legends << Rubyplot::Artist::Legend.new(
-            self,
-            @axes,
-            text: plot.label,
-            color: plot.color,
-            abs_x: @abs_x + left_margin,
-            abs_y: @abs_y + count * per_legend_height + top_margin
-          )
+          if plot.label != ""
+            @legends << Rubyplot::Artist::Legend.new(
+              self,
+              @axes,
+              text: plot.label,
+              color: plot.color,
+              abs_x: @abs_x + left_margin,
+              abs_y: @abs_y + count * per_legend_height + top_margin
+            )
+          end
         end
       end
     end

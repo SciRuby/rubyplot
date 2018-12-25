@@ -4,20 +4,21 @@ module Rubyplot
       class Base
         # Length in pixels of the arrow after the last major tick.
         FINISH_ARROW_LENGTH = 10.0
-
-        attr_reader :label, :ticks, :major_ticks_count, :min_val, :max_val, :title
-
+        
+        attr_reader :label, :ticks, :major_ticks_count
         attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend, :length
         attr_reader :stroke_width, :major_ticks
-
-        def initialize(axes, title, min_val, max_val)
+        attr_accessor :title, :min_val, :max_val
+        
+        def initialize axes
           @axes = axes
-          @title = title
-          @min_val = min_val
-          @max_val = max_val
+          @title = ""
+          @min_val = nil
+          @max_val = nil
           @stroke_width = 1.0
           @backend = @axes.backend
-          @major_ticks = []
+          @major_ticks_count = 5
+          @x_ticks = nil
         end
       end
       # class Base

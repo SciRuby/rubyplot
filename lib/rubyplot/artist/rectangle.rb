@@ -10,6 +10,11 @@ module Rubyplot
       # @param abs_y [Float] Absolute Y co-ordinate of the upper left corner.
       # @param width [Float] Width in pixels of the rectangle.
       # @param height [Float] Height in pixels of the rectangle.
+      # @param border_color [Symbol] Symbol from Rubyplot::Color::COLOR_INDEX
+      #   denoting border color.
+      # @param fill_color [Symbol] nil Symbol from Rubyplot::Color::COLOR_INDEX
+      #   denoting the fill color.
+
       # rubocop:disable Metrics/ParameterLists
       def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
         super(owner.backend, abs_x, abs_y)

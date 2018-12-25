@@ -1,7 +1,0 @@
-require_relative 'plot/scatter'
-require_relative 'plot/bar'
-require_relative 'plot/line'
-require_relative 'plot/area'
-require_relative 'plot/bubble'
-require_relative 'plot/dot'
-require_relative 'plot/stacked_bar'

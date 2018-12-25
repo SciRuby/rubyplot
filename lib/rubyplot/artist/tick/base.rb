@@ -1,7 +1,7 @@
 module Rubyplot
   module Artist
     class Tick
-      class Base
+      class Base < Artist::Base
         # Distance between tick mark and number.
         attr_reader :label_distance
         # Label of this Tick
@@ -19,16 +19,14 @@ module Rubyplot
 
         # rubocop:disable Metrics/ParameterLists
         def initialize(owner,abs_x:,abs_y:,length:,label:,label_distance:,
-          tick_opacity: 0.0,tick_width: 1.0)
+                       tick_opacity: 0.0,tick_width: 1.0)
+          super(owner.backend, abs_x, abs_y)
           @owner = owner
-          @abs_x = abs_x
-          @abs_y = abs_y
           @length = length
-          @label_text = Rubyplot::Utils.format_label label
+          @label_text = label #Rubyplot::Utils.format_label label
           @label_distance = label_distance
           @tick_opacity = tick_opacity
           @tick_width = tick_width
-          @backend = @owner.backend
         end
         # rubocop:enable Metrics/ParameterLists
       end

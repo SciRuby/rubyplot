@@ -11,13 +11,11 @@ module Rubyplot
         @length = (@abs_y1 - @abs_y2).abs
         configure_axis_line
         configure_title
-        populate_major_y_ticks
       end
 
       def draw
         @title.draw
         @line.draw
-        # @y_ticks.each(&:draw)
       end
 
       private
@@ -44,7 +42,6 @@ module Rubyplot
         )
       end
 
-      def populate_major_y_ticks; end
     end
     # class YAxis
   end
