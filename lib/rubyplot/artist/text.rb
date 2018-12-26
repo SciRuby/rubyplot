@@ -7,18 +7,18 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(text, owner, abs_x:, abs_y:,font: nil,
-        color: '#000000',pointsize:,stroke: 'transparent', internal_label: '', rotation: nil)
-        # weight: nil, gravity: nil is removed as they are unused method argument.
+                     color: '#000000',pointsize:,stroke: 'transparent',
+                     internal_label: '', rotation: nil,
+                     weight: nil, gravity: nil
+                    )
+        super(owner.backend, abs_x, abs_y)
         @text = text
         @owner = owner
-        @abs_x = abs_x
-        @abs_y = abs_y
         @font = font
         @color = color
         @pointsize = pointsize
         @stroke = stroke
         @internal_label = internal_label
-        @backend = @owner.backend
         @rotation = rotation
       end
       # rubocop:enable Metrics/ParameterLists

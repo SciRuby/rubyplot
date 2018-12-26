@@ -33,18 +33,17 @@ module Rubyplot
       # @param height [Integer] nil Height in pixels of the complete Figure.
       # @param width [Integer] nil Width in pixels of the complete Figure.
       def initialize(height: nil, width: nil)
+        super(Rubyplot::Backend::MagickWrapper.new, 0, 0)
         @title = ''
         @nrows = 1
         @ncols = 1
-        @backend = Rubyplot::Backend::MagickWrapper.new
         @width = width || DEFAULT_TARGET_WIDTH
         @height = height || @width * 0.75
-        @abs_x = 0
-        @abs_y = 0
         @top_spacing = 0.05
         @bottom_spacing = 0.05
         @left_spacing = 0.05
         @right_spacing = 0.05
+        @subplots = nil
         setup_default_theme
         add_subplots @nrows, @ncols
       end

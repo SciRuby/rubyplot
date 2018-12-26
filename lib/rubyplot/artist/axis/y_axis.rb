@@ -10,18 +10,12 @@ module Rubyplot
         @y_ticks = []
         @length = (@abs_y1 - @abs_y2).abs
         configure_axis_line
-        configure_title
-      end
-
-      def draw
-        @title.draw
-        @line.draw
       end
 
       private
 
       def configure_axis_line
-        @line = Rubyplot::Artist::Line2D.new(
+        @lines << Rubyplot::Artist::Line2D.new(
           self,
           abs_x1: @abs_x1,
           abs_y1: @abs_y1,
@@ -32,7 +26,7 @@ module Rubyplot
       end
 
       def configure_title
-        @title = Rubyplot::Artist::Text.new(
+        @texts << Rubyplot::Artist::Text.new(
           @title,
           self,
           rotation: -90.0,

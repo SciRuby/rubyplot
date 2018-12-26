@@ -11,6 +11,7 @@ AllCops:
     - 'benchmarks/*'
     - 'profile/*'
     - 'tmp/*'
+    - '*.so'
   DisplayCopNames: true
   TargetRubyVersion: 2.2
 

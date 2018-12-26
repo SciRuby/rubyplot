@@ -246,9 +246,10 @@ module Rubyplot
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
-        @title = Rubyplot::Artist::Text.new(
-          @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin, font: @font, color: @font_color,
-                        pointsize: @title_font_size, internal_label: 'axes title.'
+        @texts << Rubyplot::Artist::Text.new(
+          @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin,
+          font: @font, color: @font_color,
+          pointsize: @title_font_size, internal_label: 'axes title.'
         )
       end
 
@@ -277,7 +278,7 @@ module Rubyplot
         @x_axis.draw
         @x_ticks.each(&:draw)
         @y_axis.draw
-        @title.draw
+        @texts.each(&:draw)
         @legend_box.draw
         @plots.each(&:draw)
       end

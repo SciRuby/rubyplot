@@ -16,28 +16,6 @@ module Rubyplot
         @draw = Magick::Draw.new
       end
 
-      # Returns the height of the capital letter 'X' for the current font and
-      # size.
-      #
-      # Not scaled since it deals with dimensions that the regular scaling will
-      # handle.
-      def caps_height(font, font_size)
-        @draw.pointsize = font_size
-        @draw.font = font if font
-        @draw.get_type_metrics(@base_image, 'X').height
-      end
-
-      # Returns the width of a string at this pointsize.
-      #
-      # Not scaled since it deals with dimensions that the regular
-      # scaling will handle.
-      # FIXME: duplicate with get_text_width_height
-      def string_width(font, font_size, text)
-        @draw.pointsize = font_size
-        @draw.font = font if font
-        @draw.get_type_metrics(@base_image, text.to_s).height
-      end
-
       # Height in pixels of particular text.
       # @param text [String] Text to be measured.
       def text_height(text, font, font_size)
@@ -73,41 +51,43 @@ module Rubyplot
       # Unused method argument - stroke
       def draw_text(text,font_color:,font: nil,pointsize:,
         font_weight: Magick::NormalWeight, gravity: nil,
-        x_pos:,y_pos:,rotation: nil)
+        x:,y:,rotation: nil, stroke: 'transparent')
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
         @draw.font_weight = font_weight
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+        @draw.stroke stroke
+        @draw.stroke_antialias true
         @draw.rotation = rotation if rotation
-        @draw.annotate(@base_image, 0,0,x_pos.to_i,y_pos.to_i, text.gsub('%', '%%'))
+        @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation
       end
 
       # Draw a rectangle.
-      def draw_rectangle(x01:,y01:,x02:,y02:,border_color: '#000000',stroke: 'transparent',
+      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: '#000000',stroke: 'transparent',
         fill_color: nil, stroke_width: 1.0)
         if fill_color # solid rectangle
           @draw.stroke stroke
           @draw.fill fill_color
           @draw.stroke_width stroke_width
-          @draw.rectangle x01, y01, x02, y02
+          @draw.rectangle x1, y1, x2, y2
         else # just edges
           @draw.stroke_width stroke_width
           @draw.fill border_color
-          @draw.line x01, y01, x01 + (x02-x01), y01 # top line
-          @draw.line x01 + (x02-x01), y01, x02, y02 # right line
-          @draw.line x02, y02, x01, y01 + (y02-y01) # bottom line
-          @draw.line x01, y01, x01, y01 + (y02-y01) # left line
+          @draw.line x1, y1, x1 + (x2-x1), y1 # top line
+          @draw.line x1 + (x2-x1), y1, x2, y2 # right line
+          @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
+          @draw.line x1, y1, x1, y1 + (y2-y1) # left line
         end
       end
 
-      def draw_line(x01:,y01:,x02:,y02:,color: '#000000', stroke: 'transparent',
+      def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
         stroke_opacity: 0.0, stroke_width: 2.0)
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
-        @draw.line x01, y01, x02, y02
+        @draw.line x1, y1, x2, y2
       end
 
       def draw_circle(x_pos:,y_pos:,radius:,stroke_opacity:,stroke_width:,color:)
