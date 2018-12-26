@@ -11,11 +11,13 @@ rvm:
 before_install:
   - gem install bundler
 
-script:
-  - bundle exec rspec
-  - bundle exec rubocop
-
 install:
   - gem install bundler
   - gem install rainbow -v '2.1.0'
   - bundle install
+
+script:
+  - bundle exec rspec
+  - bundle exec rubocop
+
+
