@@ -66,16 +66,16 @@ module Rubyplot
 
       def setup_default_theme
         defaults = {
-          marker_color: 'white',
-          font_color: 'black',
+          marker_color: :white,
+          font_color: :black,
           background_image: nil
         }
         @theme_options = defaults.merge Themes::CLASSIC_WHITE
         @marker_color = @theme_options[:marker_color]
         @font_color = @theme_options[:font_color] || @marker_color
         @backend.set_base_image_gradient(
-          @theme_options[:background_colors][0],
-          @theme_options[:background_colors][1],
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
           @width,
           @height,
           @theme_options[:background_direction]

@@ -26,3 +26,23 @@ When the `draw` method in `Axes` is called, the call sequence is as follows:
 * Consolidate plots like bar plots into 'Multi-' plots.
 * Figure out location of the Axes title.
 * Figure out location of the legends.
+
+## Test infrastructure
+
+Since it is quite tough to generate the exact same plot with the exact same
+pixels on all systems, we perform automated testing by running the same
+plotting code twice, saving the generated files of each run in separate files
+then comparing them both pixel by pixel.
+
+To make this as smooth as possible, we use the `RSpec.configure` method to define
+an `after(:example)` block which will run each example twice, save the image generated
+by each run to a separate file and then compare both the files.
+
+The `after(:example)` block requires a `@figure` instance variable which it will use
+for performing the plotting. A check will be performed for the `@figure` instance
+variable before the example is run.
+
+## Artist defaults convention
+
+Due to nature of a viz library, each Artist tends to have many instance variables
+for storing various kinds of information about the Artist.
