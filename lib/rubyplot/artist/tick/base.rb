@@ -16,17 +16,24 @@ module Rubyplot
         # @param label [String] Label below the tick.
         # @param label_distance [Integer] Distance between the label and tick.
         # @param tick_opacity [Float] Number describing the opacity of the tick drawn. 0-1.0.
+
+        # rubocop:disable Metrics/ParameterLists
         def initialize(owner,abs_x:,abs_y:,length:,label:,label_distance:,
-                       tick_opacity: 0.0,tick_width: 1.0)
+          tick_opacity: 0.0,tick_width: 1.0)
           super(owner.backend, abs_x, abs_y)
           @owner = owner
           @length = length
-          @label_text = label #Rubyplot::Utils.format_label label
+          @label_text = label # Rubyplot::Utils.format_label label
           @label_distance = label_distance
           @tick_opacity = tick_opacity
           @tick_width = tick_width
         end
-      end # class Base
-    end # class Tick
-  end # class Artist
-end # module Rubyplot
+        # rubocop:enable Metrics/ParameterLists
+      end
+      # class Base
+    end
+    # class Tick
+  end
+  # class Artist
+end
+# module Rubyplot

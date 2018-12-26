@@ -5,7 +5,6 @@ module Rubyplot
         # Width in pixels of the border of each bubble.
         attr_reader :stroke_width
         attr_reader :z_max, :z_min
-        
         def initialize(*)
           super
           @bubbles = []
@@ -36,7 +35,11 @@ module Rubyplot
           end
           @bubbles.each(&:draw)
         end
-      end # class Bubble
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
+      end
+      # class Bubble
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

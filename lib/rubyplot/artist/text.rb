@@ -3,11 +3,12 @@ module Rubyplot
     class Text < Artist::Base
       # (X,Y) of upper left corner of the rectangle.
       attr_reader :color, :font, :pointsize,
-                  :stroke, :weight, :gravity, :text, :backend
-      
+        :stroke, :weight, :gravity, :text, :backend
+
+      # rubocop:disable Metrics/ParameterLists
       def initialize(text, owner, abs_x:, abs_y:,font: nil,
-                     color: '#000000',pointsize:,stroke: 'transparent',
-                     weight: nil,gravity: nil, internal_label: "", rotation: nil)
+        color: '#000000',pointsize:,stroke: 'transparent', internal_label: '', rotation: nil)
+        # weight: nil, gravity: nil is removed as they are unused method argument.
         @text = text
         @owner = owner
         @abs_x = abs_x
@@ -20,6 +21,7 @@ module Rubyplot
         @backend = @owner.backend
         @rotation = rotation
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # Height in pixels of this text
       def height
@@ -43,6 +45,9 @@ module Rubyplot
           rotation: @rotation
         )
       end
-    end # class Text
-  end # class Artist
-end # module Rubyplot
+    end
+    # class Text
+  end
+  # class Artist
+end
+# module Rubyplot

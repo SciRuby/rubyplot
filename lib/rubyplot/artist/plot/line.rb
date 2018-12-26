@@ -4,13 +4,13 @@ module Rubyplot
       class Line < Artist::Plot::Base
         # Set true if you want to see only the vertices of the line plot.
         attr_writer :hide_lines
-        
+
         def initialize(*)
           super
-          @hide_lines = false         
+          @hide_lines = false
         end
 
-        def data x_values, y_values=[]
+        def data(x_values, y_values=[])
           y_values = Array.new(x_values.size) { |i| i } if y_values.empty?
           super x_values, y_values
         end
@@ -35,11 +35,12 @@ module Rubyplot
           @normalized_data[:x_values].each_with_index do |ix, idx_ix|
             iy = @normalized_data[:y_values][idx_ix]
             next if ix.nil? || iy.nil?
+
             new_x = ix * (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs + @axes.abs_x +
                     @axes.y_axis_margin
             new_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
 
-            if !(prev_x.nil? && prev_y.nil?)
+            unless prev_x.nil? && prev_y.nil?
               Rubyplot::Artist::Line2D.new(
                 self,
                 abs_x1: prev_x,
@@ -54,8 +55,11 @@ module Rubyplot
             prev_y = new_y
           end
         end
-      end # class Line
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
-
+      end
+      # class Line
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

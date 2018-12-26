@@ -13,6 +13,8 @@ module Rubyplot
       #   denoting border color.
       # @param fill_color [Symbol] nil Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting the fill color.
+
+      # rubocop:disable Metrics/ParameterLists
       def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
         super(owner.backend, abs_x, abs_y)
         @height = height
@@ -20,6 +22,7 @@ module Rubyplot
         @border_color = Rubyplot::Color::COLOR_INDEX[border_color]
         @fill_color = Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def draw
         @backend.draw_rectangle(
@@ -31,6 +34,9 @@ module Rubyplot
           fill_color: @fill_color
         )
       end
-    end # class Rectangle
-  end # class Artist
-end # moduel Rubyplot
+    end
+    # class Rectangle
+  end
+  # class Artist
+end
+# moduel Rubyplot

@@ -11,7 +11,7 @@ module Rubyplot
       RIGHT_SPACING_RATIO = 0.1
 
       attr_accessor :border_color
-      
+
       def initialize(axes, abs_x:, abs_y:)
         super(axes.backend, abs_x, abs_y)
         @axes = axes
@@ -72,18 +72,21 @@ module Rubyplot
 
       def configure_legends
         @axes.plots.each_with_index do |plot, count|
-          if plot.label != ""
-            @legends << Rubyplot::Artist::Legend.new(
-              self,
-              @axes,
-              text: plot.label,
-              color: plot.color,
-              abs_x: @abs_x + left_margin,
-              abs_y: @abs_y + count * per_legend_height + top_margin
-            )
-          end
+          next unless plot.label != ''
+
+          @legends << Rubyplot::Artist::Legend.new(
+            self,
+            @axes,
+            text: plot.label,
+            color: plot.color,
+            abs_x: @abs_x + left_margin,
+            abs_y: @abs_y + count * per_legend_height + top_margin
+          )
         end
       end
-    end # class LegendBox
-  end # module Artist 
-end # module Rubyplot
+    end
+    # class LegendBox
+  end
+  # module Artist
+end
+# module Rubyplot

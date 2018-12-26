@@ -15,7 +15,7 @@ module Rubyplot
         attr_accessor :abs_x_left
         # Y co-ordinates of the lower left corner of the bar.
         attr_accessor :abs_y_left
-        
+
         def initialize(*)
           super
           @spacing_ratio = 0.1
@@ -25,15 +25,16 @@ module Rubyplot
         end
 
         # Set the spacing factor for this bar plot.
-        def spacing_ratio= sf
-          raise ValueError, '@spacing_ratio must be between 0.00 and 1.00' unless
-            (sf >= 0) && (sf <= 1)
-          @spacing_ratio = sf
+        def spacing_factor=(s_f)
+          raise ValueError, '@spacing_factor must be between 0.00 and 1.00' unless
+            (s_f >= 0) && (s_f <= 1)
+
+          @spacing_factor = s_f
         end
 
         # Set Bar plot data.
         def data y_values
-          super(Array.new(y_values.size) { |i| i}, y_values)
+          super(Array.new(y_values.size) { |i| i }, y_values)
         end
 
         # Number of bars in this Bar plot
@@ -62,8 +63,11 @@ module Rubyplot
             )
           end
         end
-      end # class Bar
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
-
+      end
+      # class Bar
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

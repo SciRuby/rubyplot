@@ -9,8 +9,8 @@ module Rubyplot
         # Array of Y co-ordinates of the lower left corner of each stacked bar.
         attr_accessor :abs_y_left
         # Width in pixels of each bar.
-        attr_accessor :bar_width        
-        
+        attr_accessor :bar_width
+
         def initialize(*)
           super
           @spacing_ratio = 0.1
@@ -63,7 +63,11 @@ module Rubyplot
             )
           end
         end
-      end # class StackedBar
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
+      end
+      # class StackedBar
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot

@@ -30,7 +30,7 @@ module Rubyplot
           stroke_width: @stroke_width
         )
       end
-      
+
       def configure_title
         @title = Rubyplot::Artist::Text.new(
           @title,
@@ -41,6 +41,9 @@ module Rubyplot
           pointsize: @axes.marker_font_size
         )
       end
-    end # class YAxis
-  end # class Artist
-end # module Rubyplot
+    end
+    # class YAxis
+  end
+  # class Artist
+end
+# module Rubyplot

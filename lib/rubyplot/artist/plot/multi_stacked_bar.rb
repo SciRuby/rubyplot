@@ -35,7 +35,7 @@ module Rubyplot
         end
 
         def configure_plot_geometry_data
-          @num_max_slots = @stacked_bars.map { |bar| bar.num_bars }.max
+          @num_max_slots = @stacked_bars.map(&:num_bars).max
           @max_slot_width = @axes.x_axis.length / @num_max_slots
           @spacing_ratio = @stacked_bars[0].spacing_ratio
           @padding = @spacing_ratio * @max_slot_width
@@ -48,10 +48,8 @@ module Rubyplot
 
         def configure_x_ticks
           @axes.num_x_ticks = @num_max_slots
-          labels = @axes.x_ticks || Array.new(@num_max_slots) { |i| i.to_s }
-          if labels.size != @axes.num_x_ticks
-            labels = labels[0...@axes.num_x_ticks]
-          end
+          labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
+          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
           @axes.x_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
@@ -70,11 +68,15 @@ module Rubyplot
           bar.num_bars.times do |i|
             pedestal_height = plots_below.map { |p| p.member_height(i) }.inject(:+) || 0
             bar.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin +
-                                i * @max_slot_width  + @padding / 2
+                                i * @max_slot_width + @padding / 2
             bar.abs_y_left[i] = (@axes.abs_y + @axes.y_axis.length) - pedestal_height
           end
         end
-      end # class StackedBar
-    end # module Plot
-  end # module Artist
-end # module Rubyplot
+      end
+      # class StackedBar
+    end
+    # module Plot
+  end
+  # module Artist
+end
+# module Rubyplot
