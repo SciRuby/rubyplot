@@ -4,12 +4,13 @@ language:
 rvm:
   - '2.0'
   - '2.1.0'
-  - '2.2'
+  - '2.2.0'
   - '2.3.0'
   - '2.4.0'
 
 before_install:
   - gem install bundler
+  - gem install rubocop
 
 script:
   - bundle exec rubocop
@@ -17,6 +18,7 @@ script:
 install:
   - gem install bundler
   - gem install rainbow -v '2.1.0'
+  - gem install rubocop
   - bundle install
 
 
