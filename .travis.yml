@@ -16,7 +16,6 @@ script:
 
 install:
   - gem install bundler
-  - gem install rubocop
   - gem install rainbow -v '2.1.0'
   - bundle install
 
