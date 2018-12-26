@@ -10,15 +10,10 @@ rvm:
 
 before_install:
   - gem install bundler
-  - gem install rubocop
-
-script:
-  - bundle exec rubocop
 
 install:
   - gem install bundler
   - gem install rainbow -v '2.1.0'
-  - gem install rubocop
   - bundle install
 
 
