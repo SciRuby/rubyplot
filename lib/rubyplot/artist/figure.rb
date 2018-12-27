@@ -33,18 +33,17 @@ module Rubyplot
       # @param height [Integer] nil Height in pixels of the complete Figure.
       # @param width [Integer] nil Width in pixels of the complete Figure.
       def initialize(height: nil, width: nil)
+        super(Rubyplot::Backend::MagickWrapper.new, 0, 0)
         @title = ''
         @nrows = 1
         @ncols = 1
-        @backend = Rubyplot::Backend::MagickWrapper.new
         @width = width || DEFAULT_TARGET_WIDTH
         @height = height || @width * 0.75
-        @abs_x = 0
-        @abs_y = 0
         @top_spacing = 0.05
         @bottom_spacing = 0.05
         @left_spacing = 0.05
         @right_spacing = 0.05
+        @subplots = nil
         setup_default_theme
         add_subplots @nrows, @ncols
       end
@@ -66,16 +65,16 @@ module Rubyplot
 
       def setup_default_theme
         defaults = {
-          marker_color: 'white',
-          font_color: 'black',
+          marker_color: :white,
+          font_color: :black,
           background_image: nil
         }
         @theme_options = defaults.merge Themes::CLASSIC_WHITE
         @marker_color = @theme_options[:marker_color]
         @font_color = @theme_options[:font_color] || @marker_color
         @backend.set_base_image_gradient(
-          @theme_options[:background_colors][0],
-          @theme_options[:background_colors][1],
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
           @width,
           @height,
           @theme_options[:background_direction]

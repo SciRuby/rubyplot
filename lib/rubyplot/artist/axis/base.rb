@@ -19,7 +19,17 @@ module Rubyplot
           @backend = @axes.backend
           @major_ticks_count = 5
           @x_ticks = nil
+          @texts = []
+          @lines = []
         end
+
+
+        def draw
+          configure_title
+          @lines.each(&:draw)
+          @texts.each(&:draw)
+        end
+
       end
       # class Base
     end
