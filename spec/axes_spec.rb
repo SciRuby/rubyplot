@@ -270,7 +270,7 @@ require 'spec_helper'
         axes.title = "Random bar numbers"
       end
 
-      it "adds bar plot with title margin", focus: true do
+      it "adds bar plot with title margin" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar! do |p|axes = 
@@ -281,7 +281,7 @@ require 'spec_helper'
         axes.title = "Bar with title margin = 100"
       end
 
-      it "checks if Geometry adjusts for large numbers" do
+      it "plots large numbers" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar! do |p|
@@ -315,7 +315,7 @@ require 'spec_helper'
         end
       end
 
-      it "plots both positive and negative values" do
+      it "plots both positive and negative values", focus: true do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar! do |p|
@@ -382,6 +382,11 @@ require 'spec_helper'
     end
 
     context "#scatter!" do
+      before do
+        @x1 = [1, 2, 3, 4, 5]
+        @y1 = [11, 2, 33, 4, 65]
+      end
+      
       it "adds a simple scatter plot." do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
@@ -403,6 +408,16 @@ require 'spec_helper'
           p.label = "apples"
         end
         axes.title = "all negative scatter graph test."
+      end
+
+      it "adds scatter with positive and negative values" do
+        @figure = Rubyplot::Figure.new
+        axes = @figure.add_subplot 0,0
+        axes.scatter! do |p|
+          p.data [-2,0,2,4,6], [-3,-1, 1, 4, 8]
+          p.label = "values"
+        end
+        axes.title = "positive + negative test."
       end
     end
 

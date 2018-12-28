@@ -99,12 +99,6 @@ module Rubyplot
       end
 
       # Write an image to a file by communicating with the backend.
-      # FIXME: (refactor) Currently draw first assigns default colors and then
-      # performs consolidation etc of the data and then assigns the default X ticks.
-      # The reason for this is that default labels are needed by the consolidated
-      # plots when they create the required rectangles etc. However assigning
-      # default ticks should be a part of the 'assign defaults' step and should
-      # therefore should be clubbed with the assign labels step.
       def draw
         set_axes_ranges
         normalize_plotting_data
@@ -207,8 +201,12 @@ module Rubyplot
       def assign_x_ticks
         @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
         unless @x_ticks
-          @x_ticks = (@x_range[0]..@x_range[1]).step(@inter_x_ticks_distance).map { |i| i }
+          value_distance = (@x_range[1] - @x_range[0]) / (@num_x_ticks.to_f - 1)
+          @x_ticks = @num_x_ticks.times.map do |i|
+            @x_range[0] + i * value_distance
+          end
         end
+
         unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
           @x_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
