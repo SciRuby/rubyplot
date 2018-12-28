@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Rubyplot::Figure do
+describe Rubyplot::SPI do
   before do
     @x1 = [1, 2, 3, 4, 5]
     @y1 = [10, 20, 30, 40, 50]
@@ -21,8 +21,8 @@ describe Rubyplot::Figure do
   end
 
   context '#subplot!' do
-    it 'creates a Figure with 2 Subplots stacked vertically' do
-      a = Rubyplot::Figure.new
+    skip 'creates a SPI with 2 Subplots stacked vertically' do
+      a = Rubyplot::SPI.new
       a.subplot!(2, 1, 1)
       a.line! @x1, @y1
       a.subplot!(2, 1, 2)
@@ -33,8 +33,8 @@ describe Rubyplot::Figure do
                                      'two_vertical.bmp', 10)).to eq(true)
     end
 
-    it 'creates a 2x2 subplots with multiple plots in a figure' do
-      a = Rubyplot::Figure.new
+    skip 'creates a 2x2 subplots with multiple plots in a figure' do
+      a = Rubyplot::SPI.new
       a.subplot!(2, 2, 1)
       a.line! @x1, @y1, marker_size: 1
       a.scatter! @x2, @y2
