@@ -12,6 +12,7 @@ require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
+require 'rubyplot/grwrapper'
 
 module Rubyplot
   def self.backend
