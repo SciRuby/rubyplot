@@ -1,4 +1,3 @@
-require 'gr_wrapper'
 require 'spec_helper'
 
 
