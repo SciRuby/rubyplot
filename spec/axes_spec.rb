@@ -14,7 +14,7 @@ require 'spec_helper'
     end
 
     context "#stacked_bar!" do
-      it "plots multiple stacked bar graphs with default colors", hell: true do
+      it "plots multiple stacked bar graphs with default colors" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         [
@@ -34,7 +34,7 @@ require 'spec_helper'
                         'August', 'September', 'October', 'November', 'December']
       end
 
-      it "plots stacked bar in a small size", hell: true do
+      it "plots stacked bar in a small size" do
         @figure = Rubyplot::Figure.new(height: 400, width: 400)
         axes = @figure.add_subplot 0,0
         [
@@ -112,12 +112,6 @@ require 'spec_helper'
     end
 
     context "#area!" do
-      before do 
-        @temp_dir = SPEC_ROOT + "temp/area"
-        @fix_dir = SPEC_ROOT + "fixtures/area"
-        FileUtils.mkdir_p @temp_dir
-      end
-
       it "plots a single simple Area graph" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
@@ -127,7 +121,7 @@ require 'spec_helper'
         end
         axes.title = "Visual simple area graph test."
         axes.num_x_ticks = 5
-        axes.x_ticks = ['0', '22', '44', '66', '88',]
+        axes.x_ticks = ['0', '22', '44', '66', '88']
       end
 
       it "plots multiple area plots on the same Axes" do
@@ -145,12 +139,8 @@ require 'spec_helper'
           end
         end
         axes.title = "Multiple area plots on same axes."
-        axes.x_ticks = {
-          0 => '0',
-          2 => '2',
-          4 => '4',
-          6 => '6'
-        }
+        axes.num_x_ticks = 4
+        axes.x_ticks = ['0', '2', '4', '6']
       end
     end
     
@@ -166,7 +156,7 @@ require 'spec_helper'
         axes.title = "A line graph."
       end
 
-      it "plots 2 simple lines on the same axes", focus: true do
+      it "plots 2 simple lines on the same axes" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.line! do |p|
@@ -180,10 +170,6 @@ require 'spec_helper'
           p.color = :green
         end
         axes.title = "A line graph."
-      end
-
-      skip "fails to match the reference image" do
-        
       end
 
       it "tests very small plot" do
@@ -242,8 +228,6 @@ require 'spec_helper'
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.title = "large values"
-        axes.baseline_value = 50_000
-
         [
           ["large", [100_005, 35_000, 28_000, 27_000]],
           ["large2", [35_000, 28_000, 27_000, 100_005]],
@@ -251,7 +235,6 @@ require 'spec_helper'
           ["large4", [1_238, 39_092, 27_938, 48_876]]
         ].each do |name, data|
           axes.line! do |p|
-            p.dot_radius = 15
             p.line_width = 3
             p.data data
             p.label = name
@@ -278,7 +261,7 @@ require 'spec_helper'
       it "adds a simple bar plot" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.bar!(600) do |p| 
+        axes.bar! do |p| 
           p.data [5,12,9,6,7]
           p.label = "data"
           p.color = :yellow
@@ -287,24 +270,21 @@ require 'spec_helper'
         axes.title = "Random bar numbers"
       end
 
-      it "adds bar plot with title margin" do
+      it "adds bar plot with title margin", focus: true do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.bar!(600) do |p|
-          p.marker_count = 8
+        axes.bar! do |p|axes = 
           p.data [5,12,9,6,6]
           p.label = "data"
           p.color = :green
         end
         axes.title = "Bar with title margin = 100"
-        axes.title_margin = 100
       end
 
       it "checks if Geometry adjusts for large numbers" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.bar!(600) do |p|
-          p.marker_count = 8
+        axes.bar! do |p|
           p.data [7025, 1024, 40_257, 933_672, 1_560_496]
           p.label = "data"
         end
@@ -314,13 +294,13 @@ require 'spec_helper'
       it "adds axes with X-Y labels" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.bar!(800) do |p|
+        axes.bar! do |p|
           p.data [40,50,60,80]
           p.label = "students"
         end
         axes.title = "Plot with X-Y axes."
-        axes.x_title = "Score (%)"
-        axes.y_title = "Students"
+        axes.x_title = "Students"
+        axes.y_title = "Score (%)"
         axes.x_ticks = [ '5/6', '5/15', '5/24', '5/36' ]
       end
 
@@ -347,24 +327,14 @@ require 'spec_helper'
           p.label = "peaches"
         end
         axes.title = "Pos/neg bar graph test."
-        axes.x_ticks = {
-          0 => '5/6',
-          1 => '5/15',
-          2 => '5/24',
-          3 => '5/30'
-        }
+        axes.x_ticks = ['5/6', '5/15', '5/24', '5/30']
       end
 
       it "tests negative values" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.title = "all negative bar graph."
-        axes.x_ticks = {
-          0 => '5/6',
-          1 => '5/15',
-          2 => '5/24',
-          3 => '5/30'
-        }
+        axes.x_ticks = ['5/6', '5/15', '5/24', '5/30']
         axes.bar! do |p|
           p.data [-1,-5,-4,-4]
           p.label = "apples"
@@ -375,11 +345,11 @@ require 'spec_helper'
         end
       end
 
-      skip "sets min-max range for Y axis" do
+      it "sets min-max range for Y axis" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.title = "nearly zero graph."
-        axes.y_range [0,10]
+        axes.y_range = [0,10]
         [
           [[1,2,3,4], "apples"],
           [[4,3,2,1], "peaches"]
@@ -389,20 +359,10 @@ require 'spec_helper'
             p.label = name
           end
         end
-        axes.x_ticks = {
-          0 => '5/6',
-          1 => '5/15',
-          2 => '5/24',
-          3 => '5/30'
-        }
-        
-        file = "/#{Rubyplot.backend}_y_axis_min_max_range.png"
-        fig.write(@temp_dir + file)
-
-        expect(@temp_dir + file).to eq_image(@fix_dir + file)
+        axes.x_ticks = ['5/6', '5/15', '5/24','5/30']
       end
 
-      skip "adjust legends if there are too many" do
+      it "adjust legends if there are too many" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.title = "My graph."
@@ -417,7 +377,7 @@ require 'spec_helper'
             p.label = name
           end
         end
-        axes.x_ticks = { 0 => '2003', 2 => '2004', 4 => '2005' }
+        axes.x_ticks = ['2003', '', '2004', '', '2005']
       end
     end
 
@@ -435,32 +395,59 @@ require 'spec_helper'
         axes.y_title = "Y data"
       end
 
-      it "adds a green cross scatter plot." do
-        @figure = Rubyplot::Figure.new
-        axes = @figure.add_subplot 0,0
-        axes.scatter!(400) do |p|
-          p.data @x1, @y1
-          p.color = :green
-          p.marker_size = 2
-          p.marker_type = :diagonal_cross
-        end
-      end
-
       it "adds scatter with all negative values" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.scatter!(400) do |p|
+        axes.scatter! do |p|
           p.data [-1, -1, -4, -4], [-5, -1, -3, -4]
           p.label = "apples"
         end
         axes.title = "all negative scatter graph test."
       end
+    end
 
-      it "adds multiple scatter plots" do
+    context "#top_margin=" do
+      it "sets the top margin in pixels" do
         
       end
-    end # context "#scatter!"
+    end
 
+    context "#left_margin=" do
+      it "sets the left margin in pixels" do
+        
+      end
+    end
+
+    context "#bottom_margin=" do
+      it "sets the bottom margin in pixels" do
+        
+      end
+    end
+
+    context "#right_margin=" do
+      it "sets the right margin in pixels" do
+        
+      end
+    end
+
+    context "#num_x_ticks=" do
+      it "assigns number of X ticks" do
+        fig = Rubyplot::Figure.new
+        axes = fig.add_subplot 0,0
+        axes.scatter! do |p|
+          p.data [0,1,2,3], [4, 7, 11, 15]
+        end
+        axes.num_x_ticks = 3
+        axes.x_ticks = ["4", "10", "15"]
+        fig.write("dummy.png", output: false)
+
+        expect(
+          axes.instance_variable_get(:@inter_x_ticks_distance)).to eq(
+                                                                     axes.x_axis.length /
+                                                                    (axes.num_x_ticks-1))
+      end
+    end
+    
     context "#x_ticks=" do
       it "assigns strings to X ticks" do
         @figure = Rubyplot::Figure.new
@@ -469,13 +456,8 @@ require 'spec_helper'
           p.data [1,2,3,4], [1,2,3,4]
           p.label = "apples"
         end
-        axes.x_ticks = {
-          0 => "hello 0",
-          1 => "hello 1"
-        }
+        axes.x_ticks = ["hello0", "hello1"]
       end
     end # context "#x_ticks="
   end # Rubyplot::Axes
 end # describe backends
-
-

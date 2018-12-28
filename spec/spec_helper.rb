@@ -2,9 +2,9 @@ require 'fileutils'
 require 'pry'
 require 'rubyplot'
 
-TEMP_DIR = "temp/"
-FIXTURES_DIR = "fixtures/"
 SPEC_ROOT = File.dirname(__FILE__) + "/"
+TEMP_DIR = SPEC_ROOT + "temp/"
+FIXTURES_DIR = SPEC_ROOT + "fixtures/"
 
 RSpec::Matchers.define :eq_image do |expected_image, delta|
   compared_delta = 0
@@ -35,15 +35,15 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) do
-    FileUtils.mkdir_p SPEC_ROOT + TEMP_DIR
-    FileUtils.mkdir_p SPEC_ROOT + FIXTURES_DIR
+    FileUtils.mkdir_p TEMP_DIR
+    FileUtils.mkdir_p FIXTURES_DIR
   end
   
   config.after(:example) do |example| 
     if @figure.is_a?(Rubyplot::Artist::Figure)
       plot_name = example.description.split.join("_") + ".png"
-      base_image = SPEC_ROOT + TEMP_DIR + plot_name
-      other_image = SPEC_ROOT + FIXTURES_DIR + plot_name
+      base_image = TEMP_DIR + plot_name
+      other_image = FIXTURES_DIR + plot_name
       @figure.write(other_image)
       @figure.write(base_image)
 

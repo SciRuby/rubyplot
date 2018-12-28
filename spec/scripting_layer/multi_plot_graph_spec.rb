@@ -19,7 +19,7 @@ describe Rubyplot::SPI do
       @x2 = [2, 4, 16]
       @y2 = [10, 20, -40]
     end
-    it 'creates a line and scatter graph' do
+    skip 'creates a line and scatter graph' do
       a = Rubyplot::SPI.new
       a.title = 'My cool graph'
       a.line! @x1, @y1

@@ -91,11 +91,11 @@ module Rubyplot
         @draw.line x1, y1, x2, y2
       end
 
-      def draw_circle(x_pos:,y_pos:,radius:,stroke_opacity:,stroke_width:,color:)
+      def draw_circle(x:,y:,radius:,stroke_opacity:,stroke_width:,color:)
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
-        @draw.circle(x_pos,y_pos,x-radius,y)
+        @draw.circle(x,y,x-radius,y)
       end
       # rubocop:enable Metrics/ParameterLists
 

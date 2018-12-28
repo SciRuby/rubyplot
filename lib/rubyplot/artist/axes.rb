@@ -8,16 +8,7 @@ module Rubyplot
       LABEL_MARGIN = 10.0
       DEFAULT_MARGIN = 20.0
       THOUSAND_SEPARATOR = ','.freeze
-      # FIXME: most of the below accessors should just be name= methods which
-      # will access the required Artist and set the variable in there directly.
-      # Range of X axis.
-      attr_accessor :x_range
-      # Range of Y axis.
-
-      attr_accessor :y_range, :text_font, :grid, :bounding_box, :origin, :title_shift, :title_margin
-
-      # Main title for this Axes.
-      attr_accessor :title
+      
       # Rubyplot::Figure object to which this Axes belongs.
       attr_reader :figure
       # Array of plots contained in this Axes.
@@ -26,24 +17,30 @@ module Rubyplot
                   :title_font_size, :scale, :font_color, :marker_color, :axes,
                   :legend_margin, :backend, :marker_caps_height
       attr_reader :label_stagger_height
-      # FIXME: possibly disposable attrs
-      attr_reader :title_caps_height
-      # Set true if title is to be hidden.
-      attr_accessor :hide_title
-      # Margin between the X axis and the bottom of the Axes artist.
-      attr_accessor :x_axis_margin
-      # Margin between the Y axis and the left of the Axes artist.
-      attr_accessor :y_axis_margin
-      # Position of the legend box.
-      attr_accessor :legend_box_position
       # Rubyplot::Artist::XAxis object.
       attr_reader :x_axis
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
       # Array of X ticks.
       attr_reader :x_ticks
+      # Array denoting co-ordinates in pixels of the origin of X and Y axes.
+      attr_reader :origin
       # Number of X ticks.
       attr_accessor :num_x_ticks
+      # Position of the legend box.
+      attr_accessor :legend_box_position
+      # Set true if title is to be hidden.
+      attr_accessor :hide_title
+      # Margin between the X axis and the bottom of the Axes artist.
+      attr_accessor :x_axis_margin
+      # Margin between the Y axis and the left of the Axes artist.
+      attr_accessor :y_axis_margin
+      # Range of X axis.
+      attr_accessor :x_range
+      # Range of Y axis.
+      attr_accessor :y_range, :grid, :bounding_box, :title_shift
+      # Main title for this Axes.
+      attr_accessor :title
 
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       def initialize(figure)
@@ -208,16 +205,15 @@ module Rubyplot
       end
 
       def assign_x_ticks
+        @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
         unless @x_ticks
-          val_distance = (@x_range[1] - @x_range[0]).abs / @num_x_ticks.to_f
-          @x_ticks = (@x_range[0]..@x_range[1]).step(val_distance).map { |i| i }
+          @x_ticks = (@x_range[0]..@x_range[1]).step(@inter_x_ticks_distance).map { |i| i }
         end
         unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
-          inter_ticks_distance = @x_axis.length / (@num_x_ticks - 1)
           @x_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
               self,
-              abs_x: i * inter_ticks_distance + @x_axis.abs_x1,
+              abs_x: i * @inter_x_ticks_distance + @x_axis.abs_x1,
               abs_y: @origin[1],
               label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
@@ -305,8 +301,8 @@ module Rubyplot
 
       def set_xrange
         if @x_range[0].nil? && @x_range[1].nil?
-          @x_range[0] = @plots.map { |p| p.x_min }.min
-          @x_range[1] = @plots.map { |p| p.x_max }.max
+          @x_range[0] = @plots.map(&:x_min).min
+          @x_range[1] = @plots.map(&:x_max).max
         end
         @x_axis.min_val = @x_range[0]
         @x_axis.max_val = @x_range[1]

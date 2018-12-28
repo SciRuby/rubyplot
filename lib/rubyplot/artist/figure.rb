@@ -57,7 +57,10 @@ module Rubyplot
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(self)
       end
 
-      def write(file_name)
+      # Draw on a canvas and output to a file.
+      #
+      # @param output [TrueClass, FalseClass] true Whether to output to file or not.
+      def write(file_name, output: true)
         @backend.set_base_image_gradient(
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
@@ -66,7 +69,7 @@ module Rubyplot
           @theme_options[:background_direction]
         )
         @subplots.each { |i| i.each(&:draw) }
-        @backend.write(file_name)
+        @backend.write(file_name) if output
       end
 
       private

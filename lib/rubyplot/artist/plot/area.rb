@@ -2,7 +2,8 @@ module Rubyplot
   module Artist
     module Plot
       class Area < Artist::Plot::Base
-        attr_reader :sorted_data
+        attr_accessor :sorted_data
+        
         def initialize(*)
           super
           @sorted_data = true
