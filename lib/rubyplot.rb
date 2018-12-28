@@ -12,7 +12,6 @@ require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
-require 'grruby.so'
 require 'rubyplot/gr_wrapper'
 
 module Rubyplot
