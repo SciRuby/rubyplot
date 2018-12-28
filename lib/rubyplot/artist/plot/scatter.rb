@@ -22,11 +22,7 @@ module Rubyplot
             ).draw
           end
         end
-      end
-      # class Scatter
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class Scatter
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

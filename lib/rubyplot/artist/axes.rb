@@ -316,9 +316,6 @@ module Rubyplot
         @y_axis.min_val = @y_range[0]
         @y_axis.max_val = @y_range[1]
       end
-    end
-    # class Axes
-  end
-  # moudle Artist
-end
-# module Rubyplot
+    end # class Axes
+  end # moudle Artist
+end # module Rubyplot

@@ -45,9 +45,6 @@ module Rubyplot
           rotation: @rotation
         )
       end
-    end
-    # class Text
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class Text
+  end # class Artist
+end # module Rubyplot

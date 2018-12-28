@@ -54,9 +54,6 @@ module Rubyplot
           pointsize: @font_size
         )
       end
-    end
-    # class Legend
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class Legend
+  end # class Artist
+end # module Rubyplot

@@ -32,11 +32,7 @@ module Rubyplot
             fill_opacity: 0.3
           ).draw
         end
-      end
-      # class Area
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class Area
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

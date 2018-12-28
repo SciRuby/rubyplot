@@ -10,7 +10,5 @@ module Rubyplot
         end
       end
     end
-  end
-  # module Utils
-end
-# module Rubyplot
+  end # module Utils
+end # module Rubyplot

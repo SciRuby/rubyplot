@@ -30,9 +30,6 @@ module Rubyplot
           abs_x: @axes.origin[0] + (@abs_x2 - @abs_x1)/2
         )
       end
-    end
-    # class XAxis
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class XAxis
+  end # class Artist
+end # module Rubyplot

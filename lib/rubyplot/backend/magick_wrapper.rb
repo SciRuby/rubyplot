@@ -136,9 +136,6 @@ module Rubyplot
                         end
         Image.new(width, height, gradient_fill)
       end
-    end
-    # class MagickWrapper
-  end
-  # module Backend
-end
-# module Rubyplot
+    end # class MagickWrapper
+  end # module Backend
+end # module Rubyplot

@@ -20,9 +20,6 @@ module Rubyplot
         @backend.draw_line(x1: @abs_x1, y1: @abs_y1, x2: @abs_x2, y2: @abs_y2,
                            stroke_width: @stroke_width)
       end
-    end
-    # class Line2D
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class Line2D
+  end # class Artist
+end # module Rubyplot

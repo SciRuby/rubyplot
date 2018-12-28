@@ -23,9 +23,6 @@ module Rubyplot
           color: Rubyplot::Color::COLOR_INDEX[@color]
         )
       end
-    end
-    # class Circle
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class Circle
+  end # module Artist
+end # module Rubyplot
