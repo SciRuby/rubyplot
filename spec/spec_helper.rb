@@ -2,6 +2,7 @@ require 'fileutils'
 require 'pry'
 require 'rubyplot'
 require 'rspec'
+require 'rmagick'
 
 TEMP_DIR = "temp/"
 FIXTURES_DIR = "fixtures/"
