@@ -11,8 +11,6 @@ RSpec::Core::RakeTask.new
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new
 
-require 'grruby.so'
-
 desc 'Default: run unit specs.'
 task :default => %w[spec rubocop]
 

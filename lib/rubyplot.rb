@@ -12,13 +12,11 @@ require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
-require 'grruby.so'
-require 'rubyplot/gr_wrapper'
 
 module Rubyplot
   def self.backend
     b = ENV['RUBYPLOT_BACKEND']
-    return b.to_sym if %w[magick gr].include?(b)
+    return b.to_sym if %w[magick ].include?(b)
 
     :magick
   end
