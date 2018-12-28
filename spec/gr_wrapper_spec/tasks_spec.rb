@@ -1,4 +1,4 @@
-require 'grwrapper'
+require 'gr_wrapper'
 require 'spec_helper'
 
 
