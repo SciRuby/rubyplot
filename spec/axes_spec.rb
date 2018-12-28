@@ -28,6 +28,8 @@ require 'spec_helper'
           end          
         end
         axes.title = "net earnings in different months."
+        axes.x_title = "X title"
+        axes.y_title = "Y title"
         axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
                         'August', 'September', 'October', 'November', 'December']
       end
@@ -153,7 +155,7 @@ require 'spec_helper'
     end
     
     context "#line!" do
-      it "makes a simple line plot", focus: true do
+      it "makes a simple line plot" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.line! do |p|
@@ -164,24 +166,20 @@ require 'spec_helper'
         axes.title = "A line graph."
       end
 
-      it "plots 2 simple lines on the same axes" do
+      it "plots 2 simple lines on the same axes", focus: true do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.line! do |p|
-          p.data [20, 23, 19, 8]
+          p.data [3, 5, 10, 15]
           p.label = "Marco"
           p.color = :blue
         end
         axes.line! do |p|
-          p.data [1, 53, 76, 18]
+          p.data [1, 9, 13, 28]
           p.label = "John"
           p.color = :green
         end
         axes.title = "A line graph."
-        axes.x_ticks = {
-          0 => "Ola Ruby",
-          1 => "Hello Ruby"
-        }
       end
 
       skip "fails to match the reference image" do
@@ -277,7 +275,7 @@ require 'spec_helper'
     end
 
     context "#bar!" do
-      it "adds a simple bar plot", focus: true do
+      it "adds a simple bar plot" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar!(600) do |p| 
@@ -323,15 +321,10 @@ require 'spec_helper'
         axes.title = "Plot with X-Y axes."
         axes.x_title = "Score (%)"
         axes.y_title = "Students"
-        axes.x_ticks = {
-          0 => '5/6',
-          1 => '5/15',
-          2 => '5/24',
-          3 => '5/36'
-        }
+        axes.x_ticks = [ '5/6', '5/15', '5/24', '5/36' ]
       end
 
-      it "adds multiple bar plots for wide graph", focus: true do
+      it "adds multiple bar plots for wide graph" do
         @figure = Rubyplot::Figure.new(height: 400, width: 800)
         axes = @figure.add_subplot 0,0
         @planet_data.each do |name, nums|
@@ -342,7 +335,7 @@ require 'spec_helper'
         end
       end
 
-      skip "plots both positive and negative values" do
+      it "plots both positive and negative values" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar! do |p|
@@ -362,7 +355,7 @@ require 'spec_helper'
         }
       end
 
-      skip "tests negative values" do
+      it "tests negative values" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.title = "all negative bar graph."

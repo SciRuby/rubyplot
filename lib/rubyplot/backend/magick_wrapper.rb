@@ -59,6 +59,7 @@ module Rubyplot
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.stroke stroke
         @draw.stroke_antialias true
+        @draw.text_antialias = true
         @draw.rotation = rotation if rotation
         @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation

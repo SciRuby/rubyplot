@@ -45,7 +45,6 @@ RSpec.configure do |config|
       base_image = SPEC_ROOT + TEMP_DIR + plot_name
       other_image = SPEC_ROOT + FIXTURES_DIR + plot_name
       @figure.write(other_image)
-            
       @figure.write(base_image)
 
       expect(base_image).to eq_image(other_image, 10)

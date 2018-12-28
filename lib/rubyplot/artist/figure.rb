@@ -44,6 +44,7 @@ module Rubyplot
         @left_spacing = 0.05
         @right_spacing = 0.05
         @subplots = nil
+        @n = 0
         setup_default_theme
         add_subplots @nrows, @ncols
       end
@@ -57,6 +58,13 @@ module Rubyplot
       end
 
       def write(file_name)
+        @backend.set_base_image_gradient(
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
+          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
+          @width,
+          @height,
+          @theme_options[:background_direction]
+        )
         @subplots.each { |i| i.each(&:draw) }
         @backend.write(file_name)
       end
@@ -72,13 +80,6 @@ module Rubyplot
         @theme_options = defaults.merge Themes::CLASSIC_WHITE
         @marker_color = @theme_options[:marker_color]
         @font_color = @theme_options[:font_color] || @marker_color
-        @backend.set_base_image_gradient(
-          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
-          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
-          @width,
-          @height,
-          @theme_options[:background_direction]
-        )
       end
     end
     # class Figure

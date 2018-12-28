@@ -1,30 +1,37 @@
 # rubyplot
 An advanced plotting library for Ruby.
 
-Rubyplot aims to be the most advanced visualization solution for Rubyists.
+**Rubyplot aims to be the most advanced visualization solution for Rubyists.**
+It aims to allow you to visualize anything, anywhere with a simple, Ruby-like API.
 
-# Roadmap
+# Roadmap by priority
+The release schedule and feature roadmap is as follows. Check issues labelled with
+the version tags for knowing what we're working on currently. Listed by priority.
 
-The library in its current form is heavily under development.
+## Release v0.1.rc1
+Deadline: 15 January 2019
 
-Here's the roadmap for rubyplot for the near future. Please write a mail to the sciruby ML
-or open an issue if you feel something is amiss:
+* Support currently available plots fully with various customization options on Axes.
+* Fully automated testing infrastructure. Travis integration with rubocop.
+* Create a 'debug mode' for easy debugging.
 
-## Near future
+## Release v0.1.rc2
+Deadline: 26 February 2019
 
-* Finish integration of rmagick and GR backends.
-* Creating  an Artist layer on RMagick based on GR Framework (The current 
-necessary functions are included in GR FunctionClasses file in Rubyplot-GR) 
-and integrating it with the existing scripting layer.
-* Integrate with nmatrix/plures.
-* Write tutorials and documentation.
-* Addition to events sub-layer in the backend layer.
-* Further development of scripting layer for additional features.
-* Make new plots on a priority basis. Here's the list: https://github.com/SciRuby/rubyplot/issues/4
+* Support multiple Axes on the same Figure. 
+* Support atleast 3 new kinds of plots.
 
-## Long term
+## Release v0.1.rc3
+Deadline: 15 April 2019
 
-* Integrate with iruby notebook, daru, statsample, rb-gsl, etc.
-* Integrate with red data tools projects like charty, red-chainer, etc.
-* Integrate with QT/web front end to provide widget support etc.
+* Support atleast 3 new kinds of plots.
+* Support Simple Plotting Interface.
+* Move from using Ruby Arrays to a typed-array based system.
 
+# Long term vision
+Rubyplot's long term vision, by priority:
+
+* Integrate the Rubyplot interface with the GR framework.
+* Generate various types of publication quality plots.
+* Interactive plotting using QT/GTK.
+* Interactive or static plots for web backend.
