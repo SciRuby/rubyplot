@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'rubyplot/grwrapper'
-
 
 describe Rubyplot::GRWrapper::Tasks do
   include Rubyplot::GRWrapper::Tasks
