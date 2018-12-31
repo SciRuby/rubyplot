@@ -62,7 +62,7 @@ module Rubyplot
         @draw.stroke stroke
         @draw.stroke_antialias true
         @draw.rotation = rotation if rotation
-        @draw.annotate(@base_image, 0,0,x_pos.to_i,y_pos.to_i, text.gsub('%', '%%'))
+        @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation
       end
 
@@ -73,7 +73,7 @@ module Rubyplot
           @draw.stroke stroke
           @draw.fill fill_color
           @draw.stroke_width stroke_width
-          @draw.rectangle x01, y01, x02, y02
+          @draw.rectangle x1, y1, x2, y2
         else # just edges
           @draw.stroke_width stroke_width
           @draw.fill border_color
@@ -89,7 +89,7 @@ module Rubyplot
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
-        @draw.line x01, y01, x02, y02
+        @draw.line x1, y1, x2, y2
       end
 
       def draw_circle(x_pos:,y_pos:,radius:,stroke_opacity:,stroke_width:,color:)
