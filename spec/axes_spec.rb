@@ -1,5 +1,5 @@
 require 'spec_helper'
-["magick"].each do |b|
+["rmagick"].each do |b|
   ENV['RUBYPLOT_BACKEND'] = b
   
   describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
