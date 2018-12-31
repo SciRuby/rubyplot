@@ -1,5 +1,5 @@
 require 'spec_helper'
-["rmagick"].each do |b|
+["magick"].each do |b|
   ENV['RUBYPLOT_BACKEND'] = b
   
   describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
@@ -484,5 +484,3 @@ require 'spec_helper'
     end # context "#x_ticks="
   end # Rubyplot::Axes
 end # describe backends
-
-
