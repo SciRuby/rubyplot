@@ -1,6 +1,6 @@
 require 'bigdecimal'
 
-require 'magick'
+require 'rmagick'
 
 require 'rubyplot/color'
 require 'rubyplot/utils'
