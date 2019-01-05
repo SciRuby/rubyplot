@@ -72,11 +72,7 @@ module Rubyplot
             bar.abs_y_left[i] = (@axes.abs_y + @axes.y_axis.length) - pedestal_height
           end
         end
-      end
-      # class StackedBar
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class StackedBar
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

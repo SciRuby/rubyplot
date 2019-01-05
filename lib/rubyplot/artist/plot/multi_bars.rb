@@ -69,11 +69,7 @@ module Rubyplot
             bar_plot.abs_y_left[i] = @axes.origin[1] - @axes.x_axis.stroke_width
           end
         end
-      end
-      # class MultiBars
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class MultiBars
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

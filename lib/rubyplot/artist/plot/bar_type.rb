@@ -25,11 +25,7 @@ module Rubyplot
 
         protected
 
-      end
-      # class BarType
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class BarType
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

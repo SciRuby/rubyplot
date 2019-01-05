@@ -275,9 +275,7 @@ module Rubyplot
         @texts << Rubyplot::Artist::Text.new(
           @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin,
           font: @font, color: @font_color,
-          pointsize: @title_font_size, internal_label: 'axes title.'
-
-        )
+          pointsize: @title_font_size, internal_label: 'axes title.')
       end
 
       def calculate_xy_axes_origin
@@ -348,9 +346,6 @@ module Rubyplot
         @y_axis.min_val = @y_range[0]
         @y_axis.max_val = @y_range[1]
       end
-    end
-    # class Axes
-  end
-  # moudle Artist
-end
-# module Rubyplot
+    end # class Axes
+  end # moudle Artist
+end # module Rubyplot

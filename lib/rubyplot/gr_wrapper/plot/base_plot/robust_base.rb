@@ -71,9 +71,6 @@ module Rubyplot
           end
         end
       end
-    end
-    # module Plot
-  end
-  # module GRWrapper
-end
-# module Rubyplot
+    end # module Plot
+  end # module GRWrapper
+end # module Rubyplot

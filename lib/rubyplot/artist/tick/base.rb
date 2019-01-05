@@ -29,11 +29,7 @@ module Rubyplot
           @tick_width = tick_width
         end
         # rubocop:enable Metrics/ParameterLists
-      end
-      # class Base
-    end
-    # class Tick
-  end
-  # class Artist
-end
-# module Rubyplot
+      end # class Base
+    end # class Tick
+  end # class Artist
+end # module Rubyplot

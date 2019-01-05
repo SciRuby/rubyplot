@@ -62,11 +62,7 @@ module Rubyplot
             end
           end
         end
-      end
-      # class Base
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class Base
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

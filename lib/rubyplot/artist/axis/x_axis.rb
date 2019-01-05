@@ -11,7 +11,7 @@ module Rubyplot
         @length = (@abs_x2 - @abs_x1).abs
         configure_axis_line
       end
-      
+
       private
 
       def configure_axis_line
@@ -30,9 +30,6 @@ module Rubyplot
           abs_x: @axes.origin[0] + (@abs_x2 - @abs_x1)/2
         )
       end
-    end
-    # class XAxis
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class XAxis
+  end # class Artist
+end # module Rubyplot

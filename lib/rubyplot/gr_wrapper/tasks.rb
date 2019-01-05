@@ -406,9 +406,6 @@ module Rubyplot
         pattern: 2,
         hatch: 3
       }.freeze
-    end
-    # module Tasks
-  end
-  # module GRWrapper
-end
-# module Rubyplot
+    end # module Tasks
+  end # module GRWrapper
+end # module Rubyplot

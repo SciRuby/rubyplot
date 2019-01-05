@@ -34,9 +34,6 @@ module Rubyplot
           fill_color: @fill_color
         )
       end
-    end
-    # class Rectangle
-  end
-  # class Artist
-end
-# moduel Rubyplot
+    end # class Rectangle
+  end # class Artist
+end # module Rubyplot

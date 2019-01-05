@@ -84,9 +84,6 @@ module Rubyplot
         @marker_color = @theme_options[:marker_color]
         @font_color = @theme_options[:font_color] || @marker_color
       end
-    end
-    # class Figure
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class Figure
+  end # module Artist
+end # module Rubyplot

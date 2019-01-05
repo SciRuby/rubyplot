@@ -17,9 +17,6 @@ module Rubyplot
           fill_opacity: @fill_opacity
         )
       end
-    end
-    # class Polygon
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class Polygon
+  end # module Artist
+end # module Rubyplot
