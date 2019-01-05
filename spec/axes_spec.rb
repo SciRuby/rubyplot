@@ -32,6 +32,7 @@ require 'spec_helper'
         axes.y_title = "Y title"
         axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
                         'August', 'September', 'October', 'November', 'December']
+        axes.y_ticks = ['5', '10', '15', '20', '25', '30']
       end
 
       it "plots stacked bar in a small size" do
