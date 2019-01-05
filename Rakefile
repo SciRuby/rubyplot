@@ -1,5 +1,18 @@
+require "bundler/gem_tasks"
+require "rake"
+
+require 'bundler/setup'
+require 'rubygems/tasks'
+Gem::Tasks.new
+
 require 'rspec/core/rake_task'
-require 'rake/extensiontask'
+RSpec::Core::RakeTask.new
+
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+desc 'Default: run unit specs.'
+task :default => %w[spec rubocop]
 
 gemspec = eval(IO.read('rubyplot.gemspec'))
 

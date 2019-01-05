@@ -16,6 +16,8 @@ module Rubyplot
         @draw = Magick::Draw.new
       end
 
+
+
       # Height in pixels of particular text.
       # @param text [String] Text to be measured.
       def text_height(text, font, font_size)

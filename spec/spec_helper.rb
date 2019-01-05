@@ -1,6 +1,8 @@
 require 'fileutils'
 require 'pry'
 require 'rubyplot'
+require 'rspec'
+require 'rmagick'
 
 SPEC_ROOT = File.dirname(__FILE__) + "/"
 TEMP_DIR = SPEC_ROOT + "temp/"
