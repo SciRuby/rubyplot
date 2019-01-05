@@ -23,10 +23,14 @@ module Rubyplot
       attr_reader :y_axis
       # Array of X ticks.
       attr_reader :x_ticks
+      # Array of Y ticks.
+      attr_reader :y_ticks
       # Array denoting co-ordinates in pixels of the origin of X and Y axes.
       attr_reader :origin
       # Number of X ticks.
       attr_accessor :num_x_ticks
+      # Number of Y ticks.
+      attr_accessor :num_y_ticks
       # Position of the legend box.
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
@@ -78,7 +82,9 @@ module Rubyplot
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
         @x_ticks = nil
+        @y_ticks = nil
         @num_x_ticks = 5
+        @num_y_ticks = 4
         @legend_box_position = :top
       end
 
@@ -99,12 +105,6 @@ module Rubyplot
       end
 
       # Write an image to a file by communicating with the backend.
-      # FIXME: (refactor) Currently draw first assigns default colors and then
-      # performs consolidation etc of the data and then assigns the default X ticks.
-      # The reason for this is that default labels are needed by the consolidated
-      # plots when they create the required rectangles etc. However assigning
-      # default ticks should be a part of the 'assign defaults' step and should
-      # therefore should be clubbed with the assign labels step.
       def draw
         set_axes_ranges
         normalize_plotting_data
@@ -113,6 +113,7 @@ module Rubyplot
         configure_title
         configure_legends
         assign_x_ticks
+        assign_y_ticks
         actually_draw
       end
 
@@ -185,6 +186,10 @@ module Rubyplot
         @x_ticks = x_ticks
       end
 
+      def y_ticks= y_ticks
+        @y_ticks = y_ticks
+      end
+
       def x_title= x_title
         @x_axis.title = x_title
       end
@@ -207,8 +212,12 @@ module Rubyplot
       def assign_x_ticks
         @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
         unless @x_ticks
-          @x_ticks = (@x_range[0]..@x_range[1]).step(@inter_x_ticks_distance).map { |i| i }
+          value_distance = (@x_range[1] - @x_range[0]) / (@num_x_ticks.to_f - 1)
+          @x_ticks = @num_x_ticks.times.map do |i|
+            @x_range[0] + i * value_distance
+          end
         end
+
         unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
           @x_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
@@ -218,6 +227,26 @@ module Rubyplot
               label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
               label_distance: 10
+            )
+          end
+        end
+      end
+
+      def assign_y_ticks
+        unless @y_ticks
+          val_distance = (@y_range[1] - @y_range[0]).abs / @num_y_ticks.to_f
+          @y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
+        end
+        unless @y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
+          inter_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
+          @y_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::YTick.new(
+              self,
+              abs_x: @origin[0],
+              abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
+              label: Rubyplot::Utils.format_label(tick_label),
+              length: 6,
+              label_distance: 50
             )
           end
         end
@@ -242,10 +271,12 @@ module Rubyplot
 
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
+
         @texts << Rubyplot::Artist::Text.new(
           @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin,
           font: @font, color: @font_color,
           pointsize: @title_font_size, internal_label: 'axes title.'
+
         )
       end
 
@@ -273,6 +304,7 @@ module Rubyplot
       def actually_draw
         @x_axis.draw
         @x_ticks.each(&:draw)
+        @y_ticks.each(&:draw)
         @y_axis.draw
         @texts.each(&:draw)
         @legend_box.draw

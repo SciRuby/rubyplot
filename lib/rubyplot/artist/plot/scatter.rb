@@ -17,8 +17,9 @@ module Rubyplot
             abs_x = ix * @axes.x_axis.length + @axes.abs_x + @axes.y_axis_margin
             abs_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
             Rubyplot::Artist::Circle.new(
-              self, abs_x: abs_x, abs_y: abs_y, radius: @circle_radius, stroke_opacity: @stroke_opacity,
-                    stroke_width: @stroke_width
+              self, abs_x: abs_x, abs_y: abs_y, radius: @circle_radius,
+              stroke_opacity: @stroke_opacity,
+              stroke_width: @stroke_width
             ).draw
           end
         end

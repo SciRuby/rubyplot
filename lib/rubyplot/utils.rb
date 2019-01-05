@@ -3,7 +3,7 @@ module Rubyplot
     THOUSAND_SEPARATOR = ','.freeze
     class << self
       def format_label label
-        if label.is_a? Float
+        if label.is_a? Numeric
           '%0.2f' % label
         elsif label.is_a? String
           label

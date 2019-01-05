@@ -23,6 +23,7 @@ module Rubyplot
           @lines = []
         end
 
+
         def draw
           configure_title
           @lines.each(&:draw)
