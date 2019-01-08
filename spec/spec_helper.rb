@@ -47,6 +47,7 @@ RSpec.configure do |config|
       base_image = TEMP_DIR + plot_name
       other_image = FIXTURES_DIR + plot_name
       @figure.write(other_image)
+      Rubyplot.set_backend_magick
       @figure.write(base_image)
 
       expect(base_image).to eq_image(other_image, 10)

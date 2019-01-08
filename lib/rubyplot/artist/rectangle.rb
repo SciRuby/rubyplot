@@ -16,7 +16,7 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
-        super(owner.backend, abs_x, abs_y)
+        super(abs_x, abs_y)
         @height = height
         @width = width
         @border_color = Rubyplot::Color::COLOR_INDEX[border_color]
@@ -25,7 +25,7 @@ module Rubyplot
       # rubocop:enable Metrics/ParameterLists
 
       def draw
-        @backend.draw_rectangle(
+        Rubyplot.backend.draw_rectangle(
           x1: @abs_x,
           y1: @abs_y,
           x2: @abs_x + @width,

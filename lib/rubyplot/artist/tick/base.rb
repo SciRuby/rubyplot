@@ -20,7 +20,7 @@ module Rubyplot
         # rubocop:disable Metrics/ParameterLists
         def initialize(owner,abs_x:,abs_y:,length:,label:,label_distance:,
           tick_opacity: 0.0,tick_width: 1.0)
-          super(owner.backend, abs_x, abs_y)
+          super(abs_x, abs_y)
           @owner = owner
           @length = length
           @label_text = label # Rubyplot::Utils.format_label label

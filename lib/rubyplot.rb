@@ -14,7 +14,13 @@ require 'rubyplot/spi'
 
 module Rubyplot
   @@backend = Rubyplot::Backend::MagickWrapper.new
-  def self.backend
-    @@backend
+  class << self
+    def backend
+      @@backend
+    end
+
+    def set_backend_magick
+      @@backed = Rubyplot::Backend::MagickWrapper.new
+    end
   end
-end
+end # module Rubyplot

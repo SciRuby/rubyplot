@@ -7,13 +7,10 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(text, owner, abs_x:, abs_y:,font: nil,
-
                      color: '#000000',pointsize:,stroke: 'transparent',
                      internal_label: '', rotation: nil,
-                     weight: nil, gravity: nil
-                    )
-        super(owner.backend, abs_x, abs_y)
-
+                     weight: nil, gravity: nil)
+        super(abs_x, abs_y)
         @text = text
         @owner = owner
         @font = font
@@ -27,16 +24,16 @@ module Rubyplot
 
       # Height in pixels of this text
       def height
-        @backend.text_height(@text, @font, @font_size)
+        Rubyplot.backend.text_height(@text, @font, @font_size)
       end
 
       # Width in pixels of this text
       def width
-        @backend.text_width(@text, @font, @font_size)
+        Rubyplot.backend.text_width(@text, @font, @font_size)
       end
 
       def draw
-        @backend.draw_text(
+        Rubyplot.backend.draw_text(
           @text,
           font_color: @color,
           font: @font,

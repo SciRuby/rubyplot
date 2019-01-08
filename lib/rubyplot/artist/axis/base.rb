@@ -16,7 +16,6 @@ module Rubyplot
           @min_val = nil
           @max_val = nil
           @stroke_width = 1.0
-          @backend = @axes.backend
           @major_ticks_count = 5
           @x_ticks = nil
           @texts = []

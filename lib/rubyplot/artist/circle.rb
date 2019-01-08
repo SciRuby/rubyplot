@@ -4,7 +4,7 @@ module Rubyplot
       # rubocop:disable Metrics/ParameterLists
       def initialize(owner, abs_x:, abs_y:, radius:, stroke_opacity: 0.0,
         color: :default, stroke_width:)
-        super(owner.backend, abs_x, abs_y)
+        super(abs_x, abs_y)
         @owner = owner
         @radius = radius
         @stroke_width = stroke_width
@@ -14,7 +14,7 @@ module Rubyplot
       # rubocop:enable Metrics/ParameterLists
 
       def draw
-        @backend.draw_circle(
+        Rubyplot.backend.draw_circle(
           x: @abs_x,
           y: @abs_y,
           radius: @radius,

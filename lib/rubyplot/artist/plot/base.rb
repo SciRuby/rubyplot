@@ -6,9 +6,8 @@ module Rubyplot
         attr_writer :stroke_width, :stroke_opacity
 
         def initialize axes
-          super(axes.backend, axes.abs_x, axes.abs_y)
+          super(axes.abs_x, axes.abs_y)
           @axes = axes
-          @backend = @axes.backend
           @data = {
             label: '',
             color: :default

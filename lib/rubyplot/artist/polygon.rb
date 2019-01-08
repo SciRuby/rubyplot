@@ -10,7 +10,7 @@ module Rubyplot
       end
 
       def draw
-        @backend.draw_polygon(
+        Rubyplot.backend.draw_polygon(
           coords: @coords,
           stroke: @stroke,
           color: Rubyplot::Color::COLOR_INDEX[@color],

@@ -13,7 +13,7 @@ module Rubyplot
       end
 
       def draw
-        @backend.draw_line(
+        Rubyplot.backend.draw_line(
           x1: @abs_x, y1: @abs_y, x2: @abs_x, y2: @abs_y + @length,
           stroke_opacity: @tick_opacity,
           stroke_width: @tick_width

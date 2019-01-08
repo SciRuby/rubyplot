@@ -13,7 +13,7 @@ module Rubyplot
       attr_accessor :border_color
 
       def initialize(axes, abs_x:, abs_y:)
-        super(axes.backend, abs_x, abs_y)
+        super(abs_x, abs_y)
         @axes = axes
         @border_color = :black
         @legends = []

@@ -72,7 +72,6 @@ module Rubyplot
         @legend_font_size = 20.0
         @legend_margin = LEGEND_MARGIN
         @title_font_size = 25.0
-        @backend = @figure.backend
         @plot_colors = []
         @legends = []
         @lines = []
@@ -145,10 +144,6 @@ module Rubyplot
         plot = Rubyplot::Artist::Plot::Bubble.new self
         yield(plot) if block_given?
         @plots << plot
-      end
-
-      def dot!(*args, &block)
-        add_plot 'Dot', *args, &block
       end
 
       def stacked_bar!(*_args)
@@ -252,26 +247,8 @@ module Rubyplot
         end
       end
 
-      def add_plot plot_type, *args, &block
-        plot = with_backend plot_type, *args
-        yield(plot) if block_given?
-        @plots << plot
-      end
-
-      def with_backend(plot_type, *args)
-        plot =
-          case Rubyplot.backend
-          when :magick
-            Kernel.const_get("Rubyplot::MagickWrapper::Plot::#{plot_type}").new self, *args
-          when :gr
-            Kernel.const_get("Rubyplot::GRWrapper::Plot::#{plot_type}").new self, *args
-          end
-        plot
-      end
-
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
-
         @texts << Rubyplot::Artist::Text.new(
           @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin,
           font: @font, color: @font_color,

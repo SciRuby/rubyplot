@@ -9,7 +9,7 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(legend_box, axes, text:, color:,abs_x:,abs_y:)
-        super(legend_box.backend, abs_x, abs_y)
+        super(abs_x, abs_y)
         @legend_box = legend_box
         @axes = axes
         @text = text

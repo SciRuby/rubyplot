@@ -33,7 +33,7 @@ module Rubyplot
       # @param height [Integer] nil Height in pixels of the complete Figure.
       # @param width [Integer] nil Width in pixels of the complete Figure.
       def initialize(height: nil, width: nil)
-        super(Rubyplot::Backend::MagickWrapper.new, 0, 0)
+        super(0, 0)
         @title = ''
         @nrows = 1
         @ncols = 1
@@ -62,7 +62,7 @@ module Rubyplot
       #
       # @param output [TrueClass, FalseClass] true Whether to output to file or not.
       def write(file_name, output: true)
-        @backend.set_base_image_gradient(
+        Rubyplot.backend.set_base_image_gradient(
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
           @width,
@@ -70,7 +70,7 @@ module Rubyplot
           @theme_options[:background_direction]
         )
         @subplots.each { |i| i.each(&:draw) }
-        @backend.write(file_name) if output
+        Rubyplot.backend.write(file_name) if output
       end
 
       private
