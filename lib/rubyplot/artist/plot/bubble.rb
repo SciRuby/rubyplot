@@ -35,11 +35,7 @@ module Rubyplot
           end
           @bubbles.each(&:draw)
         end
-      end
-      # class Bubble
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class Bubble
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

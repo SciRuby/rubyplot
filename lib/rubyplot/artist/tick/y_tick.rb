@@ -19,9 +19,6 @@ module Rubyplot
           stroke_width: @tick_width)
         @label.draw
       end
-    end
-    # class YTick
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class YTick
+  end # module Artist
+end # module Rubyplot

@@ -52,6 +52,9 @@ Metrics/ClassLength:
 Style/ParallelAssignment:
   Enabled: false
 
+Style/CommentedKeyword:
+  Enabled: false
+
 Style/DoubleNegation:
   Enabled: false
 

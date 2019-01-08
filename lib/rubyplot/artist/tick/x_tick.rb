@@ -20,9 +20,6 @@ module Rubyplot
         )
         @label.draw
       end
-    end
-    # class XTick
-  end
-  # class Artist
-end
-# module Rubyplot
+    end # class XTick
+  end # class Artist
+end # module Rubyplot

@@ -84,9 +84,6 @@ module Rubyplot
           )
         end
       end
-    end
-    # class LegendBox
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class LegendBox
+  end # module Artist
+end # module Rubyplot

@@ -23,18 +23,13 @@ module Rubyplot
           @lines = []
         end
 
-
         def draw
           configure_title
           @lines.each(&:draw)
           @texts.each(&:draw)
         end
 
-      end
-      # class Base
-    end
-    # class Axis
-  end
-  # class Artist
-end
-# module Rubyplot
+      end # class Base
+    end # class Axis
+  end # class Artist
+end # module Rubyplot

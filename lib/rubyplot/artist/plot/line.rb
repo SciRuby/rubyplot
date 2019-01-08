@@ -55,11 +55,7 @@ module Rubyplot
             prev_y = new_y
           end
         end
-      end
-      # class Line
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class Line
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

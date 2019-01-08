@@ -63,11 +63,7 @@ module Rubyplot
             )
           end
         end
-      end
-      # class StackedBar
-    end
-    # module Plot
-  end
-  # module Artist
-end
-# module Rubyplot
+      end # class StackedBar
+    end # module Plot
+  end # module Artist
+end # module Rubyplot

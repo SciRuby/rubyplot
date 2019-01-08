@@ -12,9 +12,6 @@ module Rubyplot
         @abs_x = abs_x
         @abs_y = abs_y
       end
-    end
-    # class Base
-  end
-  # module Artist
-end
-# module Rubyplot
+    end # class Base
+  end # module Artist
+end # module Rubyplot

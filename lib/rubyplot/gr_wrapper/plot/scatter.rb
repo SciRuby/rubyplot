@@ -46,11 +46,7 @@ module Rubyplot
 
           @tasks.each(&:call)
         end
-      end
-      # class Scatter
-    end
-    # module Plot
-  end
-  # module GRWrapper
-end
-# module Rubyplot
+      end # class Scatter
+    end # module Plot
+  end # module GRWrapper
+end # module Rubyplot
