@@ -12,8 +12,6 @@ require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
-require 'rubyplot/gr_wrapper'
-
 module Rubyplot
   @@backend = Rubyplot::Backend::MagickWrapper.new
   def self.backend
