@@ -13,14 +13,18 @@ require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
 module Rubyplot
-  @@backend = Rubyplot::Backend::MagickWrapper.new
   class << self
     def backend
-      @@backend
+      @backend
     end
 
-    def set_backend_magick
-      @@backed = Rubyplot::Backend::MagickWrapper.new
+    def set_backend b
+      case b
+      when :magick
+        @backend = Rubyplot::Backend::MagickWrapper.new
+      when :gr
+        @backend = Rubyplot::Backend::GRWrapper.new
+      end
     end
   end
 end # module Rubyplot

@@ -1031,8 +1031,9 @@ static VALUE version(VALUE self){
 
 void Init_grruby()
 {
-  VALUE mGRruby  = rb_define_module("GR");
-  VALUE mGR3ruby = rb_define_module("GR3");
+  VALUE mRubyplot = rb_define_module("Rubyplot");
+  VALUE mGRruby  = rb_define_module_under("GR", mRubyplot);
+  VALUE mGR3ruby = rb_define_module_under("GR3", mRubyplot);
 
   rb_define_singleton_method(mGRruby,"opengks",opengks,0);
   rb_define_singleton_method(mGRruby,"closegks",closegks,0);

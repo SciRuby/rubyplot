@@ -8,6 +8,8 @@ SPEC_ROOT = File.dirname(__FILE__) + "/"
 TEMP_DIR = SPEC_ROOT + "temp/"
 FIXTURES_DIR = SPEC_ROOT + "fixtures/"
 
+Rubyplot.set_backend :magick
+
 RSpec::Matchers.define :eq_image do |expected_image, delta|
   compared_delta = 0
   match do |actual_image|
@@ -47,7 +49,6 @@ RSpec.configure do |config|
       base_image = TEMP_DIR + plot_name
       other_image = FIXTURES_DIR + plot_name
       @figure.write(other_image)
-      Rubyplot.set_backend_magick
       @figure.write(base_image)
 
       expect(base_image).to eq_image(other_image, 10)
@@ -55,7 +56,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do |example|
-    # FileUtils.rm_rf SPEC_ROOT + TEMP_DIR
-    # FileUtils.rm_rf SPEC_ROOT + FIXTURES_DIR
+    FileUtils.rm_rf SPEC_ROOT + TEMP_DIR
+    FileUtils.rm_rf SPEC_ROOT + FIXTURES_DIR
   end
 end
