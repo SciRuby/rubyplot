@@ -18,7 +18,6 @@ module Rubyplot
 
       # Height in pixels of particular text.
       # @param text [String] Text to be measured.
-
       def text_height(text, font, font_size)
         @draw.pointsize = font_size
         @draw.font = font if font
@@ -59,8 +58,8 @@ module Rubyplot
         @draw.font_weight = font_weight
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.stroke stroke
-        @draw.stroke_antialias true
-        @draw.text_antialias = true
+        @draw.stroke_antialias false
+        @draw.text_antialias = false
         @draw.rotation = rotation if rotation
         @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
         @draw.rotation = 90.0 if rotation

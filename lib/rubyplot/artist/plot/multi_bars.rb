@@ -18,8 +18,8 @@ module Rubyplot
           @y_min = @bar_plots.map(&:y_min).min
           @x_max = @bar_plots.map(&:x_max).max
           @y_max = @bar_plots.map(&:y_max).max
-          configure_plot_geometry_data
-          configure_x_ticks
+          configure_plot_geometry_data!
+          configure_x_ticks!
         end
 
         def normalize
@@ -32,7 +32,7 @@ module Rubyplot
 
         private
 
-        def configure_plot_geometry_data
+        def configure_plot_geometry_data!
           @num_max_slots = @bar_plots.map(&:num_bars).max
           @max_slot_width = (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs / @num_max_slots
           # FIXME: figure out a way to specify inter-box space somehow.
@@ -45,7 +45,7 @@ module Rubyplot
           end
         end
 
-        def configure_x_ticks
+        def configure_x_ticks!
           @axes.num_x_ticks = @num_max_slots
           labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
           labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks

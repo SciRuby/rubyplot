@@ -15,10 +15,8 @@ require 'rubyplot/spi'
 require 'rubyplot/gr_wrapper'
 
 module Rubyplot
+  @@backend = Rubyplot::Backend::MagickWrapper.new
   def self.backend
-    b = ENV['RUBYPLOT_BACKEND']
-    return b.to_sym if %w[magick].include?(b)
-
-    :magick
+    @@backend
   end
 end

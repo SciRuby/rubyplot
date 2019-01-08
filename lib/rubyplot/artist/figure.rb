@@ -55,6 +55,7 @@ module Rubyplot
 
       def add_subplot(nrow, ncol)
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(self)
+        @subplots[nrow][ncol]
       end
 
       # Draw on a canvas and output to a file.

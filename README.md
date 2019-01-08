@@ -18,6 +18,7 @@ Deadline: 15 January 2019
 ## Release v0.1.rc2
 Deadline: 26 February 2019
 
+* Integrate GR backend into existing API.
 * Support multiple Axes on the same Figure. 
 * Support atleast 3 new kinds of plots.
 

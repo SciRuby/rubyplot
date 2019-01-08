@@ -274,7 +274,7 @@ require 'spec_helper'
       it "adds bar plot with title margin" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
-        axes.bar! do |p|axes = 
+        axes.bar! do |p|
           p.data [5,12,9,6,6]
           p.label = "data"
           p.color = :green
@@ -316,7 +316,7 @@ require 'spec_helper'
         end
       end
 
-      it "plots both positive and negative values", focus: true do
+      it "plots both positive and negative values" do
         @figure = Rubyplot::Figure.new
         axes = @figure.add_subplot 0,0
         axes.bar! do |p|
