@@ -27,6 +27,7 @@ module Rubyplot
       attr_reader :bottom_spacing
       attr_reader :theme_options
       attr_reader :marker_color
+      # Font color specified as a Symbol from Rubyplot::COLOR::COLOR_INDEX.
       attr_reader :font_color
 
       # Initialize a Rubyplot::Artist::Figure object.

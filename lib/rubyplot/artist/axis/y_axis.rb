@@ -4,7 +4,7 @@ module Rubyplot
       def initialize(*)
         super
         @abs_y1 = @axes.origin[1]
-        @abs_y2 = @axes.origin[1] - (@axes.height - @axes.x_axis_margin)
+        @abs_y2 = @axes.origin[1] + (@axes.height - @axes.x_axis_margin)
         @y_ticks = []
         @length = (@abs_y1 - @abs_y2).abs
         configure_axis_line

@@ -1,5 +1,12 @@
 module Rubyplot
   module Backend
+    # Wrapper around an Image Magick backend. In case of ImageMagick, the upper
+    #   left corner of the canvas is the (0,0) co-ordinate and the lower right corner
+    #   is (max_width, max_height).
+    # 
+    # Transformation are applied accordingly before actual plotting happens since Rubyplot
+    #   Artists treat the co-ordinate system differently. The `transform_x` and `transform_y`
+    #   functions are used for this purpose.
     class MagickWrapper < Base
       include ::Magick
       GRAVITY_MEASURE = {
@@ -160,7 +167,7 @@ module Rubyplot
       end
 
       def transform_y y
-        (@canvas_height * y) / Rubyplot::MAX_Y
+        (@canvas_height * (Rubyplot::MAX_Y - y)) / Rubyplot::MAX_Y
       end
 
       # Transform quantity that depends on X and Y.

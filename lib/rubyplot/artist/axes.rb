@@ -156,14 +156,14 @@ module Rubyplot
         @plots[0].write file_name
       end
 
-      # Absolute X co-ordinate of the Axes. Top left corner.
+      # Absolute X co-ordinate of the Axes. Bottom left corner.
       def abs_x
         @figure.left_spacing + @figure.abs_x
       end
 
       # Absolute Y co-ordinate of the Axes. Top left corner.
       def abs_y
-        @figure.top_spacing + @figure.abs_y
+        @figure.bottom_spacing + @figure.abs_y
       end
 
       # Width of Axes between MIN_X and MAX_X.
@@ -235,7 +235,7 @@ module Rubyplot
             Rubyplot::Artist::YTick.new(
               self,
               abs_x: @origin[0],
-              abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
+              abs_y: @y_axis.abs_y1 + (i * inter_ticks_distance),
               label: Rubyplot::Utils.format_label(tick_label)
             )
           end
@@ -252,7 +252,7 @@ module Rubyplot
 
       def calculate_xy_axes_origin
         @origin[0] = abs_x + @x_axis_margin
-        @origin[1] = abs_y + height - @y_axis_margin
+        @origin[1] = abs_y + @y_axis_margin
       end
 
       # Figure out co-ordinates of the legends
