@@ -2,19 +2,24 @@
 
 ## Co-ordinate system
 
-Rubyplot assumes that the co-ordinate system has the origin at the top left corner
-of the graph. This helps in keeping all pixel co-ordinates positive values.
+Rubyplot assumes that the co-ordinate system has the origin at the bottom left corner
+of the graph. This helps in keeping all pixel co-ordinates positive values. The bottom
+left corner is `(0,0)` and the upper left corner is `(100,100)`. The backend should be
+accomodated to work with this system. They are also denoted as `(Rubyplot::MIN_X, Rubyplot::MIN_X)`
+and `(Rubyplot::MAX_X, Rubyplot::MAX_Y)`.
 
-Each Artist contains a `(abs_x, abs_y)` pair that denotes the absolute position of the 
-Artist on the canvas. For `Figure` and `Axes` this pair denotes the top left corner.
+The only time where actual pixel values are used is when specifying the width/height
+of the `Figure` or when actually plotting things using the backend.
 
-The absolute co-ordinates are calculated during the draw phase. Therefore there 
-should be no code except in the `draw` methods where actual co-ordinates are calcualted.
+The co-ordinates are always specified by proportions otherwise. The proportions are
+always specified w.r.t the full canvas.
 
-Varible naming conventions:
-* All values that are absolute values will be prefixed with `abs_**.
-* Variables relating to positioning of the graph other than the absolute
-variables are always ratios.
+Each artist contains `abs_x` and `abs_y` variables that hold the values between 0 and 1
+that specify its position on the canvas.
+
+However font sizes and things that we don't have control over are still specified in pixels.
+Here's the list of things that are still written in pixels:
++ All font sizes.
 
 ## Drawing flow
 

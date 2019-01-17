@@ -55,9 +55,7 @@ module Rubyplot
               @axes,
               abs_x: @axes.abs_x + @axes.y_axis_margin + i * @max_slot_width + @max_slot_width / 2,
               abs_y: @axes.origin[1],
-              label: label,
-              length: 6,
-              label_distance: 10
+              label: label
             )
           end
         end

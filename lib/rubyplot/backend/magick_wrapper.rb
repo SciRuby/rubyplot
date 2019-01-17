@@ -1,6 +1,6 @@
 module Rubyplot
   module Backend
-    class MagickWrapper
+    class MagickWrapper < Base
       include ::Magick
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
@@ -50,8 +50,11 @@ module Rubyplot
       # rubocop:disable Metrics/ParameterLists
       # Unused method argument - stroke
       def draw_text(text,font_color:,font: nil,pointsize:,
-        font_weight: Magick::NormalWeight, gravity: nil,
+                    font_weight: Magick::NormalWeight, gravity: nil,
         x:,y:,rotation: nil, stroke: 'transparent')
+        x = transform_x x
+        y = transform_y y
+        
         @draw.fill = font_color
         @draw.font = font if font
         @draw.pointsize = pointsize
@@ -67,7 +70,12 @@ module Rubyplot
 
       # Draw a rectangle.
       def draw_rectangle(x1:,y1:,x2:,y2:,border_color: '#000000',stroke: 'transparent',
-        fill_color: nil, stroke_width: 1.0)
+                         fill_color: nil, stroke_width: 1.0)
+        x1 = transform_x x1
+        y1 = transform_y y1
+        x2 = transform_x x2
+        y2 = transform_y y2
+
         if fill_color # solid rectangle
           @draw.stroke stroke
           @draw.fill fill_color
@@ -84,7 +92,12 @@ module Rubyplot
       end
 
       def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
-        stroke_opacity: 0.0, stroke_width: 2.0)
+                    stroke_opacity: 0.0, stroke_width: 2.0)
+        x1 = transform_x x1
+        x2 = transform_x x2
+        y1 = transform_y y1
+        y2 = transform_y y2
+        
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
@@ -92,6 +105,9 @@ module Rubyplot
       end
 
       def draw_circle(x:,y:,radius:,stroke_opacity:,stroke_width:,color:)
+        x = transform_x x
+        y = transform_y y
+        
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
         @draw.fill color
@@ -104,7 +120,8 @@ module Rubyplot
       # @param coords [Array[Array]] Array of Arrays where first element of each sub-array is
       #   the X co-ordinate and the second element is the Y co-ordinate.
       def draw_polygon(coords:, fill_opacity: 0.0, color: '#000000',
-        stroke: 'transparent')
+                       stroke: 'transparent')
+        coords.map! { |c| [transform_x(c[0]), transform_y(c[1])] }
         @draw.stroke stroke
         @draw.fill color
         @draw.fill_opacity fill_opacity
@@ -135,6 +152,20 @@ module Rubyplot
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
         Image.new(width, height, gradient_fill)
+      end
+
+      # Transform X co-ordinate.
+      def transform_x x
+        (@canvas_width * x) / Rubyplot::MAX_X
+      end
+
+      def transform_y y
+        (@canvas_height * y) / Rubyplot::MAX_Y
+      end
+
+      # Transform quantity that depends on X and Y.
+      def transform_avg q
+        @canvas_height * q
       end
     end # class MagickWrapper
   end # module Backend

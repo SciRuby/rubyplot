@@ -1,10 +1,10 @@
 module Rubyplot
   module Artist
     class Legend < Artist::Base
-      TOP_MARGIN = 2.5
-      BOTTOM_MARGIN = 2.5
+      TOP_MARGIN = 1
+      BOTTOM_MARGIN = 1
       # Space between the color box and the legend text.
-      BOX_AND_TEXT_SPACE = 5.0
+      BOX_AND_TEXT_SPACE = 1
       attr_reader :legend_box_size, :font, :font_size, :font_color
 
       # rubocop:disable Metrics/ParameterLists
@@ -48,7 +48,7 @@ module Rubyplot
           @text,
           self,
           abs_x: @abs_x + @legend_box_size + BOX_AND_TEXT_SPACE,
-          abs_y: @legend_color_box.abs_y + @legend_box_size - 2.5,
+          abs_y: @legend_color_box.abs_y + @legend_box_size,
           font: @font,
           color: @font_color,
           pointsize: @font_size

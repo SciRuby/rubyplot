@@ -45,9 +45,9 @@ module Rubyplot
         RIGHT_SPACING_RATIO * @legends_width
       end
 
-      # Calculation of the height that each legend takes.
+      # The height between MIN_Y and MAX_Y that each legend takes.
       def per_legend_height
-        25.0
+        5.0
       end
 
       private

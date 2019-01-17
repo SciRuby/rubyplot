@@ -6,7 +6,7 @@ module Rubyplot
         @label = Rubyplot::Artist::Text.new(
           @label_text.to_s,
           @owner,
-          abs_x: @abs_x - 5,
+          abs_x: @abs_x - 2,
           abs_y: @abs_y + @length + @label_distance,
           pointsize: @owner.marker_font_size
         )

@@ -39,10 +39,10 @@ module Rubyplot
         @ncols = 1
         @width = width || DEFAULT_TARGET_WIDTH
         @height = height || @width * 0.75
-        @top_spacing = 0.05
-        @bottom_spacing = 0.05
-        @left_spacing = 0.05
-        @right_spacing = 0.05
+        @top_spacing = 5
+        @bottom_spacing = 5
+        @left_spacing = 5
+        @right_spacing = 5
         @subplots = nil
         @n = 0
         setup_default_theme
@@ -62,6 +62,8 @@ module Rubyplot
       #
       # @param output [TrueClass, FalseClass] true Whether to output to file or not.
       def write(file_name, output: true)
+        Rubyplot.backend.canvas_height = @height
+        Rubyplot.backend.canvas_width = @width
         Rubyplot.backend.set_base_image_gradient(
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],

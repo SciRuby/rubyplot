@@ -2,6 +2,7 @@ module Rubyplot
   module Artist
     module Plot
       class Scatter < Artist::Plot::Base
+        # Radius of the scatter circles in pixels.
         attr_writer :circle_radius
 
         def initialize(*)

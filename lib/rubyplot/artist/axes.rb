@@ -1,12 +1,12 @@
 module Rubyplot
   module Artist
     class Axes < Base
-      TITLE_MARGIN = 20.0
+      TITLE_MARGIN = 10.0
       # Space around text elements. Mostly used for vertical spacing.
       # This way the vertical text doesn't overlap.
-      LEGEND_MARGIN = TITLE_MARGIN = 20.0
+      LEGEND_MARGIN = TITLE_MARGIN = 10.0
       LABEL_MARGIN = 10.0
-      DEFAULT_MARGIN = 20.0
+      DEFAULT_MARGIN = 10.0
       THOUSAND_SEPARATOR = ','.freeze
       
       # Rubyplot::Figure object to which this Axes belongs.
@@ -52,8 +52,8 @@ module Rubyplot
 
         @x_title = ''
         @y_title = ''
-        @x_axis_margin = 40.0
-        @y_axis_margin = 40.0
+        @x_axis_margin = 5.0
+        @y_axis_margin = 5.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
         @title = ''
@@ -158,23 +158,22 @@ module Rubyplot
 
       # Absolute X co-ordinate of the Axes. Top left corner.
       def abs_x
-        @figure.top_spacing * @figure.height + @figure.abs_x
+        @figure.left_spacing + @figure.abs_x
       end
 
       # Absolute Y co-ordinate of the Axes. Top left corner.
       def abs_y
-        @figure.top_spacing * @figure.height + @figure.abs_y
+        @figure.top_spacing + @figure.abs_y
       end
 
-      # Absolute width of the Axes in pixels.
+      # Width of Axes between MIN_X and MAX_X.
       def width
-        (1 - (@figure.left_spacing + @figure.right_spacing)) * @figure.width
+        (Rubyplot::MAX_X - (@figure.left_spacing + @figure.right_spacing))
       end
 
-      # Absolute height of the Axes in pixels.
-      # FIXME: expand for multiple axes on same figure. width too.
+      # Height of Axes between MIN_Y and MAX_Y.
       def height
-        (1 - (@figure.top_spacing + @figure.bottom_spacing)) * @figure.height
+        (Rubyplot::MAX_Y - (@figure.top_spacing + @figure.bottom_spacing))
       end
 
       def x_ticks= x_ticks
@@ -219,9 +218,7 @@ module Rubyplot
               self,
               abs_x: i * @inter_x_ticks_distance + @x_axis.abs_x1,
               abs_y: @origin[1],
-              label: Rubyplot::Utils.format_label(tick_label),
-              length: 6,
-              label_distance: 10
+              label: Rubyplot::Utils.format_label(tick_label)
             )
           end
         end
@@ -229,7 +226,7 @@ module Rubyplot
 
       def assign_y_ticks
         unless @y_ticks
-          val_distance = (@y_range[1] - @y_range[0]).abs / @num_y_ticks.to_f
+          val_distance = (@y_range[1] - @y_range[0]).abs / (@num_y_ticks.to_f-1)
           @y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
         end
         unless @y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
@@ -239,9 +236,7 @@ module Rubyplot
               self,
               abs_x: @origin[0],
               abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
-              label: Rubyplot::Utils.format_label(tick_label),
-              length: 6,
-              label_distance: 50
+              label: Rubyplot::Utils.format_label(tick_label)
             )
           end
         end
@@ -317,8 +312,8 @@ module Rubyplot
 
       def set_yrange
         if @y_range[0].nil? && @y_range[1].nil?
-          @y_range[0] = @plots.map { |p| p.y_min }.min
-          @y_range[1] = @plots.map { |p| p.y_max }.max
+          @y_range[0] = @plots.map(&:y_min).min
+          @y_range[1] = @plots.map(&:y_max).max
         end
         @y_axis.min_val = @y_range[0]
         @y_axis.max_val = @y_range[1]

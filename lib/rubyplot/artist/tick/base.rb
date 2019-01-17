@@ -2,6 +2,9 @@ module Rubyplot
   module Artist
     class Tick
       class Base < Artist::Base
+        DEFAULT_MAJOR_TICK_LENGTH = 1.0
+        DEFAULT_MAJOR_TICK_LABEL_DISTANCE = 3.0
+        
         # Distance between tick mark and number.
         attr_reader :label_distance
         # Label of this Tick
@@ -18,13 +21,13 @@ module Rubyplot
         # @param tick_opacity [Float] Number describing the opacity of the tick drawn. 0-1.0.
 
         # rubocop:disable Metrics/ParameterLists
-        def initialize(owner,abs_x:,abs_y:,length:,label:,label_distance:,
-          tick_opacity: 0.0,tick_width: 1.0)
+        def initialize(owner,abs_x:,abs_y:,length: nil,label:,label_distance: nil,
+                       tick_opacity: 0.0,tick_width: 1.0)
           super(abs_x, abs_y)
           @owner = owner
-          @length = length
+          @length = length || DEFAULT_MAJOR_TICK_LENGTH
           @label_text = label # Rubyplot::Utils.format_label label
-          @label_distance = label_distance
+          @label_distance = label_distance || DEFAULT_MAJOR_TICK_LABEL_DISTANCE
           @tick_opacity = tick_opacity
           @tick_width = tick_width
         end

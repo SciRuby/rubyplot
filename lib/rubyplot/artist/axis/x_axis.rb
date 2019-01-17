@@ -17,7 +17,7 @@ module Rubyplot
       def configure_axis_line
         @lines << Rubyplot::Artist::Line2D.new(
           self, abs_x1: @abs_x1, abs_y1: @axes.origin[1], abs_x2: @abs_x2, abs_y2: @axes.origin[1],
-                stroke_width: @stroke_width
+          stroke_width: @stroke_width
         )
       end
 
@@ -26,7 +26,7 @@ module Rubyplot
           @title,
           self,
           pointsize: @axes.marker_font_size,
-          abs_y: @axes.origin[1] + 20,
+          abs_y: @axes.origin[1] + @axes.x_axis_margin / 2 + @axes.x_axis_margin / 4,
           abs_x: @axes.origin[0] + (@abs_x2 - @abs_x1)/2
         )
       end

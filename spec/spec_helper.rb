@@ -56,7 +56,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do |example|
-    FileUtils.rm_rf SPEC_ROOT + TEMP_DIR
-    FileUtils.rm_rf SPEC_ROOT + FIXTURES_DIR
+    # FileUtils.rm_rf SPEC_ROOT + TEMP_DIR
+    # FileUtils.rm_rf SPEC_ROOT + FIXTURES_DIR
   end
 end

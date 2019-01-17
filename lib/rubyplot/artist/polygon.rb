@@ -1,7 +1,7 @@
 module Rubyplot
   module Artist
     class Polygon < Base
-      def initialize(owner, coords:, fill_opacity: 0.0, color: :default, stroke: 'transparent')
+      def initialize(coords:, fill_opacity: 0.0, color: :default, stroke: 'transparent')
         @coords = coords
         @fill_opacity = fill_opacity
         @color = color

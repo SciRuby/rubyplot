@@ -26,7 +26,6 @@ module Rubyplot
           poly_points << [@axes.x_axis.abs_x2, @axes.origin[1] - @axes.x_axis.stroke_width]
           poly_points << [@axes.origin[0], @axes.origin[1] - @axes.x_axis.stroke_width]
           Rubyplot::Artist::Polygon.new(
-            self,
             coords: poly_points,
             color: @data[:color],
             fill_opacity: 0.3

@@ -2,8 +2,8 @@ module Rubyplot
   module Artist
     class Axis
       class Base
-        # Length in pixels of the arrow after the last major tick.
-        FINISH_ARROW_LENGTH = 10.0
+        # Length of the arrow after the last major tick.
+        FINISH_ARROW_LENGTH = 2.0
 
         attr_reader :label, :ticks, :major_ticks_count
         attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :backend, :length
@@ -15,7 +15,7 @@ module Rubyplot
           @title = ''
           @min_val = nil
           @max_val = nil
-          @stroke_width = 1.0
+          @stroke_width = 0.125
           @major_ticks_count = 5
           @x_ticks = nil
           @texts = []

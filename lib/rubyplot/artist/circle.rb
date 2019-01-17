@@ -3,7 +3,7 @@ module Rubyplot
     class Circle < Base
       # rubocop:disable Metrics/ParameterLists
       def initialize(owner, abs_x:, abs_y:, radius:, stroke_opacity: 0.0,
-        color: :default, stroke_width:)
+                     color: :default, stroke_width:)
         super(abs_x, abs_y)
         @owner = owner
         @radius = radius

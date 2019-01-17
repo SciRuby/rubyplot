@@ -13,6 +13,13 @@ require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
 module Rubyplot
+  # Min. co-ordinates of the lower left corner.
+  MIN_X = 0
+  MIN_Y = 0
+
+  # Max. co-ordinates of the upper right corner.
+  MAX_X = 100
+  MAX_Y = 100
   class << self
     def backend
       @backend
