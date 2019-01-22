@@ -59,12 +59,7 @@ module Rubyplot
         @subplots[nrow][ncol]
       end
 
-      # Draw on a canvas and output to a file.
-      #
-      # @param output [TrueClass, FalseClass] true Whether to output to file or not.
-      def write(file_name, output: true)
-        Rubyplot.backend.canvas_height = @height
-        Rubyplot.backend.canvas_width = @width
+      def set_background_gradient
         Rubyplot.backend.set_base_image_gradient(
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
           Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
@@ -72,6 +67,14 @@ module Rubyplot
           @height,
           @theme_options[:background_direction]
         )
+      end
+
+      # Draw on a canvas and output to a file.
+      #
+      # @param output [TrueClass, FalseClass] true Whether to output to file or not.
+      def write(file_name, output: true)
+        Rubyplot.backend.canvas_height = @height
+        Rubyplot.backend.canvas_width = @width
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.write(file_name) if output
       end

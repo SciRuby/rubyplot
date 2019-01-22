@@ -1,9 +1,6 @@
 require "bundler/gem_tasks"
 require "rake"
-
-require 'bundler/setup'
-require 'rubygems/tasks'
-Gem::Tasks.new
+require 'rake/extensiontask'
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new

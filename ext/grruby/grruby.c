@@ -1,11 +1,11 @@
 #include <ruby.h>
 #include <gr.h>
 
-double* rb_ar_2_dbl_ar(VALUE ar){
+double* rb_ar_2_dbl_ar(VALUE ar) {
   long ar_size=RARRAY_LEN(ar);
   double *arc = (double *)malloc(ar_size * sizeof(double));
   int i;
-  for (i=0; i<ar_size; i++){
+  for (i=0; i < ar_size; i++){
     arc[i] = NUM2DBL(rb_ary_entry(ar, i));
   }
   return arc; 
@@ -15,10 +15,10 @@ int* rb_ar_2_int_ar(VALUE ar){
   long ar_size=RARRAY_LEN(ar);
   int *arc = (int *)malloc(ar_size * sizeof(int));
   int i;
-  for (i=0; i<ar_size; i++){
+  for (i=0; i < ar_size; i++){
     arc[i] = NUM2INT(rb_ary_entry(ar, i));
   }
-    return arc; 
+  return arc;
 }
 
 static VALUE opengks(VALUE self){
@@ -40,14 +40,84 @@ static VALUE inqdspsize(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
   return Qtrue;
 }
 
-static VALUE openws(VALUE self,VALUE ws_id,VALUE connection, VALUE type){
-  int ws_idc=NUM2INT(ws_id);
-  char *connectionc=StringValueCStr(connection);
-  int typec=NUM2INT(type);
+/*
+ * call-seq:
+ *   Rubyplot::GR.openws()
+ *
+ * Open a graphical workstation.
+ *
+ * *Parameters:**
+ *
+ * `workstation_id` :
+ * A workstation identifier.
+ * `connection` :
+ * A connection identifier.
+ * `workstation_type` :
+ * The desired workstation type.
+ *
+ * Available workstation types:
+ *
+ * +-------------+------------------------------------------------------+
+ * |            5|Workstation Independent Segment Storage               |
+ * +-------------+------------------------------------------------------+
+ * |         7, 8|Computer Graphics Metafile (CGM binary, clear text)   |
+ * +-------------+------------------------------------------------------+
+ * |           41|Windows GDI                                           |
+ * +-------------+------------------------------------------------------+
+ * |           51|Mac Quickdraw                                         |
+ * +-------------+------------------------------------------------------+
+ * |      61 - 64|PostScript (b/w, color)                               |
+ * +-------------+------------------------------------------------------+
+ * |     101, 102|Portable Document Format (plain, compressed)          |
+ * +-------------+------------------------------------------------------+
+ * |    210 - 213|X Windows                                             |
+ * +-------------+------------------------------------------------------+
+ * |          214|Sun Raster file (RF)                                  |
+ * +-------------+------------------------------------------------------+
+ * |     215, 218|Graphics Interchange Format (GIF87, GIF89)            |
+ * +-------------+------------------------------------------------------+
+ * |          216|Motif User Interface Language (UIL)                   |
+ * +-------------+------------------------------------------------------+
+ * |          320|Windows Bitmap (BMP)                                  |
+ * +-------------+------------------------------------------------------+
+ * |          321|JPEG image file                                       |
+ * +-------------+------------------------------------------------------+
+ * |          322|Portable Network Graphics file (PNG)                  |
+ * +-------------+------------------------------------------------------+
+ * |          323|Tagged Image File Format (TIFF)                       |
+ * +-------------+------------------------------------------------------+
+ * |          370|Xfig vector graphics file                             |
+ * +-------------+------------------------------------------------------+
+ * |          371|Gtk                                                   |
+ * +-------------+------------------------------------------------------+
+ * |          380|wxWidgets                                             |
+ * +-------------+------------------------------------------------------+
+ * |          381|Qt4                                                   |
+ * +-------------+------------------------------------------------------+
+ * |          382|Scaleable Vector Graphics (SVG)                       |
+ * +-------------+------------------------------------------------------+
+ * |          390|Windows Metafile                                      |
+ * +-------------+------------------------------------------------------+
+ * |          400|Quartz                                                |
+ * +-------------+------------------------------------------------------+
+ * |          410|Socket driver                                         |
+ * +-------------+------------------------------------------------------+
+ * |          415|0MQ driver                                            |
+ * +-------------+------------------------------------------------------+
+ * |          420|OpenGL                                                |
+ * +-------------+------------------------------------------------------+
+ * |          430|HTML5 Canvas                                          |
+ * +-------------+------------------------------------------------------+
+ * 
+ */
+static VALUE openws(VALUE self,VALUE ws_id,VALUE connection, VALUE type) {
+  int ws_idc = NUM2INT(ws_id);
+  char *connectionc = StringValueCStr(connection);
+  int typec = NUM2INT(type);
+  
   gr_openws(ws_idc,connectionc,typec);
   return Qtrue;
 }
-
 
 static VALUE closews(VALUE self,VALUE ws_id){
   int ws_idc=NUM2INT(ws_id);
@@ -126,7 +196,9 @@ static VALUE fillarea(VALUE self,VALUE x, VALUE y){
   return Qtrue;
 }
 
-static VALUE cellarray(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE dimx,VALUE dimy,VALUE scol,VALUE srow,VALUE ncol,VALUE nrow,VALUE color){
+static VALUE cellarray(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,
+                       VALUE dimx,VALUE dimy,VALUE scol,VALUE srow,VALUE ncol,
+                       VALUE nrow,VALUE color) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
@@ -163,7 +235,8 @@ static VALUE spline(VALUE self,VALUE n,VALUE px,VALUE py,VALUE m,VALUE method){
   return Qtrue;
 }
 
-static VALUE gridit(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f,VALUE g,VALUE h,VALUE i){
+static VALUE gridit(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f,
+                    VALUE g,VALUE h,VALUE i) {
   int ac = NUM2INT(a);
   double *bc = rb_ar_2_dbl_ar(b);
   double *cc = rb_ar_2_dbl_ar(c);
@@ -323,6 +396,13 @@ static VALUE setcolorrep(VALUE self,VALUE index,VALUE red,VALUE green,VALUE blue
   return Qtrue;
 }
 
+/* 
+ * call-seq:
+ *   Rubyplot::GR.setwindow -> true
+ *
+ * Set a window or rectangular subspace of world co-ordinates to be plotted.
+ *
+ */
 static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax){
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
@@ -987,7 +1067,7 @@ static VALUE reducepoints(VALUE self,VALUE,VALUE,VALUE,VALUE,VALUE,VALUE){
   return Qtrue;
 }
 */
-static VALUE trisurface(VALUE self,VALUE px,VALUE py,VALUE pz){
+static VALUE trisurface(VALUE self,VALUE px,VALUE py,VALUE pz) {
   int x_size = RARRAY_LEN(px);
   int y_size = RARRAY_LEN(py);
   int z_size = RARRAY_LEN(pz);
@@ -1000,7 +1080,8 @@ static VALUE trisurface(VALUE self,VALUE px,VALUE py,VALUE pz){
   return Qtrue;
 }
 
-static VALUE gradient(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f,VALUE g){
+static VALUE gradient(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,
+                      VALUE f,VALUE g){
   int ac = NUM2INT(a);
   int bc = NUM2INT(b);
   double *cc = rb_ar_2_dbl_ar(c);
@@ -1012,7 +1093,8 @@ static VALUE gradient(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f
   return Qtrue;
 }
 
-static VALUE quiver(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f,VALUE g){
+static VALUE quiver(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,
+                    VALUE f,VALUE g){
   int ac = NUM2INT(a);
   int bc = NUM2INT(b);
   double *cc = rb_ar_2_dbl_ar(c);
@@ -1032,8 +1114,8 @@ static VALUE version(VALUE self){
 void Init_grruby()
 {
   VALUE mRubyplot = rb_define_module("Rubyplot");
-  VALUE mGRruby  = rb_define_module_under("GR", mRubyplot);
-  VALUE mGR3ruby = rb_define_module_under("GR3", mRubyplot);
+  VALUE mGRruby  = rb_define_module_under(mRubyplot, "GR");
+  VALUE mGR3ruby = rb_define_module_under(mRubyplot, "GR3");
 
   rb_define_singleton_method(mGRruby,"opengks",opengks,0);
   rb_define_singleton_method(mGRruby,"closegks",closegks,0);

@@ -16,7 +16,6 @@ module Rubyplot
       falu_red: '#8b2500',
       royal_blue: '#436eee',
       crimson: '#dc143c',
-      crimson: '#e6194b',
       fruit_salad: '#3cb44b',
       lemon: '#ffe119',
       bondi_blue: '#0082c8',
