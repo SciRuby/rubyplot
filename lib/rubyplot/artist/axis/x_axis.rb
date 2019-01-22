@@ -6,7 +6,7 @@ module Rubyplot
       def initialize axes
         super
         @abs_x1 = @axes.origin[0]
-        @abs_x2 = @axes.abs_x + @axes.width - @axes.y_axis_margin
+        @abs_x2 = @axes.abs_x + @axes.width - @axes.right_margin
         @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
         @length = (@abs_x2 - @abs_x1).abs
         configure_axis_line
@@ -26,8 +26,8 @@ module Rubyplot
           @title,
           self,
           pointsize: @axes.marker_font_size,
-          abs_y: @axes.origin[1] + @axes.x_axis_margin / 2 + @axes.x_axis_margin / 4,
-          abs_x: @axes.origin[0] + (@abs_x2 - @abs_x1)/2
+          abs_y: @axes.abs_y,
+          abs_x: @axes.abs_x + (@abs_x2 - @abs_x1)/2
         )
       end
     end # class XAxis

@@ -55,7 +55,7 @@ module Rubyplot
             @rectangles << Rubyplot::Artist::Rectangle.new(
               self,
               abs_x: @abs_x_left[i],
-              abs_y: @abs_y_left[i] - height,
+              abs_y: @abs_y_left[i],
               width: @bar_width,
               height: height,
               border_color: @data[:color],

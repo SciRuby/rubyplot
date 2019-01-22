@@ -53,7 +53,7 @@ module Rubyplot
           @axes.x_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
-              abs_x: @axes.abs_x + @axes.y_axis_margin + i * @max_slot_width + @max_slot_width / 2,
+              abs_x: @axes.abs_x + @axes.left_margin + i * @max_slot_width + @max_slot_width / 2,
               abs_y: @axes.origin[1],
               label: label
             )
@@ -65,9 +65,9 @@ module Rubyplot
           plots_below = @stacked_bars[0...plot_index]
           bar.num_bars.times do |i|
             pedestal_height = plots_below.map { |p| p.member_height(i) }.inject(:+) || 0
-            bar.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin +
+            bar.abs_x_left[i] = @axes.abs_x + @axes.left_margin +
                                 i * @max_slot_width + @padding / 2
-            bar.abs_y_left[i] = (@axes.abs_y + @axes.y_axis.length) - pedestal_height
+            bar.abs_y_left[i] = @axes.origin[1] + pedestal_height
           end
         end
       end # class StackedBar

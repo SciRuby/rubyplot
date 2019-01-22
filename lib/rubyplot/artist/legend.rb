@@ -48,7 +48,7 @@ module Rubyplot
           @text,
           self,
           abs_x: @abs_x + @legend_box_size + BOX_AND_TEXT_SPACE,
-          abs_y: @legend_color_box.abs_y + @legend_box_size,
+          abs_y: @legend_color_box.abs_y,
           font: @font,
           color: @font_color,
           pointsize: @font_size

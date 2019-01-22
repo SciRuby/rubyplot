@@ -15,8 +15,8 @@ module Rubyplot
             ix = @normalized_data[:x_values][idx_y]
             next if iy.nil? || ix.nil?
 
-            abs_x = ix * @axes.x_axis.length + @axes.abs_x + @axes.y_axis_margin
-            abs_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
+            abs_x = ix * @axes.x_axis.length + @axes.origin[0]
+            abs_y = iy * @axes.y_axis.length + @axes.origin[1]
             Rubyplot::Artist::Circle.new(
               self, abs_x: abs_x, abs_y: abs_y, radius: @circle_radius,
               stroke_opacity: @stroke_opacity,

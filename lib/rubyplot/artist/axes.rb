@@ -2,9 +2,7 @@ module Rubyplot
   module Artist
     class Axes < Base
       TITLE_MARGIN = 10.0
-      # Space around text elements. Mostly used for vertical spacing.
-      # This way the vertical text doesn't overlap.
-      LEGEND_MARGIN = TITLE_MARGIN = 10.0
+      LEGEND_MARGIN = 15.0
       LABEL_MARGIN = 10.0
       DEFAULT_MARGIN = 10.0
       THOUSAND_SEPARATOR = ','.freeze
@@ -35,10 +33,14 @@ module Rubyplot
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
       attr_accessor :hide_title
-      # Margin between the X axis and the bottom of the Axes artist.
-      attr_accessor :x_axis_margin
-      # Margin between the Y axis and the left of the Axes artist.
-      attr_accessor :y_axis_margin
+      # Top margin.
+      attr_accessor :top_margin
+      # Left margin.
+      attr_accessor :left_margin
+      # Bottom margin.
+      attr_accessor :bottom_margin
+      # Right margin.
+      attr_accessor :right_margin
       # Range of X axis.
       attr_accessor :x_range
       # Range of Y axis.
@@ -52,8 +54,10 @@ module Rubyplot
 
         @x_title = ''
         @y_title = ''
-        @x_axis_margin = 5.0
-        @y_axis_margin = 5.0
+        @top_margin = 5.0
+        @left_margin = 5.0
+        @bottom_margin = 5.0
+        @right_margin = 5.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
         @title = ''
@@ -91,7 +95,7 @@ module Rubyplot
       def legend_box_ix
         case @legend_box_position
         when :top
-          abs_y + width / 2
+          abs_x + width / 2
         end
       end
 
@@ -99,7 +103,7 @@ module Rubyplot
       def legend_box_iy
         case @legend_box_position
         when :top
-          abs_x + @x_axis_margin + @legend_margin
+          abs_y + height - @top_margin - @legend_margin
         end
       end
 
@@ -245,14 +249,15 @@ module Rubyplot
       # Figure out the co-ordinates of the title text w.r.t Axes.
       def configure_title
         @texts << Rubyplot::Artist::Text.new(
-          @title, self, abs_x: abs_x + width / 2, abs_y: abs_y + @title_margin,
+          @title, self,
+          abs_x: abs_x + width / 2, abs_y: abs_y + height - @title_margin,
           font: @font, color: @font_color,
           pointsize: @title_font_size, internal_label: 'axes title.')
       end
 
       def calculate_xy_axes_origin
-        @origin[0] = abs_x + @x_axis_margin
-        @origin[1] = abs_y + @y_axis_margin
+        @origin[0] = abs_x + @left_margin
+        @origin[1] = abs_y + @bottom_margin
       end
 
       # Figure out co-ordinates of the legends

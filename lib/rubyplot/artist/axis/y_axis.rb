@@ -4,7 +4,7 @@ module Rubyplot
       def initialize(*)
         super
         @abs_y1 = @axes.origin[1]
-        @abs_y2 = @axes.origin[1] + (@axes.height - @axes.x_axis_margin)
+        @abs_y2 = @axes.origin[1] + (@axes.height - @axes.top_margin)
         @y_ticks = []
         @length = (@abs_y1 - @abs_y2).abs
         configure_axis_line
@@ -29,7 +29,7 @@ module Rubyplot
           self,
           rotation: -90.0,
           abs_x: @axes.origin[0] - 3,
-          abs_y: (@abs_y1 - @abs_y2) / 2,
+          abs_y: @length / 2,
           pointsize: @axes.marker_font_size
         )
       end

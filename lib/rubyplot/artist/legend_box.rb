@@ -12,6 +12,9 @@ module Rubyplot
 
       attr_accessor :border_color
 
+      # @param axes [Rubyplot::Artist::Axes] Axes object to which this LegendBox belongs.
+      # @param abs_x [Float] X co-ordinate of the lower right corner of this legend box.
+      # @param abs_y [Float] Y co-ordinate of the lower right corner of this legend box.
       def initialize(axes, abs_x:, abs_y:)
         super(abs_x, abs_y)
         @axes = axes
@@ -72,15 +75,14 @@ module Rubyplot
 
       def configure_legends
         @axes.plots.each_with_index do |plot, count|
-          next unless plot.label != ''
-
+          next unless plot.label != ''          
           @legends << Rubyplot::Artist::Legend.new(
             self,
             @axes,
             text: plot.label,
             color: plot.color,
             abs_x: @abs_x + left_margin,
-            abs_y: @abs_y + count * per_legend_height + top_margin
+            abs_y: @abs_y + count * per_legend_height + bottom_margin
           )
         end
       end

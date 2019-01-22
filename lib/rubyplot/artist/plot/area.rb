@@ -19,8 +19,8 @@ module Rubyplot
           poly_points = []
           @normalized_data[:y_values].each_with_index do |iy, idx_y|
             ix = @normalized_data[:x_values][idx_y]
-            abs_x = ix * @axes.x_axis.length + @axes.abs_x + @axes.y_axis_margin
-            abs_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
+            abs_x = ix * @axes.x_axis.length + @axes.origin[0]
+            abs_y = iy * @axes.y_axis.length + @axes.origin[1]
             poly_points << [abs_x, abs_y]
           end
           poly_points << [@axes.x_axis.abs_x2, @axes.origin[1] - @axes.x_axis.stroke_width]
