@@ -26,7 +26,6 @@ Deadline: 26 February 2019
 Deadline: 15 April 2019
 
 * Support atleast 3 new kinds of plots.
-* Support Simple Plotting Interface.
 * Move from using Ruby Arrays to a typed-array based system.
 
 # Long term vision

@@ -27,7 +27,6 @@ module Rubyplot
           @lines.each(&:draw)
           @texts.each(&:draw)
         end
-
       end # class Base
     end # class Axis
   end # class Artist

@@ -2,18 +2,32 @@ require_relative '../../grruby.so'
 
 module Rubyplot
   module Backend
-    # Wrapper around a GR backend. Uses GR's default co-ordinate system.
-    #  The lower left corner is (0,0) and the upper right corner is (1,1).
-    #
-    # Unlike the GR wrapper, the backend stores the state of the drawing
-    #   with minimal dependence on GR for state storage because of GR's
-    #   procedural nature.
+    # Wrapper around a GR backend. Works differently than the Image Magick wrapper
+    # since in GR there is no one-one mapping between Rubyplot artists and things
+    # that are to be drawn on the backend.
     class GRWrapper < Base
-
-      # Set the max and min co-ordinates for this GR window.
       def initialize
-        Rubyplot::GR.setwindow(Rubyplot::MIN_X, Rubyplot::MAX_X,
-                               Rubyplot::MIN_Y, Rubyplot::MAX_Y)
+        
+      end
+
+      def draw_x_axis
+        
+      end
+
+      def draw_y_axis
+        
+      end
+
+      def draw_text
+        
+      end
+
+      def draw_line
+        
+      end
+
+      def write
+        
       end
     end # class GRWrapper
   end # module Backend

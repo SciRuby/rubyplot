@@ -75,6 +75,7 @@ module Rubyplot
       def write(file_name, output: true)
         Rubyplot.backend.canvas_height = @height
         Rubyplot.backend.canvas_width = @width
+        Rubyplot.backend.figure = self
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.write(file_name) if output
       end

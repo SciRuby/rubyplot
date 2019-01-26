@@ -109,6 +109,7 @@ module Rubyplot
 
       # Write an image to a file by communicating with the backend.
       def draw
+        Rubyplot.backend.active_axes = self
         set_axes_ranges
         normalize_plotting_data
         assign_default_label_colors

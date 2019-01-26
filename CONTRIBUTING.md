@@ -1,4 +1,4 @@
-# Developer notes
+# Rubyplot developer notes
 
 ## Co-ordinate system
 
@@ -51,3 +51,30 @@ variable before the example is run.
 
 Due to nature of a viz library, each Artist tends to have many instance variables
 for storing various kinds of information about the Artist.
+
+# GR extension notes
+
+## setwindow and setviewport
+
+The `Rubyplot::GR.setwindow` function allows setting up 'world co-ordinates' that are
+basically as a point of reference for future activities like setting up axes and 
+plotting points. For example, if you call the `setwindow` function as like this:
+``` ruby
+Rubyplot::GR.setwindow(0,100,0,100)
+```
+GR will set the lower left corner of the 'world' to `(0,0)` and the upper left corner
+to `(100,100)`. So when you use the `GR.axes()` function to setup co-ordinate axes
+you will only see the 0th quadrant of the co-ordinate space.
+
+In order to change the position of this 'world' on the canvas, it is necessary to use
+the `setviewport` function. Imagine this function as the zoom function of a camera. You
+can use to either 'zoom out' fully and see everything that is front of you, or you can
+'zoom in' to a particular area and see only that. Your zoom level determines your 'world'.
+
+The only difference is that in case of viewports there is no actual zooming in but only
+demarcation of areas within the canvas that are to treated as the 'world'.
+
+The implication on rubyplot would be that an `Axes` within a `Figure` would get mappped
+to a `viewport` and the plotting within the viewport would take place by setting up the
+world co-ordinates to between the X and Y range.
+

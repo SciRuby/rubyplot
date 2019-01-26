@@ -398,9 +398,14 @@ static VALUE setcolorrep(VALUE self,VALUE index,VALUE red,VALUE green,VALUE blue
 
 /* 
  * call-seq:
- *   Rubyplot::GR.setwindow -> true
+ *   Rubyplot::GR.setwindow(xmin, xmax, ymin, ymax) -> true
  *
  * Set a window or rectangular subspace of world co-ordinates to be plotted.
+ *
+ * xmin [Integer] :  
+ * xmax [Integer] :
+ * ymin [Integer] :
+ * ymax [Integer] :
  *
  */
 static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax){
@@ -421,12 +426,31 @@ static VALUE inqwindow(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
   return Qtrue;
 }
 
-static VALUE setviewport(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax){
+/*
+ * call-seq:
+ *   Rubyplot::GR.setviewport(xmin, xmax, ymin, ymax) -> true
+ * 
+ * `setviewport` establishes a rectangular subspace of normalized device coordinates.
+ *
+ * `setviewport` defines the rectangular portion of the Normalized Device Coordinate
+ * (NDC) space to be associated with the specified normalization transformation. The
+ * NDC viewport and World Coordinate (WC) window define the normalization transformation
+ * through which all output primitives pass. The WC window is mapped onto the rectangular
+ * NDC viewport which is, in turn, mapped onto the display surface of the open and active
+ * workstation, in device coordinates.
+ *
+ * xmin [Numeric] :
+ * xmax [Numeric] :
+ * ymin [Numeric] :
+ * ymax [Numeric] :
+ */
+static VALUE setviewport(VALUE self, VALUE xmin, VALUE xmax, VALUE ymin, VALUE ymax) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
   double ymaxc = NUM2DBL(ymax);
   gr_setviewport(xminc,xmaxc,yminc,ymaxc);
+  
   return Qtrue;
 }
 
@@ -560,15 +584,47 @@ static VALUE inqtextext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e){
   return Qtrue;
 }
 
-static VALUE axes(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org, VALUE y_org, VALUE major_x, VALUE major_y, VALUE tick_size){
-  double x_tickc=NUM2DBL(x_tick);
-  double y_tickc=NUM2DBL(y_tick);
+/* 
+ * call-seq:
+ *    Rubyplot::GR.axes(x_tick, y_tick, x_org, y_org, major_x, major_y, tick_size) -> true
+ *
+ * Draw X and Y co-ordinate axes with linear or logarithmically spaced tick marks.
+ *
+ *   `x_tick`, `y_tick` :
+ *       The interval between minor tick marks on each axis.
+ *   `x_org`, `y_org` :
+ *       The world coordinates of the origin (point of intersection) of the X
+ *       and Y axes.
+ *   `major_x`, `major_y` :
+ *       Unitless integer values specifying the number of minor tick intervals
+ *       between major tick marks. Values of 0 or 1 imply no minor ticks.
+ *       Negative values specify no labels will be drawn for the associated axis.
+ *   `tick_size` :
+ *       The length of minor tick marks specified in a normalized device
+ *       coordinate unit. Major tick marks are twice as long as minor tick marks.
+ *       A negative value reverses the tick marks on the axes from inward facing
+ *       to outward facing (or vice versa).
+ *
+ *   Tick marks are positioned along each axis so that major tick marks fall on the axes
+ *   origin (whether visible or not). Major tick marks are labeled with the corresponding
+ *   data values. Axes are drawn according to the scale of the window. Axes and tick marks
+ *   are drawn using solid lines; line color and width can be modified using the
+ *   `setlinetype` and `setlinewidth` functions. Axes are drawn according to
+ *   the linear or logarithmic transformation established by the `setscale` function.
+ *
+ */
+static VALUE axes(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
+                  VALUE y_org, VALUE major_x, VALUE major_y, VALUE tick_size){
+  double x_tickc = NUM2DBL(x_tick);
+  double y_tickc = NUM2DBL(y_tick);
   double x_orgc=NUM2DBL(x_org);
   double y_orgc=NUM2DBL(y_org);
   int major_xc=NUM2INT(major_x);
   int major_yc=NUM2INT(major_y);
   double tick_sizec=NUM2DBL(tick_size);
+  
   gr_axes(x_tickc,y_tickc,x_orgc,y_orgc,major_xc,major_yc,tick_sizec);
+  
   return Qtrue;
 }
 
