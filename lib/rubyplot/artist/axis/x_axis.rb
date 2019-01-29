@@ -9,7 +9,10 @@ module Rubyplot
         @abs_x2 = @axes.abs_x + @axes.width - @axes.right_margin
         @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
         @length = (@abs_x2 - @abs_x1).abs
-        configure_axis_line
+      end
+
+      def draw
+        Rubyplot.backend.draw_x_axis()
       end
 
       private

@@ -19,12 +19,8 @@ module Rubyplot
       attr_reader :x_axis
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
-      # Array of X ticks.
-      attr_reader :x_ticks
-      # Array of Y ticks.
-      attr_reader :y_ticks
       # Array denoting co-ordinates in pixels of the origin of X and Y axes.
-      attr_reader :origin
+      attr_accessor :origin
       # Number of X ticks.
       attr_accessor :num_x_ticks
       # Number of Y ticks.
@@ -57,6 +53,10 @@ module Rubyplot
       attr_accessor :height
       
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
+      # @param abs_x [Float] Absolute X co-ordinate of the lower left corner of the Axes.
+      # @param abs_y [Flot] Absolute Y co-ordinate of the lower left corner of the Axes.
+      # @param width [Float] Width between MIN_X and MAX_Y of this Axes object.
+      # @param height [Float] Height between MIN_Y and MAX_Y of this Axes object.
       def initialize(figure, abs_x:, abs_y:, width:, height:)
         @figure = figure
         @abs_x = abs_x
@@ -92,12 +92,9 @@ module Rubyplot
         @legends = []
         @lines = []
         @texts = []
-        @origin = [nil, nil]
-        calculate_xy_axes_origin
+        @origin = nil
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
-        @x_ticks = nil
-        @y_ticks = nil
         @num_x_ticks = 5
         @num_y_ticks = 4
         @legend_box_position = :top
@@ -123,6 +120,7 @@ module Rubyplot
       def draw
         Rubyplot.backend.active_axes = self
         set_axes_ranges
+        set_default_origin unless @origin
         normalize_plotting_data
         assign_default_label_colors
         consolidate_plots
@@ -174,11 +172,11 @@ module Rubyplot
       end
 
       def x_ticks= x_ticks
-        @x_ticks = x_ticks
+        @x_axis.major_ticks = x_ticks
       end
 
       def y_ticks= y_ticks
-        @y_ticks = y_ticks
+        @y_axis.major_ticks = y_ticks
       end
 
       def x_title= x_title
@@ -191,6 +189,10 @@ module Rubyplot
 
       private
 
+      def set_default_origin
+        @origin = [@x_axis.min_val, @y_axis.min_val]
+      end
+
       def assign_default_label_colors
         @plots.each_with_index do |p, i|
           if p.color == :default
@@ -202,15 +204,15 @@ module Rubyplot
 
       def assign_x_ticks
         @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
-        unless @x_ticks
+        unless @x_axis.major_ticks
           value_distance = (@x_range[1] - @x_range[0]) / (@num_x_ticks.to_f - 1)
-          @x_ticks = @num_x_ticks.times.map do |i|
+          @x_axis.major_ticks = @num_x_ticks.times.map do |i|
             @x_range[0] + i * value_distance
           end
         end
 
-        unless @x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
-          @x_ticks.map!.with_index do |tick_label, i|
+        unless @x_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
+          @x_axis.major_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
               self,
               abs_x: i * @inter_x_ticks_distance + @x_axis.abs_x1,
@@ -222,13 +224,13 @@ module Rubyplot
       end
 
       def assign_y_ticks
-        unless @y_ticks
+        unless @y_axis.major_ticks
           val_distance = (@y_range[1] - @y_range[0]).abs / (@num_y_ticks.to_f-1)
-          @y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
+          @y_axis.major_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
         end
-        unless @y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
+        unless @y_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
           inter_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
-          @y_ticks.map!.with_index do |tick_label, i|
+          @y_axis.major_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::YTick.new(
               self,
               abs_x: @origin[0],
@@ -271,8 +273,6 @@ module Rubyplot
       # Call the respective draw methods on each of the elements of this Axes.
       def actually_draw
         @x_axis.draw
-        @x_ticks.each(&:draw)
-        @y_ticks.each(&:draw)
         @y_axis.draw
         @texts.each(&:draw)
         @legend_box.draw

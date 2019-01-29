@@ -467,13 +467,13 @@ static VALUE setcolorrep(VALUE self,VALUE index,VALUE red,VALUE green,VALUE blue
  *
  * Set a window or rectangular subspace of world co-ordinates to be plotted.
  *
- * xmin [Integer] :  
- * xmax [Integer] :
- * ymin [Integer] :
- * ymax [Integer] :
+ * xmin [Float] :  
+ * xmax [Float] :
+ * ymin [Float] :
+ * ymax [Float] :
  *
  */
-static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax){
+static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);

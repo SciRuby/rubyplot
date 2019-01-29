@@ -7,7 +7,6 @@ module Rubyplot
         @abs_y2 = @axes.origin[1] + (@axes.height - @axes.top_margin)
         @y_ticks = []
         @length = (@abs_y1 - @abs_y2).abs
-        configure_axis_line
       end
 
       private

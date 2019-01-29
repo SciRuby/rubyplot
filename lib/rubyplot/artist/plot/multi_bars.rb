@@ -47,9 +47,9 @@ module Rubyplot
 
         def configure_x_ticks!
           @axes.num_x_ticks = @num_max_slots
-          labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
+          labels = @axes.x_axis.major_ticks || Array.new(@num_max_slots, &:to_s)
           labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
-          @axes.x_ticks = labels.map.with_index do |label, i|
+          @axes.x_axis.major_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
               abs_x: @axes.abs_x + @axes.left_margin + i * @max_slot_width + @max_slot_width / 2,
