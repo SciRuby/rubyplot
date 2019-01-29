@@ -50,12 +50,29 @@ module Rubyplot
         add_subplots @nrows, @ncols
       end
 
+      # Create space for subplots to be added to the figure.
+      #
+      # @param nrows [Integer] Number of rows to add.
+      # @param ncols [Integer] Number of cols to add.
       def add_subplots(nrows, ncols)
         @subplots = Array.new(nrows) { Array.new(ncols) { nil } }
       end
 
+      # Actually create a subplot at position (nrow, ncol) on the figure.
+      # You must call `add_subplots` and create space in the figure before
+      # calling this method. Returns the created Rubyplot::Axes object.
+      # 
+      # @param nrow [Integer] X co-ordinate of the subplot.
+      # @param ncol [Integer] Y co-ordinate of the subplot.
       def add_subplot(nrow, ncol)
-        @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(self)
+        # FIXME: make this work for mutliple subplots.
+        @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
+          self,
+          abs_x: @left_spacing + @abs_x,
+          abs_y: @bottom_spacing + @abs_y,
+          width: Rubyplot::MAX_X - (@left_spacing + @right_spacing),
+          height: Rubyplot::MAX_Y - (@top_spacing + @bottom_spacing)
+        )
         @subplots[nrow][ncol]
       end
 

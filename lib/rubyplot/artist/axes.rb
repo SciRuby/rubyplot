@@ -47,10 +47,22 @@ module Rubyplot
       attr_accessor :y_range, :grid, :bounding_box, :title_shift
       # Main title for this Axes.
       attr_accessor :title
-
+      # X co-ordinate of lower left corner of this Axes.
+      attr_accessor :abs_x
+      # Y co-ordinate of lower left corner of this Axes.
+      attr_accessor :abs_y
+      # Width of this Axes object. Between Rubyplot::MIN_X and MAX_X.
+      attr_accessor :width
+      # Height of this Axes object. Between Rubyplot::MIN_Y and MAX_Y.
+      attr_accessor :height
+      
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
-      def initialize(figure)
+      def initialize(figure, abs_x:, abs_y:, width:, height:)
         @figure = figure
+        @abs_x = abs_x
+        @abs_y = abs_y
+        @width = width
+        @height = height
 
         @x_title = ''
         @y_title = ''
@@ -159,26 +171,6 @@ module Rubyplot
 
       def write(file_name)
         @plots[0].write file_name
-      end
-
-      # Absolute X co-ordinate of the Axes. Bottom left corner.
-      def abs_x
-        @figure.left_spacing + @figure.abs_x
-      end
-
-      # Absolute Y co-ordinate of the Axes. Top left corner.
-      def abs_y
-        @figure.bottom_spacing + @figure.abs_y
-      end
-
-      # Width of Axes between MIN_X and MAX_X.
-      def width
-        (Rubyplot::MAX_X - (@figure.left_spacing + @figure.right_spacing))
-      end
-
-      # Height of Axes between MIN_Y and MAX_Y.
-      def height
-        (Rubyplot::MAX_Y - (@figure.top_spacing + @figure.bottom_spacing))
       end
 
       def x_ticks= x_ticks

@@ -168,11 +168,32 @@ static VALUE polymarker(VALUE self,VALUE x, VALUE y){
 
 }
 
-static VALUE text(VALUE self,VALUE x, VALUE y, VALUE string){
-  double xc=NUM2DBL(x);
-  double yc=NUM2DBL(y);
+/*
+ *    call-seq:
+ *       Rubyplot::GR.text(x, y, text) -> true
+ *
+ *    Draw a text at position `x`, `y` using the current text attributes.
+ *
+ *    **Parameters:**
+ *
+ *    `x` :
+ *        The X coordinate of starting position of the text string
+ *    `y` :
+ *        The Y coordinate of starting position of the text string
+ *    `string` :
+ *        The text to be drawn
+ *
+ *    The values for `x` and `y` are in normalized device coordinates.
+ *    The attributes that control the appearance of text are text font and precision,
+ *    character expansion factor, character spacing, text color index, character
+ *    height, character up vector, text path and text alignment.
+ */
+static VALUE text(VALUE self,VALUE x, VALUE y, VALUE string) {
+  double xc = NUM2DBL(x);
+  double yc = NUM2DBL(y);
   char *stringc=StringValueCStr(string);
   gr_text(xc,yc,stringc);
+  
   return Qtrue;
 }
 
@@ -358,13 +379,57 @@ static VALUE setcharup(VALUE self,VALUE ux,VALUE uy){
 
 static VALUE settextpath(VALUE self,VALUE path){
   int pathc = NUM2INT(path);
+  
   gr_settextpath(pathc);
   return Qtrue;
 }
 
-static VALUE settextalign(VALUE self, VALUE horizontal, VALUE vertical){
-  int horizontalc=NUM2INT(horizontal);
-  int verticalc=NUM2INT(vertical);
+/*
+ *    call-seq:
+ *      Rubyplot::GR.settextalign(Rubyplot::GR::TEXT_HALIGN_NORMAL, 
+ *        Rubyplot::GR::TEXT_HALIGN_LEFT) -> true
+ *
+ *    Set the current horizontal and vertical alignment for text.
+ *
+ *    **Parameters:**
+ *
+ *    `horizontal` :
+ *        Horizontal text alignment (see the table below)
+ *    `vertical` :
+ *        Vertical text alignment (see the table below)
+ *
+ *    `settextalign` specifies how the characters in a text primitive will be aligned
+ *    in horizontal and vertical space. The default text alignment indicates horizontal left
+ *    alignment and vertical baseline alignment.
+ *
+ *    +-------------------------+---+----------------+
+ *    |TEXT_HALIGN_NORMAL       |  0|                |
+ *    +-------------------------+---+----------------+
+ *    |TEXT_HALIGN_LEFT         |  1|Left justify    |
+ *    +-------------------------+---+----------------+
+ *    |TEXT_HALIGN_CENTER       |  2|Center justify  |
+ *    +-------------------------+---+----------------+
+ *    |TEXT_HALIGN_RIGHT        |  3|Right justify   |
+ *    +-------------------------+---+----------------+
+ *
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_NORMAL       |  0|                                                |
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_TOP          |  1|Align with the top of the characters            |
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_CAP          |  2|Aligned with the cap of the characters          |
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_HALF         |  3|Aligned with the half line of the characters    |
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_BASE         |  4|Aligned with the base line of the characters    |
+ *    +-------------------------+---+------------------------------------------------+
+ *    |TEXT_VALIGN_BOTTOM       |  5|Aligned with the bottom line of the characters  |
+ *    +-------------------------+---+------------------------------------------------+
+ */
+static VALUE settextalign(VALUE self, VALUE horizontal, VALUE vertical) {
+  int horizontalc = NUM2INT(horizontal);
+  int verticalc   = NUM2INT(vertical);
+  
   gr_settextalign(horizontalc,verticalc);
   return Qtrue;
 }
@@ -565,6 +630,96 @@ static VALUE inqscale(VALUE self,VALUE a){
   gr_inqscale(ac);
   return Qtrue;
 }
+
+/*
+ *    Draw a text at position `x`, `y` using the current text attributes. Strings can be
+ *    defined to create basic mathematical expressions and Greek letters.
+ *
+ *    **Parameters:**
+ *
+ *    `x` :
+ *        The X coordinate of starting position of the text string
+ *    `y` :
+ *        The Y coordinate of starting position of the text string
+ *    `string` :
+ *        The text to be drawn
+ *
+ *    The values for X and Y are in normalized device coordinates.
+ *    The attributes that control the appearance of text are text font and precision,
+ *    character expansion factor, character spacing, text color index, character
+ *    height, character up vector, text path and text alignment.
+ *
+ *    The character string is interpreted to be a simple mathematical formula.
+ *    The following notations apply:
+ *
+ *    Subscripts and superscripts: These are indicated by carets ('^') and underscores
+ *    ('_'). If the sub/superscript contains more than one character, it must be enclosed
+ *    in curly braces ('{}').
+ *
+ *    Fractions are typeset with A '/' B, where A stands for the numerator and B for the
+ *    denominator.
+ *
+ *    To include a Greek letter you must specify the corresponding keyword after a
+ *    backslash ('\') character. The text translator produces uppercase or lowercase
+ *    Greek letters depending on the case of the keyword.
+ *
+ *    +--------+---------+
+ *    |Letter  |Keyword  |
+ *    +--------+---------+
+ *    |Α α     |alpha    |
+ *    +--------+---------+
+ *    |Β β     |beta     |
+ *    +--------+---------+
+ *    |Γ γ     |gamma    |
+ *    +--------+---------+
+ *    |Δ δ     |delta    |
+ *    +--------+---------+
+ *    |Ε ε     |epsilon  |
+ *    +--------+---------+
+ *    |Ζ ζ     |zeta     |
+ *    +--------+---------+
+ *    |Η η     |eta      |
+ *    +--------+---------+
+ *    |Θ θ     |theta    |
+ *    +--------+---------+
+ *    |Ι ι     |iota     |
+ *    +--------+---------+
+ *    |Κ κ     |kappa    |
+ *    +--------+---------+
+ *    |Λ λ     |lambda   |
+ *    +--------+---------+
+ *    |Μ μ     |mu       |
+ *    +--------+---------+
+ *    |Ν ν     |Nu / v   |
+ *    +--------+---------+
+ *    |Ξ ξ     |xi       |
+ *    +--------+---------+
+ *    |Ο ο     |omicron  |
+ *    +--------+---------+
+ *    |Π π     |pi       |
+ *    +--------+---------+
+ *    |Ρ ρ     |rho      |
+ *    +--------+---------+
+ *    |Σ σ     |sigma    |
+ *    +--------+---------+
+ *    |Τ τ     |tau      |
+ *    +--------+---------+
+ *    |Υ υ     |upsilon  |
+ *    +--------+---------+
+ *    |Φ φ     |phi      |
+ *    +--------+---------+
+ *    |Χ χ     |chi      |
+ *    +--------+---------+
+ *    |Ψ ψ     |psi      |
+ *    +--------+---------+
+ *    |Ω ω     |omega    |
+ *    +--------+---------+
+ *
+ *    Note: `\v` is a replacement for `\nu` which would conflict with `\n` (newline)
+ *
+ *    For more sophisticated mathematical formulas, you should use the `gr.mathtex`
+ *    function.
+ */
 
 static VALUE textext(VALUE self,VALUE x, VALUE y, VALUE string){
   double xc=NUM2DBL(x);
@@ -829,11 +984,22 @@ static VALUE validaterange(VALUE self,VALUE a,VALUE b){
   return INT2NUM(gr_validaterange(ac,bc));
 }
 
-static VALUE adjustlimits(VALUE self,VALUE a,VALUE b){
-  double *ac = rb_ar_2_dbl_ar(a);
-  double *bc = rb_ar_2_dbl_ar(b);
-  gr_adjustlimits(ac,bc);
-  return Qtrue;
+/* 
+ * call-seq:
+ *   Rubyplot::GR.adjustlimits(amin, amax) -> [adjusted_amin, adjusted_amax]
+ *
+ */
+static VALUE adjustlimits(VALUE self,VALUE amin,VALUE amax) {
+  VALUE ret = rb_ary_new2(2);
+  double ac = NUM2DBL(amin);
+  double bc = NUM2DBL(amax);
+  
+  gr_adjustlimits(&ac,&bc);
+
+  rb_ary_push(ret, DBL2NUM(ac));
+  rb_ary_push(ret, DBL2NUM(bc));
+  
+  return ret;
 }
 
 static VALUE adjustrange(VALUE self,VALUE a,VALUE b){
@@ -843,18 +1009,51 @@ static VALUE adjustrange(VALUE self,VALUE a,VALUE b){
   return Qtrue;
 }
 
-static VALUE beginprint(VALUE self,VALUE pathname){
+/*
+ *   Open and activate a print device.
+ *
+ *   **Parameters:**
+ *
+ *   `pathname` :
+ *       Filename for the print device.
+ *
+ *   `beginprint` opens an additional graphics output device. The device type is obtained
+ *   from the given file extension. The following file types are supported:
+ *
+ *   +-------------+---------------------------------------+
+ *   |.ps, .eps    |PostScript                             |
+ *   +-------------+---------------------------------------+
+ *   |.pdf         |Portable Document Format               |
+ *   +-------------+---------------------------------------+
+ *   |.bmp         |Windows Bitmap (BMP)                   |
+ *   +-------------+---------------------------------------+
+ *   |.jpeg, .jpg  |JPEG image file                        |
+ *   +-------------+---------------------------------------+
+ *   |.png         |Portable Network Graphics file (PNG)   |
+ *   +-------------+---------------------------------------+
+ *   |.tiff, .tif  |Tagged Image File Format (TIFF)        |
+ *   +-------------+---------------------------------------+
+ *   |.fig         |Xfig vector graphics file              |
+ *   +-------------+---------------------------------------+
+ *   |.svg         |Scalable Vector Graphics               |
+ *   +-------------+---------------------------------------+
+ *   |.wmf         |Windows Metafile                       |
+ *   +-------------+---------------------------------------+
+ */
+static VALUE beginprint(VALUE self, VALUE pathname){
   char *pathnamec = StringValueCStr(pathname);
   gr_beginprint(pathnamec);
   return Qtrue;
 }
 
-static VALUE beginprintext(VALUE self,VALUE pathname,VALUE mode,VALUE format,VALUE orientation){
+static VALUE beginprintext(VALUE self, VALUE pathname, VALUE mode,
+                           VALUE format, VALUE orientation){
   char *pathnamec = StringValueCStr(pathname);
   char *modec = StringValueCStr(mode);
   char *formatc = StringValueCStr(format);
   char *orientationc = StringValueCStr(orientation);
   gr_beginprintext(pathnamec,modec,formatc,orientationc);
+  
   return Qtrue;
 }
 

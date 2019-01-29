@@ -52,6 +52,13 @@ variable before the example is run.
 Due to nature of a viz library, each Artist tends to have many instance variables
 for storing various kinds of information about the Artist.
 
+## Axis objects
+
+Since the parameters of the both Axis objects (`XAxis` and `YAxis`) can be modified
+by almost any element in the plot (like changing tick labels, positioning, origin, etc.)
+a convention to follow is that a constituent object of the Axis should be modified
+and the corresponding object be placed in the Axis object, which will handle its drawing.
+
 # GR extension notes
 
 ## setwindow and setviewport
