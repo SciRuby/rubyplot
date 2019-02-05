@@ -157,18 +157,18 @@ static VALUE polyline(VALUE self,VALUE x, VALUE y){
   return Qtrue;
 }
 
-static VALUE polymarker(VALUE self,VALUE x, VALUE y){
+static VALUE polymarker(VALUE self,VALUE x, VALUE y) {
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
-  int size = (x_size <= y_size)?x_size:y_size;
+  int size = (x_size <= y_size) ? x_size : y_size;
   double *xc = rb_ar_2_dbl_ar(x);
-  double *yc = rb_ar_2_dbl_ar(y); 
+  double *yc = rb_ar_2_dbl_ar(y);
+  
   gr_polymarker(size,xc,yc);
   return Qtrue;
-
 }
 
-/*
+/**
  *    call-seq:
  *       Rubyplot::GR.text(x, y, text) -> true
  *
@@ -308,6 +308,97 @@ static VALUE inqlinecolorind(VALUE self,VALUE a){
   return Qtrue;
 }
 
+/**
+ *  call-seq:
+ *    Rubyplot::GR.setmarkertype(style) -> true
+ *
+ *    Specifiy the marker type for polymarkers.
+ *
+ *    **Parameters:**
+ *
+ *    `style` :
+ *        The polymarker marker type
+ *
+ *    The available marker types are:
+ *
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_DOT               |    1|Smallest displayable dot                        |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_PLUS              |    2|Plus sign                                       |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_ASTERISK          |    3|Asterisk                                        |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_CIRCLE            |    4|Hollow circle                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_DIAGONAL_CROSS    |    5|Diagonal cross                                  |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_CIRCLE      |   -1|Filled circle                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_TRIANGLE_UP       |   -2|Hollow triangle pointing upward                 |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_TRI_UP      |   -3|Filled triangle pointing upward                 |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_TRIANGLE_DOWN     |   -4|Hollow triangle pointing downward               |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_TRI_DOWN    |   -5|Filled triangle pointing downward               |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SQUARE            |   -6|Hollow square                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_SQUARE      |   -7|Filled square                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_BOWTIE            |   -8|Hollow bowtie                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_BOWTIE      |   -9|Filled bowtie                                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_HGLASS            |  -10|Hollow hourglass                                |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_HGLASS      |  -11|Filled hourglass                                |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_DIAMOND           |  -12|Hollow diamond                                  |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_DIAMOND     |  -13|Filled Diamond                                  |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR              |  -14|Hollow star                                     |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_STAR        |  -15|Filled Star                                     |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_TRI_UP_DOWN       |  -16|Hollow triangles pointing up and down overlaid  |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_TRI_RIGHT   |  -17|Filled triangle point right                     |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID_TRI_LEFT    |  -18|Filled triangle pointing left                   |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_HOLLOW PLUS       |  -19|Hollow plus sign                                |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_SOLID PLUS        |  -20|Solid plus sign                                 |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_PENTAGON          |  -21|Pentagon                                        |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_HEXAGON           |  -22|Hexagon                                         |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_HEPTAGON          |  -23|Heptagon                                        |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_OCTAGON           |  -24|Octagon                                         |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR_4            |  -25|4-pointed star                                  |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR_5            |  -26|5-pointed star (pentagram)                      |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR_6            |  -27|6-pointed star (hexagram)                       |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR_7            |  -28|7-pointed star (heptagram)                      |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_STAR_8            |  -29|8-pointed star (octagram)                       |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_VLINE             |  -30|verical line                                    |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_HLINE             |  -31|horizontal line                                 |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *    |MARKERTYPE_OMARK             |  -32|o-mark                                          |
+ *    +-----------------------------+-----+------------------------------------------------+
+ *
+ *    Polymarkers appear centered over their specified coordinates.
+ */
 static VALUE setmarkertype(VALUE self, VALUE type){
   int typec = NUM2INT(type);
   gr_setmarkertype(typec);
@@ -324,12 +415,20 @@ static VALUE inqmarkertype(VALUE self,VALUE a){
 static VALUE setmarkersize(VALUE self, VALUE size){
   double sizec = NUM2DBL(size);
   gr_setmarkersize(sizec);
+  
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR::setmarkercolorind(color) -> true
+ *
+ * 
+ */
 static VALUE setmarkercolorind(VALUE self,VALUE color){
   double colorc = NUM2INT(color);
   gr_setmarkercolorind(colorc);
+
   return Qtrue;
 }
 
@@ -967,10 +1066,21 @@ static VALUE inqcolor(VALUE self,VALUE a,VALUE b){
   return Qtrue;
 }
 
-static VALUE inqcolorfromrgb(VALUE self,VALUE a,VALUE b,VALUE c){
-  double ac = NUM2DBL(a);
-  double bc = NUM2DBL(b);
-  double cc = NUM2DBL(c);
+/**
+ * call-seq:
+ *   Rubyplot::GR.inqcolorfromrgb(r, g, b) -> color_index
+ *
+ * Get a GR-compatible color index from RGB color values.
+ * 
+ * Arguments:
+ * * `r` - Value between 0-255 representing red.
+ * * `g` - Value between 0-255 representing green.
+ * * `b` - Value between 0-255 representing blue.
+ */
+static VALUE inqcolorfromrgb(VALUE self,VALUE r,VALUE g,VALUE b){
+  double ac = NUM2DBL(r);
+  double bc = NUM2DBL(g);
+  double cc = NUM2DBL(b);
   return INT2NUM(gr_inqcolorfromrgb(ac,bc,cc));
 }
 
@@ -992,7 +1102,7 @@ static VALUE hsvtorgb(VALUE self,VALUE h,VALUE s,VALUE v ,VALUE r,VALUE g,VALUE 
  * Return a tick unit that evenly divides into the difference between the maximum
  * and minimum values.
  */
-static VALUE tick(VALUE self,VALUE amin,VALUE amax){
+static VALUE tick(VALUE self,VALUE amin,VALUE amax) {
   double ac = NUM2DBL(amin);
   double bc = NUM2DBL(amax);
   

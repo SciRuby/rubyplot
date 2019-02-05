@@ -6,6 +6,15 @@ module Rubyplot
     # since in GR there is no one-one mapping between Rubyplot artists and things
     # that are to be drawn on the backend.
     class GRWrapper < Base
+      # Mapping Rubyplot markers to GR marker constants.
+      MARKER_MAP = {
+        dot: GR::MARKERTYPE_DOT,
+        plus: GR::MARKERTYPE_PLUS,
+        asterisk: GR::MARKERTYPE_ASTERISK,
+        circle: GR::MARKERTYPE_CIRCLE,
+        diagonal_cross: GR::MARKERTYPE_DIAGONAL_CROSS
+      }.freeze
+      
       def initialize
         @axes_maps = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
@@ -38,6 +47,21 @@ module Rubyplot
           y_major_ticks: major_ticks,
           y_major_ticks_count: major_ticks_count
         }
+      end
+      
+      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+        within_window do
+          rgb = Rubyplot::Color::COLOR_INDEX[marker_color].match(/#(..)(..)(..)/)
+          GR.setmarkercolorind(
+            GR.inqcolorfromrgb(
+              rgb[1].hex.to_f/255.0,
+              rgb[2].hex.to_f/255.0,
+              rgb[3].hex.to_f/255.0)
+          )
+          GR.setmarkersize(1)
+          GR.setmarkertype(MARKER_MAP[marker_type])
+          GR.polymarker(x, y)
+        end
       end
 
       def draw_text(text,font_color:,font: nil,font_size:,

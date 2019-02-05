@@ -7,22 +7,38 @@ module Rubyplot
 
         def initialize(*)
           super
-          @circle_radius = 4.0
+          @marker_size = 1.0
+          @marker_type = :circle
+          @marker_color = :black
+        end
+
+        def marker_size= marker_size
+          @marker_size = marker_size
+        end
+
+        # Set a symbol as the marker type for this plot. Should be one from
+        # Rubyplot::MARKER_TYPES.
+        #
+        # @param marker_type [Symbol] Name of the marker to be used.
+        def marker_type= marker_type
+          @marker_type = marker_type
+        end
+
+        # Set a color from Rubyplot::Color::COLOR_INDEX as the color.
+        #
+        # @param marker_color [Symbol] Name of the color.
+        def marker_color= marker_color
+          @marker_color = marker_color
         end
 
         def draw
-          @normalized_data[:y_values].each_with_index do |iy, idx_y|
-            ix = @normalized_data[:x_values][idx_y]
-            next if iy.nil? || ix.nil?
-
-            abs_x = ix * @axes.x_axis.length + @axes.origin[0]
-            abs_y = iy * @axes.y_axis.length + @axes.origin[1]
-            Rubyplot::Artist::Circle.new(
-              self, abs_x: abs_x, abs_y: abs_y, radius: @circle_radius,
-              stroke_opacity: @stroke_opacity,
-              stroke_width: @stroke_width
-            ).draw
-          end
+          Rubyplot.backend.draw_markers(
+            x: @data[:x_values],
+            y: @data[:y_values],
+            marker_type: @marker_type,
+            marker_color: @marker_color,
+            marker_size: @marker_size
+          )
         end
       end # class Scatter
     end # module Plot

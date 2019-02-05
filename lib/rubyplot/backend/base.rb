@@ -1,5 +1,6 @@
 module Rubyplot
   module Backend
+    # Base class for backend. A new backend should implement all the below methods.
     class Base
       # Total height and width of the canvas in pixels.
       attr_accessor :canvas_height, :canvas_width
@@ -31,6 +32,7 @@ module Rubyplot
       # @param marker_color [Symbol] A color from Rubyplot::Color.
       # @param marker_size [Numeric] Size of the marker.
       def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+        raise NotImplementedError, "not implemented for #{self}."
       end
     end # class Base
   end # module Backend

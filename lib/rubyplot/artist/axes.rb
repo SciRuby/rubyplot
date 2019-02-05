@@ -267,7 +267,7 @@ module Rubyplot
         @y_axis.draw
         @texts.each(&:draw)
         @legend_box.draw
-        #@plots.each(&:draw)
+        @plots.each(&:draw)
       end
 
       def consolidate_plots
