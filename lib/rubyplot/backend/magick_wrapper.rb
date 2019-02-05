@@ -56,15 +56,15 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       # Unused method argument - stroke
-      def draw_text(text,font_color:,font: nil,pointsize:,
+      def draw_text(text,font_color:,font: nil,font_size:,
                     font_weight: Magick::NormalWeight, gravity: nil,
-        x:,y:,rotation: nil, stroke: 'transparent')
+                    x:,y:,rotation: nil, stroke: 'transparent')
         x = transform_x x
         y = transform_y y
         
         @draw.fill = font_color
         @draw.font = font if font
-        @draw.pointsize = pointsize
+        @draw.font_size = font_size
         @draw.font_weight = font_weight
         @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.stroke stroke

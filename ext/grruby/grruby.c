@@ -467,10 +467,10 @@ static VALUE setcolorrep(VALUE self,VALUE index,VALUE red,VALUE green,VALUE blue
  *
  * Set a window or rectangular subspace of world co-ordinates to be plotted.
  *
- * xmin [Float] :  
- * xmax [Float] :
- * ymin [Float] :
- * ymax [Float] :
+ * xmin [Numeric] : Minimum value of X data in this window.
+ * xmax [Numeric] : Maximum value of X data in this window.
+ * ymin [Numeric] : Minimum value of Y data in this window. 
+ * ymax [Numeric] : Maximum value of Y data in this window.
  *
  */
 static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax) {
@@ -769,27 +769,39 @@ static VALUE inqtextext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e){
  *
  */
 static VALUE axes(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
-                  VALUE y_org, VALUE major_x, VALUE major_y, VALUE tick_size){
+                  VALUE y_org, VALUE major_x, VALUE major_y, VALUE tick_size) {
   double x_tickc = NUM2DBL(x_tick);
   double y_tickc = NUM2DBL(y_tick);
-  double x_orgc=NUM2DBL(x_org);
-  double y_orgc=NUM2DBL(y_org);
-  int major_xc=NUM2INT(major_x);
-  int major_yc=NUM2INT(major_y);
+  double x_orgc  = NUM2DBL(x_org);
+  double y_orgc  = NUM2DBL(y_org);
+  int major_xc   = NUM2INT(major_x);
+  int major_yc   = NUM2INT(major_y);
   double tick_sizec=NUM2DBL(tick_size);
   
-  gr_axes(x_tickc,y_tickc,x_orgc,y_orgc,major_xc,major_yc,tick_sizec);
+  gr_axes(x_tickc, y_tickc, x_orgc,y_orgc,major_xc,major_yc,tick_sizec);
   
   return Qtrue;
 }
 
-/* figure this one
-static VALUE axeslbl(VALUE self,VALUE,VALUE,VALUE,VALUE,VALUE,VALUE,VALUE,VALUE){
+/* call-seq:
+ *    Rubyplot::GR.axeslbl(x_tick, y_tick, x_org, y_org, major_x, major_y, tick_size,
+ *       fpx, fpy) -> true 
+ *
+ * Similar to axes() but allows more fine grained control over tick labels and
+ * text positioning.
+ * 
+ *
+ * References:
+ *   http://clalance.blogspot.com/2011/01/writing-ruby-extensions-in-c-part-11.html
+ */
+static VALUE axeslbl(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
+                     VALUE y_org, VALUE major_x, VALUE major_y ,VALUE tick_size,
+                     VALUE fpx, VALUE fpy) {
   return Qtrue;
 }
-*/
 
-static VALUE grid(VALUE self,VALUE x_tick,VALUE y_tick,VALUE x_org,VALUE y_org,VALUE major_x,VALUE major_y){
+static VALUE grid(VALUE self,VALUE x_tick,VALUE y_tick,VALUE x_org,VALUE y_org,
+                  VALUE major_x,VALUE major_y) {
   double x_tickc = NUM2DBL(x_tick);
   double y_tickc = NUM2DBL(y_tick);
   double x_orgc = NUM2DBL(x_org);
@@ -1084,6 +1096,20 @@ static VALUE wc3towc(VALUE self,VALUE a,VALUE b,VALUE c){
   return Qtrue;
 }
 
+/*
+* Draw a rectangle using the current line attributes.
+* 
+* **Parameters:**
+* 
+* `xmin` :
+*   Lower left edge of the rectangle
+* `xmax` :
+*   Lower right edge of the rectangle
+* `ymin` :
+*   Upper left edge of the rectangle
+* `ymax` :
+*   Upper right edge of the rectangle
+*/
 static VALUE drawrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
@@ -1093,6 +1119,20 @@ static VALUE drawrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
   return Qtrue;
 }
 
+/*
+ * Draw a filled rectangle using the current fill attributes.
+ * 
+ * **Parameters:**
+ * 
+ * `xmin` :
+ *   Lower left edge of the rectangle
+ * `xmax` :
+ *   Lower right edge of the rectangle
+ * `ymin` :
+ *   Upper left edge of the rectangle
+ * `ymax` :
+ *   Upper right edge of the rectangle
+ */
 static VALUE fillrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);

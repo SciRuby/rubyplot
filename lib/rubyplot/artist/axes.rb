@@ -19,7 +19,7 @@ module Rubyplot
       attr_reader :x_axis
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
-      # Array denoting co-ordinates in pixels of the origin of X and Y axes.
+      # Array denoting co-ordinates of the origin of X and Y axes. [x, y].
       attr_accessor :origin
       # Position of the legend box.
       attr_accessor :legend_box_position
@@ -238,7 +238,7 @@ module Rubyplot
           @title, self,
           abs_x: abs_x + width / 2, abs_y: abs_y + height - @title_margin,
           font: @font, color: @font_color,
-          pointsize: @title_font_size, internal_label: 'axes title.')
+          font_size: @title_font_size, internal_label: 'axes title.')
       end
 
       def calculate_xy_axes_origin
@@ -267,7 +267,7 @@ module Rubyplot
         @y_axis.draw
         @texts.each(&:draw)
         @legend_box.draw
-        @plots.each(&:draw)
+        #@plots.each(&:draw)
       end
 
       def consolidate_plots

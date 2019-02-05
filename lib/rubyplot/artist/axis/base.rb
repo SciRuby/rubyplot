@@ -7,16 +7,18 @@ module Rubyplot
 
         # Array of Rubyplot::XTick objects representing major ticks.
         attr_accessor :major_ticks
-        # Number of ticks to be plotted.
+        # Number of major ticks to be plotted.
         attr_reader :major_ticks_count
+        attr_accessor :minor_ticks # TODO
+        # Number of minor ticks between each major tick.
+        attr_reader :minor_ticks_count
         # Title (or label) given to this Axis.
         attr_accessor :title
         # The minimum value that this Axis contains.
         attr_accessor :min_val
         # The maximum value that this Axis contains.
         attr_accessor :max_val
-        attr_accessor :minor_ticks # TODO
-        attr_reader :abs_x1, :abs_x2, :abs_y1, :abs_y2, :length
+
         attr_reader :stroke_width
 
         def initialize axes
@@ -26,6 +28,7 @@ module Rubyplot
           @max_val = nil
           @stroke_width = 0.125
           @major_ticks_count = 5
+          @minor_ticks_count = 2
           @texts = []
           @lines = []
           @major_ticks = nil
@@ -34,14 +37,6 @@ module Rubyplot
 
         def spread
           (@max_val - @min_val).abs
-        end
-
-        def draw
-          configure_title
-          configure_axis_line
-          @lines.each(&:draw)
-          @texts.each(&:draw)
-          @major_ticks.each(&:draw)
         end
       end # class Base
     end # class Axis

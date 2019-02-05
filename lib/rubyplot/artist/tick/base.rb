@@ -11,6 +11,8 @@ module Rubyplot
         attr_reader :label
         attr_reader :tick_opacity
         attr_reader :tick_width
+        # Tick length between Rubyplot::MIN_* and MAX_*.
+        attr_reader :length
 
         # @param owner [Rubyplot::Artist] Artist that owns this tick.
         # @param coord [Numeric] Co-ordinate value of this tick on the Axis.
@@ -18,10 +20,9 @@ module Rubyplot
         # @param label [String] Label below the tick.
         # @param label_distance [Integer] Distance between the label and tick.
         # @param tick_opacity [Float] Number describing the opacity of the tick drawn. 0-1.0.
-
         # rubocop:disable Metrics/ParameterLists
         def initialize(owner,coord:,length: nil,label:,label_distance: nil,
-                       tick_opacity: 0.0,tick_width: 1.0)
+          tick_opacity: 0.0,tick_width: 1.0)
           @owner = owner
           @coord = coord
           @length = length || DEFAULT_MAJOR_TICK_LENGTH

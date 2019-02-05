@@ -8,6 +8,8 @@ SPEC_ROOT = File.dirname(__FILE__) + "/"
 TEMP_DIR = SPEC_ROOT + "temp/"
 FIXTURES_DIR = SPEC_ROOT + "fixtures/"
 
+ENV['GRDIR'] = "/home/sameer/Downloads/gr"
+ENV['GKS_FONTPATH'] = "/home/sameer/Downloads/gr"
 Rubyplot.set_backend :gr
 
 RSpec::Matchers.define :eq_image do |expected_image, delta|

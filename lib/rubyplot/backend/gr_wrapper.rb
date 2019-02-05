@@ -16,7 +16,8 @@ module Rubyplot
 
       # Draw X axis for the currently selected Axes.
       #
-      # @param minor_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects.
+      # @param minor_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects representing
+      #   minor ticks.
       # @param origin [Numeric] X co-ordinate value that is the origin of the X axis.
       # @param major_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects representing
       #  major ticks.
@@ -40,7 +41,14 @@ module Rubyplot
         }
       end
 
-      def draw_text
+      def draw_text(text,font_color:,font: nil,font_size:,
+        font_weight: nil, gravity: nil,
+        x:,y:,rotation: nil, stroke: nil)
+        
+      end
+
+      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,stroke: nil,
+        fill_color: nil, stroke_width: nil)
         
       end
 
@@ -54,11 +62,12 @@ module Rubyplot
 
       def init_output_device file_name
         @file_name = file_name
-        Rubyplot::GR.beginprint file_name
+        Rubyplot::GR.clearws
       end
 
       def stop_output_device
-        Rubyplot::GR.endprint
+        Rubyplot::GR.updatews
+        sleep(10)
       end
 
       def write file_name
@@ -67,31 +76,56 @@ module Rubyplot
 
       private
 
+      # Transform a X quantity to Normalized Device Co-ordinates.
+      def transform_x_ndc coord
+        coord / @xspread
+      end
+
+      # Transform a Y quantity to Normalized Device Co-ordinates.
+      def transform_y_ndc coord
+        coord / @yspread
+      end
+
+      # Transform a quanitity that represents neither X nor Y co-ordinate into NDC.
+      def transform_avg_ndc coord
+        coord / ((@xspread + @yspread) / 2)
+      end
+
       # Set the window on the canvas within which the plotting will take place
       # and then call the passed block for actual plotting.
       def within_window &block
-        vp_min_x = (@active_axes.abs_x + @active_axes.left_spacing) / @xspread
-        vp_min_y = (@active_axes.abs_y + @active_axes.bottom_spacing) / @yspread
+        vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / @xspread
+        vp_min_y = (@active_axes.abs_y + @active_axes.bottom_margin) / @yspread
         vp_max_x = (@active_axes.abs_x + @active_axes.width -
-          @active_axes.right_spacing) / @xspread
+          @active_axes.right_margin) / @xspread
         vp_max_y = (@active_axes.abs_y + @active_axes.height -
-          @active_axes.top_spacing) / @yspread
+          @active_axes.top_margin) / @yspread
         
-        Rubyplot::GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
-        Rubyplot::GR.setwindow(
-          @active_axes.xrange[0],
-          @active_axes.xrange[1],
-          @active_axes.yrange[0],
-          @active_axes.yrange[1]
+        GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
+        GR.setwindow(
+          @active_axes.x_range[0],
+          @active_axes.x_range[1],
+          @active_axes.y_range[0],
+          @active_axes.y_range[1]
         )
         block.call
       end
 
       def draw_axes
-        @axes_maps.each do |k, v|
-          @active_axes = k
+        @axes_maps.each do |axes, v|
+          tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
           within_window do
-            # Call Rubyplot::GR.axes with whatever args.
+            GR.axes(
+              (axes.x_axis.spread / axes.x_axis.major_ticks_count.to_f) /
+                axes.x_axis.minor_ticks_count,
+              (axes.y_axis.spread / axes.y_axis.major_ticks_count.to_f) /
+                axes.y_axis.minor_ticks_count,
+              axes.origin[0],
+              axes.origin[1],
+              axes.x_axis.minor_ticks_count,
+              axes.y_axis.minor_ticks_count,
+              -tick_length
+            )
           end
         end
       end

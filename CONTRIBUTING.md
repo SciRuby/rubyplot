@@ -85,3 +85,26 @@ The implication on rubyplot would be that an `Axes` within a `Figure` would get 
 to a `viewport` and the plotting within the viewport would take place by setting up the
 world co-ordinates to between the X and Y range.
 
+## GR binaries
+
+GR uses certain environment variables for working with fonts and searching the GR shared
+object binary. They are:
+
+### GRDIR
+Directory to which GR is installed. Should contain files in the standard structure. Example:
+```
+export GRDIR="/home/sameer/gr"
+```
+
+### GKS\_WSTYPE
+Type of output that you wish from the workspace. Set to `png` for PNG output.
+Example:
+```
+export GKS_WSTYPE=png
+```
+
+### GKS\_FILEPATH
+Name of output file in case of wanting to write to file.
+```
+export GKS_FILEPATH="hello.png"
+```

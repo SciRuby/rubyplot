@@ -2,12 +2,12 @@ module Rubyplot
   module Artist
     class Text < Artist::Base
       # (X,Y) of upper left corner of the rectangle.
-      attr_reader :color, :font, :pointsize,
+      attr_reader :color, :font, :font_size,
         :stroke, :weight, :gravity, :text, :backend
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(text, owner, abs_x:, abs_y:,font: nil,
-                     color: '#000000',pointsize:,stroke: 'transparent',
+                     color: '#000000',font_size:,stroke: 'transparent',
                      internal_label: '', rotation: nil,
                      weight: nil, gravity: nil)
         super(abs_x, abs_y)
@@ -15,7 +15,7 @@ module Rubyplot
         @owner = owner
         @font = font
         @color = color
-        @pointsize = pointsize
+        @font_size = font_size
         @stroke = stroke
         @internal_label = internal_label
         @rotation = rotation
@@ -37,7 +37,7 @@ module Rubyplot
           @text,
           font_color: @color,
           font: @font,
-          pointsize: @pointsize,
+          font_size: @font_size,
           stroke: @stroke,
           x: @abs_x,
           y: @abs_y,

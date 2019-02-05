@@ -8,7 +8,7 @@ module Rubyplot
         #   @owner,
         #   abs_x: @abs_x - 2,
         #   abs_y: @abs_y - (@length + @label_distance),
-        #   pointsize: @owner.marker_font_size
+        #   font_size: @owner.marker_font_size
         # )
       end
 

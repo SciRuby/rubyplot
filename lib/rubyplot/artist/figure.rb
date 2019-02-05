@@ -95,6 +95,7 @@ module Rubyplot
         Rubyplot.backend.figure = self
         Rubyplot.backend.init_output_device(file_name) if output
         @subplots.each { |i| i.each(&:draw) }
+        Rubyplot.backend.write file_name
         Rubyplot.backend.stop_output_device if output
       end
 
