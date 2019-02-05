@@ -27,6 +27,7 @@ Deadline: 15 April 2019
 
 * Support atleast 3 new kinds of plots.
 * Move from using Ruby Arrays to a typed-array based system.
+* Support for iruby notebook (Jupyter).
 
 # Long term vision
 Rubyplot's long term vision, by priority:
@@ -34,7 +35,7 @@ Rubyplot's long term vision, by priority:
 * Integrate the Rubyplot interface with the GR framework.
 * Generate various types of publication quality plots.
 * Interactive plotting using QT/GTK.
-* Interactive or static plots for web backend.
+* Integrate with bokehjs (or some other web framework) for plotting in the web browser.
 
 # Release cycle
 

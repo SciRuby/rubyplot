@@ -21,10 +21,6 @@ module Rubyplot
       attr_reader :y_axis
       # Array denoting co-ordinates in pixels of the origin of X and Y axes.
       attr_accessor :origin
-      # Number of X ticks.
-      attr_accessor :num_x_ticks
-      # Number of Y ticks.
-      attr_accessor :num_y_ticks
       # Position of the legend box.
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
@@ -95,8 +91,6 @@ module Rubyplot
         @origin = nil
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
-        @num_x_ticks = 5
-        @num_y_ticks = 4
         @legend_box_position = :top
       end
 
@@ -203,11 +197,10 @@ module Rubyplot
       end
 
       def assign_x_ticks
-        @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
-        unless @x_axis.major_ticks
-          value_distance = (@x_range[1] - @x_range[0]) / (@num_x_ticks.to_f - 1)
-          @x_axis.major_ticks = @num_x_ticks.times.map do |i|
-            @x_range[0] + i * value_distance
+        value_distance = @x_axis.spread / (@x_axis.major_ticks_count.to_f - 1)
+        unless @x_axis.major_ticks # create labels if not present
+          @x_axis.major_ticks = @x_axis.major_ticks_count.times.map do |i|
+            @x_axis.min_val + i * value_distance
           end
         end
 
@@ -215,8 +208,7 @@ module Rubyplot
           @x_axis.major_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::XTick.new(
               self,
-              abs_x: i * @inter_x_ticks_distance + @x_axis.abs_x1,
-              abs_y: @origin[1],
+              coord: i * value_distance + @x_axis.min_val,
               label: Rubyplot::Utils.format_label(tick_label)
             )
           end
@@ -224,17 +216,16 @@ module Rubyplot
       end
 
       def assign_y_ticks
+        value_distance = @y_axis.spread / (@y_axis.major_ticks_count.to_f-1)
         unless @y_axis.major_ticks
-          val_distance = (@y_range[1] - @y_range[0]).abs / (@num_y_ticks.to_f-1)
-          @y_axis.major_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
+          @y_axis.major_ticks = (@y_range[0]..@y_range[1]).step(value_distance).map { |i| i }
         end
+        
         unless @y_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
-          inter_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
           @y_axis.major_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::YTick.new(
               self,
-              abs_x: @origin[0],
-              abs_y: @y_axis.abs_y1 + (i * inter_ticks_distance),
+              coord: @y_axis.min_val + i * value_distance,
               label: Rubyplot::Utils.format_label(tick_label)
             )
           end

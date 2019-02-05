@@ -8,7 +8,7 @@ SPEC_ROOT = File.dirname(__FILE__) + "/"
 TEMP_DIR = SPEC_ROOT + "temp/"
 FIXTURES_DIR = SPEC_ROOT + "fixtures/"
 
-Rubyplot.set_backend :magick
+Rubyplot.set_backend :gr
 
 RSpec::Matchers.define :eq_image do |expected_image, delta|
   compared_delta = 0

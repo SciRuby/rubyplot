@@ -3,13 +3,13 @@ module Rubyplot
     class YTick < Tick::Base
       def initialize(*)
         super
-        @label = Rubyplot::Artist::Text.new(
-          @label_text.to_s,
-          @owner,
-          abs_x: @abs_x - @label_distance*2,
-          abs_y: @abs_y - @length,
-          pointsize: @owner.marker_font_size,
-        )
+        # @label = Rubyplot::Artist::Text.new(
+        #   @label_text.to_s,
+        #   @owner,
+        #   abs_x: @abs_x - @label_distance*2,
+        #   abs_y: @abs_y - @length,
+        #   pointsize: @owner.marker_font_size,
+        # )
       end
 
       def draw

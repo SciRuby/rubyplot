@@ -15,22 +15,28 @@ module Rubyplot
       end
 
       # Draw X axis for the currently selected Axes.
-      def draw_x_axis(minor_ticks:, origin:, major_ticks:, tick_size:)
+      #
+      # @param minor_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects.
+      # @param origin [Numeric] X co-ordinate value that is the origin of the X axis.
+      # @param major_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects representing
+      #  major ticks.
+      # @param major_ticks_count [Integer] Number of major ticks to plot.
+      def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
         @axes_maps[@active_axes] = {
           x_minor_ticks: minor_ticks,
           x_origin: origin,
           x_major_ticks: major_ticks,
-          x_tick_size: tick_size
+          x_major_ticks_count: major_ticks_count
         }
       end
 
       # Draw Y axis for currently selected Axes.
-      def draw_y_axis(minor_ticks:, origin:, major_ticks:, tick_size:)
+      def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
         @axes_maps[@active_axes] = {
           y_minor_ticks: minor_ticks,
           y_origin: origin,
           y_major_ticks: major_ticks,
-          y_tick_size: tick_size
+          y_major_ticks_count: major_ticks_count
         }
       end
 

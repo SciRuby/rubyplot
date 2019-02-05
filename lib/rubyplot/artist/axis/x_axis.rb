@@ -5,14 +5,19 @@ module Rubyplot
     class XAxis < Axis::Base
       def initialize axes
         super
-        @abs_x1 = @axes.origin[0]
-        @abs_x2 = @axes.abs_x + @axes.width - @axes.right_margin
-        @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
-        @length = (@abs_x2 - @abs_x1).abs
+        # @abs_x1 = @axes.origin[0]
+        # @abs_x2 = @axes.abs_x + @axes.width - @axes.right_margin
+        # @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
+        #@length = (@abs_x2 - @abs_x1).abs
       end
 
       def draw
-        Rubyplot.backend.draw_x_axis()
+        Rubyplot.backend.draw_x_axis(
+          origin: @axes.origin[0],
+          major_ticks: @major_ticks,
+          minor_ticks: @minor_ticks,
+          major_ticks_count: @major_ticks_count
+        )
       end
 
       private

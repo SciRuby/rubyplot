@@ -3,10 +3,19 @@ module Rubyplot
     class YAxis < Axis::Base
       def initialize(*)
         super
-        @abs_y1 = @axes.origin[1]
-        @abs_y2 = @axes.origin[1] + (@axes.height - @axes.top_margin)
+        # @abs_y1 = @axes.origin[1]
+        # @abs_y2 = @axes.origin[1] + (@axes.height - @axes.top_margin)
         @y_ticks = []
-        @length = (@abs_y1 - @abs_y2).abs
+        #@length = (@abs_y1 - @abs_y2).abs
+      end
+
+      def draw
+        Rubyplot.backend.draw_y_axis(
+          origin: @axes.origin[1],
+          major_ticks: @major_ticks,
+          minor_ticks: @minor_ticks,
+          major_ticks_count: @major_ticks_count 
+        )
       end
 
       private
