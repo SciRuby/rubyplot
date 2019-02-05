@@ -3,7 +3,7 @@ An advanced plotting library for Ruby.
 
 **Rubyplot aims to be the most advanced visualization solution for Rubyists.**
 
-It aims to allow you to visualize anything, anywhere with a simple, Ruby-like API.
+It aims to allow you to visualize anything, anywhere with a flexible, extensible, Ruby-like API.
 
 # Roadmap by priority
 The release schedule and feature roadmap is as follows. Check issues labelled with

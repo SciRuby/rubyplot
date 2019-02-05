@@ -13,6 +13,9 @@ require 'rubyplot/subplot'
 require 'rubyplot/spi'
 
 module Rubyplot
+  MARKERS = {
+    
+  }
   # Min. co-ordinates of the lower left corner.
   MIN_X = 0
   MIN_Y = 0

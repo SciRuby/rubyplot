@@ -22,6 +22,16 @@ module Rubyplot
         fill_color: nil, stroke_width: nil)
         raise NotImplementedError, "not implemented for #{self}."
       end
+
+      # Draw multiple markers as specified by co-ordinates.
+      #
+      # @param x [[Numeric]] Array of X co-ordinates.
+      # @param y [[Numeric]] Array of Y co-ordinates.
+      # @param marker_type [Symbol] A marker type from Rubyplot::MARKERS.
+      # @param marker_color [Symbol] A color from Rubyplot::Color.
+      # @param marker_size [Numeric] Size of the marker.
+      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+      end
     end # class Base
   end # module Backend
 end # module Rubyplot

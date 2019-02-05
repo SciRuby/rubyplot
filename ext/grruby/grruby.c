@@ -812,7 +812,8 @@ static VALUE grid(VALUE self,VALUE x_tick,VALUE y_tick,VALUE x_org,VALUE y_org,
   return Qtrue;
 }
 
-static VALUE grid3d(VALUE self,VALUE x_tick,VALUE y_tick,VALUE z_tick,VALUE x_org,VALUE y_org,VALUE z_org,VALUE major_x,VALUE major_y,VALUE major_z){
+static VALUE grid3d(VALUE self,VALUE x_tick,VALUE y_tick,VALUE z_tick,VALUE x_org,
+                    VALUE y_org,VALUE z_org,VALUE major_x,VALUE major_y,VALUE major_z) {
   double x_tickc = NUM2DBL(x_tick);
   double y_tickc = NUM2DBL(y_tick);
   double z_tickc = NUM2DBL(z_tick);
@@ -984,9 +985,17 @@ static VALUE hsvtorgb(VALUE self,VALUE h,VALUE s,VALUE v ,VALUE r,VALUE g,VALUE 
   return Qtrue;
 }
 
-static VALUE tick(VALUE self,VALUE a,VALUE b){
-  double ac = NUM2DBL(a);
-  double bc = NUM2DBL(b);
+/*
+ * call-seq:
+ *   Rubyplot::GR.tick(amin, amax) -> Numeric
+ *
+ * Return a tick unit that evenly divides into the difference between the maximum
+ * and minimum values.
+ */
+static VALUE tick(VALUE self,VALUE amin,VALUE amax){
+  double ac = NUM2DBL(amin);
+  double bc = NUM2DBL(amax);
+  
   return DBL2NUM(gr_tick(ac,bc));
 }
 
@@ -1408,10 +1417,12 @@ static VALUE version(VALUE self){
 
 void Init_grruby()
 {
+  /* Module definitions. */
   VALUE mRubyplot = rb_define_module("Rubyplot");
   VALUE mGRruby  = rb_define_module_under(mRubyplot, "GR");
   VALUE mGR3ruby = rb_define_module_under(mRubyplot, "GR3");
 
+  /* Function definitions. */
   rb_define_singleton_method(mGRruby,"opengks",opengks,0);
   rb_define_singleton_method(mGRruby,"closegks",closegks,0);
   rb_define_singleton_method(mGRruby,"inqdspsize",inqdspsize,4);
@@ -1537,4 +1548,93 @@ void Init_grruby()
   rb_define_singleton_method(mGRruby,"gradient",gradient,7);
   rb_define_singleton_method(mGRruby,"quiver",quiver,7);
   rb_define_singleton_method(mGRruby,"version",version,0);
+
+  /* Constants */
+  rb_define_const(mGRruby, "FONT_TIMES_ROMAN", DBL2NUM(101));
+  rb_define_const(mGRruby, "FONT_TIMES_ITALIC", DBL2NUM(102));
+  rb_define_const(mGRruby, "FONT_TIMES_BOLD", DBL2NUM(103));
+  rb_define_const(mGRruby, "FONT_TIMES_BOLD_ITALIC", DBL2NUM(104));
+  rb_define_const(mGRruby, "FONT_HELVETICA", DBL2NUM(105));
+  rb_define_const(mGRruby, "FONT_HELVETICA_OBLIQUE", DBL2NUM(106));
+  rb_define_const(mGRruby, "FONT_HELVETICA_BOLD", DBL2NUM(107));
+  rb_define_const(mGRruby, "FONT_HELVETICA_BOLD_OBLIQUE", DBL2NUM(108));
+  rb_define_const(mGRruby, "FONT_COURIER", DBL2NUM(109));
+  rb_define_const(mGRruby, "FONT_COURIER_OBLIQUE", DBL2NUM(110));
+  rb_define_const(mGRruby, "FONT_COURIER_BOLD", DBL2NUM(111));
+  rb_define_const(mGRruby, "FONT_COURIER_BOLD_OBLIQUE", DBL2NUM(112));
+  rb_define_const(mGRruby, "FONT_SYMBOL", DBL2NUM(113));
+  rb_define_const(mGRruby, "FONT_BOOKMAN_LIGHT", DBL2NUM(114));
+  rb_define_const(mGRruby, "FONT_BOOKMAN_LIGHT_ITALIC", DBL2NUM(115));
+  rb_define_const(mGRruby, "FONT_BOOKMAN_DEMI", DBL2NUM(116));
+  rb_define_const(mGRruby, "FONT_BOOKMAN_DEMI_ITALIC", DBL2NUM(117));
+  rb_define_const(mGRruby, "FONT_NEWCENTURYSCHLBK_ROMAN", DBL2NUM(118));
+  rb_define_const(mGRruby, "FONT_NEWCENTURYSCHLBK_ITALIC", DBL2NUM(119));
+  rb_define_const(mGRruby, "FONT_NEWCENTURYSCHLBK_BOLD", DBL2NUM(120));
+  rb_define_const(mGRruby, "FONT_NEWCENTURYSCHLBK_BOLD_ITALIC", DBL2NUM(121));
+  rb_define_const(mGRruby, "FONT_AVANTGARDE_BOOK", DBL2NUM(122));
+  rb_define_const(mGRruby, "FONT_AVANTGARDE_BOOK_OBLIQUE", DBL2NUM(123));
+  rb_define_const(mGRruby, "FONT_AVANTGARDE_DEMI", DBL2NUM(124));
+  rb_define_const(mGRruby, "FONT_AVANTGARDE_DEMI_OBLIQUE", DBL2NUM(125));
+  rb_define_const(mGRruby, "FONT_PALATINO_ROMAN", DBL2NUM(126));
+  rb_define_const(mGRruby, "FONT_PALATINO_ITALIC", DBL2NUM(127));
+  rb_define_const(mGRruby, "FONT_PALATINO_BOLD", DBL2NUM(128));
+  rb_define_const(mGRruby, "FONT_PALATINO_BOLD_ITALIC", DBL2NUM(129));
+  rb_define_const(mGRruby, "FONT_ZAPFCHANCERY_MEDIUM_ITALIC", DBL2NUM(130));
+  rb_define_const(mGRruby, "FONT_ZAPFDINGBATS", DBL2NUM(131));
+  rb_define_const(mGRruby, "TEXT_PRECISION_STRING", DBL2NUM(0));
+  rb_define_const(mGRruby, "TEXT_PRECISION_CHAR", DBL2NUM(1));
+  rb_define_const(mGRruby, "TEXT_PRECISION_STROKE", DBL2NUM(2));
+  rb_define_const(mGRruby, "MARKERTYPE_DOT", DBL2NUM(1));
+  rb_define_const(mGRruby, "MARKERTYPE_PLUS", DBL2NUM(2));
+  rb_define_const(mGRruby, "MARKERTYPE_ASTERISK", DBL2NUM(3));
+  rb_define_const(mGRruby, "MARKERTYPE_CIRCLE", DBL2NUM(4));
+  rb_define_const(mGRruby, "MARKERTYPE_DIAGONAL_CROSS", DBL2NUM(5));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_CIRCLE", DBL2NUM(-1));
+  rb_define_const(mGRruby, "MARKERTYPE_TRIANGLE_UP", DBL2NUM(-2));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_TRI_UP", DBL2NUM(-3));
+  rb_define_const(mGRruby, "MARKERTYPE_TRIANGLE_DOWN", DBL2NUM(-4));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_TRI_DOWN", DBL2NUM(-5));
+  rb_define_const(mGRruby, "MARKERTYPE_SQUARE", DBL2NUM(-6));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_SQUARE", DBL2NUM(-7));
+  rb_define_const(mGRruby, "MARKERTYPE_BOWTIE", DBL2NUM(-8));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_BOWTIE", DBL2NUM(-9));
+  rb_define_const(mGRruby, "MARKERTYPE_HGLASS", DBL2NUM(-10));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_HGLASS", DBL2NUM(-11));
+  rb_define_const(mGRruby, "MARKERTYPE_DIAMOND", DBL2NUM(-12));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_DIAMOND", DBL2NUM(-13));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR", DBL2NUM(-14));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_STAR", DBL2NUM(-15));
+  rb_define_const(mGRruby, "MARKERTYPE_TRI_UP_DOWN", DBL2NUM(-16));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_TRI_RIGHT", DBL2NUM(-17));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_TRI_LEFT", DBL2NUM(-18));
+  rb_define_const(mGRruby, "MARKERTYPE_HOLLOW_PLUS", DBL2NUM(-19));
+  rb_define_const(mGRruby, "MARKERTYPE_SOLID_PLUS", DBL2NUM(-20));
+  rb_define_const(mGRruby, "MARKERTYPE_PENTAGON", DBL2NUM(-21));
+  rb_define_const(mGRruby, "MARKERTYPE_HEXAGON", DBL2NUM(-22));
+  rb_define_const(mGRruby, "MARKERTYPE_HEPTAGON", DBL2NUM(-23));
+  rb_define_const(mGRruby, "MARKERTYPE_OCTAGON", DBL2NUM(-24));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR_4", DBL2NUM(-25));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR_5", DBL2NUM(-26));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR_6", DBL2NUM(-27));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR_7", DBL2NUM(-28));
+  rb_define_const(mGRruby, "MARKERTYPE_STAR_8", DBL2NUM(-29));
+  rb_define_const(mGRruby, "MARKERTYPE_VLINE", DBL2NUM(-30));
+  rb_define_const(mGRruby, "MARKERTYPE_HLINE", DBL2NUM(-31));
+  rb_define_const(mGRruby, "MARKERTYPE_OMARK", DBL2NUM(-32));
+  rb_define_const(mGRruby, "LINETYPE_SOLID", DBL2NUM(1));
+  rb_define_const(mGRruby, "LINETYPE_DASHED", DBL2NUM(2));
+  rb_define_const(mGRruby, "LINETYPE_DOTTED", DBL2NUM(3));
+  rb_define_const(mGRruby, "LINETYPE_DASHED_DOTTED", DBL2NUM(4));
+  rb_define_const(mGRruby, "LINETYPE_DASH_2_DOT", DBL2NUM(-1));
+  rb_define_const(mGRruby, "LINETYPE_DASH_3_DOT", DBL2NUM(-2));
+  rb_define_const(mGRruby, "LINETYPE_LONG_DASH", DBL2NUM(-3));
+  rb_define_const(mGRruby, "LINETYPE_LONG_SHORT_DASH", DBL2NUM(-4));
+  rb_define_const(mGRruby, "LINETYPE_SPACED_DASH", DBL2NUM(-5));
+  rb_define_const(mGRruby, "LINETYPE_SPACED_DOT", DBL2NUM(-6));
+  rb_define_const(mGRruby, "LINETYPE_DOUBLE_DOT", DBL2NUM(-7));
+  rb_define_const(mGRruby, "LINETYPE_TRIPLE_DOT", DBL2NUM(-8));
+  rb_define_const(mGRruby, "FILLSTYLE_HOLLOW", DBL2NUM(0));
+  rb_define_const(mGRruby, "FILLSTYLE_SOLID", DBL2NUM(1));
+  rb_define_const(mGRruby, "FILLSTYLE_PATTERN", DBL2NUM(2));
+  rb_define_const(mGRruby, "FILLSTYLE_HATCH", DBL2NUM(3));
 }

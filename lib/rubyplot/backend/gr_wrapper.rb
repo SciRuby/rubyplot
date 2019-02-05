@@ -7,8 +7,7 @@ module Rubyplot
     # that are to be drawn on the backend.
     class GRWrapper < Base
       def initialize
-        # Mapping between viewports and their respective Axes.
-        @axes_maps = {}
+        @axes_maps = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
         @xspread = Rubyplot::MAX_X.abs + Rubyplot::MIN_X.abs
         @yspread = Rubyplot::MAX_Y.abs + Rubyplot::MIN_Y.abs
