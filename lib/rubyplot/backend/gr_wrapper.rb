@@ -12,9 +12,57 @@ module Rubyplot
         plus: GR::MARKERTYPE_PLUS,
         asterisk: GR::MARKERTYPE_ASTERISK,
         circle: GR::MARKERTYPE_CIRCLE,
-        diagonal_cross: GR::MARKERTYPE_DIAGONAL_CROSS
+        diagonal_cross: GR::MARKERTYPE_DIAGONAL_CROSS,
+        solid_circle: GR::MARKERTYPE_SOLID_CIRCLE,
+        triangle_up: GR::MARKERTYPE_TRIANGLE_UP,
+        solid_triangle_up: GR::MARKERTYPE_SOLID_TRI_UP,
+        triangle_down: GR::MARKERTYPE_TRIANGLE_DOWN,
+        solid_triangle_down: GR::MARKERTYPE_SOLID_TRI_DOWN,
+        square: GR::MARKERTYPE_SQUARE,
+        solid_square: GR::MARKERTYPE_SOLID_SQUARE,
+        bowtie: GR::MARKERTYPE_BOWTIE,
+        solid_bowtie: GR::MARKERTYPE_SOLID_BOWTIE,
+        hglass: GR::MARKERTYPE_HGLASS,
+        solid_hglass: GR::MARKERTYPE_SOLID_HGLASS,
+        diamond: GR::MARKERTYPE_DIAMOND,
+        solid_diamond: GR::MARKERTYPE_SOLID_DIAMOND,
+        star: GR::MARKERTYPE_STAR,
+        solid_star: GR::MARKERTYPE_SOLID_STAR,
+        tri_up_down: GR::MARKERTYPE_TRI_UP_DOWN,
+        solid_tri_right: GR::MARKERTYPE_SOLID_TRI_RIGHT,
+        solid_tri_left: GR::MARKERTYPE_SOLID_TRI_LEFT,
+        hollow_plus: GR::MARKERTYPE_HOLLOW_PLUS,
+        solid_plus: GR::MARKERTYPE_SOLID_PLUS,
+        pentagon: GR::MARKERTYPE_PENTAGON,
+        hexagon: GR::MARKERTYPE_HEXAGON,
+        heptagon: GR::MARKERTYPE_HEPTAGON,
+        octagon: GR::MARKERTYPE_OCTAGON,
+        star_4: GR::MARKERTYPE_STAR_4,
+        star_5: GR::MARKERTYPE_STAR_5,
+        star_6: GR::MARKERTYPE_STAR_6,
+        star_7: GR::MARKERTYPE_STAR_7,
+        star_8: GR::MARKERTYPE_STAR_8,
+        vline: GR::MARKERTYPE_VLINE,
+        hline: GR::MARKERTYPE_HLINE,
+        omark: GR::MARKERTYPE_OMARK
       }.freeze
-      
+
+      # Mapping between rubyplot line types and GR line types.
+      LINE_MAP = {
+        solid: GR::LINETYPE_SOLID,
+        dashed: GR::LINETYPE_DASHED,
+        dotted: GR::LINETYPE_DOTTED,
+        dashed_dotted: GR::LINETYPE_DASHED_DOTTED,
+        dash_2_dot: GR::LINETYPE_DASH_2_DOT,
+        dash_3_dot: GR::LINETYPE_DASH_3_DOT,
+        long_dash: GR::LINETYPE_LONG_DASH,
+        long_short_dash: GR::LINETYPE_LONG_SHORT_DASH,
+        spaced_dash: GR::LINETYPE_SPACED_DASH,
+        spaced_dot: GR::LINETYPE_SPACED_DOT,
+        double_dot: GR::LINETYPE_DOUBLE_DOT,
+        triple_dot: GR::LINETYPE_TRIPLE_DOT
+      }
+
       def initialize
         @axes_maps = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
@@ -49,18 +97,18 @@ module Rubyplot
         }
       end
       
-      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+      def draw_markers(x:, y:, type:, color:, size:)
         within_window do
-          rgb = Rubyplot::Color::COLOR_INDEX[marker_color].match(/#(..)(..)(..)/)
-          GR.setmarkercolorind(
-            GR.inqcolorfromrgb(
-              rgb[1].hex.to_f/255.0,
-              rgb[2].hex.to_f/255.0,
-              rgb[3].hex.to_f/255.0)
-          )
-          GR.setmarkersize(1)
-          GR.setmarkertype(MARKER_MAP[marker_type])
+          GR.setmarkercolorind(to_gr_color(color))
+          GR.setmarkersize(size)
+          GR.setmarkertype(MARKER_MAP[type])
           GR.polymarker(x, y)
+        end
+      end
+
+      def draw_lines(x:, y:, width:, type:, color: :black)
+        within_window do
+          
         end
       end
 
@@ -83,14 +131,19 @@ module Rubyplot
         draw_axes
       end
 
-      def init_output_device file_name
+      def init_output_device file_name, device: :file
         @file_name = file_name
-        Rubyplot::GR.clearws
+        @output_device = device
+
+        if @output_device == :file
+          Rubyplot::GR.beginprint(file_name)
+        end
       end
 
       def stop_output_device
-        Rubyplot::GR.updatews
-        sleep(10)
+        if @output_device == :file
+          Rubyplot::GR.endprint
+        end
       end
 
       def write file_name
@@ -98,6 +151,16 @@ module Rubyplot
       end
 
       private
+
+      def to_gr_color color
+        r,g,b = to_rgb color
+        GR.inqcolorfromrgb(r, g, b)
+      end
+      
+      def to_rgb color
+        r, g, b = Rubyplot::Color::COLOR_INDEX[marker_color].match(/#(..)(..)(..)/)
+        [r.hex.to_f/255.0, g.hex.to_f/255.0, b.hex.to_f/255.0]
+      end
 
       # Transform a X quantity to Normalized Device Co-ordinates.
       def transform_x_ndc coord

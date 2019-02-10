@@ -2,13 +2,14 @@ module Rubyplot
   module Artist
     module Plot
       class Scatter < Artist::Plot::Base
-        # Radius of the scatter circles in pixels.
-        attr_writer :circle_radius
-
+        attr_reader :marker_size
+        attr_reader :marker_type
+        attr_reader :marker_color
+        
         def initialize(*)
           super
           @marker_size = 1.0
-          @marker_type = :circle
+          @marker_type = :plus
           @marker_color = :black
         end
 
@@ -35,9 +36,9 @@ module Rubyplot
           Rubyplot.backend.draw_markers(
             x: @data[:x_values],
             y: @data[:y_values],
-            marker_type: @marker_type,
-            marker_color: @marker_color,
-            marker_size: @marker_size
+            type: @marker_type,
+            color: @marker_color,
+            size: @marker_size
           )
         end
       end # class Scatter

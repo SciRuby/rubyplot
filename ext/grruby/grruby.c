@@ -147,6 +147,25 @@ static VALUE updatews(VALUE self){
   return Qtrue;
 }
 
+/**
+ *
+ * call-seq:
+ *   Rubyplot::GR.polyline(x,y) -> true
+ *
+ * Draw a polyline using the current line attributes, starting from the
+ * first data point and ending at the last data point.
+ * 
+ * Parameters:
+ * 
+ * `x` :
+ * A list containing the X coordinates
+ * `y` :
+ * A list containing the Y coordinates
+ * 
+ * The values for `x` and `y` are in world coordinates. The attributes that
+ * control the appearance of a polyline are linetype, linewidth and color
+ * index.
+*/
 static VALUE polyline(VALUE self,VALUE x, VALUE y){
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
@@ -284,9 +303,25 @@ static VALUE inqlinetype(VALUE self,VALUE a){
   return Qtrue;
 }
 
-static VALUE setlinewidth(VALUE self,VALUE width){
+/**
+ * call-seq:
+ *   Rubyplot::GR.setlinewidth(1.3) -> true
+ * Define the line width of subsequent polyline output primitives.
+ * 
+ * Parameters:
+ * 
+ * `width` :
+ *   The polyline line width scale factor
+ * 
+ * The line width is calculated as the nominal line width generated
+ * on the workstation multiplied by the line width scale factor.
+ * This value is mapped by the workstation to the nearest available line width.
+ * The default line width is 1.0, or 1 times the line width generated on the graphics device.
+ */
+static VALUE setlinewidth(VALUE self,VALUE width) {
   double widthc = NUM2DBL(width);
   gr_setlinewidth(widthc);
+  
   return Qtrue;
 }
 
@@ -296,9 +331,21 @@ static VALUE inqlinewidth(VALUE self,VALUE a){
   return Qtrue;
 }
 
-static VALUE setlinecolorind(VALUE self,VALUE color){
+/**
+ * call-seq:
+ *   Rubyplot::GR.setlinecolorind(4) -> true
+ *
+ * Define the color of subsequent polyline output primitives.
+ * 
+ * **Parameters:**
+ * 
+ * `color` :
+ * The polyline color index (COLOR < 1256)
+ */
+static VALUE setlinecolorind(VALUE self,VALUE color) {
   int colorc = NUM2INT(color);
   gr_setlinecolorind(colorc);
+  
   return Qtrue;
 }
 
@@ -1023,7 +1070,8 @@ static VALUE contour(VALUE self,VALUE px,VALUE py,VALUE ph,VALUE pz,VALUE major_
   return Qtrue;
 }
 
-static VALUE tricontour(VALUE self,VALUE npoints,VALUE x,VALUE y,VALUE z,VALUE nlevels,VALUE levels){
+static VALUE tricontour(VALUE self,VALUE npoints,VALUE x,VALUE y,VALUE z,
+                        VALUE nlevels,VALUE levels) {
   int npointsc = NUM2INT(npoints);
   double *xc = rb_ar_2_dbl_ar(x);
   double *yc = rb_ar_2_dbl_ar(y);
@@ -1034,7 +1082,7 @@ static VALUE tricontour(VALUE self,VALUE npoints,VALUE x,VALUE y,VALUE z,VALUE n
   return Qtrue;
 }
 
-static VALUE hexbin(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
+static VALUE hexbin(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d) {
   int ac = NUM2INT(a);
   double* bc = rb_ar_2_dbl_ar(b);
   double* cc = rb_ar_2_dbl_ar(c);
@@ -1042,7 +1090,7 @@ static VALUE hexbin(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
   return INT2NUM(gr_hexbin(ac,bc,cc,dc));
 }
 
-static VALUE setcolormap(VALUE self,VALUE a){
+static VALUE setcolormap(VALUE self,VALUE a) {
   int ac = NUM2INT(a);
   gr_setcolormap(ac);
   return Qtrue;
@@ -1171,8 +1219,9 @@ static VALUE adjustrange(VALUE self,VALUE a,VALUE b){
  *   |.wmf         |Windows Metafile                       |
  *   +-------------+---------------------------------------+
  */
-static VALUE beginprint(VALUE self, VALUE pathname){
+static VALUE beginprint(VALUE self, VALUE pathname) {
   char *pathnamec = StringValueCStr(pathname);
+  
   gr_beginprint(pathnamec);
   return Qtrue;
 }

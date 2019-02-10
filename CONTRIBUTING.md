@@ -87,8 +87,11 @@ world co-ordinates to between the X and Y range.
 
 ## GR binaries
 
+You can download the GR binaries for your system from [here](https://gr-framework.org/c.html#installation).
+
 GR uses certain environment variables for working with fonts and searching the GR shared
-object binary. They are:
+object binary. These variables must be set before you use the GR backend of rubyplot. 
+They are:
 
 ### GRDIR
 Directory to which GR is installed. Should contain files in the standard structure. Example:
