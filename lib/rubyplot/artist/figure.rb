@@ -93,7 +93,7 @@ module Rubyplot
         Rubyplot.backend.canvas_height = @height
         Rubyplot.backend.canvas_width = @width
         Rubyplot.backend.figure = self
-        Rubyplot.backend.init_output_device(file_name, device: :png) if output
+        Rubyplot.backend.init_output_device(file_name, device: :file) if output
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.write file_name
         Rubyplot.backend.stop_output_device if output

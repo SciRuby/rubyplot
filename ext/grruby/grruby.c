@@ -166,13 +166,14 @@ static VALUE updatews(VALUE self){
  * control the appearance of a polyline are linetype, linewidth and color
  * index.
 */
-static VALUE polyline(VALUE self,VALUE x, VALUE y){
+static VALUE polyline(VALUE self,VALUE x, VALUE y) {
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
   int size = (x_size <= y_size)?x_size:y_size;
   double *xc = rb_ar_2_dbl_ar(x);
   double *yc = rb_ar_2_dbl_ar(y); 
   gr_polyline(size,xc,yc);
+  
   return Qtrue;
 }
 
@@ -291,6 +292,45 @@ static VALUE gridit(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e,VALUE f,
   //Can be optimised for Ruby
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.setlinetype(type) -> true
+ *
+ * Specify the line style for polylines.
+ * 
+ * **Parameters:**
+ * 
+ * `style` :
+ * The polyline line style
+ * 
+ * The available line types are:
+ * 
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_SOLID             |   1|Solid line                                         |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DASHED            |   2|Dashed line                                        |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DOTTED            |   3|Dotted line                                        |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DASHED_DOTTED     |   4|Dashed-dotted line                                 |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DASH_2_DOT        |  -1|Sequence of one dash followed by two dots          |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DASH_3_DOT        |  -2|Sequence of one dash followed by three dots        |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_LONG_DASH         |  -3|Sequence of long dashes                            |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_LONG_SHORT_DASH   |  -4|Sequence of a long dash followed by a short dash   |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_SPACED_DASH       |  -5|Sequence of dashes double spaced                   |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_SPACED_DOT        |  -6|Sequence of dots double spaced                     |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_DOUBLE_DOT        |  -7|Sequence of pairs of dots                          |
+ * +---------------------------+----+---------------------------------------------------+
+ * |LINETYPE_TRIPLE_DOT        |  -8|Sequence of groups of three dots                   |
+ * +---------------------------+----+---------------------------------------------------+
+ */
 static VALUE setlinetype(VALUE self,VALUE type){
   int typec = NUM2INT(type);
   gr_setlinetype(typec);

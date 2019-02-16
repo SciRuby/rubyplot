@@ -7,7 +7,7 @@ module Rubyplot
     # that are to be drawn on the backend.
     class GRWrapper < Base
       # Mapping Rubyplot markers to GR marker constants.
-      MARKER_MAP = {
+      MARKER_TYPE_MAP = {
         dot: GR::MARKERTYPE_DOT,
         plus: GR::MARKERTYPE_PLUS,
         asterisk: GR::MARKERTYPE_ASTERISK,
@@ -48,7 +48,7 @@ module Rubyplot
       }.freeze
 
       # Mapping between rubyplot line types and GR line types.
-      LINE_MAP = {
+      LINE_TYPE_MAP = {
         solid: GR::LINETYPE_SOLID,
         dashed: GR::LINETYPE_DASHED,
         dotted: GR::LINETYPE_DOTTED,
@@ -64,7 +64,7 @@ module Rubyplot
       }
 
       def initialize
-        @axes_maps = {} # Mapping between viewports and their respective Axes.
+        @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
         @xspread = Rubyplot::MAX_X.abs + Rubyplot::MIN_X.abs
         @yspread = Rubyplot::MAX_Y.abs + Rubyplot::MIN_Y.abs
@@ -79,7 +79,8 @@ module Rubyplot
       #  major ticks.
       # @param major_ticks_count [Integer] Number of major ticks to plot.
       def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
-        @axes_maps[@active_axes] = {
+        @axes_map[@active_axes.object_id] = {
+          axes: @active_axes,
           x_minor_ticks: minor_ticks,
           x_origin: origin,
           x_major_ticks: major_ticks,
@@ -89,7 +90,8 @@ module Rubyplot
 
       # Draw Y axis for currently selected Axes.
       def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
-        @axes_maps[@active_axes] = {
+        @axes_map[@active_axes.object_id] = {
+          axes: @active_axes,
           y_minor_ticks: minor_ticks,
           y_origin: origin,
           y_major_ticks: major_ticks,
@@ -101,14 +103,17 @@ module Rubyplot
         within_window do
           GR.setmarkercolorind(to_gr_color(color))
           GR.setmarkersize(size)
-          GR.setmarkertype(MARKER_MAP[type])
+          GR.setmarkertype(MARKER_TYPE_MAP[type])
           GR.polymarker(x, y)
         end
       end
 
-      def draw_lines(x:, y:, width:, type:, color: :black)
+      def draw_lines(x:, y:, width:, type:, color:)
         within_window do
-          
+          GR.setlinewidth(width)
+          GR.setlinetype(LINE_TYPE_MAP[type])
+          GR.setlinecolorind(to_gr_color(color))
+          GR.polyline(x, y)
         end
       end
 
@@ -134,7 +139,8 @@ module Rubyplot
       def init_output_device file_name, device: :file
         @file_name = file_name
         @output_device = device
-
+        Rubyplot::GR.clearws
+        
         if @output_device == :file
           Rubyplot::GR.beginprint(file_name)
         end
@@ -143,11 +149,20 @@ module Rubyplot
       def stop_output_device
         if @output_device == :file
           Rubyplot::GR.endprint
+        elsif @output_device == :window
+          Rubyplot::GR.updatews
         end
+        flush
       end
 
       def write file_name
         draw
+      end
+
+      # Refresh this backend and remove all previously set data.
+      def flush
+        @axes_map = {}
+        @file_name = nil
       end
 
       private
@@ -158,7 +173,8 @@ module Rubyplot
       end
       
       def to_rgb color
-        r, g, b = Rubyplot::Color::COLOR_INDEX[marker_color].match(/#(..)(..)(..)/)
+        match = Rubyplot::Color::COLOR_INDEX[color].match(/#(..)(..)(..)/)
+        r, g, b = match[1], match[2], match[3]
         [r.hex.to_f/255.0, g.hex.to_f/255.0, b.hex.to_f/255.0]
       end
 
@@ -198,7 +214,8 @@ module Rubyplot
       end
 
       def draw_axes
-        @axes_maps.each do |axes, v|
+        @axes_map.each_value do |v|
+          axes = v[:axes]
           tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
           within_window do
             GR.axes(

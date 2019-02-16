@@ -79,7 +79,7 @@ module Rubyplot
         @theme = Rubyplot::Themes::CLASSIC_WHITE
         vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
         @font = File.exist?(vera_font_path) ? vera_font_path : nil
-        @font_color = '#000000'
+        @font_color = :black
         @marker_font_size = 15.0
         @legend_font_size = 20.0
         @legend_margin = LEGEND_MARGIN
@@ -308,5 +308,5 @@ module Rubyplot
         @y_axis.max_val = @y_range[1]
       end
     end # class Axes
-  end # moudle Artist
+  end # module Artist
 end # module Rubyplot
