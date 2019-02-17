@@ -7,10 +7,22 @@ module Rubyplot
 
       attr_accessor :active_axes, :figure
 
+      # Write text anywhere on the canvas. abs_x and abs_y should be specified in terms
+      #   of Rubyplot Artist Co-ordinates.
+      #
+      # @param text [String] String of text to write.
+      # @param abs_x [Numeric] X co-ordinate of the text in Rubyplot Artist Co-ordinates.
+      # @param abs_y [Numeric] Y co-ordinate of the text in Rubyplot Aritst Co-ordinates.
+      # @param font_color [Symbol] Color of the font from Rubyplot::Colors.
+      # @param font [Symbol] Name of the font.
+      # @param font_size [Numeric] Size of the font.
+      # @param font_weight [Symbol] Measure of 'bigness' of the font.
+      # @param halign [Symbol] Horizontal alignment of the text from Artist::Text::HAlignment.
+      # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
       def draw_text(text,font_color:,font: nil,font_size:,
-        font_weight: nil, gravity: nil,
-        x:,y:,rotation: nil, stroke: nil)
-        raise NotImplementedError, "not implemeted for #{self}."
+        font_weight: nil, halign: nil, valign: nil,
+        abs_x:, abs_y:,rotation: nil, stroke: nil)
+        raise NotImplementedError, "not implemented for #{self}."
       end
 
       # Draw a rectangle with optional fill.

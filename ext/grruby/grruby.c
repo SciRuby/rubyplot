@@ -1749,6 +1749,18 @@ void Init_grruby()
   rb_define_singleton_method(mGRruby,"version",version,0);
 
   /* Constants */
+  rb_define_const(mGRruby, "TEXT_HALIGN_NORMAL", DBL2NUM(0));
+  rb_define_const(mGRruby, "TEXT_HALIGN_LEFT", DBL2NUM(1));
+  rb_define_const(mGRruby, "TEXT_HALIGN_CENTER", DBL2NUM(2));
+  rb_define_const(mGRruby, "TEXT_HALIGN_RIGHT", DBL2NUM(3));
+
+  rb_define_const(mGRruby, "TEXT_VALIGN_NORMAL", DBL2NUM(0));
+  rb_define_const(mGRruby, "TEXT_VALIGN_TOP", DBL2NUM(1));
+  rb_define_const(mGRruby, "TEXT_VALIGN_CAP", DBL2NUM(2));
+  rb_define_const(mGRruby, "TEXT_VALIGN_HALF", DBL2NUM(3));
+  rb_define_const(mGRruby, "TEXT_VALIGN_BASE", DBL2NUM(4));
+  rb_define_const(mGRruby, "TEXT_VALIGN_BOTTOM", DBL2NUM(5));
+    
   rb_define_const(mGRruby, "FONT_TIMES_ROMAN", DBL2NUM(101));
   rb_define_const(mGRruby, "FONT_TIMES_ITALIC", DBL2NUM(102));
   rb_define_const(mGRruby, "FONT_TIMES_BOLD", DBL2NUM(103));

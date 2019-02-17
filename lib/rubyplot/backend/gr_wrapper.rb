@@ -119,7 +119,7 @@ module Rubyplot
 
       def draw_text(text,font_color:,font: nil,font_size:,
         font_weight: nil, gravity: nil,
-        x:,y:,rotation: nil, stroke: nil)
+        abs_x:,abs_y:,rotation: nil, stroke: nil)
         
       end
 
