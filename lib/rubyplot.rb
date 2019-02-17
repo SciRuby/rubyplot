@@ -114,6 +114,13 @@ module Rubyplot
     :down_up,
     :up_down
   ].freeze
+
+  FILL_STYLES = [
+    :hollow,
+    :solid,
+    :pattern,
+    :hatch
+  ].freeze
   
   # Min. co-ordinates of the lower left corner.
   MIN_X = 0

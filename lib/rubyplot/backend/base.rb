@@ -32,8 +32,8 @@ module Rubyplot
       # @param y1 [Numeric] Lower left Y co-ordinate.
       # @param x2 [Numeric] Upper right X co-ordinate.
       # @param x2 [Numeric] Upper right Y co-ordinate.
-      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,stroke: nil,
-        fill_color: nil, stroke_width: nil)
+      def draw_rectangle(x1:,y1:,x2:,y2:, border_color: nil, fill_color: nil,
+        border_width: nil)
         raise NotImplementedError, "not implemented for #{self}."
       end
 

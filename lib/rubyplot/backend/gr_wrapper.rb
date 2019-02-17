@@ -127,6 +127,13 @@ module Rubyplot
         bottom: GR::TEXT_VALIGN_BOTTOM
       }.freeze
 
+      FILL_STYLE_MAP = {
+        hollow: GR::FILLSTYLE_HOLLOW,
+        solid: GR::FILLSTYLE_SOLID,
+        pattern: GR::FILLSTYLE_PATTERN,
+        hatch: GR::FILLSTYLE_HATCH
+      }.freeze
+
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
@@ -198,9 +205,9 @@ module Rubyplot
         GR.settextalign(TEXT_HALIGNMENT_MAP[halign], TEXT_VALIGNMENT_MAP[valign])
         GR.text(x, y, text)
       end
-
-      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,stroke: nil,
-        fill_color: nil, stroke_width: nil)
+      
+      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,
+        fill_color: nil, border_width: nil)
         
       end
 

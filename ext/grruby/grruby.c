@@ -798,9 +798,34 @@ static VALUE settextalign(VALUE self, VALUE horizontal, VALUE vertical) {
   return Qtrue;
 }
 
-static VALUE setfillintstyle(VALUE self,VALUE style){
+/**
+ * call-seq:
+ *   Rubyplot::GR.setfillintstyle(3) -> true
+ *
+ * Set the fill area interior style to be used for fill areas.
+ * 
+ * **Parameters:**
+ * 
+ * `style` :
+ * The style of fill to be used
+ * 
+ * `setfillintstyle` defines the interior style  for subsequent fill area output
+ * primitives. The default interior style is HOLLOW.
+ * 
+ * +------------------+-+-----------------------------------------------------------------------+
+ * |INTSTYLE_HOLLOW  |0|No filling. Just draw the bounding polyline                            |
+ * +------------------+-+-----------------------------------------------------------------------+
+ * |INTSTYLE_SOLID   |1|Fill the interior of the polygon using the fill color index            |
+ * +------------------+-+-----------------------------------------------------------------------+
+ * |INTSTYLE_PATTERN |2|Fill the interior of the polygon using the style index as a pattern index|
+ * +-----------------+--+------------------------------------------------------------------------+
+ * |INTSTYLE_HATCH    |3|Fill the interior of the polygon using the style index as a cross-hatched style|
+ * +-----------------+-+--------------------------------------------------------------------------+
+ */
+static VALUE setfillintstyle(VALUE self,VALUE style) {
   int stylec = NUM2INT(style);
   gr_setfillintstyle(stylec);
+  
   return Qtrue;
 }
 
@@ -1500,12 +1525,13 @@ static VALUE wc3towc(VALUE self,VALUE a,VALUE b,VALUE c){
 * `ymax` :
 *   Upper right edge of the rectangle
 */
-static VALUE drawrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
+static VALUE drawrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
   double ymaxc = NUM2DBL(ymax);
   gr_drawrect(xminc,xmaxc,yminc,ymaxc);
+  
   return Qtrue;
 }
 
@@ -2021,6 +2047,7 @@ void Init_grruby()
   rb_define_const(mGRruby, "MARKERTYPE_VLINE", DBL2NUM(-30));
   rb_define_const(mGRruby, "MARKERTYPE_HLINE", DBL2NUM(-31));
   rb_define_const(mGRruby, "MARKERTYPE_OMARK", DBL2NUM(-32));
+  
   rb_define_const(mGRruby, "LINETYPE_SOLID", DBL2NUM(1));
   rb_define_const(mGRruby, "LINETYPE_DASHED", DBL2NUM(2));
   rb_define_const(mGRruby, "LINETYPE_DOTTED", DBL2NUM(3));
@@ -2033,6 +2060,7 @@ void Init_grruby()
   rb_define_const(mGRruby, "LINETYPE_SPACED_DOT", DBL2NUM(-6));
   rb_define_const(mGRruby, "LINETYPE_DOUBLE_DOT", DBL2NUM(-7));
   rb_define_const(mGRruby, "LINETYPE_TRIPLE_DOT", DBL2NUM(-8));
+  
   rb_define_const(mGRruby, "FILLSTYLE_HOLLOW", DBL2NUM(0));
   rb_define_const(mGRruby, "FILLSTYLE_SOLID", DBL2NUM(1));
   rb_define_const(mGRruby, "FILLSTYLE_PATTERN", DBL2NUM(2));
