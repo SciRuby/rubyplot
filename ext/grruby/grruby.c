@@ -177,6 +177,23 @@ static VALUE polyline(VALUE self,VALUE x, VALUE y) {
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.polymarker(x, y) -> true
+ *
+ * Draw marker symbols centered at the given data points.
+ * 
+ * **Parameters:**
+ * 
+ * `x` :
+ * A list containing the X coordinates
+ * `y` :
+ * A list containing the Y coordinates
+ * 
+ * The values for `x` and `y` are in world coordinates. The attributes that
+ * control the appearance of a polymarker are marker type, marker size
+ *   scale factor and color index.
+ */
 static VALUE polymarker(VALUE self,VALUE x, VALUE y) {
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
@@ -217,7 +234,7 @@ static VALUE text(VALUE self,VALUE x, VALUE y, VALUE string) {
   return Qtrue;
 }
 
-static VALUE inqtext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e){
+static VALUE inqtext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e) {
   double ac = NUM2DBL(a);
   double bc = NUM2DBL(b);
   char *cc = StringValueCStr(c);
@@ -230,10 +247,11 @@ static VALUE inqtext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e){
 static VALUE fillarea(VALUE self,VALUE x, VALUE y){
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
-  int size = (x_size <= y_size)?x_size:y_size;
+  int size = (x_size <= y_size) ? x_size : y_size;
   double *xc = rb_ar_2_dbl_ar(x);
   double *yc = rb_ar_2_dbl_ar(y); 
   gr_fillarea(size,xc,yc);
+  
   return Qtrue;
 }
 
@@ -524,11 +542,105 @@ static VALUE inqmarkercolorind(VALUE self,VALUE a){
   gr_inqmarkercolorind(ac);
   return Qtrue;
 }
-
+/**
+ * call-seq:
+ *   Rubyplot::GR.settextprecision(font, precision)-> true
+ * 
+ * Specify the text font and precision for subsequent text output primitives.
+ * 
+ * **Parameters:**
+ * 
+ * `font` :
+ * Text font (see tables below)
+ *   `precision` :
+ * Text precision (see table below)
+ * 
+ *   The available text fonts are:
+ * 
+ * +--------------------------------------+-----+
+ * |FONT_TIMES_ROMAN                      |  101|
+ * +--------------------------------------+-----+
+ * |FONT_TIMES_ITALIC                     |  102|
+ * +--------------------------------------+-----+
+ * |FONT_TIMES_BOLD                       |  103|
+ * +--------------------------------------+-----+
+ * |FONT_TIMES_BOLDITALIC                 |  104|
+ * +--------------------------------------+-----+
+ * |FONT_HELVETICA                        |  105|
+ * +--------------------------------------+-----+
+ * |FONT_HELVETICA_OBLIQUE                |  106|
+ * +--------------------------------------+-----+
+ * |FONT_HELVETICA_BOLD                   |  107|
+ * +--------------------------------------+-----+
+ * |FONT_HELVETICA_BOLDOBLIQUE            |  108|
+ * +--------------------------------------+-----+
+ * |FONT_COURIER                          |  109|
+ * +--------------------------------------+-----+
+ * |FONT_COURIER_OBLIQUE                  |  110|
+ * +--------------------------------------+-----+
+ * |FONT_COURIER_BOLD                     |  111|
+ * +--------------------------------------+-----+
+ * |FONT_COURIER_BOLDOBLIQUE              |  112|
+ * +--------------------------------------+-----+
+ * |FONT_SYMBOL                           |  113|
+ * +--------------------------------------+-----+
+ * |FONT_BOOKMAN_LIGHT                    |  114|
+ * +--------------------------------------+-----+
+ * |FONT_BOOKMAN_LIGHTITALIC              |  115|
+ * +--------------------------------------+-----+
+ * |FONT_BOOKMAN_DEMI                     |  116|
+ * +--------------------------------------+-----+
+ * |FONT_BOOKMAN_DEMIITALIC               |  117|
+ * +--------------------------------------+-----+
+ * |FONT_NEWCENTURYSCHLBK_ROMAN           |  118|
+ * +--------------------------------------+-----+
+ * |FONT_NEWCENTURYSCHLBK_ITALIC          |  119|
+ * +--------------------------------------+-----+
+ * |FONT_NEWCENTURYSCHLBK_BOLD            |  120|
+ * +--------------------------------------+-----+
+ * |FONT_NEWCENTURYSCHLBK_BOLDITALIC      |  121|
+ * +--------------------------------------+-----+
+ * |FONT_AVANTGARDE_BOOK                  |  122|
+ * +--------------------------------------+-----+
+ * |FONT_AVANTGARDE_BOOKOBLIQUE           |  123|
+ * +--------------------------------------+-----+
+ * |FONT_AVANTGARDE_DEMI                  |  124|
+ * +--------------------------------------+-----+
+ * |FONT_AVANTGARDE_DEMIOBLIQUE           |  125|
+ * +--------------------------------------+-----+
+ * |FONT_PALATINO_ROMAN                   |  126|
+ * +--------------------------------------+-----+
+ * |FONT_PALATINO_ITALIC                  |  127|
+ * +--------------------------------------+-----+
+ * |FONT_PALATINO_BOLD                    |  128|
+ * +--------------------------------------+-----+
+ * |FONT_PALATINO_BOLDITALIC              |  129|
+ * +--------------------------------------+-----+
+ * |FONT_ZAPFCHANCERY_MEDIUMITALIC        |  130|
+ * +--------------------------------------+-----+
+ * |FONT_ZAPFDINGBATS                     |  131|
+ * +--------------------------------------+-----+
+ * 
+ * The available text precisions are:
+ * 
+ * +---------------------------+---+--------------------------------------+
+ * |TEXT_PRECISION_STRING      |  0|String precision (higher quality)     |
+ * +---------------------------+---+--------------------------------------+
+ * |TEXT_PRECISION_CHAR        |  1|Character precision (medium quality)  |
+ * +---------------------------+---+--------------------------------------+
+ * |TEXT_PRECISION_STROKE      |  2|Stroke precision (lower quality)      |
+ * +---------------------------+---+--------------------------------------+
+ * 
+ * The appearance of a font depends on the text precision value specified.
+ * STRING, CHARACTER or STROKE precision allows for a greater or lesser
+ *   realization of the text primitives, for efficiency. STRING is the default
+ *   precision for GR and produces the highest quality output.
+ */
 static VALUE settextfontprec(VALUE self, VALUE font, VALUE precision){
   int fontc = NUM2INT(font);
   int precisionc = NUM2INT(precision);
-  gr_settextfontprec(fontc,precisionc);
+  gr_settextfontprec(fontc, precisionc);
+  
   return Qtrue;
 }
 
@@ -544,15 +656,45 @@ static VALUE setcharspace(VALUE self,VALUE a){
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.settextcolorind(color) -> true
+ *
+ * Sets the current text color index.
+ * 
+ * **Parameters:**
+ * 
+ * `color` :
+ * The text color index (COLOR < 1256)
+ * 
+ *   `settextcolorind` defines the color of subsequent text output primitives.
+ *   GR uses the default foreground color (black=1) for the default text color index.
+ */
 static VALUE settextcolorind(VALUE self,VALUE color){
   int colorc = NUM2INT(color);
   gr_settextcolorind(colorc);
   return Qtrue;
 }
 
-static VALUE setcharheight(VALUE self, VALUE height){
+/**
+ * call-seq:
+ *   Rubyplot::GR.setcharheight(0.05) -> true
+ *
+ * Set the current character height.
+ * 
+ * **Parameters:**
+ * 
+ * `height` :
+ * Text height value
+ * 
+ * `setcharheight` defines the height of subsequent text output primitives. Text height
+ * is defined as a percentage of the default window. GR uses the default text height of
+ * 0.027 (2.7% of the height of the default window).
+ */
+static VALUE setcharheight(VALUE self, VALUE height) {
   double heightc= NUM2DBL(height);
   gr_setcharheight(heightc);
+  
   return Qtrue;
 }
 
@@ -563,6 +705,27 @@ static VALUE setcharup(VALUE self,VALUE ux,VALUE uy){
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.settextpath(2) -> true
+ *
+ * Define the current direction in which subsequent text will be drawn.
+ * 
+ * **Parameters:**
+ * 
+ * `path` :
+ * Text path (see table below)
+ * 
+ *   +----------------------+---+---------------+
+ *   |TEXT_PATH_RIGHT       |  0|left-to-right  |
+ *   +----------------------+---+---------------+
+ *   |TEXT_PATH_LEFT        |  1|right-to-left  |
+ *   +----------------------+---+---------------+
+ *   |TEXT_PATH_UP          |  2|downside-up    |
+ *   +----------------------+---+---------------+
+ *   |TEXT_PATH_DOWN        |  3|upside-down    |
+ *   +----------------------+---+---------------+
+ */
 static VALUE settextpath(VALUE self,VALUE path){
   int pathc = NUM2INT(path);
   
@@ -570,10 +733,10 @@ static VALUE settextpath(VALUE self,VALUE path){
   return Qtrue;
 }
 
-/*
+/**
  *    call-seq:
  *      Rubyplot::GR.settextalign(Rubyplot::GR::TEXT_HALIGN_NORMAL, 
- *        Rubyplot::GR::TEXT_HALIGN_LEFT) -> true
+ *        Rubyplot::GR::TEXT_VALIGN_LEFT) -> true
  *
  *    Set the current horizontal and vertical alignment for text.
  *
@@ -817,7 +980,10 @@ static VALUE inqscale(VALUE self,VALUE a){
   return Qtrue;
 }
 
-/*
+/**
+ *  call-seq:
+ *    Rubyplot::GR.textext(x, y, "string to write") -> true    
+ *
  *    Draw a text at position `x`, `y` using the current text attributes. Strings can be
  *    defined to create basic mathematical expressions and Greek letters.
  *
@@ -907,11 +1073,12 @@ static VALUE inqscale(VALUE self,VALUE a){
  *    function.
  */
 
-static VALUE textext(VALUE self,VALUE x, VALUE y, VALUE string){
+static VALUE textext(VALUE self,VALUE x, VALUE y, VALUE string) {
   double xc=NUM2DBL(x);
   double yc=NUM2DBL(y);
   char *stringc=StringValueCStr(string);
   gr_textext(xc,yc,stringc);
+  
   return Qtrue;
 }
 
@@ -1792,9 +1959,16 @@ void Init_grruby()
   rb_define_const(mGRruby, "FONT_PALATINO_BOLD_ITALIC", DBL2NUM(129));
   rb_define_const(mGRruby, "FONT_ZAPFCHANCERY_MEDIUM_ITALIC", DBL2NUM(130));
   rb_define_const(mGRruby, "FONT_ZAPFDINGBATS", DBL2NUM(131));
+  
   rb_define_const(mGRruby, "TEXT_PRECISION_STRING", DBL2NUM(0));
   rb_define_const(mGRruby, "TEXT_PRECISION_CHAR", DBL2NUM(1));
   rb_define_const(mGRruby, "TEXT_PRECISION_STROKE", DBL2NUM(2));
+
+  rb_define_const(mGRruby, "TEXT_PATH_RIGHT", DBL2NUM(0));
+  rb_define_const(mGRruby, "TEXT_PATH_LEFT", DBL2NUM(1));
+  rb_define_const(mGRruby, "TEXT_PATH_UP", DBL2NUM(2));
+  rb_define_const(mGRruby, "TEXT_PATH_DOWN", DBL2NUM(3));
+  
   rb_define_const(mGRruby, "MARKERTYPE_DOT", DBL2NUM(1));
   rb_define_const(mGRruby, "MARKERTYPE_PLUS", DBL2NUM(2));
   rb_define_const(mGRruby, "MARKERTYPE_ASTERISK", DBL2NUM(3));

@@ -51,7 +51,7 @@ module Rubyplot
           abs_y: @legend_color_box.abs_y,
           font: @font,
           color: @font_color,
-          font_size: @font_size
+          size: @font_size
         )
       end
     end # class Legend

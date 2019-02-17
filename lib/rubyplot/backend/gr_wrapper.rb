@@ -61,7 +61,71 @@ module Rubyplot
         spaced_dot: GR::LINETYPE_SPACED_DOT,
         double_dot: GR::LINETYPE_DOUBLE_DOT,
         triple_dot: GR::LINETYPE_TRIPLE_DOT
-      }
+      }.freeze
+
+      # Mapping between Rubyplot text types and GR text types.
+      TEXT_FONT_MAP = {
+        times_roman: GR::FONT_TIMES_ROMAN,
+        times_italic: GR::FONT_TIMES_ITALIC,
+        times_bold: GR::FONT_TIMES_BOLD,
+        times_bold_italic: GR::FONT_TIMES_BOLD_ITALIC,
+        helvetica: GR::FONT_HELVETICA,
+        helvetica_oblique: GR::FONT_HELVETICA_OBLIQUE,
+        helvetica_bold: GR::FONT_HELVETICA_BOLD,
+        helvetica_bold_oblique: GR::FONT_HELVETICA_BOLD_OBLIQUE,
+        courier: GR::FONT_COURIER,
+        courier_oblique: GR::FONT_COURIER_OBLIQUE,
+        courier_bold: GR::FONT_COURIER_BOLD,
+        courier_bold_oblique: GR::FONT_COURIER_BOLD_OBLIQUE,
+        symbol: GR::FONT_SYMBOL,
+        bookman_light: GR::FONT_BOOKMAN_LIGHT,
+        bookman_lightitalic: GR::FONT_BOOKMAN_LIGHT_ITALIC,
+        bookman_demi: GR::FONT_BOOKMAN_DEMI,
+        bookman_demi_italic: GR::FONT_BOOKMAN_DEMI_ITALIC,
+        newcenturyschlbk_roman: GR::FONT_NEWCENTURYSCHLBK_ROMAN,
+        newcenturyschlbk_italic: GR::FONT_NEWCENTURYSCHLBK_ITALIC,
+        newcenturyschlbk_bold: GR::FONT_NEWCENTURYSCHLBK_BOLD,
+        newcenturyschlbk_bold_italic: GR::FONT_NEWCENTURYSCHLBK_BOLD_ITALIC,
+        avantgarde_book: GR::FONT_AVANTGARDE_BOOK,
+        avantgarde_book_oblique: GR::FONT_AVANTGARDE_BOOK_OBLIQUE,
+        avantgarde_demi: GR::FONT_AVANTGARDE_DEMI,
+        avantgarde_demi_oblique: GR::FONT_AVANTGARDE_DEMI_OBLIQUE,
+        palatino_roman: GR::FONT_PALATINO_ROMAN,
+        palatino_italic: GR::FONT_PALATINO_ITALIC,
+        palatino_bold: GR::FONT_PALATINO_BOLD,
+        palatino_bold_italic: GR::FONT_PALATINO_BOLD_ITALIC,
+        zapfchancery_medium_italic: GR::FONT_ZAPFCHANCERY_MEDIUM_ITALIC,
+        zapfdingbats: GR::FONT_ZAPFDINGBATS
+      }.freeze
+
+      TEXT_PRECISION_MAP = {
+        high: GR::TEXT_PRECISION_STRING,
+        med: GR::TEXT_PRECISION_CHAR,
+        low: GR::TEXT_PRECISION_STROKE
+      }.freeze
+
+      TEXT_DIRECTION_MAP = {
+        left_right: GR::TEXT_PATH_RIGHT,
+        right_left: GR::TEXT_PATH_LEFT,
+        down_up: GR::TEXT_PATH_UP,
+        up_down: GR::TEXT_PATH_DOWN
+      }.freeze
+        
+      TEXT_HALIGNMENT_MAP = {
+        normal: GR::TEXT_HALIGN_NORMAL,
+        left: GR::TEXT_HALIGN_LEFT,
+        center: GR::TEXT_HALIGN_CENTER,
+        right: GR::TEXT_HALIGN_RIGHT
+      }.freeze
+
+      TEXT_VALIGNMENT_MAP = {
+        normal: GR::TEXT_VALIGN_NORMAL,
+        top: GR::TEXT_VALIGN_TOP,
+        cap: GR::TEXT_VALIGN_CAP,
+        half: GR::TEXT_VALIGN_HALF,
+        base: GR::TEXT_VALIGN_BASE,
+        bottom: GR::TEXT_VALIGN_BOTTOM
+      }.freeze
 
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
@@ -117,10 +181,22 @@ module Rubyplot
         end
       end
 
-      def draw_text(text,font_color:,font: nil,font_size:,
-        font_weight: nil, gravity: nil,
-        abs_x:,abs_y:,rotation: nil, stroke: nil)
-        
+      # Draw text on the canvas. Unlike other functions, this function does not
+      # plot within a given window but directly uses the NDC for writing the text.
+      # TODO: support text with special characters and latex symbols.
+      def draw_text(text, color:, font: nil, size:,
+        font_weight: nil, gravity: nil, abs_x:,abs_y:, rotation: nil,
+        halign: nil, valign: nil, font_precision: :high, direction: :left_right)
+        x = transform_x_ndc abs_x
+        y = transform_y_ndc abs_y
+
+        puts "text: #{text} x: #{x} y: #{y}."
+        GR.setcharheight(to_gr_font_size(size))
+        GR.settextpath(TEXT_DIRECTION_MAP[direction])
+        GR.settextcolorind(to_gr_color(color))
+        GR.settextfontprec(TEXT_FONT_MAP[font], TEXT_PRECISION_MAP[font_precision])
+        GR.settextalign(TEXT_HALIGNMENT_MAP[halign], TEXT_VALIGNMENT_MAP[valign])
+        GR.text(x, y, text)
       end
 
       def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,stroke: nil,
@@ -167,6 +243,13 @@ module Rubyplot
 
       private
 
+      # Transform font size expressed in terms of Rubyplot font size (pt.)
+      # to GR font height that is expressed in terms of the height of the canvas.
+      # FIXME: Figure out a way to do this.
+      def to_gr_font_size rubyplot_font_size
+        0.027 # GR default.
+      end
+
       def to_gr_color color
         r,g,b = to_rgb color
         GR.inqcolorfromrgb(r, g, b)
@@ -180,12 +263,12 @@ module Rubyplot
 
       # Transform a X quantity to Normalized Device Co-ordinates.
       def transform_x_ndc coord
-        coord / @xspread
+        coord.to_f / @xspread
       end
 
       # Transform a Y quantity to Normalized Device Co-ordinates.
       def transform_y_ndc coord
-        coord / @yspread
+        coord.to_f / @yspread
       end
 
       # Transform a quanitity that represents neither X nor Y co-ordinate into NDC.

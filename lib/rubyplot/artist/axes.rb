@@ -64,7 +64,7 @@ module Rubyplot
         @y_title = ''
         @top_margin = 5.0
         @left_margin = 5.0
-        @bottom_margin = 5.0
+        @bottom_margin = 10.0
         @right_margin = 5.0
         @x_range = [nil, nil]
         @y_range = [nil, nil]
@@ -77,10 +77,9 @@ module Rubyplot
         @plots = []
         @raw_rows = width * (height/width)
         @theme = Rubyplot::Themes::CLASSIC_WHITE
-        vera_font_path = File.expand_path('Vera.ttf', ENV['MAGICK_FONT_PATH'])
-        @font = File.exist?(vera_font_path) ? vera_font_path : nil
+        @font = :times_roman
         @font_color = :black
-        @marker_font_size = 15.0
+        @font_size = 15.0
         @legend_font_size = 20.0
         @legend_margin = LEGEND_MARGIN
         @title_font_size = 25.0
@@ -238,7 +237,7 @@ module Rubyplot
           @title, self,
           abs_x: abs_x + width / 2, abs_y: abs_y + height - @title_margin,
           font: @font, color: @font_color,
-          font_size: @title_font_size, internal_label: 'axes title.')
+          size: @title_font_size, internal_label: 'axes title.')
       end
 
       def calculate_xy_axes_origin

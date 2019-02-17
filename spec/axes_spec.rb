@@ -144,7 +144,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
   
   context "#line!" do
-    it "makes a simple line plot", focus: true do
+    it "makes a simple line plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.line! do |p|
@@ -155,7 +155,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "A line graph."
     end
 
-    it "plots 2 simple lines on the same axes", focus: true do
+    it "plots 2 simple lines on the same axes" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.line! do |p|

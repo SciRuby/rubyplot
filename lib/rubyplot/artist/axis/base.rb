@@ -18,15 +18,16 @@ module Rubyplot
         attr_accessor :min_val
         # The maximum value that this Axis contains.
         attr_accessor :max_val
-
-        attr_reader :stroke_width
+        # Font size of title.
+        attr_accessor :title_font_size
+        # Font of the title.
+        attr_accessor :title_font
 
         def initialize axes
           @axes = axes
           @title = ''
           @min_val = nil
           @max_val = nil
-          @stroke_width = 0.125
           @major_ticks_count = 5
           @minor_ticks_count = 2
           @texts = []

@@ -15,11 +15,11 @@ module Rubyplot
       # @param abs_y [Numeric] Y co-ordinate of the text in Rubyplot Aritst Co-ordinates.
       # @param font_color [Symbol] Color of the font from Rubyplot::Colors.
       # @param font [Symbol] Name of the font.
-      # @param font_size [Numeric] Size of the font.
+      # @param size [Numeric] Size of the font.
       # @param font_weight [Symbol] Measure of 'bigness' of the font.
       # @param halign [Symbol] Horizontal alignment of the text from Artist::Text::HAlignment.
       # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
-      def draw_text(text,font_color:,font: nil,font_size:,
+      def draw_text(text,font_color:,font: nil,size:,
         font_weight: nil, halign: nil, valign: nil,
         abs_x:, abs_y:,rotation: nil, stroke: nil)
         raise NotImplementedError, "not implemented for #{self}."

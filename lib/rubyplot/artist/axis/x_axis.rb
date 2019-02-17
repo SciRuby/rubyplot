@@ -8,12 +8,14 @@ module Rubyplot
       end
 
       def draw
+        configure_title
         Rubyplot.backend.draw_x_axis(
           origin: @axes.origin[0],
           major_ticks: @major_ticks,
           minor_ticks: @minor_ticks,
           major_ticks_count: @major_ticks_count
         )
+        @texts.each(&:draw)
       end
 
       private
@@ -22,9 +24,9 @@ module Rubyplot
         @texts << Rubyplot::Artist::Text.new(
           @title,
           self,
-          font_size: @axes.marker_font_size,
+          size: @title_font_size,
           abs_y: @axes.abs_y,
-          abs_x: @axes.abs_x + (@abs_x2 - @abs_x1)/2
+          abs_x: @axes.abs_x + @axes.width/2
         )
       end
     end # class XAxis

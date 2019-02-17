@@ -26,7 +26,7 @@ module Rubyplot
     :spaced_dot,
     :double_dot,
     :triple_dot,
-  ]
+  ].freeze
   
   MARKER_TYPES = [
     :dot,
@@ -66,7 +66,55 @@ module Rubyplot
     :vline,
     :hline,
     :omark
-  ]
+  ].freeze
+
+  TEXT_FONTS = [
+    :times_roman,
+    :times_italic,
+    :times_bold,
+    :times_bolditalic,
+    :helvetica,
+    :helvetica_oblique,
+    :helvetica_bold,
+    :helvetica_boldoblique,
+    :courier,
+    :courier_oblique,
+    :courier_bold,
+    :courier_boldoblique,
+    :symbol,
+    :bookman_light,
+    :bookman_lightitalic,
+    :bookman_demi,
+    :bookman_demiitalic,
+    :newcenturyschlbk_roman,
+    :newcenturyschlbk_italic,
+    :newcenturyschlbk_bold,
+    :newcenturyschlbk_bolditalic,
+    :avantgarde_book,
+    :avantgarde_bookoblique,
+    :avantgarde_demi,
+    :avantgarde_demioblique,
+    :palatino_roman,
+    :palatino_italic,
+    :palatino_bold,
+    :palatino_bolditalic,
+    :zapfchancery_mediumitalic,
+    :zapfdingbats
+  ].freeze
+
+  TEXT_PRECISION = [
+    :high,
+    :med,
+    :low
+  ].freeze
+
+  TEXT_DIRECTION = [
+    :left_right,
+    :right_left,
+    :down_up,
+    :up_down
+  ].freeze
+  
   # Min. co-ordinates of the lower left corner.
   MIN_X = 0
   MIN_Y = 0

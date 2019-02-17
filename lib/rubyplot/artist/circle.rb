@@ -2,13 +2,13 @@ module Rubyplot
   module Artist
     class Circle < Base
       # rubocop:disable Metrics/ParameterLists
-      def initialize(owner, abs_x:, abs_y:, radius:, stroke_opacity: 0.0,
-                     color: :default, stroke_width:)
+      def initialize(owner, abs_x:, abs_y:, radius:, edge_opacity: 0.0,
+                     color: :default, edge_width:)
         super(abs_x, abs_y)
         @owner = owner
         @radius = radius
-        @stroke_width = stroke_width
-        @stroke_opacity = stroke_opacity
+        @edge_width = width
+        @edge_opacity = edge_opacity
         @color = color
       end
       # rubocop:enable Metrics/ParameterLists
@@ -18,8 +18,8 @@ module Rubyplot
           x: @abs_x,
           y: @abs_y,
           radius: @radius,
-          stroke_opacity: @stroke_opacity,
-          stroke_width: @stroke_width,
+          edge_opacity: @edge_opacity,
+          edge_width: @edge_width,
           color: Rubyplot::Color::COLOR_INDEX[@color]
         )
       end
