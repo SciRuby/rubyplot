@@ -190,7 +190,7 @@ module Rubyplot
         x = transform_x_ndc abs_x
         y = transform_y_ndc abs_y
 
-        puts "text: #{text} x: #{x} y: #{y}."
+        GR.setcharup(*to_gr_rotation_vector(rotation))
         GR.setcharheight(to_gr_font_size(size))
         GR.settextpath(TEXT_DIRECTION_MAP[direction])
         GR.settextcolorind(to_gr_color(color))
@@ -242,6 +242,15 @@ module Rubyplot
       end
 
       private
+
+      # FIXME
+      def to_gr_rotation_vector rotation
+        if rotation == -90.0
+          [-1,0]
+        else
+          [0,1]
+        end
+      end
 
       # Transform font size expressed in terms of Rubyplot font size (pt.)
       # to GR font height that is expressed in terms of the height of the canvas.
@@ -301,6 +310,7 @@ module Rubyplot
           axes = v[:axes]
           tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
           within_window do
+            GR.setcharheight(0.018)
             GR.axes(
               (axes.x_axis.spread / axes.x_axis.major_ticks_count.to_f) /
                 axes.x_axis.minor_ticks_count,

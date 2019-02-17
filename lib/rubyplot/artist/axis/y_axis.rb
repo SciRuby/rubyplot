@@ -6,12 +6,14 @@ module Rubyplot
       end
 
       def draw
+        configure_title
         Rubyplot.backend.draw_y_axis(
           origin: @axes.origin[1],
           major_ticks: @major_ticks,
           minor_ticks: @minor_ticks,
           major_ticks_count: @major_ticks_count 
         )
+        @texts.each(&:draw)
       end
 
       private
@@ -21,9 +23,9 @@ module Rubyplot
           @title,
           self,
           rotation: -90.0,
-          abs_x: @axes.origin[0] - 3,
-          abs_y: @length / 2,
-          font_size: @axes.marker_font_size
+          abs_x: @axes.abs_x,
+          abs_y: @axes.abs_y + @axes.height / 2,
+          size: @title_font_size
         )
       end
     end # class YAxis

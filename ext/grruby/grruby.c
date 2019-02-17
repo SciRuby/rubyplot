@@ -698,10 +698,25 @@ static VALUE setcharheight(VALUE self, VALUE height) {
   return Qtrue;
 }
 
-static VALUE setcharup(VALUE self,VALUE ux,VALUE uy){
+/**
+ * call-seq:
+ *   Rubyplot::GR.setcharup(0, 0.5) -> true
+ * 
+ * Set the current character text angle up vector.
+ * 
+ * **Parameters:**
+ * 
+ * `ux`, `uy` :
+ *   Text up vector
+ * 
+ *   `setcharup` defines the vertical rotation of subsequent text output primitives.
+ *   The text up vector is initially set to (0, 1), horizontal to the baseline.
+ */
+static VALUE setcharup(VALUE self,VALUE ux,VALUE uy) {
   double uxc = NUM2DBL(ux);
   double uyc = NUM2DBL(uy);
   gr_setcharup(uxc,uyc);
+  
   return Qtrue;
 }
 

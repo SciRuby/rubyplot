@@ -63,7 +63,7 @@ module Rubyplot
         @x_title = ''
         @y_title = ''
         @top_margin = 5.0
-        @left_margin = 5.0
+        @left_margin = 10.0
         @bottom_margin = 10.0
         @right_margin = 5.0
         @x_range = [nil, nil]
@@ -235,7 +235,7 @@ module Rubyplot
       def configure_title
         @texts << Rubyplot::Artist::Text.new(
           @title, self,
-          abs_x: abs_x + width / 2, abs_y: abs_y + height - @title_margin,
+          abs_x: abs_x + width / 2, abs_y: abs_y + height,
           font: @font, color: @font_color,
           size: @title_font_size, internal_label: 'axes title.')
       end

@@ -17,6 +17,7 @@ module Rubyplot
       # @param font [Symbol] Name of the font.
       # @param size [Numeric] Size of the font.
       # @param font_weight [Symbol] Measure of 'bigness' of the font.
+      # @param rotation [Numeric] Angle between 0 and 360 degrees signifying rotation of text.
       # @param halign [Symbol] Horizontal alignment of the text from Artist::Text::HAlignment.
       # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
       def draw_text(text,font_color:,font: nil,size:,
