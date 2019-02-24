@@ -4,7 +4,7 @@ module Rubyplot
       class Bar < Artist::Plot::Base
         # Space between the columns.
         attr_accessor :bar_spacing
-        # Width of each bar in pixels.
+        # Width of each bar.
         attr_accessor :bar_width
         # Number between 0 and 1.0 denoting spacing between the bars.
         # 0.0 means no spacing at all 1.0 means that each bars' width
@@ -50,8 +50,8 @@ module Rubyplot
         private
 
         def setup_bar_rectangles
-          @normalized_data[:y_values].each_with_index do |iy, i|
-            height = iy * @axes.y_axis.length
+          @data[:y_values].each_with_index do |iy|
+            height = iy
             @rectangles << Rubyplot::Artist::Rectangle.new(
               self,
               abs_x: @abs_x_left[i],

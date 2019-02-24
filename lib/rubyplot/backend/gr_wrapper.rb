@@ -207,8 +207,14 @@ module Rubyplot
       end
       
       def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,
-        fill_color: nil, border_width: nil)
-        
+        fill_color: nil, border_width: 1.0, border_type: :solid)
+        within_window do
+          GR.setlinewidth(border_width)
+          GR.setlinetype(LINE_TYPE_MAP[border_type])
+          GR.setlinecolorind(to_gr_color(border_color))
+          GR.setfillcolorind(to_gr_color(fill_color))
+          GR.drawrect(x1, x2, y1, y2)
+        end
       end
 
       def draw_line

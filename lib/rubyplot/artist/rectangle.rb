@@ -5,18 +5,18 @@ module Rubyplot
 
       # Create a Rectangle for drawing on the canvas.
       #
-      # @param abs_x [Float] Absolute X co-ordinate of the upper left corner.
-      # @param abs_y [Float] Absolute Y co-ordinate of the upper left corner.
-      # @param width [Float] Width in pixels of the rectangle.
-      # @param height [Float] Height in pixels of the rectangle.
+      # @param x [Float] X co-ordinate of the lower left corner.
+      # @param y [Float] Y co-ordinate of the lower left corner.
+      # @param width [Float] Width of the rectangle (as per range of X axis.).
+      # @param height [Float] Height of the rectangle (as per range of Y axis).
       # @param border_color [Symbol] Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting border color.
       # @param fill_color [Symbol] nil Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting the fill color.
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(owner,abs_x:,abs_y:,width:,height:,border_color:,fill_color: nil)
-        super(abs_x, abs_y)
+      def initialize(owner,x:,y:,width:,height:,border_color:,fill_color: nil)
+        super(x, y)
         @height = height
         @width = width
         @border_color = Rubyplot::Color::COLOR_INDEX[border_color]
@@ -26,10 +26,10 @@ module Rubyplot
 
       def draw
         Rubyplot.backend.draw_rectangle(
-          x1: @abs_x,
-          y1: @abs_y,
-          x2: @abs_x + @width,
-          y2: @abs_y + @height,
+          x1: @x,
+          y1: @y,
+          x2: @x + @width,
+          y2: @y + @height,
           border_color: @border_color,
           fill_color: @fill_color
         )

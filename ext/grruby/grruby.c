@@ -829,15 +829,41 @@ static VALUE setfillintstyle(VALUE self,VALUE style) {
   return Qtrue;
 }
 
+/**
+ *Sets the fill style to be used for subsequent fill areas.
+ *
+ ***Parameters:**
+ *
+ *`index` :
+ *The fill style index to be used
+ *
+ *`setfillstyle` specifies an index when PATTERN fill or HATCH fill is requested by the
+ *`setfillintstyle` function. If the interior style is set to PATTERN, the fill style
+ *  index points to a device-independent pattern table. If interior style is set to HATCH
+ *  the fill style index indicates different hatch styles. If HOLLOW or SOLID is specified
+ *  for the interior style, the fill style index is unused.
+ */
 static VALUE setfillstyle(VALUE self,VALUE index){
   int indexc = NUM2INT(index);
   gr_setfillstyle(indexc);
   return Qtrue;
 }
 
-static VALUE setfillcolorind(VALUE self,VALUE color){
+/*
+ *Sets the current fill area color index.
+ *
+ ***Parameters:**
+ *
+ *`color` :
+ *The fill area color index (COLOR < 1256)
+ *
+ *  `setfillcolorind` defines the color of subsequent fill area output primitives.
+ *  GR uses the default foreground color (black=1) for the default fill area color index.
+ */
+static VALUE setfillcolorind(VALUE self,VALUE color) {
   int colorc = NUM2INT(color);
   gr_setfillcolorind(colorc);
+  
   return Qtrue;
 }
 
