@@ -51,7 +51,6 @@ module Rubyplot
 
         def setup_bar_rectangles
           @data[:y_values].each_with_index do |iy, i|
-            puts "iy: #{iy}"
             @rectangles << Rubyplot::Artist::Rectangle.new(
               self,
               x1: @abs_x_left[i],

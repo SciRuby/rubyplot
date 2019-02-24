@@ -19,8 +19,6 @@ module Rubyplot
       attr_reader :x_axis
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
-      # Array denoting co-ordinates of the origin of X and Y axes. [x, y].
-      attr_accessor :origin
       # Position of the legend box.
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
@@ -33,10 +31,7 @@ module Rubyplot
       attr_accessor :bottom_margin
       # Right margin.
       attr_accessor :right_margin
-      # Range of X axis.
-      attr_accessor :x_range
-      # Range of Y axis.
-      attr_accessor :y_range, :grid, :bounding_box, :title_shift
+      attr_accessor :grid, :bounding_box, :title_shift
       # Main title for this Axes.
       attr_accessor :title
       # X co-ordinate of lower left corner of this Axes.
@@ -66,8 +61,6 @@ module Rubyplot
         @left_margin = 10.0
         @bottom_margin = 10.0
         @right_margin = 5.0
-        @x_range = [nil, nil]
-        @y_range = [nil, nil]
         @title = ''
         @title_shift = 0
         @title_margin = TITLE_MARGIN
@@ -87,7 +80,6 @@ module Rubyplot
         @legends = []
         @lines = []
         @texts = []
-        @origin = nil
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
         @legend_box_position = :top
@@ -97,7 +89,7 @@ module Rubyplot
       def legend_box_ix
         case @legend_box_position
         when :top
-          @x_range[0] + (@x_range[1] - @x_range[0]) / 2
+          x_range[0] + (x_range[1] - x_range[0]) / 2
         end
       end
 
@@ -105,8 +97,7 @@ module Rubyplot
       def legend_box_iy
         case @legend_box_position
         when :top
-          @y_range[1]
-          abs_y + height - @top_margin - @legend_margin
+          y_range[1] - (y_range[1] - y_range[0]) / 8
         end
       end
 
@@ -114,7 +105,6 @@ module Rubyplot
       def draw
         Rubyplot.backend.active_axes = self
         set_axes_ranges
-        set_default_origin unless @origin
         normalize_plotting_data
         assign_default_label_colors
         consolidate_plots
@@ -181,11 +171,30 @@ module Rubyplot
         @y_axis.title = y_title
       end
 
-      private
-
-      def set_default_origin
-        @origin = [@x_axis.min_val, @y_axis.min_val]
+      def x_range
+        [@x_axis.min_val, @x_axis.max_val]
       end
+
+      def y_range
+        [@y_axis.min_val, @y_axis.max_val]
+      end
+
+      # Set the X range of the Axes.
+      def x_range= xr
+        @x_axis.min_val = xr[0]
+        @x_axis.max_val = xr[1]
+      end
+
+      def y_range= xy
+        @y_axis.min_val = xy[0]
+        @y_axis.max_val = xy[1]
+      end
+
+      def origin
+        [@x_axis.min_val, @y_axis.min_val]
+      end
+
+      private
 
       def assign_default_label_colors
         @plots.each_with_index do |p, i|
@@ -218,7 +227,7 @@ module Rubyplot
       def assign_y_ticks
         value_distance = @y_axis.spread / (@y_axis.major_ticks_count.to_f-1)
         unless @y_axis.major_ticks
-          @y_axis.major_ticks = (@y_range[0]..@y_range[1]).step(value_distance).map { |i| i }
+          @y_axis.major_ticks = (y_range[0]..y_range[1]).step(value_distance).map { |i| i }
         end
         
         unless @y_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
@@ -239,11 +248,6 @@ module Rubyplot
           abs_x: abs_x + width / 2, abs_y: abs_y + height,
           font: @font, color: @font_color,
           size: @title_font_size, internal_label: 'axes title.')
-      end
-
-      def calculate_xy_axes_origin
-        @origin[0] = abs_x + @left_margin
-        @origin[1] = abs_y + @bottom_margin
       end
 
       # Figure out co-ordinates of the legends
@@ -291,21 +295,17 @@ module Rubyplot
       end
 
       def set_xrange
-        if @x_range[0].nil? && @x_range[1].nil?
-          @x_range[0] = @plots.map(&:x_min).min
-          @x_range[1] = @plots.map(&:x_max).max
+        if @x_axis.min_val.nil? && @x_axis.max_val.nil?
+          @x_axis.min_val = @plots.map(&:x_min).min
+          @x_axis.max_val = @plots.map(&:x_max).max
         end
-        @x_axis.min_val = @x_range[0]
-        @x_axis.max_val = @x_range[1]
       end
 
       def set_yrange
-        if @y_range[0].nil? && @y_range[1].nil?
-          @y_range[0] = @plots.map(&:y_min).min
-          @y_range[1] = @plots.map(&:y_max).max
+        if @y_axis.min_val.nil? && @y_axis.max_val.nil?
+          @y_axis.min_val = @plots.map(&:y_min).min
+          @y_axis.max_val = @plots.map(&:y_max).max
         end
-        @y_axis.min_val = @y_range[0]
-        @y_axis.max_val = @y_range[1]
       end
     end # class Axes
   end # module Artist

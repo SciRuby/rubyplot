@@ -25,7 +25,6 @@ module Rubyplot
       # rubocop:enable Metrics/ParameterLists
 
       def draw
-        puts "rectangle draw: x1: #{@x1} x2: #{@x2} y1: #{@y1} y2: #{@y2}."
         Rubyplot.backend.draw_rectangle(
           x1: @x1,
           y1: @y1,

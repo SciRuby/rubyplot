@@ -35,7 +35,7 @@ module Rubyplot
 
         def configure_ranges!
           @y_min = @y_min > 0 ? 0 : @y_min
-          @axes.y_range[0] = @y_min
+          @axes.y_range = [@y_min, @y_max]
         end
         
         def configure_plot_geometry_data!

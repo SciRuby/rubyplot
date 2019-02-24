@@ -344,8 +344,8 @@ module Rubyplot
                 axes.x_axis.minor_ticks_count,
               (axes.y_axis.spread / axes.y_axis.major_ticks_count.to_f) /
                 axes.y_axis.minor_ticks_count,
-              axes.origin[0],
-              axes.origin[1],
+              axes.x_axis.min_val,
+              axes.y_axis.min_val,
               axes.x_axis.minor_ticks_count,
               axes.y_axis.minor_ticks_count,
               -tick_length
