@@ -18,6 +18,7 @@ module Rubyplot
           @y_min = @bar_plots.map(&:y_min).min
           @x_max = @bar_plots.map(&:x_max).max
           @y_max = @bar_plots.map(&:y_max).max
+          configure_ranges!
           configure_plot_geometry_data!
           # configure_x_ticks!
         end
@@ -32,9 +33,14 @@ module Rubyplot
 
         private
 
+        def configure_ranges!
+          @y_min = @y_min > 0 ? 0 : @y_min
+          @axes.y_range[0] = @y_min
+        end
+        
         def configure_plot_geometry_data!
           @num_max_slots = @bar_plots.map(&:num_bars).max
-          @max_slot_width = (@x_max - @x_min) / @num_max_slots
+          @max_slot_width = (@x_max - @x_min) / @num_max_slots.to_f
           # FIXME: figure out a way to specify inter-box space somehow.
           @spacing_ratio = @bar_plots[0].spacing_ratio
           @padding = @spacing_ratio * @max_slot_width

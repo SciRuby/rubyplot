@@ -249,7 +249,7 @@ module Rubyplot
       # Figure out co-ordinates of the legends
       def configure_legends
         @legend_box = Rubyplot::Artist::LegendBox.new(
-          self, abs_x: legend_box_ix, abs_y: legend_box_iy
+          self, x: legend_box_ix, y: legend_box_iy
         )
       end
 

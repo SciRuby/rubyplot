@@ -216,6 +216,7 @@ module Rubyplot
           GR.setlinetype(LINE_TYPE_MAP[border_type])
           GR.setlinecolorind(to_gr_color(border_color))
           if fill_color
+            GR.setfillintstyle(1)
             GR.setfillcolorind(to_gr_color(fill_color))
             GR.fillrect(x1, x2, y1, y2)
           else
@@ -337,6 +338,7 @@ module Rubyplot
           tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
           within_window do
             GR.setcharheight(0.018)
+            GR.setlinecolorind(to_gr_color(:black))
             GR.axes(
               (axes.x_axis.spread / axes.x_axis.major_ticks_count.to_f) /
                 axes.x_axis.minor_ticks_count,

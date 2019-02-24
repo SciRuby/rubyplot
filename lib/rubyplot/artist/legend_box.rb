@@ -68,8 +68,9 @@ module Rubyplot
       end
 
       def configure_dimensions
-        @legends_height = @axes.plots.size * per_legend_height * (@axes.y_max - @axes.y_min)
-        @legends_width = 0.2 * (@axes.x_max - @axes.x_min)
+        @legends_height = @axes.plots.size * per_legend_height * (
+          @axes.y_range[1] - @axes.y_range[0])
+        @legends_width = 0.2 * (@axes.x_range[1] - @axes.x_range[0])
         @height = @legends_height + top_margin + bottom_margin
         @width = @legends_width + left_margin + right_margin
       end
