@@ -193,27 +193,34 @@ module Rubyplot
       # TODO: support text with special characters and latex symbols.
       def draw_text(text, color:, font: nil, size:,
         font_weight: nil, gravity: nil, abs_x:,abs_y:, rotation: nil,
-        halign: nil, valign: nil, font_precision: :high, direction: :left_right)
-        x = transform_x_ndc abs_x
-        y = transform_y_ndc abs_y
+        halign: nil, valign: nil, font_precision: :high, direction: :left_right,
+        abs: true)
+        within_window(abs) do
+          x = transform_x_ndc abs_x
+          y = transform_y_ndc abs_y
 
-        GR.setcharup(*to_gr_rotation_vector(rotation))
-        GR.setcharheight(to_gr_font_size(size))
-        GR.settextpath(TEXT_DIRECTION_MAP[direction])
-        GR.settextcolorind(to_gr_color(color))
-        GR.settextfontprec(TEXT_FONT_MAP[font], TEXT_PRECISION_MAP[font_precision])
-        GR.settextalign(TEXT_HALIGNMENT_MAP[halign], TEXT_VALIGNMENT_MAP[valign])
-        GR.text(x, y, text)
+          GR.setcharup(*to_gr_rotation_vector(rotation))
+          GR.setcharheight(to_gr_font_size(size))
+          GR.settextpath(TEXT_DIRECTION_MAP[direction])
+          GR.settextcolorind(to_gr_color(color))
+          GR.settextfontprec(TEXT_FONT_MAP[font], TEXT_PRECISION_MAP[font_precision])
+          GR.settextalign(TEXT_HALIGNMENT_MAP[halign], TEXT_VALIGNMENT_MAP[valign])
+          GR.text(x, y, text)
+        end
       end
       
-      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: nil,
+      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: :black,
         fill_color: nil, border_width: 1.0, border_type: :solid)
         within_window do
           GR.setlinewidth(border_width)
           GR.setlinetype(LINE_TYPE_MAP[border_type])
           GR.setlinecolorind(to_gr_color(border_color))
-          GR.setfillcolorind(to_gr_color(fill_color))
-          GR.drawrect(x1, x2, y1, y2)
+          if fill_color
+            GR.setfillcolorind(to_gr_color(fill_color))
+            GR.fillrect(x1, x2, y1, y2)
+          else
+            GR.drawrect(x1, x2, y1, y2)
+          end
         end
       end
 
@@ -300,21 +307,27 @@ module Rubyplot
 
       # Set the window on the canvas within which the plotting will take place
       # and then call the passed block for actual plotting.
-      def within_window &block
-        vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / @xspread
-        vp_min_y = (@active_axes.abs_y + @active_axes.bottom_margin) / @yspread
-        vp_max_x = (@active_axes.abs_x + @active_axes.width -
-          @active_axes.right_margin) / @xspread
-        vp_max_y = (@active_axes.abs_y + @active_axes.height -
-          @active_axes.top_margin) / @yspread
-        
-        GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
-        GR.setwindow(
-          @active_axes.x_range[0],
-          @active_axes.x_range[1],
-          @active_axes.y_range[0],
-          @active_axes.y_range[1]
-        )
+      def within_window abs=false, &block
+        if abs
+          GR.setviewport(0,1,0,1)
+          GR.setwindow(0,1,0,1)
+        else
+          vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / @xspread
+          vp_min_y = (@active_axes.abs_y + @active_axes.bottom_margin) / @yspread
+          vp_max_x = (@active_axes.abs_x + @active_axes.width -
+            @active_axes.right_margin) / @xspread
+          vp_max_y = (@active_axes.abs_y + @active_axes.height -
+            @active_axes.top_margin) / @yspread
+          
+          GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
+          GR.setwindow(
+            @active_axes.x_range[0],
+            @active_axes.x_range[1],
+            @active_axes.y_range[0],
+            @active_axes.y_range[1]
+          )          
+        end
+
         block.call
       end
 

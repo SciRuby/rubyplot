@@ -51,13 +51,12 @@ module Rubyplot
 
         def setup_bar_rectangles
           @data[:y_values].each_with_index do |iy|
-            height = iy
             @rectangles << Rubyplot::Artist::Rectangle.new(
               self,
-              abs_x: @abs_x_left[i],
-              abs_y: @abs_y_left[i],
-              width: @bar_width,
-              height: height,
+              x1: @abs_x_left[i],
+              y1: @abs_y_left[i],
+              x2: @abs_x_left[i] + @bar_width,
+              y2: iy,
               border_color: @data[:color],
               fill_color: @data[:color]
             )

@@ -19,7 +19,7 @@ module Rubyplot
           @x_max = @bar_plots.map(&:x_max).max
           @y_max = @bar_plots.map(&:y_max).max
           configure_plot_geometry_data!
-          configure_x_ticks!
+          # configure_x_ticks!
         end
 
         def normalize
@@ -34,7 +34,7 @@ module Rubyplot
 
         def configure_plot_geometry_data!
           @num_max_slots = @bar_plots.map(&:num_bars).max
-          @max_slot_width = @axes.x_axis.length / @num_max_slots
+          @max_slot_width = (@x_max - @x_min) / @num_max_slots
           # FIXME: figure out a way to specify inter-box space somehow.
           @spacing_ratio = @bar_plots[0].spacing_ratio
           @padding = @spacing_ratio * @max_slot_width
@@ -46,9 +46,9 @@ module Rubyplot
         end
 
         def configure_x_ticks!
-          @axes.num_x_ticks = @num_max_slots
+ #         @axes.num_x_ticks = @num_max_slots
           labels = @axes.x_axis.major_ticks || Array.new(@num_max_slots, &:to_s)
-          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
+#          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
           @axes.x_axis.major_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
@@ -62,9 +62,9 @@ module Rubyplot
         def set_bar_dims bar_plot, index
           bar_plot.bar_width = @max_bars_width / @bars_per_slot
           @num_max_slots.times do |i|
-            bar_plot.abs_x_left[i] = @axes.abs_x + @axes.left_margin +
-                                     i * @max_slot_width + @padding / 2 + index * bar_plot.bar_width
-            bar_plot.abs_y_left[i] = @axes.origin[1] + @axes.x_axis.stroke_width
+            bar_plot.abs_x_left[i] = @x_min + i*@max_slot_width + @padding/2 +
+              index * bar_plot.bar_width
+            bar_plot.abs_y_left[i] = @y_min
           end
         end
       end # class MultiBars

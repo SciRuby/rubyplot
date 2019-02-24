@@ -897,7 +897,7 @@ static VALUE setwindow(VALUE self, VALUE xmin, VALUE xmax,VALUE ymin, VALUE ymax
   return Qtrue;
 }
 
-static VALUE inqwindow(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
+static VALUE inqwindow(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d) {
   double *ac = rb_ar_2_dbl_ar(a);
   double *bc = rb_ar_2_dbl_ar(b);
   double *cc = rb_ar_2_dbl_ar(c);

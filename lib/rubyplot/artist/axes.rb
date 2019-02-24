@@ -97,7 +97,7 @@ module Rubyplot
       def legend_box_ix
         case @legend_box_position
         when :top
-          abs_x + width / 2
+          @x_range[0] + (@x_range[1] - @x_range[0]) / 2
         end
       end
 
@@ -105,6 +105,7 @@ module Rubyplot
       def legend_box_iy
         case @legend_box_position
         when :top
+          @y_range[1]
           abs_y + height - @top_margin - @legend_margin
         end
       end

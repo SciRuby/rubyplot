@@ -1,35 +1,35 @@
 module Rubyplot
   module Artist
     class Rectangle < Base
-      attr_reader :width, :height, :border_color, :fill_color
+      attr_reader :x1, :x2, :y1, :y2, :border_color, :fill_color
 
       # Create a Rectangle for drawing on the canvas.
       #
-      # @param x [Float] X co-ordinate of the lower left corner.
-      # @param y [Float] Y co-ordinate of the lower left corner.
-      # @param width [Float] Width of the rectangle (as per range of X axis.).
-      # @param height [Float] Height of the rectangle (as per range of Y axis).
+      # @param x1 [Float] X co-ordinate of the lower left corner.
+      # @param y1 [Float] Y co-ordinate of the lower left corner.
+      # @param x2 [Float] X co-ordinate of upper right corner.
+      # @param y2 [Float] Y co-ordinate of upper right corner.
       # @param border_color [Symbol] Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting border color.
       # @param fill_color [Symbol] nil Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting the fill color.
-
       # rubocop:disable Metrics/ParameterLists
-      def initialize(owner,x:,y:,width:,height:,border_color:,fill_color: nil)
-        super(x, y)
-        @height = height
-        @width = width
-        @border_color = Rubyplot::Color::COLOR_INDEX[border_color]
-        @fill_color = Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+      def initialize(owner,x1:,y1:,x2:,y2:,border_color:,fill_color: nil)
+        @x1 = x1
+        @x2 = x2
+        @y1 = y1
+        @y2 = y2
+        @border_color = border_color
+        @fill_color = fill_color
       end
       # rubocop:enable Metrics/ParameterLists
 
       def draw
         Rubyplot.backend.draw_rectangle(
-          x1: @x,
-          y1: @y,
-          x2: @x + @width,
-          y2: @y + @height,
+          x1: @x1,
+          y1: @y1,
+          x2: @x2,
+          y2: @y2,
           border_color: @border_color,
           fill_color: @fill_color
         )
