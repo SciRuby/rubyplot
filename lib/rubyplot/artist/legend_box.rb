@@ -11,6 +11,7 @@ module Rubyplot
       RIGHT_SPACING_RATIO = 0.1
 
       attr_accessor :border_color
+      attr_reader :width, :height
 
       # @param axes [Rubyplot::Artist::Axes] Axes object to which this LegendBox belongs.
       # @param abs_x [Float] Absolute X co-ordinate of the lower right corner of this legend box.
@@ -48,9 +49,9 @@ module Rubyplot
         RIGHT_SPACING_RATIO * @legends_width
       end
 
-      # Proportion of the height of the Axes that each legend takes.
+      # Height of each legend in Rubyplot Artist Co-ordinates.
       def per_legend_height
-        0.05
+        5
       end
 
       private
