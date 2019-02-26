@@ -13,11 +13,10 @@ module Rubyplot
       attr_accessor :border_color
 
       # @param axes [Rubyplot::Artist::Axes] Axes object to which this LegendBox belongs.
-      # @param x [Float] X co-ordinate of the lower right corner of this legend box.
-      # @param y [Float] Y co-ordinate of the lower right corner of this legend box.
-      def initialize(axes, x:, y:)
-        @x = x
-        @y = y
+      # @param abs_x [Float] Absolute X co-ordinate of the lower right corner of this legend box.
+      # @param abs_y [Float] Absolute Y co-ordinate of the lower right corner of this legend box.
+      def initialize(axes, abs_x:, abs_y:)
+        super(abs_x, abs_y)
         @axes = axes
         @border_color = :black
         @legends = []
@@ -59,18 +58,18 @@ module Rubyplot
       def configure_legend_box
         @bounding_box = Rubyplot::Artist::Rectangle.new(
           self,
-          x1: @x,
-          y1: @y,
-          x2: @x + @width,
-          y2: @y + @height,
-          border_color: @border_color
+          x1: @abs_x,
+          y1: @abs_y,
+          x2: @abs_x + @width,
+          y2: @abs_y + @height,
+          border_color: @border_color,
+          abs: true
         )
       end
 
       def configure_dimensions
-        @legends_height = @axes.plots.size * per_legend_height * (
-          @axes.y_range[1] - @axes.y_range[0])
-        @legends_width = 0.2 * (@axes.x_range[1] - @axes.x_range[0])
+        @legends_height = @axes.plots.size * per_legend_height
+        @legends_width = 0.2 * @axes.width
         @height = @legends_height + top_margin + bottom_margin
         @width = @legends_width + left_margin + right_margin
       end
@@ -84,7 +83,7 @@ module Rubyplot
             text: plot.label,
             color: plot.color,
             abs_x: @abs_x + left_margin,
-            abs_y: @abs_y + count * per_legend_height + bottom_margin
+            abs_y: @abs_y + count * per_legend_height + bottom_margin,
           )
         end
       end

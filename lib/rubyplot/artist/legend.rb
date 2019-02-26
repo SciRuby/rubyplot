@@ -34,12 +34,13 @@ module Rubyplot
       def configure_legend_color_box
         @legend_color_box = Rubyplot::Artist::Rectangle.new(
           self,
-          abs_x: @abs_x,
-          abs_y: @abs_y + TOP_MARGIN,
-          width: @legend_box_size,
-          height: @legend_box_size,
+          x1: @abs_x,
+          y1: @abs_y + TOP_MARGIN,
+          x2: @abs_x + @legend_box_size,
+          y2: @abs_y + @legend_box_size,
           border_color: @color,
-          fill_color: @color
+          fill_color: @color,
+          abs: true
         )
       end
 

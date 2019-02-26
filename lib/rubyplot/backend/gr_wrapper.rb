@@ -196,8 +196,10 @@ module Rubyplot
         halign: nil, valign: nil, font_precision: :high, direction: :left_right,
         abs: true)
         within_window(abs) do
-          x = transform_x_ndc abs_x
-          y = transform_y_ndc abs_y
+          if abs
+            x = transform_x_ndc abs_x
+            y = transform_y_ndc abs_y
+          end
 
           GR.setcharup(*to_gr_rotation_vector(rotation))
           GR.setcharheight(to_gr_font_size(size))
@@ -210,8 +212,15 @@ module Rubyplot
       end
       
       def draw_rectangle(x1:,y1:,x2:,y2:,border_color: :black,
-        fill_color: nil, border_width: 1.0, border_type: :solid)
-        within_window do
+        fill_color: nil, border_width: 1.0, border_type: :solid, abs: false)
+        within_window(abs) do
+          if abs
+            x1 = transform_x_ndc x1
+            x2 = transform_x_ndc x2
+            y1 = transform_y_ndc y1
+            y2 = transform_y_ndc y2
+          end
+          
           GR.setlinewidth(border_width)
           GR.setlinetype(LINE_TYPE_MAP[border_type])
           GR.setlinecolorind(to_gr_color(border_color))
@@ -308,7 +317,7 @@ module Rubyplot
 
       # Set the window on the canvas within which the plotting will take place
       # and then call the passed block for actual plotting.
-      def within_window abs=false, &block
+      def within_window(abs=false, &block)
         if abs
           GR.setviewport(0,1,0,1)
           GR.setwindow(0,1,0,1)

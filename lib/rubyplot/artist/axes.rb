@@ -89,7 +89,7 @@ module Rubyplot
       def legend_box_ix
         case @legend_box_position
         when :top
-          x_range[0] + (x_range[1] - x_range[0]) / 2
+          abs_x + width / 2
         end
       end
 
@@ -97,7 +97,7 @@ module Rubyplot
       def legend_box_iy
         case @legend_box_position
         when :top
-          y_range[1] - (y_range[1] - y_range[0]) / 8
+          abs_y + height - top_margin - legend_margin
         end
       end
 
@@ -253,7 +253,7 @@ module Rubyplot
       # Figure out co-ordinates of the legends
       def configure_legends
         @legend_box = Rubyplot::Artist::LegendBox.new(
-          self, x: legend_box_ix, y: legend_box_iy
+          self, abs_x: legend_box_ix, abs_y: legend_box_iy
         )
       end
 

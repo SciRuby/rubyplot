@@ -13,14 +13,16 @@ module Rubyplot
       #   denoting border color.
       # @param fill_color [Symbol] nil Symbol from Rubyplot::Color::COLOR_INDEX
       #   denoting the fill color.
+      # @param abs [FalseClass|TrueClass] false Whether the co-ordinates are absolute co-ordinates.
       # rubocop:disable Metrics/ParameterLists
-      def initialize(owner,x1:,y1:,x2:,y2:,border_color:,fill_color: nil)
+      def initialize(owner,x1:,y1:,x2:,y2:,border_color:,fill_color: nil, abs: false)
         @x1 = x1
         @x2 = x2
         @y1 = y1
         @y2 = y2
         @border_color = border_color
         @fill_color = fill_color
+        @abs = abs
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -31,7 +33,8 @@ module Rubyplot
           x2: @x2,
           y2: @y2,
           border_color: @border_color,
-          fill_color: @fill_color
+          fill_color: @fill_color,
+          abs: @abs
         )
       end
     end # class Rectangle
