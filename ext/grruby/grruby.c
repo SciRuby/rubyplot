@@ -1581,9 +1581,35 @@ static VALUE fillrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
   double yminc = NUM2DBL(ymin);
   double ymaxc = NUM2DBL(ymax);
   gr_fillrect(xminc,xmaxc,yminc,ymaxc);
+  
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.drawarc(0,1,0,1,0,360) -> true
+ *
+ * Draw a circular or elliptical arc covering the specified rectangle.
+ * 
+ * **Parameters:**
+ * 
+ * `xmin` :
+ * Lower left edge of the rectangle
+ * `xmax` :
+ * Lower right edge of the rectangle
+ * `ymin` :
+ * Upper left edge of the rectangle
+ * `ymax` :
+ * Upper right edge of the rectangle
+ * `a1` :
+ * The start angle
+ * `a2` :
+ * The end angle
+ * 
+ * The resulting arc begins at `a1` and ends at `a2` degrees. Angles are interpreted
+ * such that 0 degrees is at the 3 o'clock position. The center of the arc is the center
+ * of the given rectangle.
+ */
 static VALUE drawarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE a1,VALUE a2){
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
@@ -1592,10 +1618,36 @@ static VALUE drawarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALU
   int a1c = NUM2INT(a1);
   int a2c = NUM2INT(a2);
   gr_drawarc(xminc,xmaxc,yminc,ymaxc,a1c,a2c);
+  
   return Qtrue;
 }
 
-static VALUE fillarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE a1,VALUE a2){
+/**
+ * call-seq:
+ *   Rubyplot::GR.drawarc(0,1,0,1,0,360) -> true
+ *
+ * Fill a circular or elliptical arc covering the specified rectangle.
+ * 
+ * **Parameters:**
+ * 
+ * `xmin` :
+ * Lower left edge of the rectangle
+ * `xmax` :
+ * Lower right edge of the rectangle
+ * `ymin` :
+ * Upper left edge of the rectangle
+ * `ymax` :
+ * Upper right edge of the rectangle
+ * `a1` :
+ * The start angle
+ * `a2` :
+ * The end angle
+ * 
+ * The resulting arc begins at `a1` and ends at `a2` degrees. Angles are interpreted
+ * such that 0 degrees is at the 3 o'clock position. The center of the arc is the center
+ * of the given rectangle.
+ */
+static VALUE fillarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE a1,VALUE a2) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
@@ -1603,6 +1655,7 @@ static VALUE fillarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALU
   int a1c = NUM2INT(a1);
   int a2c = NUM2INT(a2);
   gr_fillarc(xminc,xmaxc,yminc,ymaxc,a1c,a2c);
+  
   return Qtrue;
 }
 

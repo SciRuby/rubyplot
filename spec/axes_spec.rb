@@ -111,7 +111,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#area!" do
-    it "plots a single simple Area graph" do
+    it "plots a single simple Area graph", fuck: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.area! do |p|

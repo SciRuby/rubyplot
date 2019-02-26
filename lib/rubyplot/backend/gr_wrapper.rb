@@ -188,6 +188,10 @@ module Rubyplot
         end
       end
 
+      def draw_polygon(coords:, border_width:, border_type:, border_color:, fill_color:,
+        fill_opacity:)
+      end
+
       # Draw text on the canvas. Unlike other functions, this function does not
       # plot within a given window but directly uses the NDC for writing the text.
       # TODO: support text with special characters and latex symbols.
@@ -236,6 +240,9 @@ module Rubyplot
 
       def draw_line
         
+      end
+
+      def draw_circle 
       end
 
       def draw

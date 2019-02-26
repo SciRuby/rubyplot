@@ -47,6 +47,20 @@ module Rubyplot
       def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
         raise NotImplementedError, "not implemented for #{self}."
       end
+
+      # Draw a circle.
+      def draw_circle(x:, y:, radius:, border_color:, fill_color:, border_width:)
+        raise NotImplementedError, "not implemented for #{self}."
+      end
+
+      # Draw a polygon and fill it with color. Co-ordinates are specified in (x,y)
+      # pairs in the coords Array.
+      #
+      # @param coords [Array] Array containing pairs of co-ordinates in (x,y) pairs.
+      # @param border_width [Numeric] Widht of the border.
+      def draw_polygon(coords:, border_width:, border_type:, border_color:, fill_color:,
+        fill_opacity:)
+      end
     end # class Base
   end # module Backend
 end # module Rubyplot
