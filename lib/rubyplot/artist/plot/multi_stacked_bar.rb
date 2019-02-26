@@ -8,11 +8,12 @@ module Rubyplot
           @x_min = @stacked_bars.map(&:x_min).min
           @y_min = @stacked_bars.map(&:y_min).min
           @x_max = @stacked_bars.map(&:x_max).max
-          @y_max = @stacked_bars.map(&:y_max).max
+          @y_max = @stacked_bars.
+            map { |s| s.y_values }.transpose.
+            map { |a| a.inject(:+) }.max
           reset_axes_ranges
-          renormalize_data
           configure_plot_geometry_data
-          configure_x_ticks
+  #        configure_x_ticks
         end
 
         def draw
@@ -22,21 +23,14 @@ module Rubyplot
         private
 
         def reset_axes_ranges
-          @axes.y_range[0] = 0
-          @axes.x_range[0] = 0
-        end
-
-        # Normalize data in the stacked bar plot w.r.t each other and new X & Y ranges.
-        def renormalize_data
-          @stacked_bars.each do |p|
-            p.normalize
-            p.renormalize @stacked_bars.size
-          end
+          @axes.y_axis.min_val = 0
+          @axes.y_axis.max_val = @y_max
+          @axes.x_axis.min_val = 0
         end
 
         def configure_plot_geometry_data
           @num_max_slots = @stacked_bars.map(&:num_bars).max
-          @max_slot_width = @axes.x_axis.length / @num_max_slots
+          @max_slot_width = (@axes.x_axis.max_val - @axes.x_axis.min_val) / @num_max_slots.to_f
           @spacing_ratio = @stacked_bars[0].spacing_ratio
           @padding = @spacing_ratio * @max_slot_width
           @max_bars_width = @max_slot_width - @padding
@@ -46,10 +40,11 @@ module Rubyplot
           end
         end
 
+        # FIXME: make backend agnostic.
         def configure_x_ticks
-          @axes.num_x_ticks = @num_max_slots
+#          @axes.num_x_ticks = @num_max_slots
           labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
-          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
+ #         labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
           @axes.x_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
@@ -64,10 +59,9 @@ module Rubyplot
           bar.bar_width = @max_bars_width
           plots_below = @stacked_bars[0...plot_index]
           bar.num_bars.times do |i|
-            pedestal_height = plots_below.map { |p| p.member_height(i) }.inject(:+) || 0
-            bar.abs_x_left[i] = @axes.abs_x + @axes.left_margin +
-                                i * @max_slot_width + @padding / 2
-            bar.abs_y_left[i] = @axes.origin[1] + pedestal_height
+            pedestal_height = plots_below.map { |p| p.y_values[i] }.inject(:+) || 0
+            bar.abs_x_left[i] = @x_min  + i * @max_slot_width + @padding / 2
+            bar.abs_y_left[i] = @axes.y_axis.min_val + pedestal_height
           end
         end
       end # class StackedBar

@@ -24,22 +24,12 @@ module Rubyplot
           super(Array(0...(y_values.size)), y_values)
         end
 
+        def y_values
+          @data[:y_values]
+        end
+
         def num_bars
           @data[:y_values].size
-        end
-
-        # Normalize this data w.r.t other plots in this graph.
-        #
-        # @param max_plots [Integer] Max number of stacked bars in this plot.
-        def renormalize max_plots
-          @renormalized_y_values = @normalized_data[:y_values].map do |iy|
-            iy / max_plots
-          end
-        end
-
-        # Return the height in pixels of the bar at 'index'.
-        def member_height index
-          @renormalized_y_values[index] * @axes.y_axis.length
         end
 
         def draw
@@ -50,14 +40,13 @@ module Rubyplot
         private
 
         def setup_bar_rectangles
-          @renormalized_y_values.each_with_index do |iy, i|
-            height = iy * @axes.y_axis.length
+          @data[:y_values].each_with_index do |iy, i|
             @rectangles << Rubyplot::Artist::Rectangle.new(
               self,
-              abs_x: @abs_x_left[i],
-              abs_y: @abs_y_left[i],
-              width: @bar_width,
-              height: height,
+              x1: @abs_x_left[i],
+              y1: @abs_y_left[i],
+              x2: @abs_x_left[i] + @bar_width,
+              y2: @abs_y_left[i] + iy,
               border_color: @data[:color],
               fill_color: @data[:color]
             )

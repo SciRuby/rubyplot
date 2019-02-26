@@ -25,7 +25,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
           p.label = label
         end          
       end
-      axes.title = "net earnings in different months."
+      axes.title = "Income."
       axes.x_title = "X title"
       axes.y_title = "Y title"
       axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
