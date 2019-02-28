@@ -317,5 +317,5 @@ module Rubyplot
         @y_axis.max_val = @y_range[1]
       end
     end # class Axes
-  end # moudle Artist
+  end # module Artist
 end # module Rubyplot

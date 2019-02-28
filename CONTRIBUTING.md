@@ -81,7 +81,7 @@ can use to either 'zoom out' fully and see everything that is front of you, or y
 The only difference is that in case of viewports there is no actual zooming in but only
 demarcation of areas within the canvas that are to treated as the 'world'.
 
-The implication on rubyplot would be that an `Axes` within a `Figure` would get mappped
+The implication on rubyplot would be that an `Axes` within a `Figure` would get mapped
 to a `viewport` and the plotting within the viewport would take place by setting up the
 world co-ordinates to between the X and Y range.
 

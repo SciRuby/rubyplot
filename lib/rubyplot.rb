@@ -1,7 +1,5 @@
 require 'bigdecimal'
-
 require 'rmagick'
-
 require 'rubyplot/color'
 require 'rubyplot/utils'
 require 'rubyplot/version'
