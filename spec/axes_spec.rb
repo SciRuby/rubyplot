@@ -97,7 +97,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "simple bubble plot."
     end
 
-    it "plots multiple bubble plots on same axes.", focus: true do 
+    it "plots multiple bubble plots on same axes." do 
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.bubble! do |p|

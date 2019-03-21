@@ -3,9 +3,7 @@ $:.unshift File.expand_path("../lib", __FILE__)
 
 require 'rubyplot/version.rb'
 
-Rubyplot::DESCRIPTION = <<MSG
-An advanced plotting library for Ruby.
-MSG
+Rubyplot::DESCRIPTION = "An advanced plotting library for Ruby."
 
 Gem::Specification.new do |spec|
   spec.name          = 'rubyplot'
