@@ -49,7 +49,8 @@ module Rubyplot
       end
 
       # Draw a circle.n
-      def draw_circle(x:, y:, radius:, border_color:, fill_color:, border_width:)
+      def draw_circle(x:, y:, radius:, border_width:, border_color:, fill_color:,
+        fill_opacity:)
         raise NotImplementedError, "not implemented for #{self}."
       end
 

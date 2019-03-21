@@ -1626,7 +1626,8 @@ static VALUE fillrect(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
  * such that 0 degrees is at the 3 o'clock position. The center of the arc is the center
  * of the given rectangle.
  */
-static VALUE drawarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE a1,VALUE a2){
+static VALUE drawarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,
+                     VALUE a1,VALUE a2) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
@@ -1663,7 +1664,8 @@ static VALUE drawarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALU
  * such that 0 degrees is at the 3 o'clock position. The center of the arc is the center
  * of the given rectangle.
  */
-static VALUE fillarc(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,VALUE a1,VALUE a2) {
+static VALUE fillarc(VALUE self, VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,
+                     VALUE a1, VALUE a2) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);

@@ -88,22 +88,24 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.bubble! do |p|
-        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [45, 10, 21, 9]
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
         p.color = :blue
       end
+      axes.x_range = [-40, 30]
+      axes.y_range = [-40, 25]
       axes.title = "simple bubble plot."
     end
 
-    it "plots multiple bubble plots on same axes." do 
+    it "plots multiple bubble plots on same axes.", focus: true do 
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.bubble! do |p|
-        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [45, 10, 21, 9]
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
       end
       axes.bubble! do |p|
-        p.data [20, 30, -6, -3], [-1, 5, -27, -3], [13, 10, 20, 10]
+        p.data [20, 30, -6, -3], [-1, 5, -27, -3], [10.3, 10.0, 20.0, 10.0]
         p.label = "peaches"
       end
       axes.title = "simple bubble plot."
@@ -111,7 +113,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#area!" do
-    it "plots a single simple Area graph", fuck: true do
+    it "plots a single simple Area graph" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.area! do |p|
@@ -137,7 +139,6 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         end
       end
       axes.title = "Multiple area plots on same axes."
-      axes.num_x_ticks = 4
       axes.x_ticks = ['0', '2', '4', '6']
     end
   end
@@ -443,24 +444,6 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#num_x_ticks=" do
-    it "assigns number of X ticks" do
-      fig = Rubyplot::Figure.new
-      axes = fig.add_subplot 0,0
-      axes.scatter! do |p|
-        p.data [0,1,2,3], [4, 7, 11, 15]
-      end
-      axes.num_x_ticks = 3
-      axes.x_ticks = ["4", "10", "15"]
-      fig.write("dummy.png", output: false)
-
-      expect(
-        axes.instance_variable_get(:@inter_x_ticks_distance)).to eq(
-                                                                   axes.x_axis.length /
-                                                                   (axes.num_x_ticks-1))
-    end
-  end
-  
   context "#x_ticks=" do
     it "assigns strings to X ticks" do
       @figure = Rubyplot::Figure.new

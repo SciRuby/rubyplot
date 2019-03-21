@@ -38,7 +38,7 @@ module Rubyplot
             y: @data[:y_values],
             type: @marker_type,
             color: @marker_color,
-            size: @marker_size
+            size: [@marker_size] * @data[x_values].size
           )
         end
       end # class Scatter

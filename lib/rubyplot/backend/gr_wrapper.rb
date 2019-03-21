@@ -173,9 +173,11 @@ module Rubyplot
       def draw_markers(x:, y:, type:, color:, size:)
         within_window do
           GR.setmarkercolorind(to_gr_color(color))
-          GR.setmarkersize(size)
           GR.setmarkertype(MARKER_TYPE_MAP[type])
-          GR.polymarker(x, y)
+          x.size.times do |i|
+            GR.setmarkersize(size[i])
+            GR.polymarker([x[i]], [y[i]])            
+          end
         end
       end
 
@@ -238,12 +240,11 @@ module Rubyplot
           GR.setlinewidth(border_width)
           GR.setlinetype(LINE_TYPE_MAP[border_type])
           GR.setlinecolorind(to_gr_color(border_color))
+          GR.drawrect(x1, x2, y1, y2)
           if fill_color
             GR.setfillintstyle(1)
             GR.setfillcolorind(to_gr_color(fill_color))
             GR.fillrect(x1, x2, y1, y2)
-          else
-            GR.drawrect(x1, x2, y1, y2)
           end
         end
       end
@@ -252,7 +253,25 @@ module Rubyplot
         
       end
 
-      def draw_circle 
+      def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,
+        fill_color:, fill_opacity:)
+        within_window do
+          xmin = x - radius
+          xmax = x + radius
+          ymin = y - radius
+          ymax = y + radius
+
+          GR.setlinewidth(border_width)
+          GR.setlinetype(LINE_TYPE_MAP[border_type])
+          GR.setlinecolorind(to_gr_color(border_color))
+          GR.drawarc(xmin, xmax, ymin, ymax, 0, 360)
+          if fill_color
+            GR.setfillintstyle(1)
+            GR.setfillcolorind(to_gr_color(fill_color))
+            GR.settransparency(fill_opacity)
+            GR.fillarc(xmin, xmax, ymin, ymax, 0, 360)
+          end
+        end
       end
 
       def draw
