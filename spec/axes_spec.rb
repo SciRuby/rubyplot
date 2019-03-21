@@ -429,7 +429,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds a single histogram with custom bins" do
+    it "adds a single histogram with custom bins", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.histogram! do |p|

@@ -6,6 +6,8 @@ module Rubyplot
         attr_accessor :x
         # Array of bins into which the data should be subdivided.
         attr_accessor :bins
+        # Width of each bar.
+        attr_accessor :bar_width
         
         def initialize(*)
           super 
@@ -43,13 +45,29 @@ module Rubyplot
             combined_freqs << sum
           end
 
-          @x_min = @bins.first
-          @x_max = @bins.last
-          @y_min = freqs.min
-          @y_max = freqs.max
+          @step = (@bins.last - @bins.first) / @bins.size.to_f
+          @x_min = @bins.first - @step
+          @x_max = @bins.last + @step
+          @y_min = 0
+          @y_max = combined_freqs.max
+          @data[:x_values] = @bins
+          @data[:y_values] = combined_freqs
+          @bar_width = @step unless @bar_width
         end
 
         def draw
+          @data[:y_values].each_with_index do |iy, i|
+            ix = @data[:x_values][i]
+            Rubyplot::Artist::Rectangle.new(
+              self,
+              x1: @bins.first + i*@bar_width,
+              y1: @y_min,
+              x2: @bins.first + i*@bar_width + @bar_width,
+              y2: iy,
+              border_color: :black,
+              fill_color: @data[:color]
+            ).draw
+          end
         end
       end # class Histogram
     end # module Plot
