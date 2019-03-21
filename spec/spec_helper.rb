@@ -60,7 +60,7 @@ RSpec.configure do |config|
       @figure.write(other_image)
       @figure.write(base_image)
 
-      expect(base_image).to eq_image(other_image, 40)
+      expect(base_image).to eq_image(other_image, 100)
     end
   end
 

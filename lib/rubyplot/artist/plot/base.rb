@@ -44,23 +44,6 @@ module Rubyplot
           @x_min = @data[:x_values].min
           @x_max = @data[:x_values].max
         end
-
-        # Normalize original data to values between 0-1. Used for obtaining relative
-        # values of the data.
-        def normalize
-          x_spread = @axes.x_range[1] - @axes.x_range[0]
-          y_spread = @axes.y_range[1] - @axes.y_range[0]
-          if @data[:x_values]
-            @normalized_data[:x_values] = @data[:x_values].map do |x|
-              (x.to_f - @axes.x_range[0]) / x_spread
-            end
-          end
-          if @data[:y_values]
-            @normalized_data[:y_values] = @data[:y_values].map do |y|
-              (y.to_f - @axes.y_range[0]) / y_spread
-            end
-          end
-        end
       end # class Base
     end # module Plot
   end # module Artist

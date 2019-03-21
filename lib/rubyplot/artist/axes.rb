@@ -105,7 +105,6 @@ module Rubyplot
       def draw
         Rubyplot.backend.active_axes = self
         set_axes_ranges
-        normalize_plotting_data
         assign_default_label_colors
         consolidate_plots
         configure_title
@@ -147,6 +146,12 @@ module Rubyplot
 
       def stacked_bar!(*_args)
         plot = Rubyplot::Artist::Plot::StackedBar.new self
+        yield(plot) if block_given?
+        @plots << plot
+      end
+
+      def histogram!(*_args)
+        plot = Rubyplot::Artist::Plot::Histogram.new self
         yield(plot) if block_given?
         @plots << plot
       end
@@ -255,14 +260,6 @@ module Rubyplot
         @legend_box = Rubyplot::Artist::LegendBox.new(
           self, abs_x: legend_box_ix, abs_y: legend_box_iy
         )
-      end
-
-      # Make adjustments to the data that will be plotted. Maps the data
-      # contained in the plot to actual pixel values.
-      def normalize_plotting_data
-        @plots.each do |plot|
-          plot.normalize
-        end
       end
 
       # Call the respective draw methods on each of the elements of this Axes.
