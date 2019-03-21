@@ -188,8 +188,18 @@ module Rubyplot
         end
       end
 
-      def draw_polygon(coords:, border_width:, border_type:, border_color:, fill_color:,
+      def draw_polygon(x:, y:, border_width:, border_type:, border_color:, fill_color:,
         fill_opacity:)
+        within_window do
+          draw_lines(x: x, y: y, width: border_width, color: border_color,
+            type: border_type)
+          if fill_color
+            GR.settransparency(fill_opacity)
+            GR.setfillintstyle(1)
+            GR.setfillcolorind(to_gr_color(fill_color))
+            GR.fillarea(x, y)
+          end
+        end
       end
 
       # Draw text on the canvas. Unlike other functions, this function does not
@@ -342,7 +352,7 @@ module Rubyplot
             @active_axes.x_range[1],
             @active_axes.y_range[0],
             @active_axes.y_range[1]
-          )          
+          )
         end
 
         block.call
@@ -353,6 +363,7 @@ module Rubyplot
           axes = v[:axes]
           tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
           within_window do
+            GR.settransparency(1)
             GR.setcharheight(0.018)
             GR.setlinecolorind(to_gr_color(:black))
             GR.axes(

@@ -119,7 +119,6 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.label = "Jimmy"
       end
       axes.title = "Visual simple area graph test."
-      axes.num_x_ticks = 5
       axes.x_ticks = ['0', '22', '44', '66', '88']
     end
 

@@ -1,8 +1,9 @@
 module Rubyplot
   module Artist
     class Polygon < Base
-      def initialize(coords:, fill_opacity: 1.0, color: :default, stroke: 'transparent')
-        @coords = coords
+      def initialize(x:, y:, fill_opacity: 1.0, color: :default, stroke: 'transparent')
+        @x = x
+        @y = y
         @fill_opacity = fill_opacity
         @color = color
         @stroke = stroke
@@ -10,7 +11,8 @@ module Rubyplot
 
       def draw
         Rubyplot.backend.draw_polygon(
-          coords: @coords,
+          x: @x,
+          y: @y,
           border_color: @color,
           border_width: 1.0,
           border_type: :solid,

@@ -2,31 +2,25 @@ module Rubyplot
   module Artist
     module Plot
       class Area < Artist::Plot::Base
-        attr_accessor :sorted_data
+        attr_accessor :sort_data
 
         def initialize(*)
           super
-          @sorted_data = true
+          @sort_data = true
         end
 
         def data x_values, y_values=[]
           y_values = Array.new(x_values.size) { |i| i } if y_values.empty?
-          x_values.sort! if @sorted_data
+          x_values.sort! if @sort_data
           super(x_values, y_values)
         end
 
         def draw
-          poly_points = []
-          @normalized_data[:y_values].each_with_index do |iy, idx_y|
-            ix = @normalized_data[:x_values][idx_y]
-            abs_x = ix * @axes.x_axis.length + @axes.origin[0]
-            abs_y = iy * @axes.y_axis.length + @axes.origin[1]
-            poly_points << [abs_x, abs_y]
-          end
-          poly_points << [@axes.x_axis.abs_x2, @axes.origin[1] - @axes.x_axis.stroke_width]
-          poly_points << [@axes.origin[0], @axes.origin[1] - @axes.x_axis.stroke_width]
+          x_poly_points = @data[:x_values].concat([@axes.x_axis.max_val, @axes.x_axis.min_val])
+          y_poly_points = @data[:y_values].concat([@axes.y_axis.min_val, @axes.y_axis.min_val])
           Rubyplot::Artist::Polygon.new(
-            coords: poly_points,
+            x: x_poly_points,
+            y: y_poly_points,
             color: @data[:color],
             fill_opacity: 0.3
           ).draw

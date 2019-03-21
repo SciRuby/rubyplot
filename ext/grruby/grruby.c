@@ -244,6 +244,22 @@ static VALUE inqtext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e) {
   return Qtrue;
 }
 
+/**
+ * call-seq:
+ *   Rubyplot::GR.fillarea([1,2,3], [1,2,3]) -> true
+ *  
+ * Allows you to specify a polygonal shape of an area to be filled.
+ * 
+ * **Parameters:**
+ * 
+ * `x` :
+ * A list containing the X coordinates
+ * `y` :
+ * A list containing the Y coordinates
+ * 
+ * The attributes that control the appearance of fill areas are fill area interior
+ * style, fill area style index and fill area color index.
+ */
 static VALUE fillarea(VALUE self,VALUE x, VALUE y){
   int x_size = RARRAY_LEN(x);
   int y_size = RARRAY_LEN(y);
@@ -1720,9 +1736,21 @@ static VALUE setshadow(VALUE self,VALUE offsetx,VALUE offsety,VALUE blur){
   return Qtrue;
 }
 
+
+/**
+ * call-seq:
+ *   Rubyplot::GR.settransparency(alpha) -> true
+ *
+ * Set the value of the alpha component associated with GR colors
+ * 
+ * **Parameters:**
+ * 
+ * `alpha` :
+ * An alpha value (0.0 - 1.0)
+ */
 static VALUE settransparency(VALUE self,VALUE alpha){
-  double alphac = NUM2DBL(alpha);
-  gr_settransparency(alphac);
+  gr_settransparency(NUM2DBL(alpha));
+  
   return Qtrue;
 }
 
