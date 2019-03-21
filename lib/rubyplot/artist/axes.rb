@@ -101,6 +101,10 @@ module Rubyplot
         end
       end
 
+      def process_data
+        @plots.each(&:process_data)
+      end
+
       # Write an image to a file by communicating with the backend.
       def draw
         Rubyplot.backend.active_axes = self

@@ -44,6 +44,10 @@ module Rubyplot
           @x_min = @data[:x_values].min
           @x_max = @data[:x_values].max
         end
+
+        def process_data
+          
+        end
       end # class Base
     end # module Plot
   end # module Artist

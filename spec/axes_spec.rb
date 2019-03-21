@@ -386,7 +386,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @y1 = [11, 2, 33, 4, 65]
     end
     
-    it "adds a simple scatter plot.", fuck: true do
+    it "adds a simple scatter plot." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.scatter! do |p|
@@ -421,11 +421,20 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#histogram!" do
-    it "adds a single histogram", focus: true do
+    it "adds a single histogram with default bins", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.histogram! do |p| 
-        
+        p.x = 100.times.map{ rand(10) }
+      end
+    end
+
+    it "adds a single histogram with custom bins" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot 0,0
+      axes.histogram! do |p|
+        p.x = 100.times.map{ rand(10) }
+        p.bins = [1, 4, 7, 10]
       end
     end
   end
