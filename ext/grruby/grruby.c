@@ -1218,6 +1218,21 @@ static VALUE axes(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
   return Qtrue;
 }
 
+static VALUE global_fpx_proc;          /* Proc for axeslbl X axis. */
+static VALUE global_fpy_proc;          /* Proc for axeslbl Y axis.  */
+
+static void rb_grruby_axeslbl_fpx_internal_callback(double x, double y,
+                                                    const char * svalue, double value) {
+  rb_funcall(global_fpx_proc, rb_intern("call"), 4,
+             DBL2NUM(x), DBL2NUM(y), rb_str_new2(svalue), DBL2NUM(value));
+}
+
+static void rb_grruby_axeslbl_fpy_internal_callback(double x, double y,
+                                                    const char * svalue, double value) {
+  rb_funcall(global_fpy_proc, rb_intern("call"), 4,
+             DBL2NUM(x), DBL2NUM(y), rb_str_new2(svalue), DBL2NUM(value));  
+}
+
 /* call-seq:
  *    Rubyplot::GR.axeslbl(x_tick, y_tick, x_org, y_org, major_x, major_y, tick_size,
  *       fpx, fpy) -> true 
@@ -1225,13 +1240,25 @@ static VALUE axes(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
  * Similar to axes() but allows more fine grained control over tick labels and
  * text positioning.
  * 
- *
  * References:
  *   http://clalance.blogspot.com/2011/01/writing-ruby-extensions-in-c-part-11.html
  */
 static VALUE axeslbl(VALUE self, VALUE x_tick, VALUE y_tick, VALUE x_org,
                      VALUE y_org, VALUE major_x, VALUE major_y ,VALUE tick_size,
                      VALUE fpx, VALUE fpy) {
+  global_fpx_proc = fpx;
+  global_fpy_proc = fpy;
+
+  gr_axeslbl(NUM2DBL(x_tick),
+             NUM2DBL(y_tick),
+             NUM2DBL(x_org),
+             NUM2DBL(y_org),
+             NUM2INT(major_x),
+             NUM2INT(major_y),
+             NUM2DBL(tick_size),
+             rb_grruby_axeslbl_fpx_internal_callback,
+             rb_grruby_axeslbl_fpy_internal_callback);
+  
   return Qtrue;
 }
 
@@ -2002,6 +2029,7 @@ void Init_grruby()
   rb_define_singleton_method(mGRruby,"textext",textext,3);
   rb_define_singleton_method(mGRruby,"inqtextext",inqtextext,5);
   rb_define_singleton_method(mGRruby,"axes",axes,7);
+  rb_define_singleton_method(mGRruby,"axeslbl",axeslbl, 9);
   rb_define_singleton_method(mGRruby,"grid",grid,6);
   rb_define_singleton_method(mGRruby,"grid3d",grid3d,9);
   rb_define_singleton_method(mGRruby,"verrorbars",verrorbars,4);
