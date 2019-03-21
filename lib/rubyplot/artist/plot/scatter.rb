@@ -9,7 +9,7 @@ module Rubyplot
         def initialize(*)
           super
           @marker_size = 1.0
-          @marker_type = :plus
+          @marker_type = :circle
           @marker_color = :black
         end
 
@@ -38,7 +38,7 @@ module Rubyplot
             y: @data[:y_values],
             type: @marker_type,
             color: @marker_color,
-            size: [@marker_size] * @data[x_values].size
+            size: [@marker_size] * @data[:x_values].size
           )
         end
       end # class Scatter

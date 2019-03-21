@@ -11,26 +11,19 @@ RuboCop::RakeTask.new
 desc 'Default: run unit specs.'
 task :default => [:spec, :rubocop]
 
-task :test do
-  puts "Testing with Magick backend..."
-
-
-  puts "Testing with GR backend..."
-
-end
-
 task :test => ["test:magick", "test:gr"]
 
 namespace :test do
   task :gr do
     ENV['RUBYPLOT_BACKEND'] = "GR"
+    Rake::Task["spec"].reenable
     Rake::Task["spec"].invoke    
   end
 
   task :magick do
     ENV['RUBYPLOT_BACKEND'] = "MAGICK"
     Rake::Task["spec"].reenable
-    Rake::Task["spec"].invoke    
+    Rake::Task["spec"].invoke
   end
 end
 

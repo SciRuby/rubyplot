@@ -5,6 +5,18 @@ An advanced plotting library for Ruby.
 
 It aims to allow you to visualize anything, anywhere with a flexible, extensible, Ruby-like API.
 
+# Usage
+
+Install the GR framework from the [website](https://gr-framework.org/c.html).
+
+Then set the `GRDIR` and `GKS_FONTPATH` ENV variables to point to your GR installation
+and GR font path. Set the `RUBYPLOT_BACKEND` ENV variable to "GR". For example:
+```
+export GRDIR="/home/sameer/Downloads/gr"
+export GKS_FONTPATH="/home/sameer/Downloads/gr"
+export RUBYPLOT_BACKEND="GR"
+```
+
 # Roadmap by priority
 The release schedule and feature roadmap is as follows. Check issues labelled with
 the version tags for knowing what we're working on currently. Listed by priority.
@@ -16,7 +28,7 @@ Deadline: 15 January 2019
 * Fully automated testing infrastructure. Travis integration with rubocop.xs
 
 ## Release v0.1-a2
-Deadline: 26 February 2019
+Deadline: 31 March 2019
 
 * Integrate GR backend into existing API.
 * Support multiple Axes on the same Figure. 
