@@ -19,8 +19,9 @@ module Rubyplot
 
       attr_reader :draw
 
-      def initialize
+      def init_output_device file_name, device: :file
         @draw = Magick::Draw.new
+        @file_name = file_name
       end
 
       # Height in pixels of particular text.
@@ -135,9 +136,9 @@ module Rubyplot
         @draw.polygon *coords.flatten
       end
 
-      def write file_name
+      def write
         @draw.draw(@base_image)
-        @base_image.write(file_name)
+        @base_image.write(@file_name)
       end
 
       private

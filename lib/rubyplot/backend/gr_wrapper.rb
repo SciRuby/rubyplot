@@ -284,7 +284,7 @@ module Rubyplot
         Rubyplot::GR.clearws
         
         if @output_device == :file
-          Rubyplot::GR.beginprint(file_name)
+          Rubyplot::GR.beginprint(@file_name)
         end
       end
 
@@ -297,7 +297,7 @@ module Rubyplot
         flush
       end
 
-      def write file_name
+      def write
         draw
       end
 

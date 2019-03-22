@@ -63,6 +63,10 @@ module Rubyplot
       def draw_polygon(x:, y:, border_width:, border_type:, border_color:, fill_color:,
         fill_opacity:)
       end
+
+      def init_output_device file_name, device: :file
+        raise NotImplementedError, "not implemented for #{self}."
+      end
     end # class Base
   end # module Backend
 end # module Rubyplot
