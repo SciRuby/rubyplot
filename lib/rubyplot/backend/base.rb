@@ -49,8 +49,8 @@ module Rubyplot
       end
 
       # Draw a circle.n
-      def draw_circle(x:, y:, radius:, border_width:, border_color:, fill_color:,
-        fill_opacity:)
+      def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,
+        fill_color:, fill_opacity:)
         raise NotImplementedError, "not implemented for #{self}."
       end
 
@@ -62,9 +62,22 @@ module Rubyplot
       # @param border_width [Numeric] Widht of the border.
       def draw_polygon(x:, y:, border_width:, border_type:, border_color:, fill_color:,
         fill_opacity:)
+        raise NotImplementedError, "not implemented for #{self}."
+      end
+
+      def draw_lines(x:, y:, width:, type:, color:)
+        raise NotImplementedError, "not implemented for #{self}."
       end
 
       def init_output_device file_name, device: :file
+        raise NotImplementedError, "not implemented for #{self}."
+      end
+
+      def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+        raise NotImplementedError, "not implemented for #{self}."
+      end
+
+      def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
         raise NotImplementedError, "not implemented for #{self}."
       end
     end # class Base
