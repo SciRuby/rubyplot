@@ -88,16 +88,16 @@ module Rubyplot
 
       # Draw on a canvas and output to a file.
       #
-      # @param output [TrueClass, FalseClass] true Whether to output to file or not.
-      def write(file_name, output: true)
+      # @param file_name [String] File name to output to.
+      def write(file_name, device: :file)
         Rubyplot.backend.canvas_height = @height
         Rubyplot.backend.canvas_width = @width
         Rubyplot.backend.figure = self
-        Rubyplot.backend.init_output_device(file_name, device: :file) if output
+        Rubyplot.backend.init_output_device(file_name, device: :file)
         @subplots.each { |i| i.each(&:process_data) }
         @subplots.each { |i| i.each(&:draw) }
-        Rubyplot.backend.write file_name
-        Rubyplot.backend.stop_output_device if output
+        Rubyplot.backend.write
+        Rubyplot.backend.stop_output_device
       end
 
       private

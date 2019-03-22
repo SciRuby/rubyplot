@@ -380,21 +380,21 @@ module Rubyplot
       def draw_axes
         @axes_map.each_value do |v|
           axes = v[:axes]
-          tick_length = transform_avg_ndc(axes.x_axis.major_ticks[0].length)
+          tick_size = transform_avg_ndc(axes.x_axis.major_ticks[0].tick_size)
           within_window do
             GR.settransparency(1)
             GR.setcharheight(0.018)
             GR.setlinecolorind(to_gr_color(:black))
             GR.axes(
-              (axes.x_axis.spread / axes.x_axis.major_ticks_count.to_f) /
-                axes.x_axis.minor_ticks_count,
-              (axes.y_axis.spread / axes.y_axis.major_ticks_count.to_f) /
-                axes.y_axis.minor_ticks_count,
+              GR.tick(@active_axes.x_range[0], @active_axes.x_range[1]) /
+                axes.x_axis.major_ticks_count.to_f,
+              GR.tick(@active_axes.y_range[0], @active_axes.y_range[1]) /
+                axes.y_axis.major_ticks_count.to_f,
               axes.x_axis.min_val,
               axes.y_axis.min_val,
               axes.x_axis.minor_ticks_count,
               axes.y_axis.minor_ticks_count,
-              -tick_length
+              -tick_size
             )
           end
         end
