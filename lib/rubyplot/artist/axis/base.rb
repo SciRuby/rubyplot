@@ -8,7 +8,7 @@ module Rubyplot
         # Array of Rubyplot::XTick objects representing major ticks.
         attr_accessor :major_ticks
         # Number of major ticks to be plotted.
-        attr_reader :major_ticks_count
+        attr_accessor :major_ticks_count
         attr_accessor :minor_ticks # TODO
         # Number of minor ticks between each major tick.
         attr_reader :minor_ticks_count

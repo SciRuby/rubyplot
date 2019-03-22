@@ -1863,7 +1863,7 @@ static VALUE inqbbox(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
   return Qtrue; 
 }
 
-static VALUE precision(VALUE self){
+static VALUE precision(VALUE self) {
   return DBL2NUM(gr_precision());
 }
 

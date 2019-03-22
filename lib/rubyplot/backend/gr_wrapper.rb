@@ -134,6 +134,16 @@ module Rubyplot
         hatch: GR::FILLSTYLE_HATCH
       }.freeze
 
+      AXES_CALLBACKS = {
+        :f2 => Proc.new { |ndc_x, ndc_y, svalue, value|
+          if value.is_a?(Float)
+            GR.text(ndc_x, ndc_y, "%0.2f" % svalue)
+          else
+            GR.text(ndc_x, ndc_y, value)
+          end
+        }
+      }.freeze
+
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
@@ -380,12 +390,13 @@ module Rubyplot
       def draw_axes
         @axes_map.each_value do |v|
           axes = v[:axes]
-          tick_size = transform_avg_ndc(axes.x_axis.major_ticks[0].tick_size)
+          tick_size = transform_avg_ndc(axes.x_axis.major_ticks[0].tick_size) / 2.0
+          puts "min_val: #{axes.x_axis.min_val}"
           within_window do
             GR.settransparency(1)
-            GR.setcharheight(0.018)
+            GR.setcharheight(0.015)
             GR.setlinecolorind(to_gr_color(:black))
-            GR.axes(
+            GR.axeslbl(
               GR.tick(@active_axes.x_range[0], @active_axes.x_range[1]) /
                 axes.x_axis.major_ticks_count.to_f,
               GR.tick(@active_axes.y_range[0], @active_axes.y_range[1]) /
@@ -394,7 +405,9 @@ module Rubyplot
               axes.y_axis.min_val,
               axes.x_axis.minor_ticks_count,
               axes.y_axis.minor_ticks_count,
-              -tick_size
+              -tick_size,
+              AXES_CALLBACKS[:f2],
+              AXES_CALLBACKS[:f2]
             )
           end
         end

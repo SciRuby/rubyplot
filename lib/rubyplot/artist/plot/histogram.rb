@@ -45,7 +45,8 @@ module Rubyplot
             combined_freqs << sum
           end
 
-          @step = (@bins.last - @bins.first) / @bins.size.to_f
+          puts "bins: #{@bins}"
+          @step = (@bins[1] - @bins[0])
           @x_min = @bins.first - @step
           @x_max = @bins.last + @step
           @y_min = 0
@@ -53,6 +54,7 @@ module Rubyplot
           @data[:x_values] = @bins
           @data[:y_values] = combined_freqs
           @bar_width = @step unless @bar_width
+          @axes.x_axis.major_ticks_count = @bins.size - 1
         end
 
         def draw
