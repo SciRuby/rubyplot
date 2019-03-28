@@ -296,9 +296,9 @@ module Rubyplot
 
         candle_sticks = @plots.grep(Rubyplot::Artist::Plot::CandleStick)
         unless candle_sticks.empty?
-          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
-          @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(self,
-            stacked_bars: stacked_bars)     
+          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::CandleStick) }
+          @plots << Rubyplot::Artist::Plot::MultiCandleStick.new(self,
+            candle_sticks: candle_sticks)
         end
       end
 

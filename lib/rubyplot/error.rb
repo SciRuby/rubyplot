@@ -1,5 +1,3 @@
 module Rubyplot
-  module Error
-    
-  end
+  class SizeError < StandardError; end
 end

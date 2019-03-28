@@ -439,7 +439,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds a single histogram with number of bins", focus: true do
+    it "adds a single histogram with number of bins" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.histogram! do |p|
@@ -450,7 +450,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#candle_stick!" do
-    it "adds a simple candle stick plot" do
+    it "adds a simple candle stick plot", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.candle_stick! do |p|
@@ -469,11 +469,15 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.lows = [100, 110, 120, 130, 120, 110]
         p.highs = [140, 150, 160, 170, 160, 150]
         p.opens = [110, 120, 130, 140, 130, 120]
-        p.closes = [130, 140, 150, 160, 150, 140]        
+        p.closes = [130, 140, 150, 160, 150, 140]
       end
       axes.candle_stick! do |p|
-        
+        p.lows = [200, 210, 220, 230, 220, 210]
+        p.highs = [240, 250, 260, 270, 260, 250]
+        p.opens = [220, 220, 230, 240, 230, 220]
+        p.closes = [230, 240, 250, 260, 250, 240]
       end
+      axes.title = "Multiple candle stick plot."
     end
   end
 

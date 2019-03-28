@@ -50,7 +50,8 @@ module Rubyplot
             set_bar_dims bar, index
           end
         end
-
+        
+        # FIXME: Find the best backend-neutral way of doing this.
         def configure_x_ticks!
  #         @axes.num_x_ticks = @num_max_slots
           labels = @axes.x_axis.major_ticks || Array.new(@num_max_slots, &:to_s)
