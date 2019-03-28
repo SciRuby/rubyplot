@@ -461,6 +461,20 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
       axes.title = "Simple candle stick plot."
     end
+
+    it "adds multiple candle stick plots" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot 0,0
+      axes.candle_stick! do |p|
+        p.lows = [100, 110, 120, 130, 120, 110]
+        p.highs = [140, 150, 160, 170, 160, 150]
+        p.opens = [110, 120, 130, 140, 130, 120]
+        p.closes = [130, 140, 150, 160, 150, 140]        
+      end
+      axes.candle_stick! do |p|
+        
+      end
+    end
   end
 
   context "#top_margin=" do

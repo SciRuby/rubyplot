@@ -160,6 +160,12 @@ module Rubyplot
         @plots << plot
       end
 
+      def candle_stick!(*_args)
+        plot = Rubyplot::Artist::Plot::CandleStick.new self
+        yield(plot) if block_given?
+        @plots << plot
+      end
+
       def write(file_name)
         @plots[0].write file_name
       end
@@ -286,6 +292,13 @@ module Rubyplot
         unless stacked_bars.empty?
           @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
           @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(self, stacked_bars: stacked_bars)
+        end
+
+        candle_sticks = @plots.grep(Rubyplot::Artist::Plot::CandleStick)
+        unless candle_sticks.empty?
+          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
+          @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(self,
+            stacked_bars: stacked_bars)     
         end
       end
 
