@@ -421,7 +421,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#histogram!" do
-    it "adds a single histogram with default bins", focus: true do
+    it "adds a single histogram with default bins" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.histogram! do |p| 
@@ -429,13 +429,37 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds a single histogram with custom bins", focus: true do
+    it "adds a single histogram with custom bins" do
+      skip "GR does not currently support custom tick marks."
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = [1, 4, 7, 10]
       end
+    end
+
+    it "adds a single histogram with number of bins", focus: true do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot 0,0
+      axes.histogram! do |p|
+        p.x = 100.times.map{ rand(10) }
+        p.bins = 5
+      end
+    end
+  end
+
+  context "#candle_stick!" do
+    it "adds a simple candle stick plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot 0,0
+      axes.candle_stick! do |p|
+        p.lows = [100, 110, 120, 130, 120, 110]
+        p.highs = [140, 150, 160, 170, 160, 150]
+        p.opens = [110, 120, 130, 140, 130, 120]
+        p.closes = [130, 140, 150, 160, 150, 140]
+      end
+      axes.title = "Simple candle stick plot."
     end
   end
 

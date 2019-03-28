@@ -57,6 +57,12 @@ by almost any element in the plot (like changing tick labels, positioning, origi
 a convention to follow is that a constituent object of the Axis should be modified
 and the corresponding object be placed in the Axis object, which will handle its drawing.
 
+## Units and measurements
+
+It is important to read up on units and measurements as used in a computer system if you
+want to contribute to rubyplot. Here's some suggested reading:
+* Point (unit) - https://en.wikipedia.org/wiki/Point_(typography)
+
 # GR extension notes
 
 ## setwindow and setviewport

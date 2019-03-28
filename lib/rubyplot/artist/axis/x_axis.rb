@@ -8,7 +8,6 @@ module Rubyplot
       end
 
       def draw
-        puts "maj ticks: #{@major_ticks.map(&:label)}."
         configure_title
         Rubyplot.backend.draw_x_axis(
           origin: @axes.origin[0],

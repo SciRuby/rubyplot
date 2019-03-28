@@ -391,7 +391,6 @@ module Rubyplot
         @axes_map.each_value do |v|
           axes = v[:axes]
           tick_size = transform_avg_ndc(axes.x_axis.major_ticks[0].tick_size) / 2.0
-          puts "min_val: #{axes.x_axis.min_val}"
           within_window do
             GR.settransparency(1)
             GR.setcharheight(0.015)

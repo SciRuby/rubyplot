@@ -45,7 +45,6 @@ module Rubyplot
             combined_freqs << sum
           end
 
-          puts "bins: #{@bins}"
           @step = (@bins[1] - @bins[0])
           @x_min = @bins.first - @step
           @x_max = @bins.last + @step
