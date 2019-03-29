@@ -7,8 +7,9 @@ module Rubyplot
         attr_accessor :opens
         attr_accessor :closes
         attr_accessor :bar_width
-        attr_accessor :x_left_candle, :y_left_candle
-        attr_accessor :x_low_stick, :y_low_stick
+        attr_accessor :x_left_candle
+        attr_accessor :x_low_stick
+        attr_accessor :border_color
 
         attr_reader :x_min, :x_max, :y_min, :y_max
 
@@ -19,13 +20,12 @@ module Rubyplot
           @opens = []
           @closes = []
           @x_left_candle = []
-          @y_left_candle = []
           @x_low_stick = []
-          @y_low_stick = []
+          @border_color = :black
         end
 
         def process_data
-          if @lows.size != @highs.size != @opens.size != @closes.size
+          if @lows.size != @highs.size || @opens.size != @closes.size
             raise Rubyplot::SizeError, "all given parameters must be of equal size."
           end
           @y_min = [@lows.min, @highs.min, @opens.min, @closes.min].min
@@ -35,6 +35,19 @@ module Rubyplot
         end
 
         def draw
+          puts "fill: #{@fill_color}."
+          @x_left_candle.each_with_index do |ix_candle, i|
+            candle = Rubyplot::Artist::Rectangle.new(
+              self,
+              x1: ix_candle,
+              y1: @opens[i],
+              x2: ix_candle + @bar_width,
+              y2: @closes[i],
+              border_color: @border_color,
+              fill_color: @data[:color]
+            )
+            candle.draw
+          end
         end
       end
     end

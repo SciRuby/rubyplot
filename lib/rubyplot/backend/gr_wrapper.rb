@@ -390,15 +390,16 @@ module Rubyplot
       def draw_axes
         @axes_map.each_value do |v|
           axes = v[:axes]
+          @active_axes = axes
           tick_size = transform_avg_ndc(axes.x_axis.major_ticks[0].tick_size) / 2.0
           within_window do
             GR.settransparency(1)
             GR.setcharheight(0.015)
             GR.setlinecolorind(to_gr_color(:black))
             GR.axeslbl(
-              GR.tick(@active_axes.x_range[0], @active_axes.x_range[1]) /
+              GR.tick(axes.x_range[0], axes.x_range[1]) /
                 axes.x_axis.major_ticks_count.to_f,
-              GR.tick(@active_axes.y_range[0], @active_axes.y_range[1]) /
+              GR.tick(axes.y_range[0], axes.y_range[1]) /
                 axes.y_axis.major_ticks_count.to_f,
               axes.x_axis.min_val,
               axes.y_axis.min_val,

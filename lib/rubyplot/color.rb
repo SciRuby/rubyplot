@@ -987,5 +987,11 @@ module Rubyplot
       purple: '#7e1e9c',
       vivid_orange: '#ff7f0e'
     }.freeze
+
+    class << self
+      def random_color
+        Rubyplot::Color::CONTRASTING_COLORS[Rubyplot::Color::CONTRASTING_COLORS.keys.sample]
+      end
+    end
   end
 end
