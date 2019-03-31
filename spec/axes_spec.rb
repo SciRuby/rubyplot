@@ -14,7 +14,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#stacked_bar!" do
     it "plots multiple stacked bar graphs with default colors" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       [
         ["Charles", [20, 10, 5, 12, 11, 6, 10, 7]],
         ["Adam", [5, 10, 20, 6, 9, 12, 14, 8]],
@@ -35,7 +35,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots stacked bar in a small size" do
       @figure = Rubyplot::Figure.new(height: 400, width: 400)
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       [
         ["Car", [25, 36, 86, 39]],
         ["Bus", [80, 54, 67, 54]],
@@ -53,7 +53,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#dot!" do
     skip "plots a single dot plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.dot! do |p|
         p.data [0,5,8,15]
         p.label = "Car"
@@ -65,7 +65,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     skip "plots multiple dot plots" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       [
         [[0, 5, 8, 15], "cars", :maroon],
         [[10, 3, 2, 8], "buses", :grey],
@@ -86,7 +86,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#bubble!" do
     it "plots a single bubble plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bubble! do |p|
         p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
@@ -99,7 +99,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots multiple bubble plots on same axes." do 
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bubble! do |p|
         p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
@@ -115,7 +115,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#area!" do
     it "plots a single simple Area graph" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.area! do |p|
         p.data [25, 36, 86, 39, 25, 31, 79, 88]
         p.label = "Jimmy"
@@ -126,7 +126,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots multiple area plots on the same Axes" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       [
         ["Jimmy", [25, 36, 86, 39, 25, 31, 79, 88]],
         ["Charles", [80, 54, 67, 54, 68, 70, 90, 95]],
@@ -146,7 +146,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#line!" do
     it "makes a simple line plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.line! do |p|
         p.data [2, 4, 7, 9], [1,2,3,4]
         p.label = "Marco"
@@ -157,7 +157,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots 2 simple lines on the same axes" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.line! do |p|
         p.data [3, 5, 10, 15]
         p.label = "Marco"
@@ -173,7 +173,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "tests very small plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "very small line chart 200px"
       @planet_data.each do |name, d|
         axes.line! do |p|
@@ -185,7 +185,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots multiple 0 data" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "hand value graph test"
       axes.line! do |p|
         p.data [0,0,100]
@@ -195,7 +195,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots small values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "small values"
       [
         [[0.1, 0.14356, 0.0, 0.5674839, 0.456], "small"],
@@ -210,7 +210,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots line starting with 0" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "starting with 0"
       [
         [[0, 5, 10, 8, 18], "first0"],
@@ -225,7 +225,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots line with large values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "large values"
       [
         ["large", [100_005, 35_000, 28_000, 27_000]],
@@ -243,7 +243,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "accepts both X and Y data" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "accept X and Y"
       axes.line! do |p|
         p.data [1, 3, 4, 5, 6, 10], [1, 2, 3, 4, 4, 3]
@@ -259,7 +259,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#bar!" do
     it "adds a simple bar plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bar! do |p| 
         p.data [5,12,9,6,7]
         p.label = "data"
@@ -271,7 +271,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds bar plot with title margin" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
         p.data [5,12,9,6,6]
         p.label = "data"
@@ -282,7 +282,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots large numbers" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
         p.data [7025, 1024, 40_257, 933_672, 1_560_496]
         p.label = "data"
@@ -292,7 +292,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds axes with X-Y labels" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
         p.data [40,50,60,80]
         p.label = "students"
@@ -305,7 +305,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds multiple bar plots for wide graph" do
       @figure = Rubyplot::Figure.new(height: 400, width: 800)
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       @planet_data.each do |name, nums|
         axes.bar! do |p| 
           p.data nums
@@ -316,7 +316,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "plots both positive and negative values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
         p.data [-1, 0, 4, -4]
         p.label = "apples"
@@ -331,7 +331,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "tests negative values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "all negative bar graph."
       axes.x_ticks = ['5/6', '5/15', '5/24', '5/30']
       axes.bar! do |p|
@@ -346,7 +346,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "sets min-max range for Y axis" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "nearly zero graph."
       axes.y_range = [0,10]
       [
@@ -363,7 +363,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adjust legends if there are too many" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.title = "My graph."
       [
         [[1, 2, 3, 4, 4, 3], 'Apples oranges Watermelon'],
@@ -388,7 +388,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     
     it "adds a simple scatter plot." do
       @figure = Rubyplot::Figure.new 
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
         p.data @x1, @y1
         p.label = "data1"
@@ -401,7 +401,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds scatter with all negative values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
         p.data [-1, -1, -4, -4], [-5, -1, -3, -4]
         p.label = "apples"
@@ -411,7 +411,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds scatter with positive and negative values" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
         p.data [-2,0,2,4,6], [-3,-1, 1, 4, 8]
         p.label = "values"
@@ -423,7 +423,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#histogram!" do
     it "adds a single histogram with default bins" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.histogram! do |p| 
         p.x = 100.times.map{ rand(10) }
       end
@@ -432,7 +432,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "adds a single histogram with custom bins" do
       skip "GR does not currently support custom tick marks."
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = [1, 4, 7, 10]
@@ -441,7 +441,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
     it "adds a single histogram with number of bins" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = 5
@@ -453,7 +453,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     # FIXME: use data method to accept the data for the plot in one go.
     it "adds a simple candle stick plot" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.candle_stick! do |p|
         p.lows = [100, 110, 120, 130, 120, 110]
         p.highs = [140, 150, 160, 170, 160, 150]
@@ -463,9 +463,9 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Simple candle stick plot."
     end
 
-    it "adds multiple candle stick plots", focus: true do
+    it "adds multiple candle stick plots" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
 
       lows = [100, 110, 120, 130, 120, 110]
       highs = [140, 150, 160, 170, 160, 150]
@@ -490,6 +490,14 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.closes = closes.map { |c| c + 10 }
       end
       axes.title = "Multiple candle stick plot."
+    end
+  end
+
+  context "#error_bar!" do
+    it "adds a simple error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot."
     end
   end
 
@@ -520,7 +528,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   context "#x_ticks=" do
     it "assigns strings to X ticks" do
       @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot 0,0
+      axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
         p.data [1,2,3,4], [1,2,3,4]
         p.label = "apples"

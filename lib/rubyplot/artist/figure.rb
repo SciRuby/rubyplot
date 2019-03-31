@@ -47,15 +47,17 @@ module Rubyplot
         @subplots = nil
         @n = 0
         setup_default_theme
-        add_subplots @nrows, @ncols
+        add_subplots! @nrows, @ncols
       end
 
       # Create space for subplots to be added to the figure.
       #
       # @param nrows [Integer] Number of rows to add.
       # @param ncols [Integer] Number of cols to add.
-      def add_subplots(nrows, ncols)
-        @subplots = Array.new(nrows) { Array.new(ncols) { nil } }
+      def add_subplots!(nrows, ncols)
+        @nrows = nrows
+        @ncols = ncols
+        @subplots = Array.new(@nrows) { Array.new(@ncols) { nil } }
       end
 
       # Actually create a subplot at position (nrow, ncol) on the figure.
@@ -64,7 +66,7 @@ module Rubyplot
       # 
       # @param nrow [Integer] X co-ordinate of the subplot.
       # @param ncol [Integer] Y co-ordinate of the subplot.
-      def add_subplot(nrow, ncol)
+      def add_subplot!(nrow, ncol)
         # FIXME: make this work for mutliple subplots.
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
           self,
