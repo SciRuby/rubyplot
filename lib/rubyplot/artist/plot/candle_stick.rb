@@ -35,9 +35,17 @@ module Rubyplot
         end
 
         def draw
-          puts "fill: #{@fill_color}."
+          @x_low_stick.each_with_index do |ix_stick, i|
+            Rubyplot::Artist::Line2D.new(
+              self,
+              x1: ix_stick,
+              y1: @lows[i],
+              x2: ix_stick,
+              y2: @highs[i]
+            ).draw
+          end
           @x_left_candle.each_with_index do |ix_candle, i|
-            candle = Rubyplot::Artist::Rectangle.new(
+            Rubyplot::Artist::Rectangle.new(
               self,
               x1: ix_candle,
               y1: @opens[i],
@@ -45,8 +53,7 @@ module Rubyplot
               y2: @closes[i],
               border_color: @border_color,
               fill_color: @data[:color]
-            )
-            candle.draw
+            ).draw
           end
         end
       end

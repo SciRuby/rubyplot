@@ -17,7 +17,7 @@ module Rubyplot
 
       def draw
         Rubyplot.backend.draw_line(x1: @x1, y1: @y1, x2: @x2, y2: @y2,
-          width: @width, color: @color, opacity: @opacity)
+          width: @width, color: @color, opacity: @opacity, type: :solid)
       end
     end # class Line2D
   end # class Artist

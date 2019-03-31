@@ -13,16 +13,14 @@ module Rubyplot
           @y_min = @candle_sticks.map(&:y_min).min
           @y_max = @candle_sticks.map(&:y_max).max
           @x_min = 0
-          @x_max = @candle_sticks.map(&:x_max).max + 1
-          puts "x_max: #{@x_max}. "
-          @axes.x_axis.max_val = @x_max
+          @x_max = @candle_sticks.map(&:x_max).max
+          @axes.x_axis.max_val = @x_max -1
           @max_slot_width = 1.0
           @candles_per_slot = @candle_sticks.size
           @max_candle_width = @max_slot_width / @candles_per_slot
           @candle_sticks.each_with_index do |candle_stick, index|
             set_bar_properties candle_stick, index
           end
-          puts "cs max: #{@candle_sticks.map(&:x_max).max}"
           @axes.x_axis.major_ticks_count = @x_max
         end
 
@@ -36,15 +34,11 @@ module Rubyplot
           candle_stick.bar_width = (@max_slot_width - @candles_per_slot * @spacing_ratio) /
             @candles_per_slot
           (@x_max-1).to_i.times do |i|
-            puts "setting properties #{i} #{index}"
             candle_stick.x_left_candle[i] = @max_slot_width * i + 
               @max_candle_width * index + 
               (@spacing_ratio/2) * @max_candle_width
-            candle_stick.x_low_stick[i] = @max_slot_width * i +
-              @max_candle_width * index + @max_candle_width / 2
-            # unless candle_stick.fill_color
-            #   candle_stick.fill_color = Rubyplot::Color.random_color
-            # end
+            candle_stick.x_low_stick[i] = (candle_stick.x_left_candle[i] +
+              candle_stick.bar_width / 2)
           end
         end
       end # class MultiCandlestick

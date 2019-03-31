@@ -259,8 +259,9 @@ module Rubyplot
         end
       end
 
-      def draw_line
-        
+      def draw_line(x1:, y1:, x2:, y2:, width:, color:, opacity:, type:)
+        draw_lines(x: [x1, x2], y: [y1, y2], width: width, color: color,
+          type: type)
       end
 
       def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,

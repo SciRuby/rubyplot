@@ -12,7 +12,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#stacked_bar!" do
-    it "plots multiple stacked bar graphs with default colors", focus: true do
+    it "plots multiple stacked bar graphs with default colors" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       [
@@ -386,7 +386,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @y1 = [11, 2, 33, 4, 65]
     end
     
-    it "adds a simple scatter plot.", focus: true do
+    it "adds a simple scatter plot." do
       @figure = Rubyplot::Figure.new 
       axes = @figure.add_subplot 0,0
       axes.scatter! do |p|
@@ -463,20 +463,31 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Simple candle stick plot."
     end
 
-    it "adds multiple candle stick plots" do
+    it "adds multiple candle stick plots", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
+
+      lows = [100, 110, 120, 130, 120, 110]
+      highs = [140, 150, 160, 170, 160, 150]
+      opens = [110, 120, 130, 140, 130, 120]
+      closes = [130, 140, 150, 160, 150, 140]
       axes.candle_stick! do |p|
-        p.lows = [100, 110, 120, 130, 120, 110]
-        p.highs = [140, 150, 160, 170, 160, 150]
-        p.opens = [110, 120, 130, 140, 130, 120]
-        p.closes = [130, 140, 150, 160, 150, 140]
+        p.lows = lows
+        p.highs = highs
+        p.opens = opens
+        p.closes = closes
       end
       axes.candle_stick! do |p|
-        p.lows = [200, 210, 220, 230, 220, 210]
-        p.highs = [240, 250, 260, 270, 260, 250]
-        p.opens = [220, 220, 230, 240, 230, 220]
-        p.closes = [230, 240, 250, 260, 250, 240]
+        p.lows = lows.map { |l| l + 100 }
+        p.highs = highs.map { |h| h + 100 }
+        p.opens = opens.map { |o| o + 100 }
+        p.closes = closes.map { |c| c + 100 }
+      end
+      axes.candle_stick! do |p|
+        p.lows = lows.map { |l| l + 10 }
+        p.highs = highs.map { |h| h + 10 }
+        p.opens = opens.map { |o| o + 10 }
+        p.closes = closes.map { |c| c + 10 }
       end
       axes.title = "Multiple candle stick plot."
     end
