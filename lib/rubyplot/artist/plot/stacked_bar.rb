@@ -33,15 +33,8 @@ module Rubyplot
         end
 
         def draw
-          setup_bar_rectangles
-          @rectangles.each(&:draw)
-        end
-
-        private
-
-        def setup_bar_rectangles
           @data[:y_values].each_with_index do |iy, i|
-            @rectangles << Rubyplot::Artist::Rectangle.new(
+            Rubyplot::Artist::Rectangle.new(
               self,
               x1: @abs_x_left[i],
               y1: @abs_y_left[i],
@@ -49,7 +42,7 @@ module Rubyplot
               y2: @abs_y_left[i] + iy,
               border_color: @data[:color],
               fill_color: @data[:color]
-            )
+            ).draw
           end
         end
       end # class StackedBar

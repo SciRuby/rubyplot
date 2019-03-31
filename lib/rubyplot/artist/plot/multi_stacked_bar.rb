@@ -5,6 +5,10 @@ module Rubyplot
         def initialize(*args, stacked_bars:)
           super(args[0])
           @stacked_bars = stacked_bars
+        end
+
+        def process_data
+          @stacked_bars.each(&:process_data)
           @x_min = @stacked_bars.map(&:x_min).min
           @y_min = @stacked_bars.map(&:y_min).min
           @x_max = @stacked_bars.map(&:x_max).max
@@ -13,7 +17,6 @@ module Rubyplot
             map { |a| a.inject(:+) }.max
           reset_axes_ranges
           configure_plot_geometry_data
-  #        configure_x_ticks
         end
 
         def draw
@@ -26,6 +29,7 @@ module Rubyplot
           @axes.y_axis.min_val = 0
           @axes.y_axis.max_val = @y_max
           @axes.x_axis.min_val = 0
+          @axes.x_axis.max_val = @x_max
         end
 
         def configure_plot_geometry_data
@@ -37,21 +41,6 @@ module Rubyplot
           @num_max_stacks = @stacked_bars.size
           @stacked_bars.each_with_index do |bar, index|
             set_bar_dims bar, index
-          end
-        end
-
-        # FIXME: make backend agnostic.
-        def configure_x_ticks
-#          @axes.num_x_ticks = @num_max_slots
-          labels = @axes.x_ticks || Array.new(@num_max_slots, &:to_s)
- #         labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
-          @axes.x_ticks = labels.map.with_index do |label, i|
-            Rubyplot::Artist::XTick.new(
-              @axes,
-              abs_x: @axes.abs_x + @axes.left_margin + i * @max_slot_width + @max_slot_width / 2,
-              abs_y: @axes.origin[1],
-              label: label
-            )
           end
         end
 

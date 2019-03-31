@@ -12,7 +12,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#stacked_bar!" do
-    it "plots multiple stacked bar graphs with default colors" do
+    it "plots multiple stacked bar graphs with default colors", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       [

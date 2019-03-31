@@ -14,17 +14,16 @@ module Rubyplot
         def initialize(*args, bar_plots:)
           super(args[0])
           @bar_plots = bar_plots
+        end
+
+        def process_data
+          @bar_plots.each(&:process_data)
           @x_min = @bar_plots.map(&:x_min).min
           @y_min = @bar_plots.map(&:y_min).min
           @x_max = @bar_plots.map(&:x_max).max
           @y_max = @bar_plots.map(&:y_max).max
           configure_ranges!
           configure_plot_geometry_data!
-          # configure_x_ticks!
-        end
-
-        def normalize
-          @bar_plots.each(&:normalize)
         end
 
         def draw
@@ -41,7 +40,6 @@ module Rubyplot
         def configure_plot_geometry_data!
           @num_max_slots = @bar_plots.map(&:num_bars).max
           @max_slot_width = (@x_max - @x_min) / @num_max_slots.to_f
-          # FIXME: figure out a way to specify inter-box space somehow.
           @spacing_ratio = @bar_plots[0].spacing_ratio
           @padding = @spacing_ratio * @max_slot_width
           @max_bars_width = @max_slot_width - @padding
@@ -51,21 +49,6 @@ module Rubyplot
           end
         end
         
-        # FIXME: Find the best backend-neutral way of doing this.
-        def configure_x_ticks!
- #         @axes.num_x_ticks = @num_max_slots
-          labels = @axes.x_axis.major_ticks || Array.new(@num_max_slots, &:to_s)
-#          labels = labels[0...@axes.num_x_ticks] if labels.size != @axes.num_x_ticks
-          @axes.x_axis.major_ticks = labels.map.with_index do |label, i|
-            Rubyplot::Artist::XTick.new(
-              @axes,
-              abs_x: @axes.abs_x + @axes.left_margin + i * @max_slot_width + @max_slot_width / 2,
-              abs_y: @axes.origin[1],
-              label: label
-            )
-          end
-        end
-
         def set_bar_dims bar_plot, index
           bar_plot.bar_width = @max_bars_width / @bars_per_slot
           @num_max_slots.times do |i|

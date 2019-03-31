@@ -102,10 +102,10 @@ module Rubyplot
       end
 
       def process_data
-        set_axes_ranges
         assign_default_label_colors
         consolidate_plots
         @plots.each(&:process_data)
+        set_axes_ranges
       end
 
       # Write an image to a file by communicating with the backend.
@@ -303,15 +303,21 @@ module Rubyplot
       end
 
       def set_xrange
-        if @x_axis.min_val.nil? && @x_axis.max_val.nil?
+        if @x_axis.min_val.nil?
           @x_axis.min_val = @plots.map(&:x_min).min
+        end
+
+        if @x_axis.max_val.nil?
           @x_axis.max_val = @plots.map(&:x_max).max
         end
       end
 
       def set_yrange
-        if @y_axis.min_val.nil? && @y_axis.max_val.nil?
+        if @y_axis.min_val.nil?
           @y_axis.min_val = @plots.map(&:y_min).min
+        end
+        
+        if @y_axis.max_val.nil?
           @y_axis.max_val = @plots.map(&:y_max).max
         end
       end

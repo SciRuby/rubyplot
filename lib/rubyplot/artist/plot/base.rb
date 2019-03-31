@@ -39,14 +39,13 @@ module Rubyplot
         def data(x_values, y_values)
           @data[:x_values] = x_values
           @data[:y_values] = y_values
+        end
+
+        def process_data
           @y_min = @data[:y_values].min
           @y_max = @data[:y_values].max
           @x_min = @data[:x_values].min
           @x_max = @data[:x_values].max
-        end
-
-        def process_data
-      
         end
       end # class Base
     end # module Plot
