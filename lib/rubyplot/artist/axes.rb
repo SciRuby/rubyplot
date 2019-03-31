@@ -102,20 +102,24 @@ module Rubyplot
       end
 
       def process_data
+        set_axes_ranges
+        assign_default_label_colors
+        consolidate_plots
         @plots.each(&:process_data)
       end
 
       # Write an image to a file by communicating with the backend.
       def draw
         Rubyplot.backend.active_axes = self
-        set_axes_ranges
-        assign_default_label_colors
-        consolidate_plots
         configure_title
         configure_legends
         assign_x_ticks
         assign_y_ticks
-        actually_draw
+        @x_axis.draw
+        @y_axis.draw
+        @texts.each(&:draw)
+        @legend_box.draw
+        @plots.each(&:draw)
       end
 
       def scatter!(*_args)
@@ -272,15 +276,6 @@ module Rubyplot
         )
       end
 
-      # Call the respective draw methods on each of the elements of this Axes.
-      def actually_draw
-        @x_axis.draw
-        @y_axis.draw
-        @texts.each(&:draw)
-        @legend_box.draw
-        @plots.each(&:draw)
-      end
-
       def consolidate_plots
         bars = @plots.grep(Rubyplot::Artist::Plot::Bar)
         unless bars.empty?
@@ -302,7 +297,6 @@ module Rubyplot
         end
       end
 
-      # FIXME: replace x_range and y_range with XAxis::max/min_value and YAxis::max/min_value.
       def set_axes_ranges
         set_xrange
         set_yrange

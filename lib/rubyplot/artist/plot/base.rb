@@ -46,7 +46,7 @@ module Rubyplot
         end
 
         def process_data
-          
+      
         end
       end # class Base
     end # module Plot

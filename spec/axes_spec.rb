@@ -386,7 +386,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @y1 = [11, 2, 33, 4, 65]
     end
     
-    it "adds a simple scatter plot." do
+    it "adds a simple scatter plot.", focus: true do
       @figure = Rubyplot::Figure.new 
       axes = @figure.add_subplot 0,0
       axes.scatter! do |p|
@@ -450,7 +450,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#candle_stick!" do
-    it "adds a simple candle stick plot", focus: true do
+    # FIXME: use data method to accept the data for the plot in one go.
+    it "adds a simple candle stick plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot 0,0
       axes.candle_stick! do |p|
