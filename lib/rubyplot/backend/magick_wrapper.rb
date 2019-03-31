@@ -1,3 +1,5 @@
+require 'rmagick'
+
 module Rubyplot
   module Backend
     # Wrapper around an Image Magick backend. In case of ImageMagick, the upper

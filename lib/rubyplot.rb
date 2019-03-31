@@ -1,6 +1,8 @@
 require 'bigdecimal'
 
-require 'rmagick'
+unless ENV["RUBYPLOT_BACKEND"]
+  ENV["RUBYPLOT_BACKEND"] = "GR"
+end
 
 require 'rubyplot/color'
 require 'rubyplot/utils'
