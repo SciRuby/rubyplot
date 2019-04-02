@@ -9,11 +9,19 @@ describe Rubyplot::Figure do
       expect(axes).to be_a(Rubyplot::Artist::Axes)
     end
 
-    it "creates 2x1 subplots within a Figure", focus: true do
+    it "creates 2x1 subplots within a Figure" do
       @figure = Rubyplot::Figure.new
       @figure.add_subplots! 2, 1
       axes0 = @figure.add_subplot! 0,0
       axes1 = @figure.add_subplot! 1,0
+
+      expect(axes0.abs_x).to eq(5.0)
+      expect(axes0.abs_y).to eq(5.0)
+      expect(axes0.width).to eq(90.0)
+      expect(axes0.height).to eq(45.0)
+
+      expect(axes1.abs_x).to eq(5.0)
+      expect(axes1.abs_y).to eq(50.0)
 
       axes0.x_range = [0, 10]
       axes0.y_range = [0, 70]
@@ -28,7 +36,7 @@ describe Rubyplot::Figure do
       end
     end
 
-    it "creates 2x2 subplots with a Figure" do
+    it "creates 2x2 subplots with a Figure", focus: true do
       @figure = Rubyplot::Figure.new
       @figure.add_subplots! 2, 2
       axes0 = @figure.add_subplot! 0,0

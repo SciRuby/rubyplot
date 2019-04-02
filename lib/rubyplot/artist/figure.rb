@@ -68,12 +68,14 @@ module Rubyplot
       # @param ncol [Integer] Y co-ordinate of the subplot.
       def add_subplot!(nrow, ncol)
         # FIXME: make this work for mutliple subplots.
+        plottable_width = Rubyplot::MAX_X - (@left_spacing + @right_spacing)
+        plottable_length = Rubyplot::MAX_Y - (@top_spacing + @bottom_spacing)
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
           self,
-          abs_x: @left_spacing + @abs_x,
-          abs_y: @bottom_spacing + @abs_y,
-          width: Rubyplot::MAX_X - (@left_spacing + @right_spacing),
-          height: Rubyplot::MAX_Y - (@top_spacing + @bottom_spacing)
+          abs_x: @left_spacing + (plottable_width.to_f / @ncols) * ncol,
+          abs_y: @bottom_spacing + (plottable_length.to_f / @nrows) * nrow,
+          width: plottable_width / @ncols,
+          height: plottable_length / @nrows
         )
         @subplots[nrow][ncol]
       end
