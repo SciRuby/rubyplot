@@ -43,6 +43,52 @@ describe Rubyplot::Figure do
       axes1 = @figure.add_subplot! 0,1
       axes2 = @figure.add_subplot! 1,0
       axes3 = @figure.add_subplot! 1,1
+
+      axes0.candle_stick! do |p|
+        p.lows = [100, 110, 120, 130, 120, 110]
+        p.highs = [140, 150, 160, 170, 160, 150]
+        p.opens = [110, 120, 130, 140, 130, 120]
+        p.closes = [130, 140, 150, 160, 150, 140]
+      end
+      axes0.title = "Simple candle stick plot."
+
+      lows = [100, 110, 120, 130, 120, 110]
+      highs = [140, 150, 160, 170, 160, 150]
+      opens = [110, 120, 130, 140, 130, 120]
+      closes = [130, 140, 150, 160, 150, 140]
+      axes1.candle_stick! do |p|
+        p.lows = lows
+        p.highs = highs
+        p.opens = opens
+        p.closes = closes
+      end
+      axes1.candle_stick! do |p|
+        p.lows = lows.map { |l| l + 100 }
+        p.highs = highs.map { |h| h + 100 }
+        p.opens = opens.map { |o| o + 100 }
+        p.closes = closes.map { |c| c + 100 }
+      end
+      axes1.candle_stick! do |p|
+        p.lows = lows.map { |l| l + 10 }
+        p.highs = highs.map { |h| h + 10 }
+        p.opens = opens.map { |o| o + 10 }
+        p.closes = closes.map { |c| c + 10 }
+      end
+      axes1.title = "Multiple candle stick plot."
+
+      axes2.line! do |p|
+        p.data [2, 4, 7, 9], [1,2,3,4]
+        p.label = "Marco"
+        p.color = :blue
+      end
+      axes2.title = "A line graph."
+
+      axes3.bar! do |p|
+        p.data [5,12,9,6,6]
+        p.label = "data"
+        p.color = :green
+      end
+      axes3.title = "Bar with title margin = 100"
     end
   end
 end
