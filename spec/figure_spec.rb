@@ -1,6 +1,57 @@
 require 'spec_helper'
 
 describe Rubyplot::Figure do
+  context ".new" do
+    it "accepts figsize in centimeter (default)", focus: true do
+      fig = Rubyplot::Figure.new(width: 30, height: 40)
+
+      expect(fig.width).to eq(30)
+      expect(fig.height).to eq(40)
+      expect(fig.figsize_unit).to eq(:cm)
+    end
+
+    it "accepts figsize in pixels" do
+      fig = Rubyplot::Figure.new(width: 200, height: 200, figsize_unit: :pixel)
+
+      expect(fig.width).to eq(200)
+      expect(fig.height).to eq(200)
+      expect(fig.figsize_unit).to eq(:pixel)
+    end
+
+    it "accepts figsize in inches" do
+      fig = Rubyplot::Figure.new(width: 3.0, height: 4.0, figsize_unit: :inch)
+
+      expect(fig.width).to eq(3.0)
+      expect(fig.height).to eq(4.0)
+      expect(fig.figsize_unit).to eq(:inch)
+    end
+
+    it "accepts portrait orientation" do
+      fig = Rubyplot::Figure.new(width: 4.0, height: 3.0, figsize_unit: :inch)
+
+      expect(fig.width).to eq(4.0)
+      expect(fig.height).to eq(3.0)
+      expect(fig.figsize_unit).to eq(:inch)
+    end
+
+    it "changes Rubyplot Artist Co-ordinates as per aspect ratio." do
+      fig = Rubyplot::Figure.new(width: 20, height: 20)
+
+      expect(Rubyplot.max_x).to eq(100.0)
+      expect(Rubyplot.max_y).to eq(100.0)
+
+      fig = Rubyplot::Figure.new(width: 30, height: 20)
+      
+      expect(Rubyplot.max_x).to eq(150.0)
+      expect(Rubyplot.max_y).to eq(100.0)
+
+      fig = Rubyplot::Figure.new(width: 20, height: 30)
+      
+      expect(Rubyplot.max_x).to eq(100.0)
+      expect(Rubyplot.max_y).to eq(150.0)
+    end
+  end
+  
   context "#add_subplot!" do
     it "creates a singular subplot inside the Figure" do
       fig = Rubyplot::Figure.new
@@ -36,7 +87,7 @@ describe Rubyplot::Figure do
       end
     end
 
-    it "creates 2x2 subplots with a Figure", focus: true do
+    it "creates 2x2 subplots with a Figure" do
       @figure = Rubyplot::Figure.new
       @figure.add_subplots! 2, 2
       axes0 = @figure.add_subplot! 0,0

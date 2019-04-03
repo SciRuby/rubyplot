@@ -214,8 +214,7 @@ module Rubyplot
         end
       end
 
-      # Draw text on the canvas. Unlike other functions, this function does not
-      # plot within a given window but directly uses the NDC for writing the text.
+      # Draw text on the canvas.
       # TODO: support text with special characters and latex symbols.
       def draw_text(text, color:, font: nil, size:,
         font_weight: nil, gravity: nil, abs_x:,abs_y:, rotation: nil,

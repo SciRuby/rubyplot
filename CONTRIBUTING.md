@@ -45,18 +45,6 @@ The `after(:example)` block requires a `@figure` instance variable which it will
 for performing the plotting. A check will be performed for the `@figure` instance
 variable before the example is run.
 
-## Artist defaults convention
-
-Due to nature of a viz library, each Artist tends to have many instance variables
-for storing various kinds of information about the Artist.
-
-## Axis objects
-
-Since the parameters of the both Axis objects (`XAxis` and `YAxis`) can be modified
-by almost any element in the plot (like changing tick labels, positioning, origin, etc.)
-a convention to follow is that a constituent object of the Axis should be modified
-and the corresponding object be placed in the Axis object, which will handle its drawing.
-
 ## Units and measurements
 
 It is important to read up on units and measurements as used in a computer system if you
@@ -64,6 +52,26 @@ want to contribute to rubyplot. Here's some suggested reading:
 * Point (unit) - https://en.wikipedia.org/wiki/Point_(typography)
 
 # GR extension notes
+
+## Typography
+
+The most common way of specifying font sizes is by using the 'point' unit. This is what rubyplot
+uses at a top level. However, the backend can work with some different units, which makes it
+important to translate points to the right unit.
+
+### Font sizes in GR
+
+The only way to tell GR to change the way a font looks is by changing the font height,
+spacing etc. using the `settextfontprec`, `settextcolorind`, `setcharheight`, `setcharup`,
+and other such functions.
+
+All these features are abstracted using `Rubyplot::Artist::Text`, which accepts inputs
+in human-understadable format and uses the appropriate GR primitives to do its job.
+
+## Figure sizes
+
+GR does not allow changing the internal DPI setting as of now (which is 600).
+The size of the figure can be set using the `setwsviewport` or `setwswindow` functions.
 
 ## setwindow and setviewport
 

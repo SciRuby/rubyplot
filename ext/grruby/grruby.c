@@ -37,6 +37,7 @@ static VALUE inqdspsize(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d){
   int *cc = rb_ar_2_int_ar(c);
   int *dc = rb_ar_2_int_ar(d);
   gr_inqdspsize(ac,bc,cc,dc);
+  
   return Qtrue;
 }
 
@@ -971,21 +972,61 @@ static VALUE setclip(VALUE self,VALUE indicator){
   return Qtrue;
 }
 
-static VALUE setwswindow(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
+/*
+ * Set the area of the NDC viewport that is to be drawn in the workstation window.
+ * 
+ * **Parameters:**
+ * 
+ * `xmin` :
+ * The left horizontal coordinate of the workstation window.
+ * `xmax` :
+ * The right horizontal coordinate of the workstation window (0 <= `xmin` < `xmax` <= 1).
+ * `ymin` :
+ * The bottom vertical coordinate of the workstation window.
+ * `ymax` :
+ * The top vertical coordinate of the workstation window (0 <= `ymin` < `ymax` <= 1).
+ * 
+ *   `setwswindow` defines the rectangular area of the Normalized Device Coordinate space
+ *   to be output to the device. By default, the workstation transformation will map the
+ *   range [0,1] x [0,1] in NDC onto the largest square on the workstation’s display
+ *   surface. The aspect ratio of the workstation window is maintained at 1 to 1.
+ **/
+static VALUE setwswindow(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
   double ymaxc = NUM2DBL(ymax);
   gr_setwswindow(xminc,xmaxc,yminc,ymaxc);
+  
   return Qtrue;
 }
 
-static VALUE setwsviewport(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax){
+/*
+ *    Define the size of the workstation graphics window in meters.
+ *
+ *    **Parameters:**
+ *
+ *    `xmin` :
+ *        The left horizontal coordinate of the workstation viewport.
+ *    `xmax` :
+ *        The right horizontal coordinate of the workstation viewport.
+ *    `ymin` :
+ *        The bottom vertical coordinate of the workstation viewport.
+ *    `ymax` :
+ *        The top vertical coordinate of the workstation viewport.
+ *
+ *    `setwsviewport` places a workstation window on the display of the specified size in
+ *    meters. This command allows the workstation window to be accurately sized for a
+ *    display or hardcopy device, and is often useful for sizing graphs for desktop
+ *    publishing applications.
+ **/
+static VALUE setwsviewport(VALUE self,VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax) {
   double xminc = NUM2DBL(xmin);
   double xmaxc = NUM2DBL(xmax);
   double yminc = NUM2DBL(ymin);
   double ymaxc = NUM2DBL(ymax);
   gr_setwsviewport(xminc,xmaxc,yminc,ymaxc);
+  
   return Qtrue;
 }
 
@@ -1164,7 +1205,7 @@ static VALUE textext(VALUE self,VALUE x, VALUE y, VALUE string) {
   return Qtrue;
 }
 
-static VALUE inqtextext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e){
+static VALUE inqtextext(VALUE self,VALUE a,VALUE b,VALUE c,VALUE d,VALUE e) {
   double ac = NUM2DBL(a);
   double bc = NUM2DBL(b);
   char *cc = StringValueCStr(c);
