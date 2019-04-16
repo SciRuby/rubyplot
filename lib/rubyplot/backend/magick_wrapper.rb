@@ -166,11 +166,11 @@ module Rubyplot
 
       # Transform X co-ordinate.
       def transform_x x
-        (@canvas_width * x) / Rubyplot::MAX_X
+        (@canvas_width * x) / Rubyplot.max_x
       end
 
       def transform_y y
-        (@canvas_height * (Rubyplot::MAX_Y - y)) / Rubyplot::MAX_Y
+        (@canvas_height * (Rubyplot.max_y - y)) / Rubyplot.max_y
       end
 
       # Transform quantity that depends on X and Y.

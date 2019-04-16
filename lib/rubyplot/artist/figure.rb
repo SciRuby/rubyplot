@@ -1,8 +1,8 @@
 module Rubyplot
   module Artist
     class Figure < Artist::Base
-      DEFAULT_TARGET_WIDTH = 800
-
+      DEFAULT_CANVAS_DIM = 40.0
+      
       # Title on the figure.
       attr_reader :title
       # Number of Axes objects in the rows.
@@ -29,23 +29,31 @@ module Rubyplot
       attr_reader :marker_color
       # Font color specified as a Symbol from Rubyplot::COLOR::COLOR_INDEX.
       attr_reader :font_color
+      # Unit of the figure size.
+      attr_reader :figsize_unit
+      attr_reader :max_x
+      attr_reader :max_y
+      attr_reader :min_x
+      attr_reader :min_y
 
       # Initialize a Rubyplot::Artist::Figure object.
       # @param height [Integer] nil Height in pixels of the complete Figure.
       # @param width [Integer] nil Width in pixels of the complete Figure.
-      def initialize(height: nil, width: nil)
+      def initialize(height: nil, width: nil, figsize_unit: :cm)
         super(0, 0)
         @title = ''
         @nrows = 1
         @ncols = 1
-        @width = width || DEFAULT_TARGET_WIDTH
-        @height = height || @width * 0.75
+        @width = (width || DEFAULT_CANVAS_DIM).to_f
+        @height = (height || DEFAULT_CANVAS_DIM).to_f
         @top_spacing = 5
         @bottom_spacing = 5
         @left_spacing = 5
         @right_spacing = 5
         @subplots = nil
         @n = 0
+        @figsize_unit = figsize_unit
+        set_rubyplot_artist_coords!
         setup_default_theme
         add_subplots! @nrows, @ncols
       end
@@ -68,12 +76,12 @@ module Rubyplot
       # @param ncol [Integer] Y co-ordinate of the subplot.
       def add_subplot!(nrow, ncol)
         # FIXME: make this work for mutliple subplots.
-        plottable_width = Rubyplot::MAX_X - (@left_spacing + @right_spacing)
-        plottable_length = Rubyplot::MAX_Y - (@top_spacing + @bottom_spacing)
+        plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
+        plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
         @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
           self,
-          abs_x: @left_spacing + (plottable_width.to_f / @ncols) * ncol,
-          abs_y: @bottom_spacing + (plottable_length.to_f / @nrows) * nrow,
+          abs_x: @left_spacing + (plottable_width / @ncols) * ncol,
+          abs_y: @bottom_spacing + (plottable_length / @nrows) * nrow,
           width: plottable_width / @ncols,
           height: plottable_length / @nrows
         )
@@ -105,6 +113,20 @@ module Rubyplot
       end
 
       private
+
+      def set_rubyplot_artist_coords!
+        @max_x = 100.0
+        @max_y = 100.0
+        @min_x = 0.0
+        @min_y = 0.0
+        if @height > @width
+          aspect_ratio = @height / @width
+          @max_y = @max_y * aspect_ratio
+        elsif @height < @width
+          aspect_ratio = @width / @height
+          @max_x = @max_x * aspect_ratio
+        end
+      end
 
       def setup_default_theme
         defaults = {

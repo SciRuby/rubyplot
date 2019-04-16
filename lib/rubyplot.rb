@@ -124,14 +124,7 @@ module Rubyplot
     :hatch
   ].freeze
   
-  # Min. co-ordinates of the lower left corner.
-  MIN_X = 0
-  MIN_Y = 0
-
-  # Max. co-ordinates of the upper right corner.
-  MAX_X = 100
-  MAX_Y = 100
-  class << self
+  class << self    
     def backend
       @backend
     end
@@ -146,3 +139,4 @@ module Rubyplot
     end
   end
 end # module Rubyplot
+

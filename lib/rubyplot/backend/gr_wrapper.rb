@@ -147,8 +147,14 @@ module Rubyplot
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
-        @xspread = Rubyplot::MAX_X.abs + Rubyplot::MIN_X.abs
-        @yspread = Rubyplot::MAX_Y.abs + Rubyplot::MIN_Y.abs
+      end
+
+      def xspread
+        (@figure.max_x.abs + @figure.min_x.abs).to_f
+      end
+
+      def yspread
+        (@figure.max_y.abs + @figure.min_y.abs).to_f
       end
 
       # Draw X axis for the currently selected Axes.
@@ -348,17 +354,17 @@ module Rubyplot
 
       # Transform a X quantity to Normalized Device Co-ordinates.
       def transform_x_ndc coord
-        coord.to_f / @xspread
+        coord.to_f / xspread
       end
 
       # Transform a Y quantity to Normalized Device Co-ordinates.
       def transform_y_ndc coord
-        coord.to_f / @yspread
+        coord.to_f / yspread
       end
 
       # Transform a quanitity that represents neither X nor Y co-ordinate into NDC.
       def transform_avg_ndc coord
-        coord / ((@xspread + @yspread) / 2)
+        coord / ((xspread + yspread) / 2)
       end
 
       # Set the window on the canvas within which the plotting will take place
@@ -368,13 +374,13 @@ module Rubyplot
           GR.setviewport(0,1,0,1)
           GR.setwindow(0,1,0,1)
         else
-          vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / @xspread
-          vp_min_y = (@active_axes.abs_y + @active_axes.bottom_margin) / @yspread
+          vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / xspread
+          vp_min_y = (@active_axes.abs_y + @active_axes.bottom_margin) / yspread
           vp_max_x = (@active_axes.abs_x + @active_axes.width -
-            @active_axes.right_margin) / @xspread
+            @active_axes.right_margin) / xspread
           vp_max_y = (@active_axes.abs_y + @active_axes.height -
-            @active_axes.top_margin) / @yspread
-          
+            @active_axes.top_margin) / yspread
+
           GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
           GR.setwindow(
             @active_axes.x_range[0],

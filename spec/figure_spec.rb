@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe Rubyplot::Figure do
   context ".new" do
-    it "accepts figsize in centimeter (default)", focus: true do
+    it "accepts figsize in centimeter (default)" do
       fig = Rubyplot::Figure.new(width: 30, height: 40)
 
       expect(fig.width).to eq(30)
       expect(fig.height).to eq(40)
       expect(fig.figsize_unit).to eq(:cm)
+
+      expect(fig.max_x).to eq(100.0)
+      expect(fig.max_y).to be_within(0.01).of(133.33)
     end
 
     it "accepts figsize in pixels" do
@@ -37,18 +40,18 @@ describe Rubyplot::Figure do
     it "changes Rubyplot Artist Co-ordinates as per aspect ratio." do
       fig = Rubyplot::Figure.new(width: 20, height: 20)
 
-      expect(Rubyplot.max_x).to eq(100.0)
-      expect(Rubyplot.max_y).to eq(100.0)
+      expect(fig.max_x).to eq(100.0)
+      expect(fig.max_y).to eq(100.0)
 
       fig = Rubyplot::Figure.new(width: 30, height: 20)
       
-      expect(Rubyplot.max_x).to eq(150.0)
-      expect(Rubyplot.max_y).to eq(100.0)
+      expect(fig.max_x).to eq(150.0)
+      expect(fig.max_y).to eq(100.0)
 
       fig = Rubyplot::Figure.new(width: 20, height: 30)
       
-      expect(Rubyplot.max_x).to eq(100.0)
-      expect(Rubyplot.max_y).to eq(150.0)
+      expect(fig.max_x).to eq(100.0)
+      expect(fig.max_y).to eq(150.0)
     end
   end
   

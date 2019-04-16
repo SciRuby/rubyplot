@@ -4,8 +4,8 @@
 
 Rubyplot assumes that the co-ordinate system has the origin at the bottom left corner
 of the graph. This helps in keeping all pixel co-ordinates positive values. The bottom
-left corner is `(Rubyplot::MIN_X, Rubyplot::MIN_X)` and the upper left corner is 
-`(Rubyplot::MAX_X, Rubyplot::MAX_Y)`. The backend should be accomodated to work with 
+left corner is `(Rubyplot.min_x, Rubyplot.min_x)` and the upper left corner is 
+`(Rubyplot::max_x, Rubyplot.max_y)`. The backend should be accomodated to work with 
 this system. They are also denoted as and . This system is known as the 
 `Rubyplot Artist Co-ordinates` system internally within the codebase.
 
@@ -72,6 +72,8 @@ in human-understadable format and uses the appropriate GR primitives to do its j
 
 GR does not allow changing the internal DPI setting as of now (which is 600).
 The size of the figure can be set using the `setwsviewport` or `setwswindow` functions.
+Therefore, `setwsviewport(0, 6 * 0.0254, 0, 3 * 0.0254)` would create a 6 by 3
+inch image at 600 dpi.
 
 ## setwindow and setviewport
 

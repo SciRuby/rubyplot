@@ -303,7 +303,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.x_ticks = [ '5/6', '5/15', '5/24', '5/36' ]
     end
 
-    it "adds multiple bar plots for wide graph" do
+    it "adds multiple bar plots for wide graph", focus: true do
       @figure = Rubyplot::Figure.new(height: 400, width: 800)
       axes = @figure.add_subplot! 0,0
       @planet_data.each do |name, nums|
@@ -387,7 +387,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
     
     it "adds a simple scatter plot." do
-      @figure = Rubyplot::Figure.new 
+      @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
         p.data @x1, @y1

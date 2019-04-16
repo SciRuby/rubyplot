@@ -38,9 +38,9 @@ module Rubyplot
       attr_accessor :abs_x
       # Y co-ordinate of lower left corner of this Axes.
       attr_accessor :abs_y
-      # Width of this Axes object. Between Rubyplot::MIN_X and MAX_X.
+      # Width of this Axes object. Between Rubyplot.min_x and max_x.
       attr_accessor :width
-      # Height of this Axes object. Between Rubyplot::MIN_Y and MAX_Y.
+      # Height of this Axes object. Between Rubyplot.min_y and MAX_Y.
       attr_accessor :height
       
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
