@@ -31,9 +31,13 @@ module Rubyplot
       attr_reader :font_color
       # Unit of the figure size.
       attr_reader :figsize_unit
+      # Max X co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :max_x
+      # Max Y co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :max_y
+      # Min X co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :min_x
+      # Min co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :min_y
 
       # Initialize a Rubyplot::Artist::Figure object.
@@ -51,7 +55,6 @@ module Rubyplot
         @left_spacing = 5
         @right_spacing = 5
         @subplots = nil
-        @n = 0
         @figsize_unit = figsize_unit
         set_rubyplot_artist_coords!
         setup_default_theme

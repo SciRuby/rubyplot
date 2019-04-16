@@ -144,6 +144,13 @@ module Rubyplot
         }
       }.freeze
 
+      # Multiplier needed to convert given unit into meters. (GR default).
+      METER_MULTIPLIERS = {
+        inch: 0.0254,
+        cm: 100.0,
+        pixel: 600.0 / 0.0254
+      }.freeze
+
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
