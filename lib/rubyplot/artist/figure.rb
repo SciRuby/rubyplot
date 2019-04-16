@@ -37,7 +37,7 @@ module Rubyplot
       attr_reader :max_y
       # Min X co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :min_x
-      # Min co-ordinate in terms of Rubyplot Co-ordinate System.
+      # Min Y co-ordinate in terms of Rubyplot Co-ordinate System.
       attr_reader :min_y
 
       # Initialize a Rubyplot::Artist::Figure object.

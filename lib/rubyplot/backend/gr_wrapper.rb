@@ -6,6 +6,8 @@ module Rubyplot
     # since in GR there is no one-one mapping between Rubyplot artists and things
     # that are to be drawn on the backend.
     class GRWrapper < Base
+      DEFAULT_DPI = 600.0
+      
       # Mapping Rubyplot markers to GR marker constants.
       MARKER_TYPE_MAP = {
         dot: GR::MARKERTYPE_DOT,
@@ -147,8 +149,8 @@ module Rubyplot
       # Multiplier needed to convert given unit into meters. (GR default).
       METER_MULTIPLIERS = {
         inch: 0.0254,
-        cm: 100.0,
-        pixel: 600.0 / 0.0254
+        cm: 1 / 100.0,
+        pixel: 0.0254 / DEFAULT_DPI
       }.freeze
 
       def initialize
@@ -233,14 +235,14 @@ module Rubyplot
         font_weight: nil, gravity: nil, abs_x:,abs_y:, rotation: nil,
         halign: nil, valign: nil, font_precision: :high, direction: :left_right,
         abs: true)
-        within_window(abs) do
+        within_window(abs) do |ndc_min_x, ndc_max_x, ndc_min_y, ndc_max_y| 
           if abs
             x = transform_x_ndc abs_x
             y = transform_y_ndc abs_y
           end
 
           GR.setcharup(*to_gr_rotation_vector(rotation))
-          GR.setcharheight(to_gr_font_size(size))
+          GR.setcharheight(to_gr_font_size(size, ndc_min_y, ndc_max_y))
           GR.settextpath(TEXT_DIRECTION_MAP[direction])
           GR.settextcolorind(to_gr_color(color))
           GR.settextfontprec(TEXT_FONT_MAP[font], TEXT_PRECISION_MAP[font_precision])
@@ -343,9 +345,11 @@ module Rubyplot
 
       # Transform font size expressed in terms of Rubyplot font size (pt.)
       # to GR font height that is expressed in terms of the height of the canvas.
-      # FIXME: Figure out a way to do this.
-      def to_gr_font_size rubyplot_font_size
-        0.027 # GR default.
+      def to_gr_font_size rubyplot_font_size, ndc_min_y, ndc_max_y
+        height_in_pixels = (ndc_max_y - ndc_min_y) *
+          2400 * METER_MULTIPLIERS[:pixel] * 39.3701 *
+          DEFAULT_DPI
+        (rubyplot_font_size / height_in_pixels)
       end
 
       def to_gr_color color
@@ -377,8 +381,13 @@ module Rubyplot
       # Set the window on the canvas within which the plotting will take place
       # and then call the passed block for actual plotting.
       def within_window(abs=false, &block)
+        vp_min_x = 0.0
+        vp_max_x = 1.0
+        vp_min_y = 0.0
+        vp_max_y = 1.0
+        
         if abs
-          GR.setviewport(0,1,0,1)
+          GR.setviewport(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
           GR.setwindow(0,1,0,1)
         else
           vp_min_x = (@active_axes.abs_x + @active_axes.left_margin) / xspread
@@ -397,7 +406,7 @@ module Rubyplot
           )
         end
 
-        block.call
+        block.call(vp_min_x, vp_max_x, vp_min_y, vp_max_y)
       end
 
       def draw_axes

@@ -42,6 +42,8 @@ module Rubyplot
       attr_accessor :width
       # Height of this Axes object. Between Rubyplot.min_y and MAX_Y.
       attr_accessor :height
+      # Font size of the Axes title in pt. scale.
+      attr_accessor :title_font_size
       
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       # @param abs_x [Float] Absolute X co-ordinate of the lower left corner of the Axes.
@@ -186,8 +188,16 @@ module Rubyplot
         @x_axis.title = x_title
       end
 
+      def x_title_font_size= x_font_size
+        @x_axis.title_font_size = x_font_size
+      end
+
       def y_title= y_title
         @y_axis.title = y_title
+      end
+
+      def y_title_font_size= y_font_size
+        @y_axis.title_font_size = y_font_size
       end
 
       def x_range

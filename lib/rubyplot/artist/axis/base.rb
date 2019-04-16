@@ -34,6 +34,7 @@ module Rubyplot
           @lines = []
           @major_ticks = nil
           @minor_ticks = nil
+          @title_font_size = 25.0
         end
 
         def spread

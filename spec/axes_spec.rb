@@ -269,7 +269,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Random bar numbers"
     end
 
-    it "adds bar plot with title margin" do
+    it "adds bar plot with title margin", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
@@ -278,6 +278,9 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.color = :green
       end
       axes.title = "Bar with title margin = 100"
+      axes.title_font_size = 50.0
+      axes.x_title = "Green data!"
+      axes.y_title = "Green Y data!"
     end
 
     it "plots large numbers" do
