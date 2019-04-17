@@ -19,18 +19,32 @@ module Rubyplot
       attr_reader :label_stagger_height
       # Rubyplot::Artist::XAxis object.
       attr_reader :x_axis
+      # Rubyplot::Artist::XDashAxis object.
+      attr_reader :x_dash_axis
+
       # Rubyplot::Artist::YAxis object.
       attr_reader :y_axis
+# Rubyplot::Artist::YDASHAxis object.
+      attr_reader :y_dash_axis
+
       # Array of X ticks.
       attr_reader :x_ticks
+      # Array of X dash ticks.
+      attr_reader :x_dash_ticks
       # Array of Y ticks.
       attr_reader :y_ticks
+      # Array of Y dash ticks.
+      attr_reader :y_dash_ticks
       # Array denoting co-ordinates in pixels of the origin of X and Y axes.
       attr_reader :origin
       # Number of X ticks.
       attr_accessor :num_x_ticks
+      # Number of X dash ticks.
+      attr_accessor :num_x_dash_ticks
       # Number of Y ticks.
       attr_accessor :num_y_ticks
+      # Number of Y dash ticks.
+      attr_accessor :num_y_dash_ticks
       # Position of the legend box.
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
@@ -41,6 +55,10 @@ module Rubyplot
       attr_accessor :y_axis_margin
       # Range of X axis.
       attr_accessor :x_range
+      # Range of X dash axis.
+      attr_accessor :x_dash_range
+      # Range of Y dash axis.
+      attr_accessor :y_dash_range
       # Range of Y axis.
       attr_accessor :y_range, :grid, :bounding_box, :title_shift
       # Main title for this Axes.
@@ -55,7 +73,9 @@ module Rubyplot
         @x_axis_margin = 40.0
         @y_axis_margin = 40.0
         @x_range = [nil, nil]
+	@x_dash_range = [nil, nil]
         @y_range = [nil, nil]
+	@y_dash_range = [nil, nil]
         @title = ''
         @title_shift = 0
         @title_margin = TITLE_MARGIN
@@ -80,11 +100,17 @@ module Rubyplot
         @origin = [nil, nil]
         calculate_xy_axes_origin
         @x_axis = Rubyplot::Artist::XAxis.new(self)
+        @x_dash_axis = Rubyplot::Artist::XDashAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
+        @y_dash_axis = Rubyplot::Artist::YDashAxis.new(self)
         @x_ticks = nil
+	@x_dash_ticks = nil
         @y_ticks = nil
+	@y_dash_ticks = nil
         @num_x_ticks = 5
+	@num_x_dash_ticks = 5
         @num_y_ticks = 4
+	@num_y_dash_ticks = 4
         @legend_box_position = :top
       end
 
@@ -113,6 +139,8 @@ module Rubyplot
         configure_title
         configure_legends
         assign_x_ticks
+	assign_x_dash_ticks
+	assign_y_dash_ticks
         assign_y_ticks
         actually_draw
       end
@@ -185,9 +213,14 @@ module Rubyplot
       def x_ticks= x_ticks
         @x_ticks = x_ticks
       end
-
+      def x_dash_ticks= x_dash_ticks
+        @x_dash_ticks = x_dash_ticks
+      end
       def y_ticks= y_ticks
         @y_ticks = y_ticks
+      end
+      def y_dash_ticks= y_dash_ticks
+        @y_dash_ticks = y_dash_ticks
       end
 
       def x_title= x_title
@@ -210,7 +243,7 @@ module Rubyplot
       end
 
       def assign_x_ticks
-        @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f-1)
+        @inter_x_ticks_distance = @x_axis.length / (@num_x_ticks.to_f - 1)
         unless @x_ticks
           value_distance = (@x_range[1] - @x_range[0]) / (@num_x_ticks.to_f - 1)
           @x_ticks = @num_x_ticks.times.map do |i|
@@ -232,6 +265,29 @@ module Rubyplot
         end
       end
 
+      def assign_x_dash_ticks
+        @inter_x_dash_ticks_distance = @x_dash_axis.length / (@num_x_dash_ticks.to_f - 1)
+        unless @x_dash_ticks
+          value_distance = (@x_dash_range[1] - @x_dash_range[0]) / (@num_x_dash_ticks.to_f - 1)
+          @x_dash_ticks = @num_x_dash_ticks.times.map do |i|
+            @x_dash_range[0] + i * value_distance
+          end
+        end
+
+        unless @x_dash_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XDashTick) }
+          @x_dash_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::XDashTick.new(
+              self,
+              abs_x: -i * @inter_x_dash_ticks_distance + @x_dash_axis.abs_x1,
+              abs_y: @origin[1],
+              label: Rubyplot::Utils.format_label(-tick_label),
+              length: 6,
+              label_distance: 10
+            )
+          end
+        end
+      end
+
       def assign_y_ticks
         unless @y_ticks
           val_distance = (@y_range[1] - @y_range[0]).abs / @num_y_ticks.to_f
@@ -245,6 +301,26 @@ module Rubyplot
               abs_x: @origin[0],
               abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
               label: Rubyplot::Utils.format_label(tick_label),
+              length: 6,
+              label_distance: 50
+            )
+          end
+        end
+      end
+
+      def assign_y_dash_ticks
+        unless @y_dash_ticks
+          val_distance = (@y_dash_range[1] - @y_dash_range[0]).abs / @num_y_dash_ticks.to_f
+          @y_dash_ticks = (@y_dash_range[0]..@y_dash_range[1]).step(val_distance).map { |i| i }
+        end
+        unless @y_dash_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YDashTick) }
+          inter_ticks_distance = @y_dash_axis.length / (@num_y_dash_ticks - 1)
+          @y_dash_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::YDashTick.new(
+              self,
+              abs_x: @origin[0],
+              abs_y: @y_dash_axis.abs_y1 - (-i * inter_ticks_distance),
+              label: Rubyplot::Utils.format_label(-tick_label),
               length: 6,
               label_distance: 50
             )
@@ -279,8 +355,8 @@ module Rubyplot
       end
 
       def calculate_xy_axes_origin
-        @origin[0] = abs_x + @x_axis_margin
-        @origin[1] = abs_y + height - @y_axis_margin
+        @origin[0] = abs_x + width/2
+        @origin[1] = abs_y + height/2
       end
 
       # Figure out co-ordinates of the legends
@@ -302,8 +378,12 @@ module Rubyplot
       def actually_draw
         @x_axis.draw
         @x_ticks.each(&:draw)
+	@y_axis.draw
         @y_ticks.each(&:draw)
-        @y_axis.draw
+	@x_dash_axis.draw
+	@x_dash_ticks.each(&:draw)
+        @y_dash_axis.draw
+	@y_dash_ticks.each(&:draw)
         @texts.each(&:draw)
         @legend_box.draw
         @plots.each(&:draw)
@@ -327,24 +407,44 @@ module Rubyplot
       def set_axes_ranges
         set_xrange
         set_yrange
+	set_xdashrange
+	set_ydashrange
       end
 
       def set_xrange
         if @x_range[0].nil? && @x_range[1].nil?
-          @x_range[0] = @plots.map(&:x_min).min
+          @x_range[0] = 0
           @x_range[1] = @plots.map(&:x_max).max
         end
         @x_axis.min_val = @x_range[0]
         @x_axis.max_val = @x_range[1]
       end
-
+	
+      def set_xdashrange
+        if @x_dash_range[0].nil? && @x_dash_range[1].nil?
+          @x_dash_range[0] = 0
+          @x_dash_range[1] = @plots.map(&:x_max).max
+        end
+        @x_dash_axis.min_val = @x_dash_range[1]
+        @x_dash_axis.max_val = @x_dash_range[0]
+      end
+      
       def set_yrange
         if @y_range[0].nil? && @y_range[1].nil?
-          @y_range[0] = @plots.map { |p| p.y_min }.min
+          @y_range[0] = 0
           @y_range[1] = @plots.map { |p| p.y_max }.max
         end
         @y_axis.min_val = @y_range[0]
         @y_axis.max_val = @y_range[1]
+      end
+
+	def set_ydashrange
+        if @y_dash_range[0].nil? && @y_dash_range[1].nil?
+          @y_dash_range[0] = 0
+          @y_dash_range[1] = @plots.map { |p| p.y_max }.max
+        end
+        @y_dash_axis.min_val = @y_dash_range[0]
+        @y_dash_axis.max_val = @y_dash_range[1]
       end
     end # class Axes
   end # moudle Artist

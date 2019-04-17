@@ -1,6 +1,6 @@
 module Rubyplot
   module Artist
-    class YTick < Tick::Base
+    class YDashTick < Tick::Base
       def initialize(*)
         super
         @label = Rubyplot::Artist::Text.new(
@@ -17,7 +17,7 @@ module Rubyplot
           x1: @abs_x, y1: @abs_y, x2: @abs_x - @length, y2: @abs_y,
           stroke_opacity: @tick_opacity,
           stroke_width: @tick_width)
-	if @label_text != '0.00'
+	if @label_text !='-0.00'
         	@label.draw
 	end
       end

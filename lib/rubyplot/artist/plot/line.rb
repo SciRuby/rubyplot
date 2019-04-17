@@ -36,9 +36,8 @@ module Rubyplot
             iy = @normalized_data[:y_values][idx_ix]
             next if ix.nil? || iy.nil?
 
-            new_x = ix * (@axes.x_axis.abs_x2 - @axes.x_axis.abs_x1).abs + @axes.abs_x +
-                    @axes.y_axis_margin
-            new_y = (@axes.y_axis.length - iy * @axes.y_axis.length) + @axes.abs_y
+            new_x = ix * (@axes.x_axis.length) + @axes.origin[0]
+            new_y = @axes.origin[1] - iy * @axes.y_axis.length
 
             unless prev_x.nil? && prev_y.nil?
               Rubyplot::Artist::Line2D.new(

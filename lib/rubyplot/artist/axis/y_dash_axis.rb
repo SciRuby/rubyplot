@@ -1,12 +1,12 @@
 module Rubyplot
   module Artist
-    class YAxis < Axis::Base
+    class YDashAxis < Axis::Base
       def initialize(*)
         super
         @abs_x1 = @axes.origin[0]
         @abs_y1 = @axes.origin[1]
         @abs_x2 = @axes.origin[0]
-        @abs_y2 = @axes.origin[1] - (@axes.height/2 - @axes.x_axis_margin)
+        @abs_y2 = @axes.origin[1] + (@axes.height/2 - @axes.x_axis_margin)
         @y_ticks = []
         @length = (@abs_y1 - @abs_y2).abs
         configure_axis_line
@@ -35,6 +35,6 @@ module Rubyplot
           pointsize: @axes.marker_font_size
         )
       end
-    end # class YAxis
+    end # class YDashAxis
   end # class Artist
 end # module Rubyplot

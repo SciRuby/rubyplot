@@ -2,11 +2,11 @@ require_relative 'base'
 
 module Rubyplot
   module Artist
-    class XAxis < Axis::Base
+    class XDashAxis < Axis::Base
       def initialize axes
         super
         @abs_x1 = @axes.origin[0]
-        @abs_x2 = @axes.origin[0] + @axes.width/2 - @axes.y_axis_margin
+        @abs_x2 = @axes.abs_x + @axes.y_axis_margin
         @major_ticks_distance = (@abs_x2 - @abs_x1) / @major_ticks_count
         @length = (@abs_x2 - @abs_x1).abs
         configure_axis_line

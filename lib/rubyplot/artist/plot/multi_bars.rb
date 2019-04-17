@@ -52,7 +52,7 @@ module Rubyplot
           @axes.x_ticks = labels.map.with_index do |label, i|
             Rubyplot::Artist::XTick.new(
               @axes,
-              abs_x: @axes.abs_x + @axes.y_axis_margin + i * @max_slot_width + @max_slot_width / 2,
+              abs_x: @axes.abs_x + @axes.y_axis_margin*9 + i * @max_slot_width + @max_slot_width / 2,
               abs_y: @axes.origin[1],
               label: label,
               length: 6,
@@ -64,7 +64,7 @@ module Rubyplot
         def set_bar_dims bar_plot, index
           bar_plot.bar_width = @max_bars_width / @bars_per_slot
           @num_max_slots.times do |i|
-            bar_plot.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin +
+            bar_plot.abs_x_left[i] = @axes.abs_x + @axes.y_axis_margin*9 +
                                      i * @max_slot_width + @padding / 2 + index * bar_plot.bar_width
             bar_plot.abs_y_left[i] = @axes.origin[1] - @axes.x_axis.stroke_width
           end
