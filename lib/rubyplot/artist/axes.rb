@@ -35,6 +35,14 @@ module Rubyplot
       attr_reader :y_ticks
       # Array of Y dash ticks.
       attr_reader :y_dash_ticks
+      # Array of minor X ticks.
+      attr_reader :minor_x_ticks
+      # Array of minor X dash ticks.
+      attr_reader :minor_x_dash_ticks
+      # Array of minor Y ticks.
+      attr_reader :minor_y_ticks
+      # Array of minor Y dash ticks.
+      attr_reader :minor_y_dash_ticks
       # Array denoting co-ordinates in pixels of the origin of X and Y axes.
       attr_reader :origin
       # Number of X ticks.
@@ -45,6 +53,14 @@ module Rubyplot
       attr_accessor :num_y_ticks
       # Number of Y dash ticks.
       attr_accessor :num_y_dash_ticks
+       # Number of minor X ticks.
+      attr_accessor :num_minor_x_ticks
+      # Number of minor X dash ticks.
+      attr_accessor :num_minor_x_dash_ticks
+      # Number of minor Y ticks.
+      attr_accessor :num_minor_y_ticks
+      # Number of minor Y dash ticks.
+      attr_accessor :num_minor_y_dash_ticks
       # Position of the legend box.
       attr_accessor :legend_box_position
       # Set true if title is to be hidden.
@@ -107,10 +123,18 @@ module Rubyplot
 	@x_dash_ticks = nil
         @y_ticks = nil
 	@y_dash_ticks = nil
+	@minor_x_ticks = nil
+	@minor_x_dash_ticks = nil
+        @minor_y_ticks = nil
+	@minor_y_dash_ticks = nil
         @num_x_ticks = 5
 	@num_x_dash_ticks = 5
         @num_y_ticks = 4
 	@num_y_dash_ticks = 4
+        @num_minor_x_ticks = 5*(@num_x_ticks-1)+1
+	@num_minor_x_dash_ticks = 5*(@num_x_dash_ticks-1)+1
+        @num_minor_y_ticks = 5*(@num_y_ticks-1)+1
+	@num_minor_y_dash_ticks = 5*(@num_y_dash_ticks-1)+1
         @legend_box_position = :top
       end
 
@@ -140,8 +164,12 @@ module Rubyplot
         configure_legends
         assign_x_ticks
 	assign_x_dash_ticks
-	assign_y_dash_ticks
         assign_y_ticks
+	assign_y_dash_ticks
+	assign_minor_x_ticks
+	assign_minor_x_dash_ticks
+	assign_minor_y_ticks
+	assign_minor_y_dash_ticks
         actually_draw
       end
 
@@ -223,6 +251,21 @@ module Rubyplot
         @y_dash_ticks = y_dash_ticks
       end
 
+
+      def minor_x_ticks= minor_x_ticks
+        @minor_x_ticks = minor_x_ticks
+      end
+      def minor_x_dash_ticks= minor_x_dash_ticks
+        @minor_x_dash_ticks = minor_x_dash_ticks
+      end
+      def minor_y_ticks= minor_y_ticks
+        @minor_y_ticks = minor_y_ticks
+      end
+      def minor_y_dash_ticks= minor_y_dash_ticks
+        @minor_y_dash_ticks = minor_y_dash_ticks
+      end
+
+
       def x_title= x_title
         @x_axis.title = x_title
       end
@@ -259,7 +302,7 @@ module Rubyplot
               abs_y: @origin[1],
               label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
-              label_distance: 10
+              label_distance: 15
             )
           end
         end
@@ -282,7 +325,7 @@ module Rubyplot
               abs_y: @origin[1],
               label: Rubyplot::Utils.format_label(-tick_label),
               length: 6,
-              label_distance: 10
+              label_distance: 15
             )
           end
         end
@@ -294,12 +337,12 @@ module Rubyplot
           @y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
         end
         unless @y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
-          inter_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
+          @inter_y_ticks_distance = @y_axis.length / (@num_y_ticks - 1)
           @y_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::YTick.new(
               self,
               abs_x: @origin[0],
-              abs_y: @y_axis.abs_y1 - (i * inter_ticks_distance),
+              abs_y: @y_axis.abs_y1 - (i * @inter_y_ticks_distance),
               label: Rubyplot::Utils.format_label(tick_label),
               length: 6,
               label_distance: 50
@@ -314,12 +357,12 @@ module Rubyplot
           @y_dash_ticks = (@y_dash_range[0]..@y_dash_range[1]).step(val_distance).map { |i| i }
         end
         unless @y_dash_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YDashTick) }
-          inter_ticks_distance = @y_dash_axis.length / (@num_y_dash_ticks - 1)
+          @inter_y_dash_ticks_distance = @y_dash_axis.length / (@num_y_dash_ticks - 1)
           @y_dash_ticks.map!.with_index do |tick_label, i|
             Rubyplot::Artist::YDashTick.new(
               self,
               abs_x: @origin[0],
-              abs_y: @y_dash_axis.abs_y1 - (-i * inter_ticks_distance),
+              abs_y: @y_dash_axis.abs_y1 - (-i * @inter_y_dash_ticks_distance),
               label: Rubyplot::Utils.format_label(-tick_label),
               length: 6,
               label_distance: 50
@@ -327,6 +370,108 @@ module Rubyplot
           end
         end
       end
+
+
+
+
+
+
+
+      def assign_minor_x_ticks
+        @inter_minor_x_ticks_distance = @x_axis.length / (@num_minor_x_ticks.to_f - 1)
+        unless @minor_x_ticks
+          value_distance = (@x_range[1] - @x_range[0]) / (@num_minor_x_ticks.to_f - 1)
+          @minor_x_ticks = @num_minor_x_ticks.times.map do |i|
+            @x_range[0] + i * value_distance
+          end
+        end
+
+        unless @minor_x_ticks.all? { |t| t.is_a?(Rubyplot::Artist::MinorXTick) }
+          @minor_x_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::MinorXTick.new(
+              self,
+              abs_x: i * @inter_minor_x_ticks_distance + @x_axis.abs_x1,
+              abs_y: @origin[1],
+              label: Rubyplot::Utils.format_label(""),
+              length: 3,
+              label_distance: 10
+            )
+          end
+        end
+      end
+
+      def assign_minor_x_dash_ticks
+        @inter_minor_x_dash_ticks_distance = @x_dash_axis.length / (@num_minor_x_dash_ticks.to_f - 1)
+        unless @minor_x_dash_ticks
+          value_distance = (@x_dash_range[1] - @x_dash_range[0]) / (@num_minor_x_dash_ticks.to_f - 1)
+          @minor_x_dash_ticks = @num_minor_x_dash_ticks.times.map do |i|
+            @x_dash_range[0] + i * value_distance
+          end
+        end
+
+        unless @minor_x_dash_ticks.all? { |t| t.is_a?(Rubyplot::Artist::MinorXDashTick) }
+          @minor_x_dash_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::MinorXDashTick.new(
+              self,
+              abs_x: -i * @inter_minor_x_dash_ticks_distance + @x_dash_axis.abs_x1,
+              abs_y: @origin[1],
+              label: Rubyplot::Utils.format_label(""),
+              length: 3,
+              label_distance: 10
+            )
+          end
+        end
+      end
+
+      def assign_minor_y_ticks
+        unless @minor_y_ticks
+          val_distance = (@y_range[1] - @y_range[0]).abs / @num_minor_y_ticks.to_f
+          @minor_y_ticks = (@y_range[0]..@y_range[1]).step(val_distance).map { |i| i }
+	
+        end
+        unless @minor_y_ticks.all? { |t| t.is_a?(Rubyplot::Artist::MinorYTick) }
+          @inter_minor_y_ticks_distance = @y_axis.length / (@num_minor_y_ticks - 1)
+          @minor_y_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::MinorYTick.new(
+              self,
+              abs_x: @origin[0],
+              abs_y: @y_axis.abs_y1 - (i * @inter_minor_y_ticks_distance),
+              label: Rubyplot::Utils.format_label(""),
+              length: 3,
+              label_distance: 50
+            )
+          end
+        end
+      end
+
+      def assign_minor_y_dash_ticks
+        unless @minor_y_dash_ticks
+          val_distance = (@y_dash_range[1] - @y_dash_range[0]).abs / @num_minor_y_dash_ticks.to_f
+          @minor_y_dash_ticks = (@y_dash_range[0]..@y_dash_range[1]).step(val_distance).map { |i| i }
+        end
+        unless @minor_y_dash_ticks.all? { |t| t.is_a?(Rubyplot::Artist::MinorYDashTick) }
+          @inter_minor_y_dash_ticks_distance = @y_dash_axis.length / (@num_minor_y_dash_ticks - 1)
+          @minor_y_dash_ticks.map!.with_index do |tick_label, i|
+            Rubyplot::Artist::MinorYDashTick.new(
+              self,
+              abs_x: @origin[0],
+              abs_y: @y_dash_axis.abs_y1 - (-i * @inter_minor_y_dash_ticks_distance),
+              label: Rubyplot::Utils.format_label(""),
+              length: 3,
+              label_distance: 50
+            )
+          end
+        end
+      end
+
+
+
+
+
+
+
+
+
 
       def add_plot plot_type, *args, &block
         plot = with_backend plot_type, *args
@@ -378,12 +523,16 @@ module Rubyplot
       def actually_draw
         @x_axis.draw
         @x_ticks.each(&:draw)
+	@minor_x_ticks.each(&:draw)
 	@y_axis.draw
         @y_ticks.each(&:draw)
+	@minor_y_ticks.each(&:draw)
 	@x_dash_axis.draw
 	@x_dash_ticks.each(&:draw)
+	@minor_x_dash_ticks.each(&:draw)
         @y_dash_axis.draw
 	@y_dash_ticks.each(&:draw)
+	@minor_y_dash_ticks.each(&:draw)
         @texts.each(&:draw)
         @legend_box.draw
         @plots.each(&:draw)
