@@ -11,8 +11,8 @@ FIXTURES_DIR = SPEC_ROOT + "fixtures/"
 backend = ENV['RUBYPLOT_BACKEND']
 
 if backend == "GR"
-  ENV['GRDIR'] = "/home/sameer/Downloads/gr"
-  ENV['GKS_FONTPATH'] = "/home/sameer/Downloads/gr"
+  ENV['GRDIR'] = "/usr/local/gr"
+  ENV['GKS_FONTPATH'] = "/usr/local/gr"
   Rubyplot.set_backend :gr
 elsif backend == "MAGICK"
   Rubyplot.set_backend :magick

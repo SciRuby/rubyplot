@@ -20,7 +20,7 @@ module Rubyplot
       # @param rotation [Numeric] Angle between 0 and 360 degrees signifying rotation of text.
       # @param halign [Symbol] Horizontal alignment of the text from Artist::Text::HAlignment.
       # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
-      def draw_text(text,font_color:,font: nil,size:,
+      def draw_text(text,color:,font: nil,size:,
         font_weight: nil, halign: nil, valign: nil,
         abs_x:, abs_y:,rotation: nil, stroke: nil)
         raise NotImplementedError, "not implemented for #{self}."

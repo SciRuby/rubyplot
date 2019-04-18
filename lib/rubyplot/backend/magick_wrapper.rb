@@ -21,8 +21,35 @@ module Rubyplot
 
       attr_reader :draw
 
+      def initialize
+        @axes_map = {}        
+      end
+
+      def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+        if @axes_map[active_axes.object_id].nil?
+          @axes_map[@active_axes.object_id]={
+            axes: @active_axes,
+            x_origin: origin
+          }
+        else
+          @axes_map[@active_axes.object_id].merge!(x_origin: origin)
+        end        
+      end
+
+      def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+        if @axes_map[@active_axes.object_id].nil?
+          @axes_map[@active_axes.object_id]={
+          axes: @active_axes,
+          y_origin: origin
+          }
+        else
+          @axes_map[@active_axes.object_id].merge!(y_origin: origin)
+        end
+      end
+
       def init_output_device file_name, device: :file
         @draw = Magick::Draw.new
+        @axes = Magick::Draw.new
         @file_name = file_name
       end
 
@@ -59,23 +86,34 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       # Unused method argument - stroke
-      def draw_text(text,font_color:,font: nil,font_size:,
-                    font_weight: Magick::NormalWeight, gravity: nil,
-                    x:,y:,rotation: nil, stroke: 'transparent')
-        x = transform_x x
-        y = transform_y y
+      def draw_text(text,color:,font: nil,size:,
+                    font_weight: Magick::NormalWeight, halign:, valign:,
+                    abs_x:,abs_y:,rotation: nil, stroke: 'transparent')
+        x = transform_x abs_x
+        y = transform_y abs_y
         
-        @draw.fill = font_color
+        @draw.fill = color
         @draw.font = font if font
-        @draw.font_size = font_size
+        @draw.pointsize = size
         @draw.font_weight = font_weight
-        @draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+        #@draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.stroke stroke
         @draw.stroke_antialias false
         @draw.text_antialias = false
-        @draw.rotation = rotation if rotation
+        @draw.rotate = rotation if rotation
         @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
-        @draw.rotation = 90.0 if rotation
+        @draw.rotate = 90.0 if rotation
+      end
+
+      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+        y.each_with_index do |iy, idx_y|
+          ix = x[idx_y]
+
+          Rubyplot::Artist::Circle.new(
+            self, x: ix, y: iy, radius: marker_size, border_width: 1,
+            border_color:marker_color,border_type: nil,fill_color:marker_color, fill_opacity: 1
+          ).draw
+        end
       end
 
       # Draw a rectangle.
@@ -114,13 +152,15 @@ module Rubyplot
         @draw.line x1, y1, x2, y2
       end
 
-      def draw_circle(x:,y:,radius:,stroke_opacity:,stroke_width:,color:)
+      def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,
+        fill_color:, fill_opacity:)
         x = transform_x x
         y = transform_y y
-        
-        @draw.stroke_opacity stroke_opacity
-        @draw.stroke_width stroke_width
-        @draw.fill color
+
+        @draw.stroke_width border_width
+        @draw.stroke border_color
+        @draw.fill fill_color
+        @draw.fill_opacity fill_opacity
         @draw.circle(x,y,x-radius,y)
       end
       # rubocop:enable Metrics/ParameterLists
@@ -139,6 +179,7 @@ module Rubyplot
       end
 
       def write
+        draw_axes
         @draw.draw(@base_image)
         @base_image.write(@file_name)
       end
@@ -176,6 +217,19 @@ module Rubyplot
       # Transform quantity that depends on X and Y.
       def transform_avg q
         @canvas_height * q
+      end
+
+      def draw_axes
+        @axes_map.each_value do |v|
+          axes = v[:axes]
+          @active_axes = axes
+          @axes.polyline(
+            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[0]),transform_y(v[:y_origin]),
+            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[1]),transform_y(v[:y_origin]),
+            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[0]),
+            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1]))
+        end
+        @axes.draw(@base_image)
       end
     end # class MagickWrapper
   end # module Backend
