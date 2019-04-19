@@ -33,7 +33,7 @@ module Rubyplot
       # @param x2 [Numeric] Upper right X co-ordinate.
       # @param x2 [Numeric] Upper right Y co-ordinate.
       def draw_rectangle(x1:,y1:,x2:,y2:, border_color: nil, fill_color: nil,
-        border_width: nil, border_type: nil)
+        border_width: nil, border_type: nil, abs: false)
         raise NotImplementedError, "not implemented for #{self}."
       end
 
@@ -44,7 +44,7 @@ module Rubyplot
       # @param marker_type [Symbol] A marker type from Rubyplot::MARKERS.
       # @param marker_color [Symbol] A color from Rubyplot::Color.
       # @param marker_size [Numeric] Size of the marker.
-      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+      def draw_markers(x:, y:, type:, color:, size:)
         raise NotImplementedError, "not implemented for #{self}."
       end
 

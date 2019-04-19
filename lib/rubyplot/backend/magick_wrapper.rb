@@ -22,7 +22,7 @@ module Rubyplot
       attr_reader :draw
 
       def initialize
-        @axes_map = {}        
+        @axes_map = {}  
       end
 
       def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
@@ -86,52 +86,52 @@ module Rubyplot
 
       # rubocop:disable Metrics/ParameterLists
       # Unused method argument - stroke
-      def draw_text(text,color:,font: nil,size:,
+      def draw_text(text,color: :default,font: nil,size:,
                     font_weight: Magick::NormalWeight, halign:, valign:,
                     abs_x:,abs_y:,rotation: nil, stroke: 'transparent')
         x = transform_x abs_x
         y = transform_y abs_y
         
-        @draw.fill = color
-        @draw.font = font if font
+        @draw.fill = Rubyplot::Color::COLOR_INDEX[color]
+        @draw.font = font.to_s if font
         @draw.pointsize = size
         @draw.font_weight = font_weight
         #@draw.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
         @draw.stroke stroke
         @draw.stroke_antialias false
         @draw.text_antialias = false
-        @draw.rotate = rotation if rotation
+        @draw.rotate rotation if rotation
         @draw.annotate(@base_image, 0,0,x.to_i,y.to_i, text.gsub('%', '%%'))
-        @draw.rotate = 90.0 if rotation
+        @draw.rotate 90.0 if rotation
       end
 
-      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
+      def draw_markers(x:, y:, type: nil, color: :default, size: nil)
         y.each_with_index do |iy, idx_y|
           ix = x[idx_y]
 
           Rubyplot::Artist::Circle.new(
-            self, x: ix, y: iy, radius: marker_size, border_width: 1,
-            border_color:marker_color,border_type: nil,fill_color:marker_color, fill_opacity: 1
+            self, x: ix, y: iy, radius: size, border_opacity: 0.0,
+            color: color, border_width: 1.0, abs: false 
           ).draw
         end
       end
 
       # Draw a rectangle.
-      def draw_rectangle(x1:,y1:,x2:,y2:,border_color: '#000000',stroke: 'transparent',
-                         fill_color: nil, stroke_width: 1.0)
+      def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default, fill_color: nil,
+                          border_width: 1, border_type: nil, abs: false)
         x1 = transform_x x1
         y1 = transform_y y1
         x2 = transform_x x2
         y2 = transform_y y2
 
         if fill_color # solid rectangle
-          @draw.stroke stroke
-          @draw.fill fill_color
-          @draw.stroke_width stroke_width
+          @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          @draw.stroke_width border_width.to_f
           @draw.rectangle x1, y1, x2, y2
         else # just edges
-          @draw.stroke_width stroke_width
-          @draw.fill border_color
+          @draw.stroke_width border_width.to_f
+          @draw.fill Rubyplot::Color::COLOR_INDEX[border_color]
           @draw.line x1, y1, x1 + (x2-x1), y1 # top line
           @draw.line x1 + (x2-x1), y1, x2, y2 # right line
           @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
@@ -139,7 +139,7 @@ module Rubyplot
         end
       end
 
-      def draw_line(x1:,y1:,x2:,y2:,color: '#000000', stroke: 'transparent',
+      def draw_line(x1:,y1:,x2:,y2:,color: :default, stroke: 'transparent',
                     stroke_opacity: 0.0, stroke_width: 2.0)
         x1 = transform_x x1
         x2 = transform_x x2
@@ -148,20 +148,20 @@ module Rubyplot
         
         @draw.stroke_opacity stroke_opacity
         @draw.stroke_width stroke_width
-        @draw.fill color
+        @draw.fill Rubyplot::Color::COLOR_INDEX[color]
         @draw.line x1, y1, x2, y2
       end
 
-      def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,
-        fill_color:, fill_opacity:)
+      def draw_circle(x:, y:, radius:, border_type: nil, border_width: 1.0, fill_color: nil,
+        border_color: :default, fill_opacity: 0.0)
         x = transform_x x
         y = transform_y y
 
         @draw.stroke_width border_width
-        @draw.stroke border_color
-        @draw.fill fill_color
+        @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+        @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
         @draw.fill_opacity fill_opacity
-        @draw.circle(x,y,x-radius,y)
+        @draw.circle(x,y,x-radius[0],y) #TODO: make raduis single vaiable instead of an array 
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -169,11 +169,11 @@ module Rubyplot
       #
       # @param coords [Array[Array]] Array of Arrays where first element of each sub-array is
       #   the X co-ordinate and the second element is the Y co-ordinate.
-      def draw_polygon(coords:, fill_opacity: 0.0, color: '#000000',
+      def draw_polygon(coords:, fill_opacity: 0.0, color: :default,
                        stroke: 'transparent')
         coords.map! { |c| [transform_x(c[0]), transform_y(c[1])] }
         @draw.stroke stroke
-        @draw.fill color
+        @draw.fill Rubyplot::Color::COLOR_INDEX[color]
         @draw.fill_opacity fill_opacity
         @draw.polygon *coords.flatten
       end
@@ -182,6 +182,16 @@ module Rubyplot
         draw_axes
         @draw.draw(@base_image)
         @base_image.write(@file_name)
+      end
+
+      # Refresh this backend and remove all previously set data.
+      def flush
+        @axes_map = {}
+        @file_name = nil
+      end
+
+      def stop_output_device
+        flush
       end
 
       private
@@ -202,16 +212,16 @@ module Rubyplot
                         else
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
-        Image.new(width, height, gradient_fill)
+        Magick::Image.new(width, height, gradient_fill)
       end
 
       # Transform X co-ordinate.
       def transform_x x
-        (@canvas_width * x) / Rubyplot.max_x
+        (@canvas_width * x) / @figure.max_x
       end
 
       def transform_y y
-        (@canvas_height * (Rubyplot.max_y - y)) / Rubyplot.max_y
+        (@canvas_height * (@figure.max_y - y)) / @figure.max_y
       end
 
       # Transform quantity that depends on X and Y.
