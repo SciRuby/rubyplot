@@ -1758,18 +1758,39 @@ static VALUE setarrowstyle(VALUE self,VALUE style){
   return Qtrue;
 }
 
-static VALUE setarrowsize(VALUE self,VALUE size){
+/*!
+ * Set the arrow size to be used for subsequent arrow commands.
+ *
+ * \param[in] size The arrow size to be used
+ *
+ * This function defines the arrow size for subsequent arrow primitives.
+ * The default arrow size is 1.
+ */
+static VALUE setarrowsize(VALUE self,VALUE size) {
   int sizec = NUM2INT(size);
   gr_setarrowsize(size);
   return Qtrue;
 }
 
-static VALUE drawarrow(VALUE self,VALUE x1,VALUE y1,VALUE x2,VALUE y2){
+/*!
+ * Draw an arrow between two points.
+ *
+ * \param[in] x1 The X coordinate of the arrow start point (tail)
+ * \param[in] y1 The Y coordinate of the arrow start point (tail)
+ * \param[in] x2 The X coordinate of the arrow end point (head)
+ * \param[in] y2 The Y coordinate of the arrow end point (head)
+ *
+ * Different arrow styles (angles between arrow tail and wing, optionally filled
+ * heads, double headed arrows) are available and can be set with the
+ * gr_setarrowstyle function.
+ */
+static VALUE drawarrow (VALUE self,VALUE x1,VALUE y1,VALUE x2,VALUE y2) {
   double x1c = NUM2DBL(x1);
   double x2c = NUM2DBL(x2);
   double y1c = NUM2DBL(y1);
   double y2c = NUM2DBL(y2);
-  gr_drawarrow(x1c,x2c,y1c,y2c);
+  gr_drawarrow(x1c, x2c, y1c, y2c);
+  
   return Qtrue;
 }
 

@@ -206,7 +206,7 @@ module Rubyplot
         end
       end
 
-      def draw_lines(x:, y:, width:, type:, color:)
+      def draw_lines(x:, y:, width:, type:, color:, opacity: 1.0)
         within_window do
           GR.setlinewidth(width)
           GR.setlinetype(LINE_TYPE_MAP[type])

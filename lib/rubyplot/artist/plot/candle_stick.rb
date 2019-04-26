@@ -38,10 +38,8 @@ module Rubyplot
           @x_low_stick.each_with_index do |ix_stick, i|
             Rubyplot::Artist::Line2D.new(
               self,
-              x1: ix_stick,
-              y1: @lows[i],
-              x2: ix_stick,
-              y2: @highs[i]
+              x: [ix_stick, ix_stick],
+              y: [@lows[i], @highs[i]]
             ).draw
           end
           @x_left_candle.each_with_index do |ix_candle, i|
