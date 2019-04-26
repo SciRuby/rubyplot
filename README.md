@@ -17,29 +17,9 @@ export GKS_FONTPATH="/home/sameer/Downloads/gr"
 export RUBYPLOT_BACKEND="GR"
 ```
 
-# Roadmap by priority
-The release schedule and feature roadmap is as follows. Check issues labelled with
-the version tags for knowing what we're working on currently. Listed by priority.
+# Short term priorities
 
-## Release v0.1-a1
-Deadline: 15 January 2019
-
-* Support currently available plots fully with various customization options on Axes.
-* Fully automated testing infrastructure. Travis integration with rubocop.xs
-
-## Release v0.1-a2
-Deadline: 31 March 2019
-
-* Integrate GR backend into existing API.
-* Support multiple Axes on the same Figure. 
-* Support atleast 3 new kinds of plots.
-
-## Release v0.1-a3
-Deadline: 15 April 2019
-
-* Support atleast 3 new kinds of plots.
-* Move from using Ruby Arrays to a typed-array based system.
-* Support for iruby notebook (Jupyter).
+Check milestones in GitHub for more information.
 
 # Long term vision
 Rubyplot's long term vision, by priority:
