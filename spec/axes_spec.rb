@@ -269,7 +269,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Random bar numbers"
     end
 
-    it "adds bar plot with title margin", focus: true do
+    it "adds bar plot with title margin" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.bar! do |p|
@@ -497,10 +497,82 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#error_bar!" do
-    it "adds a simple error bar plot" do
+    before do
+      @x = [1,2,3,4,5,6]
+      @y = [3,4,5,6,7,8]
+    end
+    
+    it "adds a simple xerr to error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.title = "Simple error bar plot."
+      axes.title = "Simple error bar plot with xerr."
+      axes.error_bar! do |p|
+        p.x = @x
+        p.y = @y
+        p.xerr = 0.1
+      end
+    end
+
+    it "adds a collection of xerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr."
+      axes.error_bar! do |p|
+        p.x = @x
+        p.y = @y
+        p.xerr = [0.1,0.3,0.5,0.1,0.2,0.4]
+      end      
+    end
+
+    it "adds a simple xerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with yerr."
+      axes.error_bar! do |p|
+        p.x = @x
+        p.y = @y
+        p.yerr = 0.1
+      end
+    end
+
+    it "adds a collection of xerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection yerr."
+      axes.error_bar! do |p|
+        p.x = @x
+        p.y = @y
+        p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
+      end      
+    end
+
+    it "adds both xerr and yerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr and yerr."
+      axes.error_bar! do |p|
+        p.x = [1,2,3,4]
+        p.y = [1,4,9,16]
+        p.xerr = [0.5,1.0,1.5,0.3]
+        p.yerr = [0.6,0.2,0.8,0.1]
+      end
+    end
+  end
+
+  context "#box_plot!" do
+    it "adds a simple box plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "A simple box plot."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]
+        ]
+      end
+      axes.x_title = "foo"
+      axes.y_title = "bar"
     end
   end
 

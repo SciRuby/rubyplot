@@ -307,7 +307,7 @@ module Rubyplot
         @file_name = file_name
         @output_device = device
         Rubyplot::GR.clearws
-        
+
         if @output_device == :file
           Rubyplot::GR.beginprint(@file_name)
         end
