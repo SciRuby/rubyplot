@@ -507,8 +507,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with xerr."
       axes.error_bar! do |p|
-        p.x = @x
-        p.y = @y
+        p.data @x, @y
         p.xerr = 0.1
       end
     end
@@ -518,8 +517,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with collection xerr."
       axes.error_bar! do |p|
-        p.x = @x
-        p.y = @y
+        p.data @x, @y
         p.xerr = [0.1,0.3,0.5,0.1,0.2,0.4]
       end      
     end
@@ -529,8 +527,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with yerr."
       axes.error_bar! do |p|
-        p.x = @x
-        p.y = @y
+        p.data @x, @y
         p.yerr = 0.1
       end
     end
@@ -540,8 +537,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with collection yerr."
       axes.error_bar! do |p|
-        p.x = @x
-        p.y = @y
+        p.data @x, @y
         p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
       end      
     end
@@ -551,8 +547,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with collection xerr and yerr."
       axes.error_bar! do |p|
-        p.x = [1,2,3,4]
-        p.y = [1,4,9,16]
+        p.data [1,2,3,4], [1,4,9,16]
         p.xerr = [0.5,1.0,1.5,0.3]
         p.yerr = [0.6,0.2,0.8,0.1]
       end

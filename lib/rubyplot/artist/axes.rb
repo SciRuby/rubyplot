@@ -156,6 +156,10 @@ module Rubyplot
         add_plot! :CandleStick, &block
       end
 
+      def error_bar!(*_args, &block)
+        add_plot! :ErrorBar, &block
+      end
+
       def write(file_name)
         @plots[0].write file_name
       end
