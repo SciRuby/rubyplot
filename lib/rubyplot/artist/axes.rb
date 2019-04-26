@@ -124,52 +124,36 @@ module Rubyplot
         @plots.each(&:draw)
       end
 
-      def scatter!(*_args)
-        plot = Rubyplot::Artist::Plot::Scatter.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def scatter!(*_args, &block)
+        add_plot! :Scatter, &block
       end
 
-      def bar!(*_args)
-        plot = Rubyplot::Artist::Plot::Bar.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def bar!(*_args, &block)
+        add_plot! :Bar, &block
       end
 
-      def line!(*_args)
-        plot = Rubyplot::Artist::Plot::Line.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def line!(*_args, &block)
+        add_plot! :Line, &block
       end
 
-      def area!(*_args)
-        plot = Rubyplot::Artist::Plot::Area.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def area!(*_args, &block)
+        add_plot! :Area, &block
       end
 
-      def bubble!(*_args)
-        plot = Rubyplot::Artist::Plot::Bubble.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def bubble!(*_args, &block)
+        add_plot! :Bubble, &block
       end
 
-      def stacked_bar!(*_args)
-        plot = Rubyplot::Artist::Plot::StackedBar.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def stacked_bar!(*_args, &block)
+        add_plot! :StackedBar, &block
       end
 
-      def histogram!(*_args)
-        plot = Rubyplot::Artist::Plot::Histogram.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def histogram!(*_args, &block)
+        add_plot! :Histogram, &block
       end
 
-      def candle_stick!(*_args)
-        plot = Rubyplot::Artist::Plot::CandleStick.new self
-        yield(plot) if block_given?
-        @plots << plot
+      def candle_stick!(*_args, &block)
+        add_plot! :CandleStick, &block
       end
 
       def write(file_name)
@@ -224,6 +208,12 @@ module Rubyplot
       end
 
       private
+
+      def add_plot! klass, &block
+        plot = Kernel.const_get("Rubyplot::Artist::Plot::#{klass}").new self
+        yield(plot) if block_given?
+        @plots << plot
+      end
 
       def assign_default_label_colors
         @plots.each_with_index do |p, i|
