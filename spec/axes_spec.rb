@@ -522,7 +522,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end      
     end
 
-    it "adds a simple xerr to the error bar plot" do
+    it "adds a simple yerr to the error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with yerr."
@@ -532,7 +532,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds a collection of xerr to the error bar plot" do
+    it "adds a collection of yerr to the error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with collection yerr."
@@ -540,6 +540,24 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.data @x, @y
         p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
       end      
+    end
+
+    it "adds an asymmetric collection of yerr to the error bar plot" do
+      skip "do this later."
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with asymmetric plotting."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.yerr = [
+          [0.6, 0.2],
+          [0.1, 0.9],
+          [0.1, 0.4],
+          [0.8, 0.84],
+          [0.3, 0.69],
+          [0.1, 1.0]
+        ]
+      end
     end
 
     it "adds both xerr and yerr to the error bar plot" do
