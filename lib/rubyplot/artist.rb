@@ -11,5 +11,4 @@ require_relative 'artist/axes'
 require_relative 'artist/rectangle'
 require_relative 'artist/circle'
 require_relative 'artist/polygon'
-#export RUBYPLOT_BACKEND="MAGICK"
-#rspec --t=focus
+require_relative 'artist/arrow'

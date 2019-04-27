@@ -320,7 +320,7 @@ module Rubyplot
         end
       end
 
-      def draw_arrow(x1:, y1:, x2:, y2:, size: 1.0, style: :simple_single_ended)
+      def draw_arrow(x1:, y1:, x2:, y2:, size:, style:)
         GR.setarrowstyle(ARROW_STYLE_MAP[style])
         GR.setarrowsize(size)
         GR.drawarrow(x1, y1, x2, y2)

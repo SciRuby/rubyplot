@@ -496,13 +496,13 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#error_bar!" do
+  context "#error_bar!", focus: true do
     before do
       @x = [1,2,3,4,5,6]
       @y = [3,4,5,6,7,8]
     end
     
-    it "adds a simple xerr to error bar plot", focus: true do
+    it "adds a simple xerr to error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Simple error bar plot with xerr."

@@ -62,11 +62,27 @@ module Rubyplot
                 color: @data[:color]
               )
             else
-              if @xuplims
-                
+              arrows = []
+              if @xuplims && @xuplims[idx]
+                arrows << Rubyplot::Artist::Arrow.new(
+                  x1: xcoord,
+                  y1: ycoord,
+                  x2: xcoord + xe,
+                  y2: ycoord
+                )
+              end
+
+              if @xlolims && @xlolims[idx]
+                arrows << Rubyplot::Artist::Arrow.new(
+                  x1: xcoord - xe,
+                  y1: ycoord,
+                  x2: xcoord,
+                  y2: ycoord                  
+                )
               end
             end
-          end          
+          end
+          @xerr_lines.flatten!
         end
 
         def generate_yerr
