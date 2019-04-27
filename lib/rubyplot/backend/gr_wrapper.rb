@@ -153,6 +153,27 @@ module Rubyplot
         pixel: 0.0254 / DEFAULT_DPI
       }.freeze
 
+      ARROW_STYLE_MAP = {
+        simple_single_ended: GR::ARROW_STYLE_SIMPLE_SINGLE_ENDED,
+        simple_single_ended_acute: GR::ARROW_STYLE_SIMPLE_SINGLE_ENDED_ACUTE,
+        hollow_single_ended: GR::ARROW_STYLE_HOLLOW_SINGLE_ENDED,
+        filled_singled_ended: GR::ARROW_STYLE_FILLED_SINGLED_ENDED,
+        triangle_single_ended: GR::ARROW_STYLE_TRIANGLE_SINGLE_ENDED,
+        filled_triangle_single_ended: GR::ARROW_STYLE_FILLED_TRIANGLE_SINGLE_ENDED,
+        kite_single_ended: GR::ARROW_STYLE_KITE_SINGLE_ENDED,
+        filled_kite_single_ended: GR::ARROW_STYLE_FILLED_KITE_SINGLE_ENDED,
+        simple_double_ended: GR::ARROW_STYLE_SIMPLE_DOUBLE_ENDED,
+        simple_double_ended_acute: GR::ARROW_STYLE_SIMPLE_DOUBLE_ENDED_ACUTE,
+        hollow_double_ended: GR::ARROW_STYLE_HOLLOW_DOUBLE_ENDED,
+        filled_double_ended: GR::ARROW_STYLE_FILLED_DOUBLE_ENDED,
+        triangle_double_ended: GR::ARROW_STYLE_TRIANGLE_DOUBLE_ENDED,
+        filled_triangle_double_ended: GR::ARROW_STYLE_FILLED_TRIANGLE_DOUBLE_ENDED,
+        kite_double_ended: GR::ARROW_STYLE_KITE_DOUBLE_ENDED,
+        filled_kite_double_ended: GR::ARROW_STYLE_FILLED_KITE_DOUBLE_ENDED,
+        double_line_single_ended: GR::ARROW_STYLE_DOUBLE_LINE_SINGLE_ENDED,
+        double_line_double_ended: GR::ARROW_STYLE_DOUBLE_LINE_DOUBLE_ENDED,
+      }.freeze
+
       def initialize
         @axes_map = {} # Mapping between viewports and their respective Axes.
         @file_name = nil
@@ -297,6 +318,12 @@ module Rubyplot
             GR.fillarc(xmin, xmax, ymin, ymax, 0, 360)
           end
         end
+      end
+
+      def draw_arrow(x1:, y1:, x2:, y2:, size: 1.0, style: :simple_single_ended)
+        GR.setarrowstyle(ARROW_STYLE_MAP[style])
+        GR.setarrowsize(size)
+        GR.drawarrow(x1, y1, x2, y2)
       end
 
       def draw

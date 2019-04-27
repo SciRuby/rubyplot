@@ -1752,6 +1752,56 @@ static VALUE fillarc(VALUE self, VALUE xmin,VALUE xmax,VALUE ymin,VALUE ymax,
 requires a struct do that
 */
 
+/*!
+ * Set the arrow style to be used for subsequent arrow commands.
+ *
+ * \param[in] style The arrow style to be used
+ *
+ * This function defines the arrow style for subsequent arrow primitives.
+ * The default arrow style is 1.
+ *
+ * \verbatim embed:rst:leading-asterisk
+ *
+ * +---+----------------------------------+
+ * |  1|simple, single-ended              |
+ * +---+----------------------------------+
+ * |  2|simple, single-ended, acute head  |
+ * +---+----------------------------------+
+ * |  3|hollow, single-ended              |
+ * +---+----------------------------------+
+ * |  4|filled, single-ended              |
+ * +---+----------------------------------+
+ * |  5|triangle, single-ended            |
+ * +---+----------------------------------+
+ * |  6|filled triangle, single-ended     |
+ * +---+----------------------------------+
+ * |  7|kite, single-ended                |
+ * +---+----------------------------------+
+ * |  8|filled kite, single-ended         |
+ * +---+----------------------------------+
+ * |  9|simple, double-ended              |
+ * +---+----------------------------------+
+ * | 10|simple, double-ended, acute head  |
+ * +---+----------------------------------+
+ * | 11|hollow, double-ended              |
+ * +---+----------------------------------+
+ * | 12|filled, double-ended              |
+ * +---+----------------------------------+
+ * | 13|triangle, double-ended            |
+ * +---+----------------------------------+
+ * | 14|filled triangle, double-ended     |
+ * +---+----------------------------------+
+ * | 15|kite, double-ended                |
+ * +---+----------------------------------+
+ * | 16|filled kite, double-ended         |
+ * +---+----------------------------------+
+ * | 17|double line, single-ended         |
+ * +---+----------------------------------+
+ * | 18|double line, double-ended         |
+ * +---+----------------------------------+
+ *
+ * \endverbatim
+ */
 static VALUE setarrowstyle(VALUE self,VALUE style){
   int stylec = NUM2INT(style);
   gr_setarrowstyle(stylec);
@@ -2264,4 +2314,23 @@ void Init_grruby()
   rb_define_const(mGRruby, "FILLSTYLE_SOLID", DBL2NUM(1));
   rb_define_const(mGRruby, "FILLSTYLE_PATTERN", DBL2NUM(2));
   rb_define_const(mGRruby, "FILLSTYLE_HATCH", DBL2NUM(3));
+
+  rb_define_const(mGRruby, "ARROW_STYLE_SIMPLE_SINGLE_ENDED", DBL2NUM(1));
+  rb_define_const(mGRruby, "ARROW_STYLE_SIMPLE_SINGLE_ENDED_ACUTE", DBL2NUM(2));
+  rb_define_const(mGRruby, "ARROW_STYLE_HOLLOW_SINGLE_ENDED", DBL2NUM(3));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_SINGLED_ENDED", DBL2NUM(4));
+  rb_define_const(mGRruby, "ARROW_STYLE_TRIANGLE_SINGLE_ENDED", DBL2NUM(5));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_TRIANGLE_SINGLE_ENDED", DBL2NUM(6));
+  rb_define_const(mGRruby, "ARROW_STYLE_KITE_SINGLE_ENDED", DBL2NUM(7));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_KITE_SINGLE_ENDED", DBL2NUM(8));
+  rb_define_const(mGRruby, "ARROW_STYLE_SIMPLE_DOUBLE_ENDED", DBL2NUM(9));
+  rb_define_const(mGRruby, "ARROW_STYLE_SIMPLE_DOUBLE_ENDED_ACUTE", DBL2NUM(10));
+  rb_define_const(mGRruby, "ARROW_STYLE_HOLLOW_DOUBLE_ENDED", DBL2NUM(11));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_DOUBLE_ENDED", DBL2NUM(12));
+  rb_define_const(mGRruby, "ARROW_STYLE_TRIANGLE_DOUBLE_ENDED", DBL2NUM(13));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_TRIANGLE_DOUBLE_ENDED", DBL2NUM(14));
+  rb_define_const(mGRruby, "ARROW_STYLE_KITE_DOUBLE_ENDED", DBL2NUM(15));
+  rb_define_const(mGRruby, "ARROW_STYLE_FILLED_KITE_DOUBLE_ENDED", DBL2NUM(16));
+  rb_define_const(mGRruby, "ARROW_STYLE_DOUBLE_LINE_SINGLE_ENDED", DBL2NUM(17));
+  rb_define_const(mGRruby, "ARROW_STYLE_DOUBLE_LINE_DOUBLE_ENDED", DBL2NUM(18));
 }
