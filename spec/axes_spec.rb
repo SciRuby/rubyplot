@@ -571,7 +571,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds error bar with upper limit and lower limit with collection xerr & yerr", focus: true do 
+    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do 
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Error bar plot with lots of options"
@@ -587,7 +587,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#box_plot!" do
+  context "#box_plot!", focus: true do
     it "adds a simple box plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -601,6 +601,32 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
       axes.x_title = "foo"
       axes.y_title = "bar"
+    end
+
+    it "adds a simple horizontal box plot" do
+      skip "Leave for after initial box plot setup is complete."
+    end
+
+    it "groups multiple box plots on the same axes" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Multiple box plots."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]          
+        ]
+      end
+      axes.box_plot! do |p|
+        p.data [
+          (0..100).to_a,
+          (500..4500).to_a,
+          (-100..100).to_a
+        ]
+      end
+      axes.x_title = "hogehoge"
+      axes.y_title = "bokeboke"
     end
   end
 

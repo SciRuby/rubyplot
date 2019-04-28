@@ -160,6 +160,10 @@ module Rubyplot
         add_plot! :ErrorBar, &block
       end
 
+      def box_plot!(*_args, &block)
+        add_plot! :BoxPlot, &block
+      end
+
       def write(file_name)
         @plots[0].write file_name
       end
@@ -299,6 +303,13 @@ module Rubyplot
           @plots << Rubyplot::Artist::Plot::MultiCandleStick.new(self,
             candle_sticks: candle_sticks)
         end
+
+        box_plots = @plots.grep(Rubyplot::Artist::Plot::BoxPlot)
+        unless box_plots.empty?
+          @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::BoxPlot) }
+          @plots << Rubyplot::Artist::Plot::MultiBoxPlot.new(self,
+            box_plots: box_plots)
+        end        
       end
 
       def set_axes_ranges

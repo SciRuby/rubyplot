@@ -45,7 +45,6 @@ module Rubyplot
             @axes.y_axis.max_val = @data[:y_values].max + @yerr.max
             @axes.y_axis.min_val = @data[:y_values].min - @yerr.min
           end
-
         end
 
         def preprocess_err_values!
