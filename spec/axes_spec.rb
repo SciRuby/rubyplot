@@ -496,7 +496,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#error_bar!", focus: true do
+  context "#error_bar!" do
     before do
       @x = [1,2,3,4,5,6]
       @y = [3,4,5,6,7,8]
@@ -571,14 +571,14 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do 
+    it "adds error bar with upper limit and lower limit with collection xerr & yerr", focus: true do 
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Error bar plot with lots of options"
       axes.error_bar! do |p|
         p.data [1,2,3,4], [1,4,9,16]
         p.xerr = [0.5,1.0,1.5,0.3]
-        p.yerr = [0.6,0.2,0.8,0.1]
+        p.yerr = [0.6,1.0,0.8,0.5]
         p.xuplims = [true, false, true, false]
         p.xlolims = [false, true, false, true]
         p.yuplims = [true, false, true, false]

@@ -1817,8 +1817,8 @@ static VALUE setarrowstyle(VALUE self,VALUE style){
  * The default arrow size is 1.
  */
 static VALUE setarrowsize(VALUE self,VALUE size) {
-  int sizec = NUM2INT(size);
-  gr_setarrowsize(size);
+  gr_setarrowsize(NUM2DBL(size));
+  
   return Qtrue;
 }
 
@@ -1839,7 +1839,7 @@ static VALUE drawarrow (VALUE self,VALUE x1,VALUE y1,VALUE x2,VALUE y2) {
   double x2c = NUM2DBL(x2);
   double y1c = NUM2DBL(y1);
   double y2c = NUM2DBL(y2);
-  gr_drawarrow(x1c, x2c, y1c, y2c);
+  gr_drawarrow(x1c, y1c, x2c, y2c);
   
   return Qtrue;
 }
