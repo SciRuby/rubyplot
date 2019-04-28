@@ -123,6 +123,27 @@ module Rubyplot
     :pattern,
     :hatch
   ].freeze
+
+  ARROW_STYLES = [
+    :simple_single_ended,
+    :simple_single_ended_acute,
+    :hollow_single_ended,
+    :filled_singled_ended,
+    :triangle_single_ended,
+    :filled_triangle_single_ended,
+    :kite_single_ended,
+    :filled_kite_single_ended,
+    :simple_double_ended,
+    :simple_double_ended_acute,
+    :hollow_double_ended,
+    :filled_double_ended,
+    :triangle_double_ended,
+    :filled_triangle_double_ended,
+    :kite_double_ended,
+    :filled_kite_double_ended,
+    :double_line_single_ended,
+    :double_line_double_ended
+  ].freeze
   
   class << self    
     def backend

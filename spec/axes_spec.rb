@@ -497,10 +497,160 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#error_bar!" do
-    it "adds a simple error bar plot" do
+    before do
+      @x = [1,2,3,4,5,6]
+      @y = [3,4,5,6,7,8]
+    end
+    
+    it "adds a simple xerr to error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.title = "Simple error bar plot."
+      axes.title = "Simple error bar plot with xerr."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.xerr = 0.1
+      end
+    end
+
+    it "adds a collection of xerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.xerr = [0.1,0.3,0.5,0.1,0.2,0.4]
+      end      
+    end
+
+    it "adds a simple yerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with yerr."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.yerr = 0.1
+      end
+    end
+
+    it "adds a collection of yerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection yerr."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
+      end      
+    end
+
+    it "adds an asymmetric collection of yerr to the error bar plot" do
+      skip "do this later."
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with asymmetric plotting."
+      axes.error_bar! do |p|
+        p.data @x, @y
+        p.yerr = [
+          [0.6, 0.2],
+          [0.1, 0.9],
+          [0.1, 0.4],
+          [0.8, 0.84],
+          [0.3, 0.69],
+          [0.1, 1.0]
+        ]
+      end
+    end
+
+    it "adds both xerr and yerr to the error bar plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr and yerr."
+      axes.error_bar! do |p|
+        p.data [1,2,3,4], [1,4,9,16]
+        p.xerr = [0.5,1.0,1.5,0.3]
+        p.yerr = [0.6,0.2,0.8,0.1]
+      end
+    end
+
+    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do 
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Error bar plot with lots of options"
+      axes.error_bar! do |p|
+        p.data [1,2,3,4], [1,4,9,16]
+        p.xerr = [0.5,1.0,1.5,0.3]
+        p.yerr = [0.6,1.0,0.8,0.5]
+        p.xuplims = [true, false, true, false]
+        p.xlolims = [false, true, false, true]
+        p.yuplims = [true, false, true, false]
+        p.ylolims = [false, true, false, true]
+      end
+    end
+  end
+
+  context "#box_plot!" do
+    it "adds a simple box plot", focus: true do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "A simple box plot."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]
+        ]
+      end
+      axes.x_title = "foo"
+      axes.y_title = "bar"
+    end
+
+    it "adds a simple horizontal box plot" do
+      skip "Leave for after initial box plot setup is complete."
+    end
+
+    it "groups multiple box plots on the same axes" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Multiple box plots."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]          
+        ]
+      end
+      axes.box_plot! do |p|
+        p.data [
+          (0..100).to_a,
+          (500..4500).to_a,
+          (-100..100).to_a
+        ]
+      end
+      axes.x_title = "hogehoge"
+      axes.y_title = "bokeboke"
+    end
+
+    it "controls multiple of whiskers for multiple box plots" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Multiple box plots with controlled whiskers."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]          
+        ]
+        p.whiskers = 3.0
+      end
+      axes.box_plot! do |p|
+        p.data [
+          (0..100).to_a,
+          (500..4500).to_a,
+          (-100..100).to_a
+        ]
+        p.whiskers = 0.5
+      end
+      axes.x_title = "hoge with whiskers"
+      axes.y_title = "boke with whiskers"
     end
   end
 
