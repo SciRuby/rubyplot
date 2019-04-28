@@ -587,8 +587,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#box_plot!", focus: true do
-    it "adds a simple box plot" do
+  context "#box_plot!" do
+    it "adds a simple box plot", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "A simple box plot."
