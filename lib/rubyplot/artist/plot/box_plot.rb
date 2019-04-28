@@ -2,7 +2,6 @@ module Rubyplot
   module Artist
     module Plot
       class BoxPlot < Artist::Plot::Base
-        
         def initialize(*)
           super
         end

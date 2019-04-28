@@ -628,6 +628,30 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.x_title = "hogehoge"
       axes.y_title = "bokeboke"
     end
+
+    it "controls multiple of whiskers for multiple box plots" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Multiple box plots with controlled whiskers."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]          
+        ]
+        p.whiskers = 3.0
+      end
+      axes.box_plot! do |p|
+        p.data [
+          (0..100).to_a,
+          (500..4500).to_a,
+          (-100..100).to_a
+        ]
+        p.whiskers = 0.5
+      end
+      axes.x_title = "hoge with whiskers"
+      axes.y_title = "boke with whiskers"
+    end
   end
 
   context "#top_margin=" do
