@@ -10,11 +10,19 @@ module Rubyplot
         attr_accessor :box_width
         # Array of co-ordinates of the lower left corners of the box.
         attr_accessor :x_left_box
+        attr_accessor :median_color
+        attr_accessor :outlier_marker_type
+        attr_accessor :outlier_marker_color
+        attr_accessor :outlier_marker_size
         
         def initialize(*)
           super
           @whiskers = 1.5
           @x_left_box = []
+          @median_color = :orange
+          @outlier_marker_type = :plus
+          @outlier_marker_color = :violet
+          @outlier_marker_size = 1.0
         end
 
         def process_data
@@ -34,8 +42,8 @@ module Rubyplot
           @x_left_box.each_with_index do |x_left, i|
             draw_box x_left, i
             draw_whiskers x_left, i
-            # draw_outliers x_left
-            # draw_medians x_left    
+            draw_outliers x_left
+            draw_median x_left, i    
           end
         end
 
@@ -52,23 +60,38 @@ module Rubyplot
         end
 
         def draw_whiskers x_left, index
+          x_coord = x_left + @box_width/2
           Rubyplot::Artist::Line2D.new(self,
-            x: [x_left + @box_width, x_left + @box_width],
-            y: [@q3s[index], @max[index]]
+            x: [x_coord, x_coord],
+            y: [@q3s[index], @maxs[index]]
           ).draw                # top whisker
 
           Rubyplot::Artist::Line2D.new(self,
-            x: [x_left + @box_width, x_left + @box_width],
-            y: [@q1s[index], @min[index]]
+            x: [x_coord, x_coord],
+            y: [@q1s[index], @mins[index]]
+          ).draw                # bottom whisker
+
+          Rubyplot::Artist::Line2D.new(self,
+            x: [x_coord - @box_width / 4.0, x_coord + @box_width / 4.0],
+            y: [@mins[index], @mins[index]]
+          ).draw                # bottom whisker horizontal bar
+
+          Rubyplot::Artist::Line2D.new(self,
+            x: [x_coord - @box_width / 4.0, x_coord + @box_width / 4.0],
+            y: [@maxs[index], @maxs[index]]
+          ).draw                # top whisker horizontal bar
+        end
+
+        def draw_outliers x_left, index
+          
+        end
+
+        def draw_median x_left, index
+          Rubyplot::Artist::Line2D.new(self,
+            x: [x_left, x_left + @box_width],
+            y: [@medians[index], @medians[index]],
+            color: @median_color
           ).draw
-        end
-
-        def draw_outliers
-          
-        end
-
-        def draw_median
-          
         end
 
         def calculate_ranges!
