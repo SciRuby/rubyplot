@@ -31,11 +31,9 @@ module Rubyplot
         end
 
         def draw
-          puts "#{@q1s}"
-          puts "#{@mins}"
           @x_left_box.each_with_index do |x_left, i|
             draw_box x_left, i
-            # draw_whiskers x_left
+            draw_whiskers x_left, i
             # draw_outliers x_left
             # draw_medians x_left    
           end
@@ -53,8 +51,16 @@ module Rubyplot
           ).draw
         end
 
-        def draw_whiskers
-          
+        def draw_whiskers x_left, index
+          Rubyplot::Artist::Line2D.new(self,
+            x: [x_left + @box_width, x_left + @box_width],
+            y: [@q3s[index], @max[index]]
+          ).draw                # top whisker
+
+          Rubyplot::Artist::Line2D.new(self,
+            x: [x_left + @box_width, x_left + @box_width],
+            y: [@q1s[index], @min[index]]
+          ).draw
         end
 
         def draw_outliers
