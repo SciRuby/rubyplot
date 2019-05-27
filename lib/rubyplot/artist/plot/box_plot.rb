@@ -7,13 +7,14 @@ module Rubyplot
         # to the datum less then Q3 + whiskers*IQR. Beyond the whiskers, data are considered
         # outliers and plotted as individual points.
         attr_accessor :whiskers
-        attr_accessor :bar_width
+        attr_accessor :box_width
         # Array of co-ordinates of the lower left corners of the box.
         attr_accessor :x_left_box
         
         def initialize(*)
           super
           @whiskers = 1.5
+          @x_left_box = []
         end
 
         def process_data
@@ -30,9 +31,39 @@ module Rubyplot
         end
 
         def draw
+          puts "#{@q1s}"
+          puts "#{@mins}"
+          @x_left_box.each_with_index do |x_left, i|
+            draw_box x_left, i
+            # draw_whiskers x_left
+            # draw_outliers x_left
+            # draw_medians x_left    
+          end
         end
 
         private
+
+        def draw_box x_left, index
+          Rubyplot::Artist::Rectangle.new(self,
+            x1: x_left,
+            x2: x_left + @box_width,
+            y1: @q1s[index],
+            y2: @q3s[index],
+            border_color: :black
+          ).draw
+        end
+
+        def draw_whiskers
+          
+        end
+
+        def draw_outliers
+          
+        end
+
+        def draw_median
+          
+        end
 
         def calculate_ranges!
           @q1s = []
@@ -53,13 +84,25 @@ module Rubyplot
 
             iqr = q3 - q1
 
-            @mins << q1 - @whiskers * iqr
-            @maxs << q3 + @whiskers * iqr
+            if sorted_vec[0] >= q1 - @whiskers * iqr
+              @mins << sorted_vec[0]
+            else
+              @mins << q1 - @whiskers * iqr
+            end
+
+            if sorted_vec.last <= q3 + @whiskers * iqr
+              @maxs << sorted_vec.last
+            else
+              @maxs << q3 + @whiskers * iqr
+            end
           end
         end
 
         def get_percentile percentile, vec
           size = vec.size
+          if size == 2
+           return vec[0] + ((vec[1]-vec[0])) * (percentile / 100.0) 
+          end
           index = (size * (percentile / 100.0))
           
           if index - index.to_i != 0 # not a whole number
