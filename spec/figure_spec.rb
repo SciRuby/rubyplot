@@ -54,6 +54,28 @@ describe Rubyplot::Figure do
       expect(fig.max_y).to eq(150.0)
     end
   end
+
+  context "#title=" do
+    it "allows setting the title of the whole figure" do
+      @figure = Rubyplot::Figure.new
+      @figure.title = "Full figure title."
+
+      @figure.add_subplots! 1, 2
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p| 
+        p.data (0..100).to_a, (0..100).to_a
+      end
+      axes.title = "Linear plot."
+
+      axes1 = @figure.add_subplot! 0, 1
+      axes1.plot! do |p|
+        d = (0..360).step(30).to_a
+        p.data d, d.map { |a| Math.sin(a) }
+        p.marker = :solid_line
+      end
+      axes1.title = "Sine wave."
+    end
+  end
   
   context "#add_subplot!" do
     it "creates a singular subplot inside the Figure" do
