@@ -19,7 +19,7 @@ module Rubyplot
           super
           @whiskers = 1.5
           @x_left_box = []
-          @median_color = :orange
+          @median_color = :yellow
           @outlier_marker_type = :plus
           @outlier_marker_color = :violet
           @outlier_marker_size = 1.0
@@ -42,7 +42,7 @@ module Rubyplot
           @x_left_box.each_with_index do |x_left, i|
             draw_box x_left, i
             draw_whiskers x_left, i
-            draw_outliers x_left
+            draw_outliers x_left, i
             draw_median x_left, i    
           end
         end
@@ -50,12 +50,14 @@ module Rubyplot
         private
 
         def draw_box x_left, index
+          puts "box width: xlefr: #{x_left} #{@box_width}."
           Rubyplot::Artist::Rectangle.new(self,
             x1: x_left,
             x2: x_left + @box_width,
             y1: @q1s[index],
             y2: @q3s[index],
-            border_color: :black
+            border_color: :black,
+            fill_color: @data[:color]
           ).draw
         end
 

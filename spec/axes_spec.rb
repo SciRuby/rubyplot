@@ -607,7 +607,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       skip "Leave for after initial box plot setup is complete."
     end
 
-    it "groups multiple box plots on the same axes" do
+    it "groups multiple box plots on the same axes", focus: true do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Multiple box plots."
@@ -621,8 +621,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.box_plot! do |p|
         p.data [
           (0..100).to_a,
-          (500..4500).to_a,
-          (-100..100).to_a
+          (5..45).to_a,
+          (-10..10).to_a
         ]
       end
       axes.x_title = "hogehoge"
@@ -644,8 +644,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.box_plot! do |p|
         p.data [
           (0..100).to_a,
-          (500..4500).to_a,
-          (-100..100).to_a
+          (5..45).to_a,
+          (-10..10).to_a
         ]
         p.whiskers = 0.5
       end

@@ -34,11 +34,9 @@ module Rubyplot
         end
 
         def set_bar_properties! box_plot, index
-          box_plot.box_width = (@max_slot_width - @padding * @box_plots.size) /
-            @box_plots.size
+          box_plot.box_width = @max_box_slot_width - @padding * 2
           (@x_max).to_i.times do |i|
-            box_plot.x_left_box[i] =  @max_box_slot_width * i +
-              @max_box_slot_width * index +
+            box_plot.x_left_box[i] =  @max_box_slot_width * index + @max_slot_width * i +
               (@padding / 2)
           end
         end
