@@ -164,6 +164,10 @@ module Rubyplot
         add_plot! :BoxPlot, &block
       end
 
+      def plot!(*_args, &block)
+        add_plot! :BasicPlot, &block
+      end
+
       def write(file_name)
         @plots[0].write file_name
       end

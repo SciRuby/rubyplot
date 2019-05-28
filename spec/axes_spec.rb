@@ -50,7 +50,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#plot!" do
+  context "#plot!", focus: true do
     it "plots a simple scatter plot with dot marker" do
       @figure = Rubyplot::Figure.new(height: 400, width: 400)
       axes = @figure.add_subplot! 0,0
@@ -90,7 +90,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
 
       axes.plot! do |p| 
-        p.marker = :dash_dot_line
+        p.marker = :dashed_dotted_line
         d = (0..360).step(30).to_a
         p.data d, d.map { |a| Math.sin(a) }
         p.color = :green
