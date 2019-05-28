@@ -21,7 +21,7 @@ module Rubyplot
           @x_left_box = []
           @median_color = :yellow
           @outlier_marker_type = :plus
-          @outlier_marker_color = :violet
+          @outlier_marker_color = nil
           @outlier_marker_size = 1.0
         end
 
@@ -30,6 +30,8 @@ module Rubyplot
           @y_max = @vectors.map(&:max).max
           @x_min = 0
           @x_max = @vectors.size
+          @vectors.map! { |v| v.sort! }
+          @outlier_marker_color ||= @data[:color]
 
           calculate_ranges!
         end
@@ -50,7 +52,6 @@ module Rubyplot
         private
 
         def draw_box x_left, index
-          puts "box width: xlefr: #{x_left} #{@box_width}."
           Rubyplot::Artist::Rectangle.new(self,
             x1: x_left,
             x2: x_left + @box_width,
@@ -85,7 +86,45 @@ module Rubyplot
         end
 
         def draw_outliers x_left, index
-          
+          max = @maxs[index]
+          vector = @vectors[index]
+          max_index = first_max_outlier_index vector, max
+          if max_index
+            outliers_max = vector[max_index..-1]
+            Rubyplot.backend.draw_markers(
+              x: [x_left + @box_width/2]*outliers_max.size, y: outliers_max,
+              type: @outlier_marker_type, color: @outlier_marker_color,
+              size: [@outlier_marker_size]*outliers_max.size) # draw max outliers
+          end
+
+          min = @mins[index]
+          min_index = first_min_outlier_index vector, min
+          if min_index
+            outliers_min = vector[0..min_index]
+            Rubyplot.backend.draw_markers(
+              x: [x_left + @box_width/2] * outliers_min.size, y: outliers_min,
+              type: @outlier_marker_type, color: @outlier_marker_color,
+              size: [@outlier_marker_size]*outliers_min.size
+            )
+          end
+        end
+
+        def first_max_outlier_index vector, max
+          return nil if vector.last >= max
+          vector.size.times do |i| 
+            if vector[i] > max
+              return i
+            end
+          end
+        end
+
+        def first_min_outlier_index vector, min
+          return nil if vector.first >= min
+          vector.size.times do |i|
+            if vector[i] > min
+              return i-1
+            end
+          end
         end
 
         def draw_median x_left, index
@@ -103,8 +142,7 @@ module Rubyplot
           @mins = []
           @maxs = []
           
-          @vectors.each do |vec|
-            sorted_vec = vec.sort
+          @vectors.each do |sorted_vec|
             m = get_percentile 50, sorted_vec
             q1 = get_percentile 25, sorted_vec
             q3 = get_percentile 75, sorted_vec
@@ -129,18 +167,15 @@ module Rubyplot
           end
         end
 
-        def get_percentile percentile, vec
-          size = vec.size
-          if size == 2
-           return vec[0] + ((vec[1]-vec[0])) * (percentile / 100.0) 
-          end
-          index = (size * (percentile / 100.0))
-          
-          if index - index.to_i != 0 # not a whole number
-            vec[index.floor]
-          else
-            (vec[index.floor] + vec[index.floor - 1]) / 2.0
-          end
+        def get_percentile percentile, values
+
+          return values.first if values.size == 1
+
+          values.sort!
+          return values.last if p == 100
+          rank = percentile / 100.0 * (values.size - 1)
+          lower, upper = values[rank.floor,2]
+          lower + (upper - lower) * (rank - rank.floor)
         end
       end # class BoxPlot
     end # module Plot
