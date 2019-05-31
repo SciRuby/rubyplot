@@ -50,6 +50,68 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
+  context "#plot!", focus: true do
+    it "plots a simple scatter plot with dot marker" do
+      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p| 
+        p.marker = :dot
+        p.data (0..150).to_a, (-100..50).to_a
+      end
+      axes.title = "simple plot with dots."
+    end
+
+    it "plots a simple line plot" do
+      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p| 
+        p.marker = :solid_line
+        d = (0..360).step(30).to_a
+        p.data d, d.map { |a| Math.sin(a) }
+      end
+      axes.title = "Simple sine wave plot."
+    end
+
+    it "plots a simple dashed line plot" do
+      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      x = (0..100).to_a
+      y = (0..100).to_a
+      axes = @figure.add_subplot! 0,0
+      
+      axes.plot! do |p| 
+        p.marker = :dashed_line
+        p.data x, y
+        p.color = :orange
+      end
+    end
+
+    it "plots a simple dash dot line plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+
+      axes.plot! do |p| 
+        p.marker = :dashed_dotted_line
+        d = (0..360).step(30).to_a
+        p.data d, d.map { |a| Math.sin(a) }
+        p.color = :green
+      end
+    end
+
+    it "plots a simple plot with plus marker of green color" do
+      @figure = Rubyplot::Figure.new
+      x = (0..100).to_a
+      y = (0..100).to_a
+      axes = @figure.add_subplot! 0,0
+
+      axes.plot! do |p| 
+        p.marker = :plus
+        d = (0..360).step(30).to_a
+        p.data d, d.map { |a| Math.cos(a) }
+        p.color = :green
+      end
+    end
+  end
+
   context "#dot!" do
     skip "plots a single dot plot" do
       @figure = Rubyplot::Figure.new
@@ -588,7 +650,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#box_plot!" do
-    it "adds a simple box plot", focus: true do
+    it "adds a simple box plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "A simple box plot."
@@ -613,16 +675,16 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Multiple box plots."
       axes.box_plot! do |p|
         p.data [
-          [60,70,80,70,50],
-          [100,40,20,80,70],
-          [30, 10]          
+          [-48, 2,60,70,80,70,50],
+          [4,100,40,20,80,70],
+          [1,30, 10]          
         ]
       end
       axes.box_plot! do |p|
         p.data [
           (0..100).to_a,
-          (500..4500).to_a,
-          (-100..100).to_a
+          (5..45).to_a,
+          (-10..10).to_a
         ]
       end
       axes.x_title = "hogehoge"
@@ -635,19 +697,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Multiple box plots with controlled whiskers."
       axes.box_plot! do |p|
         p.data [
-          [60,70,80,70,50],
-          [100,40,20,80,70],
-          [30, 10]          
+          [-48,60,70,80,70,50],
+          [4,100,40,20,80,70],
+          [1,30, 10]          
         ]
-        p.whiskers = 3.0
+        p.whiskers = 0.3
       end
       axes.box_plot! do |p|
         p.data [
           (0..100).to_a,
-          (500..4500).to_a,
-          (-100..100).to_a
+          (5..45).to_a,
+          (-10..10).to_a
         ]
-        p.whiskers = 0.5
+        p.whiskers = 0.1
       end
       axes.x_title = "hoge with whiskers"
       axes.y_title = "boke with whiskers"
