@@ -104,9 +104,8 @@ module Rubyplot
         @text.translate(x.to_i,y.to_i)
         @text.rotate rotation if rotation
         @text.text(0,0, text.gsub('%', '%%'))
-        @text.draw(@base_image)
         @text.rotate 90.0 if rotation
-        @text = Magick::Draw.new
+        @text.translate(-1*x.to_i,-1*y.to_i)
       end
 
       def draw_markers(x:, y:, type: nil, color: :default, size: nil)
@@ -185,6 +184,7 @@ module Rubyplot
       def write
         draw_axes
         @draw.draw(@base_image)
+        @text.draw(@base_image)
         @base_image.write(@file_name)
       end
 
@@ -216,16 +216,16 @@ module Rubyplot
                         else
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
-        Magick::Image.new(width * 10, height * 10, gradient_fill)
+        Magick::Image.new(width * 116.25, height * 116.25, gradient_fill)
       end
 
       # Transform X co-ordinate.
       def transform_x x
-        (@canvas_width * x * 10) / @figure.max_x
+        (@canvas_width * x * 116.25) / @figure.max_x
       end
 
       def transform_y y
-        (@canvas_height * (@figure.max_y - y) * 10) / @figure.max_y
+        (@canvas_height * (@figure.max_y - y) * 116.25) / @figure.max_y
       end
 
       # Transform quantity that depends on X and Y.
