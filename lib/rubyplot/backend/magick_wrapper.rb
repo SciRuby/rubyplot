@@ -89,23 +89,25 @@ module Rubyplot
       # Unused method argument - stroke
       def draw_text(text,color: :default,font: nil,size:,
         font_weight: Magick::NormalWeight, halign:, valign:,
-        abs_x:,abs_y:,rotation: nil, stroke: 'transparent')
-        x = transform_x abs_x
-        y = transform_y abs_y
+        abs_x:,abs_y:,rotation: nil, stroke: 'transparent', abs: true)
+        within_window(abs) do
+          x = transform_x abs_x
+          y = transform_y abs_y
 
-        @text.fill = Rubyplot::Color::COLOR_INDEX[color]
-        @text.font = font.to_s if font
-        @text.pointsize = size
-        @text.font_weight = font_weight
-        # @text.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
-        @text.stroke stroke
-        @text.stroke_antialias false
-        @text.text_antialias = false
-        @text.translate(x.to_i,y.to_i)
-        @text.rotate rotation if rotation
-        @text.text(0,0, text.gsub('%', '%%'))
-        @text.rotate 90.0 if rotation
-        @text.translate(-1*x.to_i,-1*y.to_i)
+          @text.fill = Rubyplot::Color::COLOR_INDEX[color]
+          @text.font = font.to_s if font
+          @text.pointsize = size
+          @text.font_weight = font_weight
+          # @text.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+          @text.stroke stroke
+          @text.stroke_antialias false
+          @text.text_antialias = false
+          @text.translate(x.to_i,y.to_i)
+          @text.rotate rotation if rotation
+          @text.text(0,0, text.gsub('%', '%%'))
+          @text.rotate 90.0 if rotation
+          @text.translate(-1*x.to_i,-1*y.to_i)
+        end
       end
 
       def draw_markers(x:, y:, type: nil, color: :default, size: nil)
@@ -122,49 +124,55 @@ module Rubyplot
       # Draw a rectangle.
       def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
         fill_color: nil, border_width: 1, border_type: nil, abs: false)
-        x1 = transform_x x1
-        y1 = transform_y y1
-        x2 = transform_x x2
-        y2 = transform_y y2
+        within_window(abs) do
+          x1 = transform_x x1
+          x2 = transform_x x2
+          y1 = transform_y y1
+          y2 = transform_y y2
 
-        if fill_color # solid rectangle
-          @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
-          @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
-          @draw.stroke_width border_width.to_f
-          @draw.rectangle x1, y1, x2, y2
-        else # just edges
-          @draw.stroke_width border_width.to_f
-          @draw.fill Rubyplot::Color::COLOR_INDEX[border_color]
-          @draw.line x1, y1, x1 + (x2-x1), y1 # top line
-          @draw.line x1 + (x2-x1), y1, x2, y2 # right line
-          @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
-          @draw.line x1, y1, x1, y1 + (y2-y1) # left line
+          if fill_color # solid rectangle
+            @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+            @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+            @draw.stroke_width border_width.to_f
+            @draw.rectangle x1, y1, x2, y2
+          else # just edges
+            @draw.stroke_width border_width.to_f
+            @draw.fill Rubyplot::Color::COLOR_INDEX[border_color]
+            @draw.line x1, y1, x1 + (x2-x1), y1 # top line
+            @draw.line x1 + (x2-x1), y1, x2, y2 # right line
+            @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
+            @draw.line x1, y1, x1, y1 + (y2-y1) # left line
+          end
         end
       end
 
       def draw_line(x1:,y1:,x2:,y2:,color: :default, stroke: 'transparent',
         stroke_opacity: 0.0, stroke_width: 2.0)
-        x1 = transform_x x1
-        x2 = transform_x x2
-        y1 = transform_y y1
-        y2 = transform_y y2
+        within_window do
+          x1 = transform_x x1
+          x2 = transform_x x2
+          y1 = transform_y y1
+          y2 = transform_y y2
 
-        @draw.stroke_opacity stroke_opacity
-        @draw.stroke_width stroke_width
-        @draw.fill Rubyplot::Color::COLOR_INDEX[color]
-        @draw.line x1, y1, x2, y2
+          @draw.stroke_opacity stroke_opacity
+          @draw.stroke_width stroke_width
+          @draw.fill Rubyplot::Color::COLOR_INDEX[color]
+          @draw.line x1, y1, x2, y2
+        end
       end
 
       def draw_circle(x:, y:, radius:, border_type: nil, border_width: 1.0, fill_color: nil,
         border_color: :default, fill_opacity: 0.0)
-        x = transform_x x
-        y = transform_y y
+        within_window do
+          x = transform_x x
+          y = transform_y y
 
-        @draw.stroke_width border_width
-        @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
-        @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
-        @draw.fill_opacity fill_opacity
-        @draw.circle(x,y,x-radius[0],y) # TODO: make raduis single vaiable instead of an array
+          @draw.stroke_width border_width
+          @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+          @draw.fill_opacity fill_opacity
+          @draw.circle(x,y,x-(radius[0]*5),y) # TODO: make raduis single vaiable instead of an array
+        end
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -174,11 +182,13 @@ module Rubyplot
       #   the X co-ordinate and the second element is the Y co-ordinate.
       def draw_polygon(coords:, fill_opacity: 0.0, color: :default,
         stroke: 'transparent')
-        coords.map! { |c| [transform_x(c[0]), transform_y(c[1])] }
-        @draw.stroke stroke
-        @draw.fill Rubyplot::Color::COLOR_INDEX[color]
-        @draw.fill_opacity fill_opacity
-        @draw.polygon *coords.flatten
+        within_window do
+          coords.map! { |c| [transform_x(c[0]), transform_y(c[1])] }
+          @draw.stroke stroke
+          @draw.fill Rubyplot::Color::COLOR_INDEX[color]
+          @draw.fill_opacity fill_opacity
+          @draw.polygon *coords.flatten
+        end
       end
 
       def write
@@ -216,16 +226,17 @@ module Rubyplot
                         else
                           GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
                         end
-        Magick::Image.new(width * 116.25, height * 116.25, gradient_fill)
+        Magick::Image.new(width, height, gradient_fill)
       end
 
       # Transform X co-ordinate.
       def transform_x x
-        (@canvas_width * x * 116.25) / @figure.max_x
+        ((x.to_f - @active_axes.x_range[0].to_f) / (@active_axes.x_range[1].to_f - @active_axes.x_range[0].to_f)) * @canvas_width.to_f
       end
 
+      # Transform Y co-ordinate
       def transform_y y
-        (@canvas_height * (@figure.max_y - y) * 116.25) / @figure.max_y
+        ((@active_axes.y_range[1].to_f - y.to_f) / (@active_axes.y_range[1].to_f - @active_axes.y_range[0].to_f)) * @canvas_height.to_f
       end
 
       # Transform quantity that depends on X and Y.
@@ -237,45 +248,49 @@ module Rubyplot
         @axes_map.each_value do |v|
           axes = v[:axes]
           @active_axes = axes
-          @axes.polyline(
-            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[0]),transform_y(v[:y_origin]),
-            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[1]),transform_y(v[:y_origin]),
-            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[0]),
-            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1]))
-            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1])
-          )
+          within_window do
+            @axes.polyline(
+              transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[1]),transform_y(v[:y_origin]),
+              transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1])
+            )
+          end
         end
         @axes.draw(@base_image)
       end
 
-      def within_window(&block)
-        # Setting window for axes in rubyplot coordinates
-        # i.e. shifting to adjust incorporate the margin of the figure
-        # border! method can be used but that will disturb rubyplot coordinates
-        # i.e. rubyplot coordinates include the border spacing
-        @draw.translate(@active_axes.abs_x, @active_axes.abs_y)
-        @text.translate(@active_axes.abs_x, @active_axes.abs_y)
-        @axes.translate(@active_axes.abs_x, @active_axes.abs_y)
-        # Scaling
-        @draw.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
-        @text.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
-        @axes.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
+      def within_window(abs=false, &block)
+        if abs
 
-        # Setting viewport for axes in rubyplot coordinates
-        # to actually draw the plot
-        # i.e. shifting to adjust incorporate the margin of the axes
-        @draw.translate(@active_axes.left_margin, @active_axes.bottom_margin)
-        @text.translate(@active_axes.left_margin, @active_axes.bottom_margin)
-        @axes.translate(@active_axes.left_margin, @active_axes.bottom_margin)
-        # Scaling
-        plottable_width = @active_axes.width - (@active_axes.left_margin + @active_axes.right_margin)
-        plottable_height = @active_axes.height - (@active_axes.bottom_margin + @active_axes.top_margin)
-        @draw.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
-        @text.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
-        @axes.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
+        else
+          # Shifting to adjust incorporate the margin of the figure and axes
+          # border! method can be used for figure margin but that will disturb rubyplot coordinates
+          # i.e. rubyplot coordinates include the border spacing
+          x_shift = (@active_axes.abs_x + @active_axes.left_margin) * @canvas_width / @figure.max_x # in pixels
+          y_shift = (@active_axes.abs_y + @active_axes.bottom_margin) * @canvas_height / @figure.max_y # in pixels
+          @draw.translate(x_shift, y_shift)
+          @text.translate(x_shift, y_shift)
+          @axes.translate(x_shift, y_shift)
 
-        # Calling the block
-        yield
+          plottable_width = @active_axes.width - (@active_axes.left_margin + @active_axes.right_margin)
+          plottable_height = @active_axes.height - (@active_axes.bottom_margin + @active_axes.top_margin)
+          # Scaling
+          @draw.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+          @text.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+          @axes.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+
+          # Calling the block
+          block.call(plottable_width, plottable_height)
+
+          # Rescaling
+          @draw.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+          @text.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+          @axes.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+
+          # Reshifting to the original coordinates
+          @draw.translate(-1 * x_shift, -1 * y_shift)
+          @text.translate(-1 * x_shift, -1 * y_shift)
+          @axes.translate(-1 * x_shift, -1 * y_shift)
+        end
       end
     end # class MagickWrapper
   end # module Backend

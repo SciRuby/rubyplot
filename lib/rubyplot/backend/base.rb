@@ -22,7 +22,7 @@ module Rubyplot
       # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
       def draw_text(text,color:,font: nil,size:,
         font_weight: nil, halign: nil, valign: nil,
-        abs_x:, abs_y:,rotation: nil, stroke: nil)
+        abs_x:, abs_y:,rotation: nil, stroke: nil, abs: false)
         raise NotImplementedError, "not implemented for #{self}."
       end
 
