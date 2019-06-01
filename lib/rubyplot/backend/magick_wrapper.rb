@@ -242,8 +242,40 @@ module Rubyplot
             transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[1]),transform_y(v[:y_origin]),
             transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[0]),
             transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1]))
+            transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1])
+          )
         end
         @axes.draw(@base_image)
+      end
+
+      def within_window(&block)
+        # Setting window for axes in rubyplot coordinates
+        # i.e. shifting to adjust incorporate the margin of the figure
+        # border! method can be used but that will disturb rubyplot coordinates
+        # i.e. rubyplot coordinates include the border spacing
+        @draw.translate(@active_axes.abs_x, @active_axes.abs_y)
+        @text.translate(@active_axes.abs_x, @active_axes.abs_y)
+        @axes.translate(@active_axes.abs_x, @active_axes.abs_y)
+        # Scaling
+        @draw.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
+        @text.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
+        @axes.scale(@active_axes.width / @canvas_width, @active_axes.height / @canvas_height)
+
+        # Setting viewport for axes in rubyplot coordinates
+        # to actually draw the plot
+        # i.e. shifting to adjust incorporate the margin of the axes
+        @draw.translate(@active_axes.left_margin, @active_axes.bottom_margin)
+        @text.translate(@active_axes.left_margin, @active_axes.bottom_margin)
+        @axes.translate(@active_axes.left_margin, @active_axes.bottom_margin)
+        # Scaling
+        plottable_width = @active_axes.width - (@active_axes.left_margin + @active_axes.right_margin)
+        plottable_height = @active_axes.height - (@active_axes.bottom_margin + @active_axes.top_margin)
+        @draw.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
+        @text.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
+        @axes.scale(plottable_width / @active_axes.width, plottable_height / @active_axes.height)
+
+        # Calling the block
+        yield
       end
     end # class MagickWrapper
   end # module Backend
