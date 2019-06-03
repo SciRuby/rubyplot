@@ -19,6 +19,13 @@ module Rubyplot
         :north => Magick::NorthGravity
       }.freeze
 
+      # Multiplier needed to convert given unit into pixels. (Magick default).
+      PIXEL_MULTIPLIERS = {
+        inch: 96,
+        cm: 39.7953,
+        pixel: 1
+      }.freeze
+
       attr_reader :draw
 
       def initialize
@@ -48,6 +55,7 @@ module Rubyplot
       end
 
       def init_output_device file_name, device: :file
+        @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
         @draw = Magick::Draw.new
         @axes = Magick::Draw.new
         @text = Magick::Draw.new
@@ -205,13 +213,25 @@ module Rubyplot
       end
 
       def stop_output_device
+        @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
         flush
       end
 
       private
 
+      # Function to convert figure size to pixels
+      def scale_figure(width, height)
+        return width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]
+      end
+
+      # Function to convert figure size from pixels to original unit
+      def unscale_figure(width, height)
+        return width / PIXEL_MULTIPLIERS[@figure.figsize_unit], height / PIXEL_MULTIPLIERS[@figure.figsize_unit]
+      end
+
       # Render a gradient and return an Image.
       def render_gradient(top_color, bottom_color, width, height, direct)
+        width, height = scale_figure(width, height)
         gradient_fill = case direct
                         when :bottom_top
                           GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
