@@ -91,8 +91,8 @@ module Rubyplot
         font_weight: Magick::NormalWeight, halign:, valign:,
         abs_x:,abs_y:,rotation: nil, stroke: 'transparent', abs: true)
         within_window(abs) do
-          x = transform_x abs_x
-          y = transform_y abs_y
+          x = transform_x(x: abs_x, abs: abs)
+          y = transform_y(y: abs_y, abs: abs)
 
           @text.fill = Rubyplot::Color::COLOR_INDEX[color]
           @text.font = font.to_s if font
@@ -125,10 +125,10 @@ module Rubyplot
       def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
         fill_color: nil, border_width: 1, border_type: nil, abs: false)
         within_window(abs) do
-          x1 = transform_x x1
-          x2 = transform_x x2
-          y1 = transform_y y1
-          y2 = transform_y y2
+          x1 = transform_x(x: x1, abs: abs)
+          x2 = transform_x(x: x2, abs: abs)
+          y1 = transform_y(y: y1, abs: abs)
+          y2 = transform_y(y: y2, abs: abs)
 
           if fill_color # solid rectangle
             @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
@@ -149,10 +149,10 @@ module Rubyplot
       def draw_line(x1:,y1:,x2:,y2:,color: :default, stroke: 'transparent',
         stroke_opacity: 0.0, stroke_width: 2.0)
         within_window do
-          x1 = transform_x x1
-          x2 = transform_x x2
-          y1 = transform_y y1
-          y2 = transform_y y2
+          x1 = transform_x x: x1
+          x2 = transform_x x: x2
+          y1 = transform_y y: y1
+          y2 = transform_y y: y2
 
           @draw.stroke_opacity stroke_opacity
           @draw.stroke_width stroke_width
@@ -164,8 +164,8 @@ module Rubyplot
       def draw_circle(x:, y:, radius:, border_type: nil, border_width: 1.0, fill_color: nil,
         border_color: :default, fill_opacity: 0.0)
         within_window do
-          x = transform_x x
-          y = transform_y y
+          x = transform_x x: x
+          y = transform_y y: y
 
           @draw.stroke_width border_width
           @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
@@ -183,7 +183,7 @@ module Rubyplot
       def draw_polygon(coords:, fill_opacity: 0.0, color: :default,
         stroke: 'transparent')
         within_window do
-          coords.map! { |c| [transform_x(c[0]), transform_y(c[1])] }
+          coords.map! { |c| [transform_x(x: c[0]), transform_y(y: c[1])] }
           @draw.stroke stroke
           @draw.fill Rubyplot::Color::COLOR_INDEX[color]
           @draw.fill_opacity fill_opacity
@@ -230,13 +230,21 @@ module Rubyplot
       end
 
       # Transform X co-ordinate.
-      def transform_x x
-        ((x.to_f - @active_axes.x_range[0].to_f) / (@active_axes.x_range[1].to_f - @active_axes.x_range[0].to_f)) * @canvas_width.to_f
+      def transform_x(x: , abs: false)
+        if abs
+          (@canvas_width.to_f * x.to_f / @figure.max_x.to_f)
+        else
+          ((x.to_f - @active_axes.x_range[0].to_f) / (@active_axes.x_range[1].to_f - @active_axes.x_range[0].to_f)) * @canvas_width.to_f
+        end
       end
 
       # Transform Y co-ordinate
-      def transform_y y
-        ((@active_axes.y_range[1].to_f - y.to_f) / (@active_axes.y_range[1].to_f - @active_axes.y_range[0].to_f)) * @canvas_height.to_f
+      def transform_y(y: , abs: false)
+        if abs
+          (@canvas_height.to_f * (@figure.max_y.to_f - y.to_f) / @figure.max_y.to_f)
+        else
+          ((@active_axes.y_range[1].to_f - y.to_f) / (@active_axes.y_range[1].to_f - @active_axes.y_range[0].to_f)) * @canvas_height.to_f
+        end
       end
 
       # Transform quantity that depends on X and Y.
@@ -250,8 +258,8 @@ module Rubyplot
           @active_axes = axes
           within_window do
             @axes.polyline(
-              transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(axes.x_range[1]),transform_y(v[:y_origin]),
-              transform_x(v[:x_origin]),transform_y(v[:y_origin]), transform_x(v[:x_origin]),transform_y(axes.y_range[1])
+              transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]),
+              transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1])
             )
           end
         end
@@ -260,8 +268,12 @@ module Rubyplot
 
       def within_window(abs=false, &block)
         if abs
-
+          # Coordinates are given in rubyplot cordinates
+          # Transform function handles deciding the position
+          # in the figure
+          yield
         else
+          # Coordinates are not in rubyplot coordinates
           # Shifting to adjust incorporate the margin of the figure and axes
           # border! method can be used for figure margin but that will disturb rubyplot coordinates
           # i.e. rubyplot coordinates include the border spacing
@@ -279,7 +291,7 @@ module Rubyplot
           @axes.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
 
           # Calling the block
-          block.call(plottable_width, plottable_height)
+          yield
 
           # Rescaling
           @draw.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
