@@ -277,6 +277,7 @@ module Rubyplot
           axes = v[:axes]
           @active_axes = axes
           within_window do
+            # Plot the X and Y axes
             @axes.polyline(
               transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]),
               transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1])
@@ -298,7 +299,7 @@ module Rubyplot
           # border! method can be used for figure margin but that will disturb rubyplot coordinates
           # i.e. rubyplot coordinates include the border spacing
           x_shift = (@active_axes.abs_x + @active_axes.left_margin) * @canvas_width / @figure.max_x # in pixels
-          y_shift = (@active_axes.abs_y + @active_axes.bottom_margin) * @canvas_height / @figure.max_y # in pixels
+          y_shift = (@active_axes.abs_y + @active_axes.top_margin) * @canvas_height / @figure.max_y # in pixels
           @draw.translate(x_shift, y_shift)
           @text.translate(x_shift, y_shift)
           @axes.translate(x_shift, y_shift)
