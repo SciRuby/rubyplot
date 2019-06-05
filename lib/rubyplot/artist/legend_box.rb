@@ -77,7 +77,7 @@ module Rubyplot
 
       def configure_legends
         @axes.plots.each_with_index do |plot, count|
-          next unless plot.label != ''          
+          next unless plot.label != ''      
           @legends << Rubyplot::Artist::Legend.new(
             self,
             @axes,

@@ -50,7 +50,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#plot!", focus: true do
+  context "#plot!" do
     it "plots a simple scatter plot with dot marker" do
       @figure = Rubyplot::Figure.new(height: 400, width: 400)
       axes = @figure.add_subplot! 0,0
@@ -457,7 +457,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.scatter! do |p|
         p.data @x1, @y1
         p.label = "data1"
-        p.color = :plum_purple
+        p.marker_fill_color = :plum_purple
+        p.marker_type = :circle
       end
       axes.title = "Nice plot"
       axes.x_title = "X data"

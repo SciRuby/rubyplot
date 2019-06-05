@@ -93,7 +93,7 @@ module Rubyplot
             outliers_max = vector[max_index..-1]
             Rubyplot.backend.draw_markers(
               x: [x_left + @box_width/2]*outliers_max.size, y: outliers_max,
-              type: @outlier_marker_type, color: @outlier_marker_color,
+              type: @outlier_marker_type, fill_color: @outlier_marker_color,
               size: [@outlier_marker_size]*outliers_max.size) # draw max outliers
           end
 
@@ -103,7 +103,7 @@ module Rubyplot
             outliers_min = vector[0..min_index]
             Rubyplot.backend.draw_markers(
               x: [x_left + @box_width/2] * outliers_min.size, y: outliers_min,
-              type: @outlier_marker_type, color: @outlier_marker_color,
+              type: @outlier_marker_type, fill_color: @outlier_marker_color,
               size: [@outlier_marker_size]*outliers_min.size
             )
           end
