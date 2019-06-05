@@ -118,13 +118,13 @@ module Rubyplot
         end
       end
 
-      def draw_markers(x:, y:, type: nil, color: :default, size: nil)
+      def draw_markers(x:, y:, type: nil, fill_color: :default, size: nil)
         y.each_with_index do |iy, idx_y|
           ix = x[idx_y]
 
           Rubyplot::Artist::Circle.new(
             self, x: ix, y: iy, radius: size, border_opacity: 0.0,
-            color: color, border_width: 1.0, abs: false
+            color: fill_color, border_width: 1.0, abs: false
           ).draw
         end
       end
