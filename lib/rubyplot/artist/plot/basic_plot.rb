@@ -28,7 +28,7 @@ module Rubyplot
               x: @data[:x_values],
               y: @data[:y_values],
               type: @marker,
-              color: @data[:color],
+              fill_color: @data[:color],
               size: [@marker_size] * @data[:x_values].size
             )
           end

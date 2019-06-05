@@ -559,6 +559,7 @@ static VALUE inqmarkercolorind(VALUE self,VALUE a){
   gr_inqmarkercolorind(ac);
   return Qtrue;
 }
+
 /**
  * call-seq:
  *   Rubyplot::GR.settextprecision(font, precision)-> true

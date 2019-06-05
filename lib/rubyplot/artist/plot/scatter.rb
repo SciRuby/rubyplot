@@ -2,34 +2,38 @@ module Rubyplot
   module Artist
     module Plot
       class Scatter < Artist::Plot::Base
-        attr_reader :marker_size
-        attr_reader :marker_type
-        attr_reader :marker_color
+        attr_accessor :marker_size
+        # Set a symbol as the marker type for this plot. Should be one from
+        # Rubyplot::MARKER_TYPES.
+        attr_accessor :marker_type
+        # Set a color from Rubyplot::Color::COLOR_INDEX as the color of the
+        # fill of the marker.        
+        attr_accessor :marker_fill_color
+        # Set a color from Rubyplot::Color::COLOR_INDEX as the color of the
+        # border of the marker.
+        attr_accessor :marker_border_color
         
         def initialize(*)
           super
           @marker_size = 1.0
           @marker_type = :circle
-          @marker_color = :black
+          @marker_border_color = :black
+          # set fill to nil for the benefit of hollow markers so that legend
+          # color defaults to :black in case user does not specify.
+          @marker_fill_color = nil
         end
 
-        def marker_size= marker_size
-          @marker_size = marker_size
+        # Color used for creating the legend. Defaults to the marker_fill_color
+        # but will use the marker_border_color if marker_fill_color does not
+        # exist (for example for hollow circles).
+        def color
+          @marker_fill_color || @marker_border_color
         end
 
-        # Set a symbol as the marker type for this plot. Should be one from
-        # Rubyplot::MARKER_TYPES.
-        #
-        # @param marker_type [Symbol] Name of the marker to be used.
-        def marker_type= marker_type
-          @marker_type = marker_type
-        end
-
-        # Set a color from Rubyplot::Color::COLOR_INDEX as the color.
-        #
-        # @param marker_color [Symbol] Name of the color.
-        def marker_color= marker_color
-          @marker_color = marker_color
+        # Set both marker_fill_color and marker_border_color to the same color.
+        def color= color
+          @marker_fill_color = color
+          @marker_border_color = color
         end
 
         def draw
@@ -37,7 +41,7 @@ module Rubyplot
             x: @data[:x_values],
             y: @data[:y_values],
             type: @marker_type,
-            color: @marker_color,
+            fill_color: color,
             size: [@marker_size] * @data[:x_values].size
           )
         end

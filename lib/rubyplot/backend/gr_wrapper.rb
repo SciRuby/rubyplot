@@ -216,9 +216,9 @@ module Rubyplot
         }
       end
       
-      def draw_markers(x:, y:, type:, color:, size:)
+      def draw_markers(x:, y:, type:, fill_color:, border_color: nil, size:)
         within_window do
-          GR.setmarkercolorind(to_gr_color(color))
+          GR.setmarkercolorind(to_gr_color(fill_color))
           GR.setmarkertype(MARKER_TYPE_MAP[type])
           x.size.times do |i|
             GR.setmarkersize(size[i])

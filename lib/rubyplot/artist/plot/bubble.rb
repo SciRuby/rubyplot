@@ -21,7 +21,7 @@ module Rubyplot
             x: @data[:x_values],
             y: @data[:y_values],
             size: @data[:z_values],
-            color: @data[:color],
+            fill_color: @data[:color],
             type: :solid_circle
           )
         end

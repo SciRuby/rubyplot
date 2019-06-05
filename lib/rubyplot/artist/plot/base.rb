@@ -24,6 +24,8 @@ module Rubyplot
           @data[:label]
         end
 
+        # Color of the plot that will be used by LegenBox to configure the
+        # Legend colors.
         def color
           @data[:color]
         end
