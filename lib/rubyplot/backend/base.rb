@@ -44,7 +44,7 @@ module Rubyplot
       # @param marker_type [Symbol] A marker type from Rubyplot::MARKERS.
       # @param marker_color [Symbol] A color from Rubyplot::Color.
       # @param marker_size [Numeric] Size of the marker.
-      def draw_markers(x:, y:, type:, color:, size:)
+      def draw_markers(x:, y:, type:, fill_color:, border_color:, size:)
         raise NotImplementedError, "not implemented for #{self}."
       end
 
