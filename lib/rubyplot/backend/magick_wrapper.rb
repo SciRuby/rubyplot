@@ -179,7 +179,7 @@ module Rubyplot
           @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
           @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
           @draw.fill_opacity fill_opacity
-          @draw.circle(x,y,x-(radius[0]*5),y) # TODO: make raduis single vaiable instead of an array
+          @draw.circle(x,y,x-radius,y)
         end
       end
       # rubocop:enable Metrics/ParameterLists
