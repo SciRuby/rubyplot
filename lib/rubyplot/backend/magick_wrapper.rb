@@ -118,14 +118,35 @@ module Rubyplot
         end
       end
 
-      def draw_markers(x:, y:, type: nil, fill_color: :default, size: nil)
+      def draw_markers(x:, y:, type: nil, fill_color: :default, border_color: :default, size: nil)
         y.each_with_index do |iy, idx_y|
-          ix = x[idx_y]
-
-          Rubyplot::Artist::Circle.new(
-            self, x: ix, y: iy, radius: size, border_opacity: 0.0,
-            color: fill_color, border_width: 1.0, abs: false
-          ).draw
+          ix = transform_x(x: x[idx_y],abs: false)
+          iy = transform_y(y: iy, abs: false)
+          # in GR backend size is multiplied by
+          # nominal size generated on the graphics device
+          # so setting the nominal_factor
+          nominal_factor = 15
+          within_window do
+            size[idx_y] *= nominal_factor
+            case type
+            when :plus # Stroke width is set to 1
+              @draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+              @draw.polyline(
+                ix,iy, ix + size[idx_y],iy,
+                ix,iy, ix - size[idx_y],iy,
+                ix,iy, ix,iy + size[idx_y],
+                ix,iy, ix,iy - size[idx_y]
+              )
+            else # Default for type :circle
+              @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+              @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+              @draw.circle(ix,iy, ix + size[idx_y],iy)
+            end
+          end
+          # Rubyplot::Artist::Circle.new(
+          #   self, x: ix, y: iy, radius: size, border_opacity: 0.0,
+          #   color: fill_color, border_width: 1.0, abs: false
+          # ).draw
         end
       end
 
