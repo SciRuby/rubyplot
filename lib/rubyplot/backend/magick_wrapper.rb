@@ -65,6 +65,50 @@ module Rubyplot
           draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
           draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
           draw.circle(x,y, x + size,y)
+        },
+        triangle_down: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x, y + size/2,
+            x, y + size/2, x - size/2, y - size/2
+          )
+        },
+        solid_triangle_down: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x, y + size/2,
+            x, y + size/2, x - size/2, y - size/2
+          )
+        },
+        triangle_up: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y + size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x, y - size/2,
+            x, y - size/2, x - size/2, y + size/2
+          )
+        },
+        solid_triangle_up: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y + size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x, y - size/2,
+            x, y - size/2, x - size/2, y + size/2
+          )
         }
       }.freeze
 
