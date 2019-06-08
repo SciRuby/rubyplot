@@ -265,12 +265,12 @@ module Rubyplot
 
       # Function to convert figure size to pixels
       def scale_figure(width, height)
-        return width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]
+        [width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]]
       end
 
       # Function to convert figure size from pixels to original unit
       def unscale_figure(width, height)
-        return width / PIXEL_MULTIPLIERS[@figure.figsize_unit], height / PIXEL_MULTIPLIERS[@figure.figsize_unit]
+        [width / PIXEL_MULTIPLIERS[@figure.figsize_unit], height / PIXEL_MULTIPLIERS[@figure.figsize_unit]]
       end
 
       # Render a gradient and return an Image.
