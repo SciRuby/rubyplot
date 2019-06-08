@@ -157,6 +157,30 @@ module Rubyplot
             x + size/2, y - size/2, x - size/2, y + size/2,
             x - size/2, y + size/2, x - size/2, y - size/2
           )
+        },
+        hglass: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x - size/2, y + size/2,
+            x - size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y - size/2
+          )
+        },
+        solid_hglass: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x - size/2, y + size/2,
+            x - size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y - size/2
+          )
         }
       }.freeze
 
