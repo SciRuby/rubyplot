@@ -181,6 +181,30 @@ module Rubyplot
             x - size/2, y + size/2, x + size/2, y - size/2,
             x + size/2, y - size/2, x - size/2, y - size/2
           )
+        },
+        diamond: ->(draw, x, y, fill_color, border_color, size) {
+          # size is equal to side of the square
+          # x,y is center of base and height i.e. center of the square
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x, y - size/2, x + size/2, y,
+            x + size/2, y, x, y + size/2,
+            x, y + size/2, x - size/2, y,
+            x - size/2, y, x, y - size/2
+          )
+        },
+        solid_diamond: ->(draw, x, y, fill_color, border_color, size) {
+          # size is equal to side of the square
+          # x,y is center of base and height i.e. center of the square
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x, y - size/2, x + size/2, y,
+            x + size/2, y, x, y + size/2,
+            x, y + size/2, x - size/2, y,
+            x - size/2, y, x, y - size/2
+          )
         }
       }.freeze
 
