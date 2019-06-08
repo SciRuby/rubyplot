@@ -26,6 +26,48 @@ module Rubyplot
         pixel: 1
       }.freeze
 
+      MARKER_TYPES = {
+        # Default type is circle
+        nil: ->(draw, x, y, fill_color, border_color, size) {
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.circle(x,y, x + size,y)
+        },
+        circle: ->(draw, x, y, fill_color, border_color, size) {
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.circle(x,y, x + size,y)
+        },
+        plus: ->(draw, x, y, fill_color, border_color, size) {
+          # Stroke width is set to 1
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x,y, x + size,y,
+            x,y, x - size,y,
+            x,y, x,y + size,
+            x,y, x,y - size
+          )
+        },
+        dot: ->(draw, x, y, fill_color, border_color, size) {
+          # Dot is a circle of size 5 pixels
+          # size is kept 5 to make it visible, ideally it should be 1
+          # which is the smallest displayable size
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.circle(x,y, x + 5,y)
+        },
+        asterisk: ->(draw, x, y, fill_color, border_color, size) {
+          # Looks like a five sided star
+        },
+        diagonal_cross: ->(draw, x, y, fill_color, border_color, size) {
+          # Looks like X
+        },
+        solid_circle: ->(draw, x, y, fill_color, border_color, size) {
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.circle(x,y, x + size,y)
+        }
+      }.freeze
+
       attr_reader :draw
 
       def initialize
@@ -110,11 +152,9 @@ module Rubyplot
           @text.stroke stroke
           @text.stroke_antialias false
           @text.text_antialias = false
-          @text.translate(x.to_i,y.to_i)
-          @text.rotate rotation if rotation
-          @text.text(0,0, text.gsub('%', '%%'))
-          @text.rotate 90.0 if rotation
-          @text.translate(-1*x.to_i,-1*y.to_i)
+          modify_draw(@text, x_shift: x.to_i, y_shift: y.to_i, rotation: rotation) do |draw|
+            draw.text(0,0, text.gsub('%', '%%'))
+          end
         end
       end
 
@@ -128,25 +168,8 @@ module Rubyplot
           nominal_factor = 15
           within_window do
             size[idx_y] *= nominal_factor
-            case type
-            when :plus # Stroke width is set to 1
-              @draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
-              @draw.polyline(
-                ix,iy, ix + size[idx_y],iy,
-                ix,iy, ix - size[idx_y],iy,
-                ix,iy, ix,iy + size[idx_y],
-                ix,iy, ix,iy - size[idx_y]
-              )
-            else # Default for type :circle
-              @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
-              @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
-              @draw.circle(ix,iy, ix + size[idx_y],iy)
-            end
+            MARKER_TYPES[type].call(@draw, ix, iy, fill_color, border_color, size[idx_y])
           end
-          # Rubyplot::Artist::Circle.new(
-          #   self, x: ix, y: iy, radius: size, border_opacity: 0.0,
-          #   color: fill_color, border_width: 1.0, abs: false
-          # ).draw
         end
       end
 
@@ -306,6 +329,26 @@ module Rubyplot
           end
         end
         @axes.draw(@base_image)
+      end
+
+      def modify_draw(draw, x_shift: nil, y_shift: nil, scale_x: nil, scale_y: nil, rotation: nil, &block)
+        draw = [draw] unless draw.respond_to? :each # Making draw iterable if not iterable
+        draw.each do |d|
+          d.translate(x_shift, y_shift) if x_shift && y_shift
+          d.rotate(rotation) if rotation
+          d.scale(scale_x, scale_y) if scale_x && scale_y
+        end
+
+        draw.each do |d|
+          yield(d)
+        end
+
+        draw.each do |d|
+          d.scale(1 / scale_x, 1 / scale_y) if scale_x && scale_y
+          d.rotate(90.0) if rotation
+          d.translate(-1 * x_shift, -1 * y_shift) if x_shift && y_shift
+        end
+        draw = draw[0] unless draw.respond_to? :each
       end
 
       def within_window(abs=false, &block)
