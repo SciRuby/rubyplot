@@ -109,6 +109,30 @@ module Rubyplot
             x + size/2, y + size/2, x, y - size/2,
             x, y - size/2, x - size/2, y + size/2
           )
+        },
+        square: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to side of the square
+          # x,y is center of base and height i.e. center of the square
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y + size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y - size/2,
+            x - size/2, y - size/2, x - size/2, y + size/2
+          )
+        },
+        solid_square: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to side of the square
+          # x,y is center of base and height i.e. center of the square
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y + size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y - size/2,
+            x - size/2, y - size/2, x - size/2, y + size/2
+          )
         }
       }.freeze
 
