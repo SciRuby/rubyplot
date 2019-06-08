@@ -111,7 +111,7 @@ module Rubyplot
           )
         },
         square: ->(draw, x, y, fill_color, border_color, size) {
-          # height and base are equal to side of the square
+          # size is equal to side of the square
           # x,y is center of base and height i.e. center of the square
           draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
           draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
@@ -123,7 +123,7 @@ module Rubyplot
           )
         },
         solid_square: ->(draw, x, y, fill_color, border_color, size) {
-          # height and base are equal to side of the square
+          # size is equal to side of the square
           # x,y is center of base and height i.e. center of the square
           draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
           draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
@@ -132,6 +132,30 @@ module Rubyplot
             x + size/2, y + size/2, x + size/2, y - size/2,
             x + size/2, y - size/2, x - size/2, y - size/2,
             x - size/2, y - size/2, x - size/2, y + size/2
+          )
+        },
+        bowtie: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y + size/2,
+            x - size/2, y + size/2, x - size/2, y - size/2
+          )
+        },
+        solid_bowtie: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x + size/2, y + size/2,
+            x + size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y + size/2,
+            x - size/2, y + size/2, x - size/2, y - size/2
           )
         }
       }.freeze
