@@ -406,20 +406,22 @@ module Rubyplot
       def draw_text(text,color: :default,font: nil,size:,
         font_weight: Magick::NormalWeight, halign:, valign:,
         abs_x:,abs_y:,rotation: nil, stroke: 'transparent', abs: true)
-        within_window(abs) do
-          x = transform_x(x: abs_x, abs: abs)
-          y = transform_y(y: abs_y, abs: abs)
+        unless text.empty?
+          within_window(abs) do
+            x = transform_x(x: abs_x, abs: abs)
+            y = transform_y(y: abs_y, abs: abs)
 
-          @text.fill = Rubyplot::Color::COLOR_INDEX[color]
-          @text.font = font.to_s if font
-          @text.pointsize = size
-          @text.font_weight = font_weight
-          # @text.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
-          @text.stroke stroke
-          @text.stroke_antialias false
-          @text.text_antialias = false
-          modify_draw(@text, x_shift: x.to_i, y_shift: y.to_i, rotation: rotation) do |draw|
-            draw.text(0,0, text.gsub('%', '%%'))
+            @text.fill = Rubyplot::Color::COLOR_INDEX[color]
+            @text.font = font.to_s if font
+            @text.pointsize = size
+            @text.font_weight = font_weight
+            # @text.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+            @text.stroke stroke
+            @text.stroke_antialias false
+            @text.text_antialias = false
+            modify_draw(@text, x_shift: x.to_i, y_shift: y.to_i, rotation: rotation) do |draw|
+              draw.text(0,0, text.gsub('%', '%%'))
+            end
           end
         end
       end
@@ -496,16 +498,20 @@ module Rubyplot
 
       # Draw a polygon.
       #
-      # @param coords [Array[Array]] Array of Arrays where first element of each sub-array is
+      # @param coords (Array[Array]) Array of Arrays where first element of each sub-array is
       #   the X co-ordinate and the second element is the Y co-ordinate.
-      def draw_polygon(coords:, fill_opacity: 0.0, color: :default,
-        stroke: 'transparent')
+      def draw_polygon(x:, y:, border_width:, border_type:, border_color:, fill_color:,
+        fill_opacity:)
         within_window do
-          coords.map! { |c| [transform_x(x: c[0]), transform_y(y: c[1])] }
-          @draw.stroke stroke
-          @draw.fill Rubyplot::Color::COLOR_INDEX[color]
+          x = x.map! { |ix| transform_x(x: ix, abs: false) }
+          y = y.map! { |iy| transform_y(y: iy, abs: false) }
+          coords = x.zip(y)
+          @draw.stroke_width border_width
+          @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
           @draw.fill_opacity fill_opacity
           @draw.polygon *coords.flatten
+          @draw.fill_opacity 1
         end
       end
 
