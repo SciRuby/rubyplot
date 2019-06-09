@@ -28,6 +28,7 @@ module Rubyplot
 
       MARKER_TYPES = {
         # Default type is circle
+        # Stroke width is set to 1
         nil: ->(draw, x, y, fill_color, border_color, size) {
           draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
           draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
@@ -39,14 +40,10 @@ module Rubyplot
           draw.circle(x,y, x + size,y)
         },
         plus: ->(draw, x, y, fill_color, border_color, size) {
-          # Stroke width is set to 1
+          # size is length of one line
           draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
-          draw.polyline(
-            x,y, x + size,y,
-            x,y, x - size,y,
-            x,y, x,y + size,
-            x,y, x,y - size
-          )
+          draw.line(x - size/2, y, x + size/2, y)
+          draw.line(x, y - size/2, x, y + size/2)
         },
         dot: ->(draw, x, y, fill_color, border_color, size) {
           # Dot is a circle of size 5 pixels
@@ -59,7 +56,10 @@ module Rubyplot
           # Looks like a five sided star
         },
         diagonal_cross: ->(draw, x, y, fill_color, border_color, size) {
-          # Looks like X
+          # size is length of one line
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.line(x - size/2, y + size/2, x + size/2, y - size/2)
+          draw.line(x - size/2, y - size/2, x + size/2, y + size/2)
         },
         solid_circle: ->(draw, x, y, fill_color, border_color, size) {
           draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
@@ -205,6 +205,132 @@ module Rubyplot
             x, y + size/2, x - size/2, y,
             x - size/2, y, x, y - size/2
           )
+        },
+        star: ->(draw, x, y, fill_color, border_color, size) {
+          # 5 sided star
+        },
+        solid_star: ->(draw, x, y, fill_color, border_color, size) {
+          # 5 sided solid star
+        },
+        tri_up_down: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        solid_tri_right: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x + size/2, y + size/2, x + size/2, y - size/2,
+            x + size/2, y - size/2, x - size/2, y,
+            x - size/2, y, x + size/2, y + size/2
+          )
+        },
+        solid_tri_left: ->(draw, x, y, fill_color, border_color, size) {
+          # height and base are equal to size
+          # x,y is center of base and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x - size/2, y - size/2, x - size/2, y + size/2,
+            x - size/2, y + size/2, x + size/2, y,
+            x + size/2, y, x - size/2, y - size/2
+          )
+        },
+        hollow_plus: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill_opacity 0
+          draw.polyline(
+            x + size/4, y- size/2, x + size/4, y - size/4,
+            x + size/4, y - size/4, x + size/2, y - size/4,
+            x + size/2, y - size/4, x + size/2, y + size/4,
+            x + size/2, y + size/4, x + size/4, y + size/4,
+            x + size/4, y + size/4, x + size/4, y + size/2,
+            x + size/4, y + size/2, x - size/4, y + size/2,
+            x - size/4, y + size/2, x - size/4, y + size/4,
+            x - size/4, y + size/4, x - size/2, y + size/4,
+            x - size/2, y + size/4, x - size/2, y - size/4,
+            x - size/2, y - size/4, x - size/4, y - size/4,
+            x - size/4, y - size/4, x - size/4, y - size/2,
+            x - size/4, y - size/2, x + size/4, y - size/2
+          )
+          draw.fill_opacity 1
+        },
+        solid_plus: ->(draw, x, y, fill_color, border_color, size) {
+          # height and width are equal to size
+          # x,y is center of width and height
+          draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.polyline(
+            x + size/4, y - size/2, x + size/4, y - size/4,
+            x + size/4, y - size/4, x + size/2, y - size/4,
+            x + size/2, y - size/4, x + size/2, y + size/4,
+            x + size/2, y + size/4, x + size/4, y + size/4,
+            x + size/4, y + size/4, x + size/4, y + size/2,
+            x + size/4, y + size/2, x - size/4, y + size/2,
+            x - size/4, y + size/2, x - size/4, y + size/4,
+            x - size/4, y + size/4, x - size/2, y + size/4,
+            x - size/2, y + size/4, x - size/2, y - size/4,
+            x - size/2, y - size/4, x - size/4, y - size/4,
+            x - size/4, y - size/4, x - size/4, y - size/2,
+            x - size/4, y - size/2, x + size/4, y - size/2
+          )
+        },
+        pentagon: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        hexagon: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        heptagon: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        octagon: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        star_4: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        star_5: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        star_6: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        star_7: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        star_8: ->(draw, x, y, fill_color, border_color, size) {
+
+        },
+        vline: ->(draw, x, y, fill_color, border_color, size) {
+          # size is length of line
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.line(x, y - size/2, x, y + size/2)
+        },
+        hline: ->(draw, x, y, fill_color, border_color, size) {
+          # size is length of line
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.line(x - size/2, y, x + size/2, y)
+        },
+        omark: ->(draw, x, y, fill_color, border_color, size) {
+          # Hollow Square with truncated corners with side of square as size
+          # x, y is the center of the side
+          draw.stroke Rubyplot::Color::COLOR_INDEX[fill_color]
+          draw.fill_opacity 0
+          draw.polyline(
+            x - 3*size/8, y - size/2, x + 3*size/8, y - size/2,
+            x + 3*size/8, y - size/2, x + size/2, y - 3*size/8,
+            x + size/2, y - 3*size/8, x + size/2, y + 3*size/8,
+            x + size/2, y + 3*size/8, x + 3*size/8, y + size/2,
+            x + 3*size/8, y + size/2, x - 3*size/8, y + size/2,
+            x - 3*size/8, y + size/2, x - size/2, y + 3*size/8,
+            x - size/2, y + 3*size/8, x - size/2, y - 3*size/8,
+            x - size/2, y - 3*size/8, x - 3*size/8, y - size/2
+          )
+          draw.fill_opacity 1
         }
       }.freeze
 
