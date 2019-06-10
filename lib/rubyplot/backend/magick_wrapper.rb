@@ -450,19 +450,14 @@ module Rubyplot
           y1 = transform_y(y: y1, abs: abs)
           y2 = transform_y(y: y2, abs: abs)
 
-          if fill_color # solid rectangle
-            @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
-            @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
-            @draw.stroke_width border_width.to_f
-            @draw.rectangle x1, y1, x2, y2
-          else # just edges
-            @draw.stroke_width border_width.to_f
-            @draw.fill Rubyplot::Color::COLOR_INDEX[border_color]
-            @draw.line x1, y1, x1 + (x2-x1), y1 # top line
-            @draw.line x1 + (x2-x1), y1, x2, y2 # right line
-            @draw.line x2, y2, x1, y1 + (y2-y1) # bottom line
-            @draw.line x1, y1, x1, y1 + (y2-y1) # left line
-          end
+          @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+          @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+          @draw.stroke_width border_width.to_f
+          # if fill_color is not given, the rectangle fill colour is transparent
+          # i.e. only edges are visible
+          @draw.fill_opacity 0 unless fill_color
+          @draw.rectangle x1, y1, x2, y2
+          @draw.fill_opacity 1 unless fill_color
         end
       end
 
