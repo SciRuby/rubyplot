@@ -27,7 +27,7 @@ module Rubyplot
         # but will use the marker_border_color if marker_fill_color does not
         # exist (for example for hollow circles).
         def color
-          @marker_fill_color || @marker_border_color
+          @marker_fill_color || @marker_border_color || :default
         end
 
         # Set both marker_fill_color and marker_border_color to the same color.
