@@ -6,12 +6,12 @@ module Rubyplot
 
         def initialize(*)
           super
-          @sort_data = true
+          @sort_data = false
         end
 
-        def data x_values, y_values=[]
-          y_values = Array.new(x_values.size) { |i| i } if y_values.empty?
-          x_values.sort! if @sort_data
+        def data y_values, x_values=[]
+          x_values = Array.new(y_values.size) { |i| i } if x_values.empty?
+          y_values.sort! if @sort_data
           super(x_values, y_values)
         end
 
