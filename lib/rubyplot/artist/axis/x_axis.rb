@@ -21,6 +21,7 @@ module Rubyplot
       private
 
       def configure_title
+        @title = 'X axis' if @title == ''
         @texts << Rubyplot::Artist::Text.new(
           @title,
           self,
