@@ -478,8 +478,8 @@ module Rubyplot
           coords = xarr.zip(yarr)
           @draw.stroke Rubyplot::Color::COLOR_INDEX[color]
           @draw.stroke_width width.to_f
-          @draw.stroke_opacity 0
-          @draw.fill_opacity 0
+          # @draw.stroke_opacity 0
+          @draw.fill_opacity opacity
           @draw.polyline *coords.flatten
           @draw.fill_opacity 1
         end
