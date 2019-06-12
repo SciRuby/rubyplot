@@ -65,7 +65,7 @@ module Rubyplot
         raise NotImplementedError, "not implemented for #{self}."
       end
 
-      def draw_lines(x:, y:, width:, type:, color:)
+      def draw_lines(x:, y:, width:, type:, color:, opacity:)
         raise NotImplementedError, "not implemented for #{self}."
       end
 

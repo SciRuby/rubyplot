@@ -461,6 +461,30 @@ module Rubyplot
         end
       end
 
+      def draw_lines(x:, y:, width: 30.0, type: nil, color: :default, opacity: 1.0)
+        # TODO: Fix for more than 2 points in a line
+        # fill_opacity will create a problem
+        within_window do
+          xarr = []
+          yarr = []
+          y.each_with_index do |_, idx_y|
+            yarr << transform_y(y: y[idx_y], abs: false)
+            xarr << transform_x(x: x[idx_y], abs: false)
+            unless idx_y == 0 || idx_y == (y.length - 1)
+              yarr << transform_y(y: y[idx_y], abs: false)
+              xarr << transform_x(x: x[idx_y], abs: false)
+            end
+          end
+          coords = xarr.zip(yarr)
+          @draw.stroke Rubyplot::Color::COLOR_INDEX[color]
+          @draw.stroke_width width.to_f
+          @draw.stroke_opacity 0
+          @draw.fill_opacity 0
+          @draw.polyline *coords.flatten
+          @draw.fill_opacity 1
+        end
+      end
+
       def draw_line(x1:,y1:,x2:,y2:,color: :default, stroke: 'transparent',
         stroke_opacity: 0.0, stroke_width: 2.0)
         within_window do
