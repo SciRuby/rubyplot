@@ -54,6 +54,7 @@ module Rubyplot
         },
         asterisk: ->(draw, x, y, fill_color, border_color, size) {
           # Looks like a five sided star
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         diagonal_cross: ->(draw, x, y, fill_color, border_color, size) {
           # size is length of one line
@@ -208,12 +209,14 @@ module Rubyplot
         },
         star: ->(draw, x, y, fill_color, border_color, size) {
           # 5 sided star
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         solid_star: ->(draw, x, y, fill_color, border_color, size) {
           # 5 sided solid star
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         tri_up_down: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         solid_tri_right: ->(draw, x, y, fill_color, border_color, size) {
           # height and base are equal to size
@@ -279,31 +282,31 @@ module Rubyplot
           )
         },
         pentagon: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         hexagon: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         heptagon: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         octagon: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         star_4: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         star_5: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         star_6: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         star_7: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         star_8: ->(draw, x, y, fill_color, border_color, size) {
-
+          raise NotImplementedError, 'This marker has not yet been implemented'
         },
         vline: ->(draw, x, y, fill_color, border_color, size) {
           # size is length of line
