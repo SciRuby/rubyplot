@@ -366,7 +366,12 @@ module Rubyplot
       end
 
       def init_output_device file_name, device: :file
+        top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
+        bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
         @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
+        direction = @figure.theme_options[:background_direction]
+
+        @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
         @draw = Magick::Draw.new
         @axes = Magick::Draw.new
         @text = Magick::Draw.new
@@ -392,10 +397,6 @@ module Rubyplot
       # Scale backend canvas to required proportion.
       def scale(scale)
         @draw.scale(scale, scale)
-      end
-
-      def set_base_image_gradient(top_color, bottom_color, width, height, direct=:top_bottom)
-        @base_image = render_gradient top_color, bottom_color, width, height, direct
       end
 
       # Get the width and height of the text in pixels.
@@ -569,7 +570,6 @@ module Rubyplot
 
       # Render a gradient and return an Image.
       def render_gradient(top_color, bottom_color, width, height, direct)
-        width, height = scale_figure(width, height)
         gradient_fill = case direct
                         when :bottom_top
                           GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
