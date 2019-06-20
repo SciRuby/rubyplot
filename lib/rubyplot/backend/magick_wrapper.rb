@@ -523,6 +523,12 @@ module Rubyplot
         end
       end
 
+      def draw_arrow(x1:, y1:, x2:, y2:, size:, style:)
+        within_window do
+          # TODO
+        end
+      end
+
       def write
         draw_axes
         @draw.draw(@base_image)

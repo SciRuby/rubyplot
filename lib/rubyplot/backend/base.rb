@@ -69,6 +69,10 @@ module Rubyplot
         raise NotImplementedError, "not implemented for #{__method__}."
       end
 
+      def draw_arrow(x1:, y1:, x2:, y2:, size:, style:)
+        raise NotImplementedError, "not implemented for #{__method__}."
+      end
+
       def init_output_device file_name, device: :file
         raise NotImplementedError, "not implemented for #{__method__}."
       end
