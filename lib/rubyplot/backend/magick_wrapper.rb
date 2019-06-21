@@ -11,6 +11,9 @@ module Rubyplot
     #   functions are used for this purpose.
     class MagickWrapper < Base
       include ::Magick
+
+      NOMINAL_FACTOR_MARKERS = 15
+
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
         :center => Magick::CenterGravity,
@@ -436,10 +439,9 @@ module Rubyplot
           iy = transform_y(y: iy, abs: false)
           # in GR backend size is multiplied by
           # nominal size generated on the graphics device
-          # so setting the nominal_factor
-          nominal_factor = 15
+          # so set the nominal_factor to 15
           within_window do
-            size[idx_y] *= nominal_factor
+            size[idx_y] *= NOMINAL_FACTOR_MARKERS
             MARKER_TYPES[type].call(@draw, ix, iy, fill_color, border_color, size[idx_y])
           end
         end
