@@ -32,7 +32,7 @@ module Rubyplot
       MARKER_TYPES = {
         # Default type is circle
         # Stroke width is set to 1
-        nil: ->(draw, x, y, fill_color, border_color, size) {
+        default: ->(draw, x, y, fill_color, border_color, size) {
           draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
           draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
           draw.circle(x,y, x + size,y)
@@ -433,7 +433,7 @@ module Rubyplot
         end
       end
 
-      def draw_markers(x:, y:, type: nil, fill_color: :default, border_color: :default, size: nil)
+      def draw_markers(x:, y:, type: :default, fill_color: :default, border_color: :default, size: nil)
         y.each_with_index do |iy, idx_y|
           ix = transform_x(x: x[idx_y],abs: false)
           iy = transform_y(y: iy, abs: false)
