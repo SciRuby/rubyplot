@@ -340,6 +340,49 @@ module Rubyplot
         }
       }.freeze
 
+      LINE_TYPES = {
+        # Default type is solid
+        solid: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          draw.fill_opacity opacity
+          draw.stroke_width width
+          draw.fill Rubyplot::Color::COLOR_INDEX[color]
+          draw.line x1, y1, x2, y2
+        },
+        dashed: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        dotted: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        dashed_dotted: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        dash_2_dot: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        dash_3_dot: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        long_dash: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        long_short_dash: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        spaced_dash: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        spaced_dot: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        double_dot: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        },
+        triple_dot: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+          raise NotImplementedError, 'This line has not yet been implemented'
+        }
+      }.freeze
+
       attr_reader :draw
 
       def initialize
@@ -467,28 +510,22 @@ module Rubyplot
         end
       end
 
-      def draw_lines(x:, y:, width: 2.0, type: nil, color: :default, opacity: 1.0)
-        @draw.fill Rubyplot::Color::COLOR_INDEX[color]
-        y.each_with_index do |_, idx_y|
-          if idx_y < (y.length - 1)
-            draw_line(x1: x[idx_y], y1: y[idx_y], x2: x[idx_y + 1], y2: y[idx_y + 1],
-                      width: width, type: type, color: color, opacity: opacity)
+      def draw_lines(x:, y:, width: 2.0, type: :default, color: :default, opacity: 1.0)
+        within_window do
+          y.each_with_index do |_, idx_y|
+            if idx_y < (y.length - 1)
+              x1 = transform_x(x: x[idx_y], abs: false)
+              y1 = transform_y(y: y[idx_y], abs: false)
+              x2 = transform_x(x: x[idx_y + 1], abs: false)
+              y2 = transform_y(y: y[idx_y + 1], abs: false)
+              LINE_TYPES[type].call(@draw, x1, y1, x2, y2, width, color, opacity)
+            end
           end
         end
       end
 
-      def draw_line(x1:,y1:,x2:,y2:, width: 2.0, type: nil,color: :default, opacity: 1.0)
-        within_window do
-          x1 = transform_x x: x1
-          x2 = transform_x x: x2
-          y1 = transform_y y: y1
-          y2 = transform_y y: y2
-
-          @draw.stroke_opacity opacity
-          @draw.stroke_width width
-
-          @draw.line x1, y1, x2, y2
-        end
+      def draw_line(x1:,y1:,x2:,y2:, width:, type:, color:, opacity:)
+        draw_lines(x: [x1, x2], y: [y1, y2], width: width, type: type, color: color, opacity: opacity)
       end
 
       def draw_circle(x:, y:, radius:, border_type: nil, border_width: 1.0, fill_color: nil,
