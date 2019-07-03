@@ -14,7 +14,7 @@ module Rubyplot
           @y_max = @candle_sticks.map(&:y_max).max
           @x_min = 0
           @x_max = @candle_sticks.map(&:x_max).max
-          @axes.x_axis.max_val = @x_max -1
+          @axes.x_axis.max_val = @x_max
           @max_slot_width = 1.0
           @candles_per_slot = @candle_sticks.size
           @max_candle_width = @max_slot_width / @candles_per_slot
@@ -33,9 +33,9 @@ module Rubyplot
         def set_bar_properties candle_stick, index
           candle_stick.bar_width = (@max_slot_width - @candles_per_slot * @spacing_ratio) /
             @candles_per_slot
-          (@x_max-1).to_i.times do |i|
-            candle_stick.x_left_candle[i] = @max_slot_width * i + 
-              @max_candle_width * index + 
+          (@x_max).to_i.times do |i|
+            candle_stick.x_left_candle[i] = @max_slot_width * i +
+              @max_candle_width * index +
               (@spacing_ratio/2) * @max_candle_width
             candle_stick.x_low_stick[i] = (candle_stick.x_left_candle[i] +
               candle_stick.bar_width / 2)
