@@ -17,13 +17,18 @@ module Rubyplot
         end
 
         def draw
-          Rubyplot.backend.draw_markers(
-            x: @data[:x_values],
-            y: @data[:y_values],
-            size: @data[:z_values],
-            fill_color: @data[:color],
-            type: :solid_circle
-          )
+          @data[:x_values].each_with_index do |_, idx|
+            Rubyplot::Artist::Circle.new(
+              self,
+              x: @data[:x_values][idx],
+              y: @data[:y_values][idx],
+              radius: @data[:z_values][idx],
+              fill_opacity: 0.5,
+              color: @data[:color],
+              border_width: 1,
+              abs: false
+            ).draw
+          end
         end
       end # class Bubble
     end # module Plot
