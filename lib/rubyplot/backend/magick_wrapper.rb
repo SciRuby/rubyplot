@@ -13,6 +13,7 @@ module Rubyplot
       include ::Magick
 
       NOMINAL_FACTOR_MARKERS = 15
+      NOMINAL_FACTOR_CIRCLE = 27.5
 
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
@@ -544,7 +545,7 @@ module Rubyplot
           @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
           @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
           @draw.fill_opacity fill_opacity
-          @draw.circle(x,y,x-radius,y)
+          @draw.circle(x,y,x - (radius * NOMINAL_FACTOR_CIRCLE),y)
         end
       end
       # rubocop:enable Metrics/ParameterLists
