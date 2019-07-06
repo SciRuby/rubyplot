@@ -37,6 +37,7 @@ module Rubyplot
         end
 
         def draw
+          @marker_fill_color = :default if @marker_fill_color.nil?
           Rubyplot.backend.draw_markers(
             x: @data[:x_values],
             y: @data[:y_values],
