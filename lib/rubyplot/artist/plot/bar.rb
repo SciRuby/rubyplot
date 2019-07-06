@@ -29,7 +29,7 @@ module Rubyplot
           raise ValueError, '@spacing_ratio must be between 0.00 and 1.00' unless
             (s_r >= 0) && (s_r <= 1)
 
-          @spacing_factor = s_r
+          @spacing_ratio = s_r
         end
 
         # Set Bar plot data.
