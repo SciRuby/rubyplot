@@ -576,9 +576,9 @@ module Rubyplot
       end
 
       def write
-        draw_axes
         @draw.draw(@base_image)
         @text.draw(@base_image)
+        draw_axes
         @base_image.write(@file_name)
       end
 
