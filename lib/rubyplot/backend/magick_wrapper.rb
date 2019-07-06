@@ -652,11 +652,15 @@ module Rubyplot
           axes = v[:axes]
           @active_axes = axes
           within_window do
-            # Plot the X and Y axes
-            @axes.polyline(
-              transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]),
-              transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1])
-            )
+            @axes.stroke Rubyplot::Color::COLOR_INDEX[:black]
+            @axes.stroke_width 5
+            if axes.square_axes
+              @axes.fill_opacity 0
+              @axes.rectangle(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: axes.y_range[1]))
+            else
+              @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]))
+              @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1]))
+            end
           end
         end
         @axes.draw(@base_image)
