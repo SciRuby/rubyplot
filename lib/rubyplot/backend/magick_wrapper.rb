@@ -396,25 +396,45 @@ module Rubyplot
         @axes_map = {}
       end
 
-      def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+      def draw_x_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
         if @axes_map[active_axes.object_id].nil?
           @axes_map[@active_axes.object_id]={
             axes: @active_axes,
-            x_origin: origin
+            x_origin: origin,
+            minor_ticks: minor_ticks,
+            major_ticks: major_ticks,
+            minor_ticks_count: minor_ticks_count,
+            major_ticks_count: major_ticks_count
           }
         else
-          @axes_map[@active_axes.object_id].merge!(x_origin: origin)
+          @axes_map[@active_axes.object_id].merge!(
+            x_origin: origin,
+            minor_ticks: minor_ticks,
+            major_ticks: major_ticks,
+            minor_ticks_count: minor_ticks_count,
+            major_ticks_count: major_ticks_count
+          )
         end
       end
 
-      def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+      def draw_y_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
         if @axes_map[@active_axes.object_id].nil?
           @axes_map[@active_axes.object_id]={
             axes: @active_axes,
-            y_origin: origin
+            y_origin: origin,
+            minor_ticks: minor_ticks,
+            major_ticks: major_ticks,
+            minor_ticks_count: minor_ticks_count,
+            major_ticks_count: major_ticks_count
           }
         else
-          @axes_map[@active_axes.object_id].merge!(y_origin: origin)
+          @axes_map[@active_axes.object_id].merge!(
+            y_origin: origin,
+            minor_ticks: minor_ticks,
+            major_ticks: major_ticks,
+            minor_ticks_count: minor_ticks_count,
+            major_ticks_count: major_ticks_count
+          )
         end
       end
 
