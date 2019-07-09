@@ -602,6 +602,13 @@ module Rubyplot
         @base_image.write(@file_name)
       end
 
+      def show
+        @draw.draw(@base_image)
+        @text.draw(@base_image)
+        draw_axes
+        @base_image.display
+      end
+
       # Refresh this backend and remove all previously set data.
       def flush
         @axes_map = {}
