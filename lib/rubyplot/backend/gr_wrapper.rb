@@ -355,6 +355,12 @@ module Rubyplot
         draw
       end
 
+      def show
+        draw
+        Rubyplot::GR.updatews
+        Rubyplot::GR.clearws
+      end
+
       # Refresh this backend and remove all previously set data.
       def flush
         @axes_map = {}
