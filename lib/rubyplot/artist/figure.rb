@@ -91,16 +91,6 @@ module Rubyplot
         @subplots[nrow][ncol]
       end
 
-      def set_background_gradient
-        Rubyplot.backend.set_base_image_gradient(
-          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
-          Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
-          @width,
-          @height,
-          @theme_options[:background_direction]
-        )
-      end
-
       # Draw on a canvas and output to a file.
       #
       # @param file_name [String] File name to output to.
@@ -112,6 +102,17 @@ module Rubyplot
         @subplots.each { |i| i.each(&:process_data) }
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.write
+        Rubyplot.backend.stop_output_device
+      end
+
+      def show
+        Rubyplot.backend.canvas_height = @height
+        Rubyplot.backend.canvas_width = @width
+        Rubyplot.backend.figure = self
+        Rubyplot.backend.init_output_device(nil, device: nil)
+        @subplots.each { |i| i.each(&:process_data) }
+        @subplots.each { |i| i.each(&:draw) }
+        Rubyplot.backend.show
         Rubyplot.backend.stop_output_device
       end
 

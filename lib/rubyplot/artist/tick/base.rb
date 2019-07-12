@@ -7,6 +7,8 @@ module Rubyplot
         attr_reader :tick_opacity
         attr_reader :tick_width
         attr_reader :tick_size
+        attr_reader :coord
+        attr_reader :owner
 
 
         # @param owner [Rubyplot::Artist] Artist that owns this tick.

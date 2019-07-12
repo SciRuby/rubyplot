@@ -44,7 +44,9 @@ module Rubyplot
       attr_accessor :height
       # Font size of the Axes title in pt. scale.
       attr_accessor :title_font_size
-      
+      # Flag for square axes
+      attr_accessor :square_axes
+
       # @param figure [Rubyplot::Figure] Figure object to which this Axes belongs.
       # @param abs_x [Float] Absolute X co-ordinate of the lower left corner of the Axes.
       # @param abs_y [Flot] Absolute Y co-ordinate of the lower left corner of the Axes.
@@ -85,6 +87,7 @@ module Rubyplot
         @x_axis = Rubyplot::Artist::XAxis.new(self)
         @y_axis = Rubyplot::Artist::YAxis.new(self)
         @legend_box_position = :top
+        @square_axes = true
       end
 
       # X co-ordinate of the legend box depending on value of @legend_box_position.

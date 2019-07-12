@@ -195,7 +195,7 @@ module Rubyplot
       # @param major_ticks [[Rubyplot::Artist::XTick]] Array of XTick objects representing
       #  major ticks.
       # @param major_ticks_count [Integer] Number of major ticks to plot.
-      def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+      def draw_x_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
         @axes_map[@active_axes.object_id] = {
           axes: @active_axes,
           x_minor_ticks: minor_ticks,
@@ -206,7 +206,7 @@ module Rubyplot
       end
 
       # Draw Y axis for currently selected Axes.
-      def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+      def draw_y_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
         @axes_map[@active_axes.object_id] = {
           axes: @active_axes,
           y_minor_ticks: minor_ticks,
@@ -353,6 +353,12 @@ module Rubyplot
 
       def write
         draw
+      end
+
+      def show
+        draw
+        Rubyplot::GR.updatews
+        Rubyplot::GR.clearws
       end
 
       # Refresh this backend and remove all previously set data.

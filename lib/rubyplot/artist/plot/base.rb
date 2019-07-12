@@ -34,7 +34,7 @@ module Rubyplot
           @data[:label] = label
         end
 
-        def color= color
+        def color=(color)
           @data[:color] = color
         end
 

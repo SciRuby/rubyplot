@@ -20,10 +20,10 @@ module Rubyplot
       # @param rotation [Numeric] Angle between 0 and 360 degrees signifying rotation of text.
       # @param halign [Symbol] Horizontal alignment of the text from Artist::Text::HAlignment.
       # @param valign [Symbol] Vertical alignment of the text from Artist::Text::VAlignment
-      def draw_text(text,font_color:,font: nil,size:,
+      def draw_text(text,color:,font: nil,size:,
         font_weight: nil, halign: nil, valign: nil,
-        abs_x:, abs_y:,rotation: nil, stroke: nil)
-        raise NotImplementedError, "not implemented for #{self}."
+        abs_x:, abs_y:,rotation: nil, stroke: nil, abs: false)
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       # Draw a rectangle with optional fill.
@@ -33,8 +33,8 @@ module Rubyplot
       # @param x2 [Numeric] Upper right X co-ordinate.
       # @param x2 [Numeric] Upper right Y co-ordinate.
       def draw_rectangle(x1:,y1:,x2:,y2:, border_color: nil, fill_color: nil,
-        border_width: nil, border_type: nil)
-        raise NotImplementedError, "not implemented for #{self}."
+        border_width: nil, border_type: nil, abs: false)
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       # Draw multiple markers as specified by co-ordinates.
@@ -44,14 +44,14 @@ module Rubyplot
       # @param marker_type [Symbol] A marker type from Rubyplot::MARKERS.
       # @param marker_color [Symbol] A color from Rubyplot::Color.
       # @param marker_size [Numeric] Size of the marker.
-      def draw_markers(x:, y:, marker_type:, marker_color:, marker_size:)
-        raise NotImplementedError, "not implemented for #{self}."
+      def draw_markers(x:, y:, type:, fill_color:, border_color:, size:)
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       # Draw a circle.n
       def draw_circle(x:, y:, radius:, border_width:, border_color:, border_type:,
         fill_color:, fill_opacity:)
-        raise NotImplementedError, "not implemented for #{self}."
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       # Draw a polygon and fill it with color. Co-ordinates are specified in (x,y)
@@ -62,23 +62,27 @@ module Rubyplot
       # @param border_width [Numeric] Widht of the border.
       def draw_polygon(x:, y:, border_width:, border_type:, border_color:, fill_color:,
         fill_opacity:)
-        raise NotImplementedError, "not implemented for #{self}."
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
-      def draw_lines(x:, y:, width:, type:, color:)
-        raise NotImplementedError, "not implemented for #{self}."
+      def draw_lines(x:, y:, width:, type:, color:, opacity:)
+        raise NotImplementedError, "not implemented for #{__method__}."
+      end
+
+      def draw_arrow(x1:, y1:, x2:, y2:, size:, style:)
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       def init_output_device file_name, device: :file
-        raise NotImplementedError, "not implemented for #{self}."
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
-        raise NotImplementedError, "not implemented for #{self}."
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
 
       def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
-        raise NotImplementedError, "not implemented for #{self}."
+        raise NotImplementedError, "not implemented for #{__method__}."
       end
     end # class Base
   end # module Backend
