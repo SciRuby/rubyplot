@@ -109,7 +109,7 @@ module Rubyplot
         Rubyplot.backend.canvas_height = @height
         Rubyplot.backend.canvas_width = @width
         Rubyplot.backend.figure = self
-        Rubyplot.backend.init_output_device(nil, device: nil)
+        Rubyplot.backend.init_output_device(nil, device: :window)
         @subplots.each { |i| i.each(&:process_data) }
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.show

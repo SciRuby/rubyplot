@@ -394,6 +394,7 @@ module Rubyplot
 
       def initialize
         @axes_map = {}
+        @base_image = nil
       end
 
       def draw_x_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
@@ -436,19 +437,6 @@ module Rubyplot
             major_ticks_count: major_ticks_count
           )
         end
-      end
-
-      def init_output_device file_name, device: :file
-        top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
-        bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
-        @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
-        direction = @figure.theme_options[:background_direction]
-
-        @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
-        @draw = Magick::Draw.new
-        @axes = Magick::Draw.new
-        @text = Magick::Draw.new
-        @file_name = file_name
       end
 
       # Height in pixels of particular text.
@@ -599,14 +587,12 @@ module Rubyplot
         @draw.draw(@base_image)
         @text.draw(@base_image)
         draw_axes
-        @base_image.write(@file_name)
       end
 
       def show
         @draw.draw(@base_image)
         @text.draw(@base_image)
         draw_axes
-        @base_image.display
       end
 
       # Refresh this backend and remove all previously set data.
@@ -615,7 +601,31 @@ module Rubyplot
         @file_name = nil
       end
 
+      def init_output_device file_name = nil, device: :file
+        @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
+        @draw = Magick::Draw.new
+        @axes = Magick::Draw.new
+        @text = Magick::Draw.new
+        if @base_image.nil?
+          top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
+          bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
+          direction = @figure.theme_options[:background_direction]
+
+          @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
+        else
+          @base_image.erase!
+        end
+        @output_device = device
+        @file_name = file_name if @output_device == :file
+      end
+
       def stop_output_device
+        case @output_device
+        when :file
+          @base_image.write(@file_name)
+        when :window
+          @base_image.display
+        end
         @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
         flush
       end
