@@ -634,6 +634,15 @@ module Rubyplot
 
       # Function to convert figure size to pixels
       def scale_figure(width, height)
+        case @figure.figsize_unit
+        when :pixel
+          raise RangeError, 'Figure with a dimension greater than 11500 pixels can not be plotted' if height>11500 || width>11500
+        when :cm
+          raise RangeError, 'Figure with a dimension greater than 290 cms can not be plotted' if height>290 || width>290
+        when :inch
+          raise RangeError, 'Figure with a dimension greater than 115 inches can not be plotted' if height>115 || width>115
+        end
+
         [width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]]
       end
 
