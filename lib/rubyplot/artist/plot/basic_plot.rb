@@ -10,7 +10,49 @@ module Rubyplot
         attr_accessor :line_type
         attr_accessor :line_width
         attr_accessor :line_opacity
-        attr_accessor :fmt
+
+        COLOR_TYPES_FMT = {
+          'b' => :blue,
+          'g' => :green,
+          'r' => :red,
+          'c' => :cyan,
+          'm' => :magenta,
+          'y' => :yellow,
+          'k' => :black,
+          'w' => :white
+        }.freeze
+
+        MARKER_TYPES_FMT = {
+          '.' => :dot,
+          ',' => :omark,
+          'o' => :circle,
+          'v' => :traingle_down,
+          '^' => :traingle_up,
+          '<' => :solid_tri_left,
+          '>' => :solid_tri_right,
+          '1' => :solid_triangle_down,
+          '2' => :solid_triangle_up,
+          '3' => :solid_tri_left,
+          '4' => :solid_tri_right,
+          's' => :square,
+          'p' => :pentagon,
+          '*' => :star,
+          'h' => :hexagon,
+          'H' => :heptagon,
+          '+' => :plus,
+          'x' => :diagonal_cross,
+          'D' => :solid_diamond,
+          'd' => :diamond,
+          '|' => :vline,
+          '_' => :hline
+        }
+
+        LINE_TYPES_FMT ={
+          '--' => :dashed,
+          '-.' => :dashed_dotted,
+          '-' => :solid,
+          ':' => :dotted
+        }
 
         def initialize(*)
           super
@@ -31,12 +73,40 @@ module Rubyplot
           @line_color || @marker_fill_color || @marker_border_color || :default
         end
 
+        def fmt=(fmt)
+          unless fmt.is_a? String
+            raise TypeError, 'fmt argument takes a String input'
+          end
+
+          COLOR_TYPES_FMT.each do |symbol, color|
+            if fmt.include? symbol
+              @marker_fill_color = color
+              @marker_border_color = color
+              @line_color = color
+              break
+            end
+          end
+
+          MARKER_TYPES_FMT.each do |symbol, marker_type|
+            if fmt.include? symbol
+              @marker_type = marker_type
+              break
+            end
+          end
+
+          LINE_TYPES_FMT.each do |symbol, line_type|
+            if fmt.include? symbol
+              @line_type = line_type
+              break
+            end
+          end
+        end
+
         def draw
           # Default marker fill color
           @marker_fill_color = :default if @marker_fill_color.nil?
           # defualt type of plot is solid line
           @line_type = :solid if @line_type.nil? && @marker_type.nil?
-          # line_style = @marker.to_s.match /(.*)_line\z/
           Rubyplot::Artist::Line2D.new(
             self,
             x: @data[:x_values],
