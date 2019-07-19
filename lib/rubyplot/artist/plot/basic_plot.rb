@@ -45,14 +45,14 @@ module Rubyplot
           'd' => :diamond,
           '|' => :vline,
           '_' => :hline
-        }
+        }.freeze
 
         LINE_TYPES_FMT ={
           '--' => :dashed,
           '-.' => :dashed_dotted,
           '-' => :solid,
           ':' => :dotted
-        }
+        }.freeze
 
         def initialize(*)
           super
@@ -66,7 +66,6 @@ module Rubyplot
           @line_type = nil
           @line_width = 1.0
           @line_opacity = 1.0
-          @fmt = nil
         end
 
         def color
