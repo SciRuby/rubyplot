@@ -606,15 +606,14 @@ module Rubyplot
         @draw = Magick::Draw.new
         @axes = Magick::Draw.new
         @text = Magick::Draw.new
-        if @base_image.nil?
-          top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
-          bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
-          direction = @figure.theme_options[:background_direction]
 
-          @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
-        else
-          @base_image.erase!
-        end
+        top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
+        bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
+        direction = @figure.theme_options[:background_direction]
+
+        @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
+        # Initialize base_image again even if it exists as there may be a change in properties
+
         @output_device = device
         @file_name = file_name if @output_device == :file
       end
