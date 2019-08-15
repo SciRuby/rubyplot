@@ -5,7 +5,7 @@ module Rubyplot
       # Total height and width of the canvas in pixels.
       attr_accessor :canvas_height, :canvas_width
 
-      attr_accessor :active_axes, :figure
+      attr_accessor :active_axes, :figure, :output_device
 
       # Write text anywhere on the canvas. abs_x and abs_y should be specified in terms
       #   of Rubyplot Artist Co-ordinates.
