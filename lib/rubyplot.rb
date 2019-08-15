@@ -144,10 +144,21 @@ module Rubyplot
     :double_line_single_ended,
     :double_line_double_ended
   ].freeze
-  
-  class << self    
+
+  class << self
+
+    attr_accessor :iruby_inline
+
     def backend
       @backend
+    end
+
+    def inline
+      @iruby_inline = true
+    end
+
+    def stop_inline
+      @iruby_inline = false
     end
 
     def set_backend b
