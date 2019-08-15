@@ -620,7 +620,6 @@ module Rubyplot
 
       def stop_output_device
         @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
-        puts @output_device
         case @output_device
         when :file
           @base_image.write(@file_name)
