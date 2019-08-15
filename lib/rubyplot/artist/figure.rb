@@ -99,7 +99,8 @@ module Rubyplot
       end
 
       def show
-        print_on_device(nil, :window)
+        Rubyplot.backend.output_device = Rubyplot.iruby_inline ? :iruby : :window
+        print_on_device(nil, Rubyplot.backend.output_device)
       end
 
       private
