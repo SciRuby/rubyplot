@@ -14,6 +14,11 @@ module Rubyplot
 
       NOMINAL_FACTOR_MARKERS = 15
       NOMINAL_FACTOR_CIRCLE = 27.5
+      TICK_FONT_SIZE = 25
+      AXES_WIDTH_MULTIPLIER = 5
+      TICK_SIZE_MULTIPLIER = 15
+      TICK_LABEL_COORD_X_MULTIPLIER = 3
+      TICK_LABEL_COORD_Y_MULTIPLIER = 5.5
 
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
@@ -27,7 +32,8 @@ module Rubyplot
       PIXEL_MULTIPLIERS = {
         inch: 96,
         cm: 39.7953,
-        pixel: 1
+        pixel: 1,
+        point: 4/3
       }.freeze
 
       MARKER_TYPES = {
@@ -585,14 +591,14 @@ module Rubyplot
 
       def write
         @draw.draw(@base_image)
-        @text.draw(@base_image)
         draw_axes
+        @text.draw(@base_image)
       end
 
       def show
         @draw.draw(@base_image)
-        @text.draw(@base_image)
         draw_axes
+        @text.draw(@base_image)
       end
 
       # Refresh this backend and remove all previously set data.
@@ -704,13 +710,34 @@ module Rubyplot
           @active_axes = axes
           within_window do
             @axes.stroke Rubyplot::Color::COLOR_INDEX[:black]
-            @axes.stroke_width 5
+            @axes.stroke_width AXES_WIDTH_MULTIPLIER
+            # Drawing the X and Y axes lines
             if axes.square_axes
               @axes.fill_opacity 0
               @axes.rectangle(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: axes.y_range[1]))
             else
               @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]))
               @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1]))
+            end
+            # Drawing ticks
+            # X major ticks
+            axes.x_axis.major_ticks.each do |x_major_tick|
+              @axes.stroke_width x_major_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              @axes.opacity x_major_tick.tick_opacity
+              @axes.line(transform_x(x: x_major_tick.coord),transform_y(y: v[:y_origin]), transform_x(x: x_major_tick.coord),(transform_y(y: v[:y_origin]) + x_major_tick.tick_size*TICK_SIZE_MULTIPLIER))
+              @text.pointsize TICK_FONT_SIZE
+              # Changed X and Y coordinates of label for better appearance
+              @text.text((transform_x(x: x_major_tick.coord) - TICK_FONT_SIZE*PIXEL_MULTIPLIERS[:point]),(transform_y(y: v[:y_origin]) + TICK_LABEL_COORD_X_MULTIPLIER*TICK_SIZE_MULTIPLIER*x_major_tick.tick_size), x_major_tick.label)
+              @axes.opacity 1
+            end
+            # Y major ticks
+            axes.y_axis.major_ticks.each do |y_major_tick|
+              @axes.stroke_width y_major_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              @axes.opacity y_major_tick.tick_opacity
+              @axes.line( (transform_x(x: v[:x_origin]) - y_major_tick.tick_size*TICK_SIZE_MULTIPLIER),transform_y(y: y_major_tick.coord), transform_x(x: v[:x_origin]),transform_y(y: y_major_tick.coord))
+              @text.pointsize TICK_FONT_SIZE
+              @text.text((transform_x(x: v[:x_origin]) - TICK_LABEL_COORD_Y_MULTIPLIER*TICK_SIZE_MULTIPLIER*y_major_tick.tick_size),(transform_y(y: y_major_tick.coord) + TICK_FONT_SIZE/3*PIXEL_MULTIPLIERS[:point]), y_major_tick.label)
+              @axes.opacity 1
             end
           end
         end
