@@ -8,9 +8,13 @@ module Rubyplot
         attr_accessor :bins
         # Width of each bar.
         attr_accessor :bar_width
-        
+
         def initialize(*)
-          super 
+          super
+        end
+
+        def data x_values
+          @x = x_values
         end
 
         def process_data
