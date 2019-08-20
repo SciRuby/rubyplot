@@ -16,8 +16,7 @@ module Rubyplot
           @line_color = :black
         end
 
-        def data(y_values, x_values=[])
-          x_values = Array.new(y_values.size) { |i| i } if x_values.empty?
+        def data(x_values, y_values)
           super x_values, y_values
         end
 
