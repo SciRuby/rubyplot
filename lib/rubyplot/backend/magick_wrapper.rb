@@ -14,11 +14,12 @@ module Rubyplot
 
       NOMINAL_FACTOR_MARKERS = 15
       NOMINAL_FACTOR_CIRCLE = 27.5
-      TICK_FONT_SIZE = 25
+      TICK_FONT_SIZE = 33.5
       AXES_WIDTH_MULTIPLIER = 5
       TICK_SIZE_MULTIPLIER = 20
-      TICK_LABEL_COORD_X_MULTIPLIER = 3
-      TICK_LABEL_COORD_Y_MULTIPLIER = 5.5
+      TICK_LABEL_COORD_X_MULTIPLIER = 3.5
+      TICK_LABEL_COORD_Y_MULTIPLIER = 5.25
+      TICK_LABEL_FONT_WEIGHT = 800
 
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
@@ -726,8 +727,10 @@ module Rubyplot
               # @axes.opacity x_major_tick.tick_opacity
               @axes.line(transform_x(x: x_major_tick.coord),transform_y(y: v[:y_origin]), transform_x(x: x_major_tick.coord),(transform_y(y: v[:y_origin]) + x_major_tick.tick_size*TICK_SIZE_MULTIPLIER))
               @text.pointsize TICK_FONT_SIZE
+              @text.font_weight TICK_LABEL_FONT_WEIGHT
               # Changed X and Y coordinates of label for better appearance
               @text.text((transform_x(x: x_major_tick.coord) - TICK_FONT_SIZE*PIXEL_MULTIPLIERS[:point]),(transform_y(y: v[:y_origin]) + TICK_LABEL_COORD_X_MULTIPLIER*TICK_SIZE_MULTIPLIER*x_major_tick.tick_size), x_major_tick.label)
+              @text.font_weight NormalWeight
               # @axes.opacity 1
             end
             # X minor ticks
@@ -743,8 +746,10 @@ module Rubyplot
               # @axes.opacity y_major_tick.tick_opacity
               @axes.line((transform_x(x: v[:x_origin]) - y_major_tick.tick_size*TICK_SIZE_MULTIPLIER),transform_y(y: y_major_tick.coord), transform_x(x: v[:x_origin]),transform_y(y: y_major_tick.coord))
               @text.pointsize TICK_FONT_SIZE
+              @text.font_weight TICK_LABEL_FONT_WEIGHT
               # Changed X and Y coordinates of label for better appearance
               @text.text((transform_x(x: v[:x_origin]) - TICK_LABEL_COORD_Y_MULTIPLIER*TICK_SIZE_MULTIPLIER*y_major_tick.tick_size),(transform_y(y: y_major_tick.coord) + TICK_FONT_SIZE/3*PIXEL_MULTIPLIERS[:point]), y_major_tick.label)
+              @text.font_weight NormalWeight
               # @axes.opacity 1
             end
             # Y minor ticks
