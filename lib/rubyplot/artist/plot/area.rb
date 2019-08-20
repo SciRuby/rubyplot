@@ -6,12 +6,16 @@ module Rubyplot
 
         def initialize(*)
           super
-          @sort_data = false
+          @sort_data = true
+          @fill_opacity = 0.3
         end
 
-        def data y_values, x_values=[]
-          x_values = Array.new(y_values.size) { |i| i } if x_values.empty?
-          y_values.sort! if @sort_data
+        def stacked(bool)
+          @fill_opacity = 1 if bool
+        end
+
+        def data x_values, y_values
+          x_values, y_values = x_values.zip(y_values).sort.transpose if @sort_data
           super(x_values, y_values)
         end
 
@@ -22,7 +26,7 @@ module Rubyplot
             x: x_poly_points,
             y: y_poly_points,
             color: @data[:color],
-            fill_opacity: 0.3
+            fill_opacity: @fill_opacity
           ).draw
         end
       end # class Area
