@@ -351,16 +351,22 @@ module Rubyplot
       LINE_TYPES = {
         # Default type is solid
         default: ->(draw, x1, y1, x2, y2, width, color, opacity) {
-          draw.fill_opacity opacity
+          draw.stroke_opacity opacity
+          draw.opacity opacity
           draw.stroke_width width
           draw.fill Rubyplot::Color::COLOR_INDEX[color]
           draw.line x1, y1, x2, y2
+          draw.stroke_opacity 1
+          draw.opacity 1
         },
         solid: ->(draw, x1, y1, x2, y2, width, color, opacity) {
-          draw.fill_opacity opacity
+          draw.stroke_opacity opacity
+          draw.opacity opacity
           draw.stroke_width width
           draw.fill Rubyplot::Color::COLOR_INDEX[color]
           draw.line x1, y1, x2, y2
+          draw.stroke_opacity 1
+          draw.opacity 1
         },
         dashed: ->(draw, x1, y1, x2, y2, width, color, opacity) {
           raise NotImplementedError, 'This line has not yet been implemented'
