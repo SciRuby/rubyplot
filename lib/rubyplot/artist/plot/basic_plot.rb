@@ -9,7 +9,6 @@ module Rubyplot
         attr_accessor :line_color
         attr_accessor :line_type
         attr_accessor :line_width
-        attr_accessor :line_opacity
 
         COLOR_TYPES_FMT = {
           'b' => :blue,
@@ -65,7 +64,6 @@ module Rubyplot
           @line_color = :default
           @line_type = nil
           @line_width = 1.0
-          @line_opacity = 1.0
         end
 
         def color
@@ -111,9 +109,7 @@ module Rubyplot
             x: @data[:x_values],
             y: @data[:y_values],
             type: @line_type,
-            # type: line_style[1].to_sym,
             color: @line_color,
-            opacity: @line_opacity,
             width: @line_width
           ).draw if @line_type
           Rubyplot.backend.draw_markers(
