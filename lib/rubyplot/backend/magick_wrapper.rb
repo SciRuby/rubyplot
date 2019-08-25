@@ -34,7 +34,7 @@ module Rubyplot
         inch: 96,
         cm: 39.7953,
         pixel: 1,
-        point: 4/3
+        point: 4/3 # Point is the unit if measurement for the size of font in ImageMagick
       }.freeze
 
       MARKER_TYPES = {
