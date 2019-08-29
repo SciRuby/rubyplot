@@ -68,6 +68,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.marker = :solid_line
         d = (0..360).step(30).to_a
         p.data d, d.map { |a| Math.sin(a) }
+        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
       end
       axes.title = "Simple sine wave plot."
     end
@@ -93,6 +94,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.marker = :dashed_dotted_line
         d = (0..360).step(30).to_a
         p.data d, d.map { |a| Math.sin(a) }
+        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
         p.color = :green
       end
     end
@@ -107,6 +109,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.marker = :plus
         d = (0..360).step(30).to_a
         p.data d, d.map { |a| Math.cos(a) }
+        p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
         p.color = :green
       end
     end

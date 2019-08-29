@@ -256,6 +256,27 @@ module Rubyplot
             )
           end
         end
+
+        @x_axis.minor_ticks = []
+        @x_axis.major_ticks.each_with_index do |major_tick, i|
+          minor_tick_value_distance = value_distance / (@x_axis.minor_ticks_count.to_f + 1)
+          if i < (@x_axis.major_ticks_count-1) # Skip the last tick
+            for j in 1..@x_axis.minor_ticks_count do
+              @x_axis.minor_ticks.push(major_tick.coord + j * minor_tick_value_distance)
+            end
+          end
+        end
+
+        unless @x_axis.minor_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
+          @x_axis.minor_ticks.map!.with_index do |coord, i|
+            Rubyplot::Artist::XTick.new(
+              self,
+              coord: coord,
+              label: nil,
+              tick_size: @x_axis.major_ticks[0].tick_size/2
+            )
+          end
+        end
       end
 
       def assign_y_ticks
@@ -270,6 +291,27 @@ module Rubyplot
               self,
               coord: @y_axis.min_val + i * value_distance,
               label: Rubyplot::Utils.format_label(tick_label)
+            )
+          end
+        end
+
+        @y_axis.minor_ticks = []
+        @y_axis.major_ticks.each_with_index do |major_tick, i|
+          minor_tick_value_distance = value_distance / (@y_axis.minor_ticks_count.to_f + 1)
+          if i < (@y_axis.major_ticks_count-1) # Skip the last tick
+            for j in 1..@y_axis.minor_ticks_count do # Skip the 0th index as major tick is already present
+              @y_axis.minor_ticks.push(major_tick.coord + j * minor_tick_value_distance)
+            end
+          end
+        end
+
+        unless @y_axis.minor_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
+          @y_axis.minor_ticks.map!.with_index do |coord, i|
+            Rubyplot::Artist::XTick.new(
+              self,
+              coord: coord,
+              label: nil,
+              tick_size: @y_axis.major_ticks[0].tick_size/2
             )
           end
         end

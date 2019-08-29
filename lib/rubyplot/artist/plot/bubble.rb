@@ -5,10 +5,14 @@ module Rubyplot
         # Width in pixels of the border of each bubble.
         attr_reader :border_width
         attr_reader :z_max, :z_min
+        # Opacity of the circles
+        attr_accessor :fill_opacity
+
         def initialize(*)
           super
           @bubbles = []
           @border_width = 1.0
+          @fill_opacity = 0.5
         end
 
         def data x_values, y_values, z_values
@@ -23,9 +27,9 @@ module Rubyplot
               x: @data[:x_values][idx],
               y: @data[:y_values][idx],
               radius: @data[:z_values][idx],
-              fill_opacity: 0.5,
+              fill_opacity: @fill_opacity,
               color: @data[:color],
-              border_width: 1,
+              border_width: @border_width,
               abs: false
             ).draw
           end

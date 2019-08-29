@@ -6,8 +6,11 @@ module Rubyplot
         attr_writer :line_type
         # The number of times that you want the width to be of the graphic device. Default 1.0.
         attr_writer :line_width
-        # Color of the line. Default black.
-        attr_writer :line_color
+
+        def line_color=(color)
+          @line_color = color
+          @data[:color] = color
+        end
 
         def initialize(*)
           super
@@ -16,8 +19,7 @@ module Rubyplot
           @line_color = :black
         end
 
-        def data(y_values, x_values=[])
-          x_values = Array.new(y_values.size) { |i| i } if x_values.empty?
+        def data(x_values, y_values)
           super x_values, y_values
         end
 
@@ -34,4 +36,3 @@ module Rubyplot
     end # module Plot
   end # module Artist
 end # module Rubyplot
-

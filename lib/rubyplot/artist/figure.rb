@@ -95,28 +95,26 @@ module Rubyplot
       #
       # @param file_name [String] File name to output to.
       def write(file_name, device: :file)
-        Rubyplot.backend.canvas_height = @height
-        Rubyplot.backend.canvas_width = @width
-        Rubyplot.backend.figure = self
-        Rubyplot.backend.init_output_device(file_name, device: :file)
-        @subplots.each { |i| i.each(&:process_data) }
-        @subplots.each { |i| i.each(&:draw) }
-        Rubyplot.backend.write
-        Rubyplot.backend.stop_output_device
+        print_on_device(file_name, device)
       end
 
       def show
+        Rubyplot.backend.output_device = Rubyplot.iruby_inline ? :iruby : :window
+        print_on_device(nil, Rubyplot.backend.output_device)
+      end
+
+      private
+
+      def print_on_device(file_name, device)
         Rubyplot.backend.canvas_height = @height
         Rubyplot.backend.canvas_width = @width
         Rubyplot.backend.figure = self
-        Rubyplot.backend.init_output_device(nil, device: nil)
+        Rubyplot.backend.init_output_device(file_name, device: device)
         @subplots.each { |i| i.each(&:process_data) }
         @subplots.each { |i| i.each(&:draw) }
         Rubyplot.backend.show
         Rubyplot.backend.stop_output_device
       end
-
-      private
 
       def set_rubyplot_artist_coords!
         @max_x = 100.0

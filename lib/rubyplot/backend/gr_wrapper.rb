@@ -337,15 +337,14 @@ module Rubyplot
         @output_device = device
         Rubyplot::GR.clearws
 
-        if @output_device == :file
-          Rubyplot::GR.beginprint(@file_name)
-        end
+        Rubyplot::GR.beginprint(@file_name) if @output_device == :file
       end
 
       def stop_output_device
-        if @output_device == :file
+        case @output_device
+        when :file
           Rubyplot::GR.endprint
-        elsif @output_device == :window
+        when :window
           Rubyplot::GR.updatews
         end
         flush
@@ -357,8 +356,6 @@ module Rubyplot
 
       def show
         draw
-        Rubyplot::GR.updatews
-        Rubyplot::GR.clearws
       end
 
       # Refresh this backend and remove all previously set data.

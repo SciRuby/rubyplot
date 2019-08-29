@@ -14,6 +14,12 @@ module Rubyplot
 
       NOMINAL_FACTOR_MARKERS = 15
       NOMINAL_FACTOR_CIRCLE = 27.5
+      TICK_FONT_SIZE = 33.5
+      AXES_WIDTH_MULTIPLIER = 5
+      TICK_SIZE_MULTIPLIER = 20
+      TICK_LABEL_COORD_X_MULTIPLIER = 3.5
+      TICK_LABEL_COORD_Y_MULTIPLIER = 5.25
+      TICK_LABEL_FONT_WEIGHT = 800
 
       GRAVITY_MEASURE = {
         nil => Magick::ForgetGravity,
@@ -27,7 +33,8 @@ module Rubyplot
       PIXEL_MULTIPLIERS = {
         inch: 96,
         cm: 39.7953,
-        pixel: 1
+        pixel: 1,
+        point: 4/3 # Point is the unit if measurement for the size of font in ImageMagick
       }.freeze
 
       MARKER_TYPES = {
@@ -344,13 +351,11 @@ module Rubyplot
       LINE_TYPES = {
         # Default type is solid
         default: ->(draw, x1, y1, x2, y2, width, color, opacity) {
-          draw.fill_opacity opacity
           draw.stroke_width width
           draw.fill Rubyplot::Color::COLOR_INDEX[color]
           draw.line x1, y1, x2, y2
         },
         solid: ->(draw, x1, y1, x2, y2, width, color, opacity) {
-          draw.fill_opacity opacity
           draw.stroke_width width
           draw.fill Rubyplot::Color::COLOR_INDEX[color]
           draw.line x1, y1, x2, y2
@@ -394,6 +399,7 @@ module Rubyplot
 
       def initialize
         @axes_map = {}
+        @base_image = nil
       end
 
       def draw_x_axis(origin:, minor_ticks:, major_ticks:, minor_ticks_count:, major_ticks_count:)
@@ -436,19 +442,6 @@ module Rubyplot
             major_ticks_count: major_ticks_count
           )
         end
-      end
-
-      def init_output_device file_name, device: :file
-        top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
-        bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
-        @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
-        direction = @figure.theme_options[:background_direction]
-
-        @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
-        @draw = Magick::Draw.new
-        @axes = Magick::Draw.new
-        @text = Magick::Draw.new
-        @file_name = file_name
       end
 
       # Height in pixels of particular text.
@@ -597,16 +590,14 @@ module Rubyplot
 
       def write
         @draw.draw(@base_image)
-        @text.draw(@base_image)
         draw_axes
-        @base_image.write(@file_name)
+        @text.draw(@base_image)
       end
 
       def show
         @draw.draw(@base_image)
-        @text.draw(@base_image)
         draw_axes
-        @base_image.display
+        @text.draw(@base_image)
       end
 
       # Refresh this backend and remove all previously set data.
@@ -615,15 +606,53 @@ module Rubyplot
         @file_name = nil
       end
 
+      def init_output_device file_name = nil, device: :file
+        @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
+        @draw = Magick::Draw.new
+        @axes = Magick::Draw.new
+        @text = Magick::Draw.new
+
+        top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
+        bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
+        direction = @figure.theme_options[:background_direction]
+
+        @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
+        # Initialize base_image again even if it exists as there may be a change in properties
+
+        @output_device = device
+        @file_name = file_name if @output_device == :file
+      end
+
       def stop_output_device
         @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
-        flush
+        case @output_device
+        when :file
+          @base_image.write(@file_name)
+          flush
+        when :window
+          flush
+          @base_image.display
+          # return nil so that image is not printed on iruby
+          nil
+        when :iruby
+          flush
+          @base_image
+        end
       end
 
       private
 
       # Function to convert figure size to pixels
       def scale_figure(width, height)
+        case @figure.figsize_unit
+        when :pixel
+          raise RangeError, 'Figure with a dimension greater than 11500 pixels can not be plotted' if height>11500 || width>11500
+        when :cm
+          raise RangeError, 'Figure with a dimension greater than 290 cms can not be plotted' if height>290 || width>290
+        when :inch
+          raise RangeError, 'Figure with a dimension greater than 115 inches can not be plotted' if height>115 || width>115
+        end
+
         [width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]]
       end
 
@@ -680,13 +709,53 @@ module Rubyplot
           @active_axes = axes
           within_window do
             @axes.stroke Rubyplot::Color::COLOR_INDEX[:black]
-            @axes.stroke_width 5
+            @axes.stroke_width AXES_WIDTH_MULTIPLIER
+            # Drawing the X and Y axes lines
             if axes.square_axes
               @axes.fill_opacity 0
               @axes.rectangle(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: axes.y_range[1]))
             else
               @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]))
               @axes.line(transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1]))
+            end
+            # Drawing ticks
+            # X major ticks
+            axes.x_axis.major_ticks.each do |x_major_tick|
+              # @axes.stroke_width x_major_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              # @axes.opacity x_major_tick.tick_opacity
+              @axes.line(transform_x(x: x_major_tick.coord),transform_y(y: v[:y_origin]), transform_x(x: x_major_tick.coord),(transform_y(y: v[:y_origin]) + x_major_tick.tick_size*TICK_SIZE_MULTIPLIER))
+              @text.pointsize TICK_FONT_SIZE
+              @text.font_weight TICK_LABEL_FONT_WEIGHT
+              # Changed X and Y coordinates of label for better appearance
+              @text.text((transform_x(x: x_major_tick.coord) - TICK_FONT_SIZE*PIXEL_MULTIPLIERS[:point]),(transform_y(y: v[:y_origin]) + TICK_LABEL_COORD_X_MULTIPLIER*TICK_SIZE_MULTIPLIER*x_major_tick.tick_size), x_major_tick.label)
+              @text.font_weight NormalWeight
+              # @axes.opacity 1
+            end
+            # X minor ticks
+            axes.x_axis.minor_ticks.each do |x_minor_tick|
+              # @axes.stroke_width x_minor_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              # @axes.opacity x_minor_tick.tick_opacity
+              @axes.line(transform_x(x: x_minor_tick.coord),transform_y(y: v[:y_origin]), transform_x(x: x_minor_tick.coord),(transform_y(y: v[:y_origin]) + x_minor_tick.tick_size*TICK_SIZE_MULTIPLIER))
+              # @axes.opacity 1
+            end
+            # Y major ticks
+            axes.y_axis.major_ticks.each do |y_major_tick|
+              # @axes.stroke_width y_major_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              # @axes.opacity y_major_tick.tick_opacity
+              @axes.line((transform_x(x: v[:x_origin]) - y_major_tick.tick_size*TICK_SIZE_MULTIPLIER),transform_y(y: y_major_tick.coord), transform_x(x: v[:x_origin]),transform_y(y: y_major_tick.coord))
+              @text.pointsize TICK_FONT_SIZE
+              @text.font_weight TICK_LABEL_FONT_WEIGHT
+              # Changed X and Y coordinates of label for better appearance
+              @text.text((transform_x(x: v[:x_origin]) - TICK_LABEL_COORD_Y_MULTIPLIER*TICK_SIZE_MULTIPLIER*y_major_tick.tick_size),(transform_y(y: y_major_tick.coord) + TICK_FONT_SIZE/3*PIXEL_MULTIPLIERS[:point]), y_major_tick.label)
+              @text.font_weight NormalWeight
+              # @axes.opacity 1
+            end
+            # Y minor ticks
+            axes.y_axis.minor_ticks.each do |y_minor_tick|
+              # @axes.stroke_width y_minor_tick.tick_width*AXES_WIDTH_MULTIPLIER
+              # @axes.opacity y_minor_tick.tick_opacity
+              @axes.line((transform_x(x: v[:x_origin]) - y_minor_tick.tick_size*TICK_SIZE_MULTIPLIER),transform_y(y: y_minor_tick.coord), transform_x(x: v[:x_origin]),transform_y(y: y_minor_tick.coord))
+              # @axes.opacity 1
             end
           end
         end
