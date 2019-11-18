@@ -38,7 +38,8 @@ module Rubyplot
           y1: @abs_y + BOTTOM_MARGIN,
           x2: @abs_x + @legend_box_size,
           y2: @abs_y + @legend_box_size + BOTTOM_MARGIN,
-          border_color: @color,
+          border_color: :black,
+          border_width: 2,
           fill_color: @color,
           abs: true
         )
