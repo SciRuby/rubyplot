@@ -17,6 +17,8 @@ export GKS_FONTPATH="/home/sameer/Downloads/gr"
 export RUBYPLOT_BACKEND="GR"
 ```
 
+A more extensive documentation can be found [here](https://github.com/SciRuby/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb).
+
 # Short term priorities
 
 Check milestones in GitHub for more information.
