@@ -623,6 +623,11 @@ module Rubyplot
         @file_name = file_name if @output_device == :file
       end
 
+      def init_image(device: :window)
+        @image = Magick::ImageList.new if @image.nil?
+        @output_device = device
+      end
+
       def stop_output_device
         @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
         case @output_device
@@ -638,6 +643,35 @@ module Rubyplot
           flush
           @base_image
         end
+      end
+
+      def imread(path,idx=nil)
+        if idx.nil?
+          @image.read(path)
+        else
+          @image[idx.to_i] = Magick::ImageList.new.read(path)
+        end
+      end
+
+      def imshow(idx=0)
+        p @output_device
+        @output_device = :window if @output_device.nil?
+        case @output_device
+        when :window
+          @image[idx.to_i].display
+          # return nil so that image is not printed on iruby
+          # nil
+        when :iruby
+          @image[idx.to_i]
+        end
+      end
+
+      def imwrite(file_name,idx=0)
+        @image[idx.to_i].write(file_name)
+      end
+
+      def imclear
+        @image = Magick::ImageList.new
       end
 
       private

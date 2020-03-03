@@ -13,6 +13,7 @@ require 'rubyplot/backend'
 require 'rubyplot/figure'
 require 'rubyplot/subplot'
 require 'rubyplot/spi'
+require 'rubyplot/image'
 
 module Rubyplot
   LINE_TYPES = [
