@@ -1,2 +1,19 @@
-# Alias meant for easy class initialization without knowing Artist details.
-Rubyplot::Image = Rubyplot::Artist::Image
+module Rubyplot
+  class Image
+    def initialize
+      @image = nil
+    end
+
+    def imread(path)
+      @image = Rubyplot::Artist::Image.new(path)
+    end
+
+    def imshow
+      @image.imshow
+    end
+
+    def imwrite(path)
+      @image.imwrite(path)
+    end
+  end # class Image
+end # module Ruyplot
