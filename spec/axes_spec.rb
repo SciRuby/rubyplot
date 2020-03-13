@@ -38,7 +38,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end
 
-  context "#multi_stacked_bar!", focus: true do
+  context "#multi_stacked_bar!" do
     it "plots multiple stacked bar graphs with default colors" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -101,67 +101,116 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#plot!" do
-    it "plots a simple scatter plot with dot marker" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+    it "plots a simple scatter plot with circle marker" do
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       axes = @figure.add_subplot! 0,0
       axes.plot! do |p|
-        p.marker = :dot
-        p.data (0..150).to_a, (-100..50).to_a
+        p.marker_type = :circle
+        p.data (0..15).to_a, (-10..5).to_a
+        p.marker_size = 1.5
       end
       axes.title = "simple plot with dots."
     end
 
     it "plots a simple line plot" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       axes = @figure.add_subplot! 0,0
-      axes.plot! do |p| 
-        p.marker = :solid_line
-        d = (0..360).step(30).to_a
-        p.data d, d.map { |a| Math.sin(a) }
+      axes.plot! do |p|
+        d = (0..360).step(5).to_a
         p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+        p.line_type = :solid
+        p.line_width = 3
+        p.label = "sine"
       end
       axes.title = "Simple sine wave plot."
     end
 
     it "plots a simple dashed line plot" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       x = (0..100).to_a
       y = (0..100).to_a
       axes = @figure.add_subplot! 0,0
-      
-      axes.plot! do |p| 
-        p.marker = :dashed_line
+      axes.plot! do |p|
+        p.line_type = :dashed
         p.data x, y
-        p.color = :orange
+        p.label = "line"
       end
     end
 
-    it "plots a simple dash dot line plot" do
-      @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot! 0,0
-
-      axes.plot! do |p| 
-        p.marker = :dashed_dotted_line
-        d = (0..360).step(30).to_a
-        p.data d, d.map { |a| Math.sin(a) }
-        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
-        p.color = :green
-      end
-    end
-
-    it "plots a simple plot with plus marker of green color" do
+    it "plots a simple plot with diamond marker of yellow color" do
       @figure = Rubyplot::Figure.new
       x = (0..100).to_a
       y = (0..100).to_a
       axes = @figure.add_subplot! 0,0
-
-      axes.plot! do |p| 
-        p.marker = :plus
-        d = (0..360).step(30).to_a
+      axes.plot! do |p|
+        p.marker_type = :diamond
+        d = (0..360).step(15).to_a
         p.data d, d.map { |a| Math.cos(a) }
         p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
-        p.color = :green
+        p.marker_fill_color = :yellow
+        p.marker_size = 1.5
       end
+    end
+
+    it "plots line plot with markers" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+      d = (0..360).step(5).to_a
+      p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+      p.marker_type = :circle
+      p.marker_fill_color = :blue
+      p.marker_size = 0.5
+      p.marker_border_color = :orangeish
+      p.line_type = :solid
+      p.line_color = :black
+      p.line_width = 2
+      p.label = "sine"
+    end
+    axes.title = "A plot function example"
+    axes.x_title = "X-axis"
+    axes.y_title = "Y-axis"
+    end
+
+    it "plots line plot using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+        d = (0..360).step(5).to_a
+        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+        p.fmt='-k'
+        p.label = "sine"
+        axes.x_title = "X-axis"
+        axes.y_title = "Y-axis"
+      end
+    end
+
+    it "plots scatter plot using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+        d = (0..360).step(10).to_a
+        p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
+        p.fmt='sg'
+        p.label = "cosine"
+      end
+      axes.x_title = "X-axis"
+      axes.y_title = "Y-axis"
+    end
+
+    it "plots line plot with markers using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+      d = (0..360).step(5).to_a
+      p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
+      p.fmt = 's-g'
+      p.line_width = 2
+      p.label = "cosine"
+    end
+    axes.title = "A plot function example"
+    axes.x_title = "X-axis"
+    axes.y_title = "Y-axis"
     end
   end
 
