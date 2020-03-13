@@ -3,7 +3,7 @@ module Rubyplot
     module Plot
       class Bubble < Artist::Plot::Base
         # Width in pixels of the border of each bubble.
-        attr_reader :border_width
+        attr_accessor :border_width
         attr_reader :z_max, :z_min
         # Opacity of the circles
         attr_accessor :fill_opacity

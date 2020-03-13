@@ -261,16 +261,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "simple bubble plot."
     end
 
-    it "plots multiple bubble plots on same axes." do 
+    it "plots multiple bubble plots on same axes." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.bubble! do |p|
         p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
+        p.fill_opacity = 1
       end
       axes.bubble! do |p|
         p.data [20, 30, -6, -3], [-1, 5, -27, -3], [10.3, 10.0, 20.0, 10.0]
         p.label = "peaches"
+        p.border_width = 3
+        p.fill_opacity = 0.2
       end
       axes.title = "simple bubble plot."
     end
