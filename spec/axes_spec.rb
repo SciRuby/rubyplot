@@ -12,6 +12,33 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#stacked_bar!" do
+    it "plots a stacked bar graph" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.stacked_bar! do |p|
+        p.data [20, 10, 5, 12, 11, 6, 10, 7]
+        p.label = "Charles"
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+    end
+
+    it "plots a stacked bar graph with thin bars" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.stacked_bar! do |p|
+        p.data [20, 10, 5, 12, 11, 6, 10, 7]
+        p.label = "Charles"
+        p.spacing_ratio = 0.5
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+    end
+  end
+
+  context "#multi_stacked_bar!", focus: true do
     it "plots multiple stacked bar graphs with default colors" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -23,7 +50,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         axes.stacked_bar! do |p|
           p.data data
           p.label = label
-        end          
+        end
       end
       axes.title = "Income."
       axes.x_title = "X title"
@@ -33,20 +60,43 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.y_ticks = ['5', '10', '15', '20', '25', '30']
     end
 
-    it "plots stacked bar in a small size" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+    it "plots stacked bar with thin bars" do
+      @figure = Rubyplot::Figure.new(height: 20, width: 20)
       axes = @figure.add_subplot! 0,0
       [
         ["Car", [25, 36, 86, 39]],
         ["Bus", [80, 54, 67, 54]],
         ["Train", [22, 29, 35, 38]]
       ].each do |label, data|
-        axes.stacked_bar! do |p| 
+        axes.stacked_bar! do |p|
           p.data data
           p.label = label
+          p.spacing_ratio = 0.6
         end
       end
       axes.title = "stacked bar."
+    end
+
+    it "plots multiple stacked bar graphs with custom colors" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      [
+        ["Charles", [20, 10, 5, 12, 11, 6, 10, 7], :silver],
+        ["Adam", [5, 10, 20, 6, 9, 12, 14, 8], :black],
+        ["Daniel", [19, 9, 6, 11, 12, 7, 15, 8], :orangeish]
+      ].each do |label, data, color|
+        axes.stacked_bar! do |p|
+          p.data data
+          p.label = label
+          p.color = color
+        end
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+      axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
+                      'August', 'September', 'October', 'November', 'December']
+      axes.y_ticks = ['5', '10', '15', '20', '25', '30']
     end
   end
 
@@ -54,7 +104,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "plots a simple scatter plot with dot marker" do
       @figure = Rubyplot::Figure.new(height: 400, width: 400)
       axes = @figure.add_subplot! 0,0
-      axes.plot! do |p| 
+      axes.plot! do |p|
         p.marker = :dot
         p.data (0..150).to_a, (-100..50).to_a
       end
