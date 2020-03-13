@@ -15,5 +15,9 @@ module Rubyplot
     def imwrite(path)
       @image.imwrite(path)
     end
+
+    def imclear
+      @image = nil
+    end
   end # class Image
 end # module Ruyplot
