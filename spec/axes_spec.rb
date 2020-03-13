@@ -474,7 +474,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "adds a simple bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.bar! do |p| 
+      axes.bar! do |p|
         p.data [5,12,9,6,7]
         p.label = "data"
         p.color = :yellow
@@ -534,10 +534,10 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
 
     it "adds multiple bar plots for wide graph" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 800)
+      @figure = Rubyplot::Figure.new(height: 40, width: 80)
       axes = @figure.add_subplot! 0,0
       @planet_data.each do |name, nums|
-        axes.bar! do |p| 
+        axes.bar! do |p|
           p.data nums
           p.label = name
         end
@@ -615,7 +615,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @x1 = [1, 2, 3, 4, 5]
       @y1 = [11, 2, 33, 4, 65]
     end
-    
+
     it "adds a simple scatter plot." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -626,6 +626,53 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.marker_type = :circle
       end
       axes.title = "Nice plot"
+      axes.x_title = "X data"
+      axes.y_title = "Y data"
+    end
+
+    it "adds a simple scatter plot with diamond marker" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.scatter! do |p|
+        p.data @x1, @y1
+        p.label = "data1"
+        p.marker_size = 3
+        p.marker_fill_color = :electric_lime
+        p.marker_border_color = :black
+        p.marker_type = :diamond
+      end
+      axes.title = "Nice plot"
+      axes.x_title = "X data"
+      axes.y_title = "Y data"
+    end
+
+    it "adds multiple scatter plots on same axes" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.scatter! do |p|
+        p.data [2,4,3], [6,2,10]
+        p.label = "data1"
+        p.marker_size = 3
+        p.marker_fill_color = :blue
+        p.marker_border_color = :yellow
+        p.marker_type = :solid_plus
+      end
+      axes.scatter! do |p|
+        p.data [5,7,2,5], [12,4,7,9]
+        p.label = "data2"
+        p.marker_size = 2
+        p.marker_fill_color = :yellow
+        p.marker_border_color = :black
+        p.marker_type = :bowtie
+      end
+      axes.scatter! do |p|
+        p.data [7,3], [9, 4]
+        p.label = "data3"
+        p.marker_size = 4
+        p.marker_fill_color = :red
+        p.marker_type = :diagonal_cross
+      end
+      axes.title = "multiple scatter plots"
       axes.x_title = "X data"
       axes.y_title = "Y data"
     end
