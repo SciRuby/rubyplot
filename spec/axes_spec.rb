@@ -483,6 +483,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "Random bar numbers"
     end
 
+    it "adds a simple bar plot with thin bars" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bar! do |p|
+        p.data [14, 3, 7, 11, 25, 0, 20, 19]
+        p.label = "data"
+        p.color = :red
+        p.spacing_ratio = 0.5
+      end
+      axes.x_ticks = ["five", "twelve", "nine", "six", "seven"]
+      axes.title = "Random bar numbers"
+    end
+
     it "adds bar plot with title margin" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
