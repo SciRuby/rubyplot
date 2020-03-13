@@ -284,8 +284,20 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.area! do |p|
-        p.data [25, 36, 86, 39, 25, 31, 79, 88]
+        p.data (0...8).to_a, [25, 36, 86, 39, 25, 31, 79, 88]
         p.label = "Jimmy"
+      end
+      axes.title = "Visual simple area graph test."
+      axes.x_ticks = ['0', '22', '44', '66', '88']
+    end
+
+    it "plots a single simple Area graph with opaicty 1" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.area! do |p|
+        p.data (0...8).to_a, [20, 24, 36, 39, 18, 60, 79, 45]
+        p.label = "Marvin"
+        p.fill_opacity = 1
       end
       axes.title = "Visual simple area graph test."
       axes.x_ticks = ['0', '22', '44', '66', '88']
@@ -295,21 +307,41 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       [
-        ["Jimmy", [25, 36, 86, 39, 25, 31, 79, 88]],
-        ["Charles", [80, 54, 67, 54, 68, 70, 90, 95]],
-        ["Julie", [22, 29, 35, 38, 36, 40, 46, 57]],
-        ["Jane", [3, 95, 95, 90, 85, 80, 88, 100]]
-      ].each do |n, data|
+        ["Jimmy", (0...8).to_a, [28, 36, 86, 39, 40, 45, 79, 88], 0.3],
+        ["Charles", (0...8).to_a, [80, 54, 67, 54, 68, 70, 90, 95], 0.3],
+        ["Julie", (0...8).to_a, [22, 29, 35, 38, 36, 40, 46, 57], 1]
+      ].each do |n, datax, datay, op|
         axes.area! do |p|
-          p.data data
+          p.data datax, datay
           p.label = n
+          p.fill_opacity = op
         end
       end
       axes.title = "Multiple area plots on same axes."
       axes.x_ticks = ['0', '2', '4', '6']
     end
+
+    it "plots multiple stacked area plots on the same Axes" do
+      @figure = Rubyplot::Figure.new(width: 20, height: 20)
+      axes = @figure.add_subplot! 0,0
+      axes.area! do |p|
+        p.data [1, 2, 3, 4, 5, 6], [3, 2, 5, 5, 7, 4]
+        p.color = :black
+        p.label = "Stock A"
+        p.stacked true
+      end
+      axes.area! do |p|
+        p.data [1, 2, 3, 4, 5, 6], [2, 1, 3, 3, 6, 1]
+        p.color = :yellow
+        p.label = "Stock B"
+        p.stacked true
+      end
+      axes.title = "An area plot"
+      axes.x_title = "Time"
+      axes.y_title = "Value"
+    end
   end
-  
+
   context "#line!" do
     it "makes a simple line plot" do
       @figure = Rubyplot::Figure.new

@@ -2,7 +2,7 @@ module Rubyplot
   module Artist
     module Plot
       class Area < Artist::Plot::Base
-        attr_accessor :sort_data
+        attr_accessor :sort_data, :fill_opacity
 
         def initialize(*)
           super
