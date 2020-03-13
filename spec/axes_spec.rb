@@ -349,7 +349,21 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.line! do |p|
         p.data [2, 4, 7, 9], [1,2,3,4]
         p.label = "Marco"
-        p.color = :blue
+        p.line_width = 3
+        p.line_color = :yellow
+      end
+      axes.title = "A line graph."
+    end
+
+    it "makes a simple line plot with dashed_dotted line type" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.line! do |p|
+        p.data [2, 4, 7, 9], [1,2,3,4]
+        p.label = "Marco"
+        p.line_type = :dashed_dotted
+        p.line_width = 3
+        p.line_color = :red
       end
       axes.title = "A line graph."
     end
@@ -358,12 +372,12 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.line! do |p|
-        p.data [3, 5, 10, 15]
+        p.data (0...4).to_a, [3, 5, 10, 15]
         p.label = "Marco"
         p.color = :blue
       end
       axes.line! do |p|
-        p.data [1, 9, 13, 28]
+        p.data (0...4).to_a, [1, 9, 13, 28]
         p.label = "John"
         p.color = :green
       end
@@ -371,12 +385,12 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
 
     it "tests very small plot" do
-      @figure = Rubyplot::Figure.new
+      @figure = Rubyplot::Figure.new(height: 200, width: 200, figsize_unit: :pixel)
       axes = @figure.add_subplot! 0,0
       axes.title = "very small line chart 200px"
       @planet_data.each do |name, d|
         axes.line! do |p|
-          p.data d
+          p.data (0...d.size).to_a, d
           p.label = name
         end
       end
@@ -387,7 +401,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "hand value graph test"
       axes.line! do |p|
-        p.data [0,0,100]
+        p.data (0...3).to_a, [0,0,100]
+        p.line_width = 10
         p.label = "test"
       end
     end
@@ -397,11 +412,11 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "small values"
       [
-        [[0.1, 0.14356, 0.0, 0.5674839, 0.456], "small"],
+        [[0.1, 0.14356, 0.0, 0.5674839, 0.456], "small1"],
         [[0.2, 0.3, 0.1, 0.05, 0.9], "small2"]
       ].each do |d, label|
         axes.line! do |p|
-          p.data d
+          p.data (0...d.size).to_a, d
           p.label = label
         end
       end
@@ -416,7 +431,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         [[1, 2, 3, 4, 5], "normal"]
       ].each do |data, name|
         axes.line! do |p|
-          p.data data
+          p.data (0...data.size).to_a, data
           p.label = name
         end
       end
@@ -434,7 +449,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       ].each do |name, data|
         axes.line! do |p|
           p.line_width = 3
-          p.data data
+          p.data (0...data.size).to_a, data
           p.label = name
         end
       end

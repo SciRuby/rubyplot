@@ -12,7 +12,6 @@ module Rubyplot
 
       def imwrite(path)
         Rubyplot.backend.imwrite(@image, path)
-
       end
     end # class Image
   end # module Artist
