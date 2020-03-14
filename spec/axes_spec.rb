@@ -702,18 +702,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "adds a single histogram with default bins" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.histogram! do |p| 
+      axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
       end
     end
 
     it "adds a single histogram with custom bins" do
-      skip "GR does not currently support custom tick marks."
+      # skip "GR does not currently support custom tick marks."
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = [1, 4, 7, 10]
+        p.color = :red
       end
     end
 
@@ -723,6 +724,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = 5
+        p.color = :silver
       end
     end
   end
