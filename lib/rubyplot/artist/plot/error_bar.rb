@@ -2,17 +2,21 @@ module Rubyplot
   module Artist
     module Plot
       class ErrorBar < Artist::Plot::Base
-        attr_accessor :xerr
-        attr_accessor :yerr, :xuplims, :xlolims, :yuplims, :ylolims
-        
+        attr_accessor :xerr, :yerr, :xuplims, :xlolims, :yuplims, :ylolims, :line_width, :xerr_width, :yerr_width, :xerr_color, :yerr_color
+
         def initialize(*)
           super
+          @line_width = 1.0
+          @xerr_width = 1.0
+          @yerr_width = 1.0
+          @xerr_color = nil
+          @yerr_color = nil
         end
 
         def process_data
           super
           preprocess_err_values!
-          
+
           check_lims_sizes
           check_err_sizes
 
@@ -21,7 +25,8 @@ module Rubyplot
             self,
             x: @data[:x_values],
             y: @data[:y_values],
-            color: @data[:color]
+            color: @data[:color],
+            width: @line_width
           )
           generate_yerr if @yerr
           generate_xerr if @xerr
@@ -40,7 +45,7 @@ module Rubyplot
             @axes.x_axis.max_val = @data[:x_values].max + @xerr.max
             @axes.x_axis.min_val = @data[:x_values].min - @xerr.min
           end
-          
+
           if @yerr
             @axes.y_axis.max_val = @data[:y_values].max + @yerr.max
             @axes.y_axis.min_val = @data[:y_values].min - @yerr.min
@@ -71,7 +76,8 @@ module Rubyplot
                 self,
                 x: [xcoord - xe, xcoord + xe],
                 y: [ycoord, ycoord],
-                color: @data[:color]
+                color: @xerr_color.nil? ? @data[:color] : @xerr_color,
+                width: @xerr_width
               )
             else
               arrows = []
@@ -89,7 +95,7 @@ module Rubyplot
                   x1: xcoord,
                   y1: ycoord,
                   x2: xcoord - xe,
-                  y2: ycoord                  
+                  y2: ycoord
                 )
               end
               arrows
@@ -108,7 +114,8 @@ module Rubyplot
                 self,
                 x: [xcoord, xcoord],
                 y: [ycoord - ye, ycoord + ye],
-                color: @data[:color]
+                color: @yerr_color.nil? ? @data[:color] : @yerr_color,
+                width: @yerr_width
               )
             else
               arrows = []
@@ -126,7 +133,7 @@ module Rubyplot
                   x1: xcoord,
                   y1: ycoord,
                   x2: xcoord,
-                  y2: ycoord - ye               
+                  y2: ycoord - ye
                 )
               end
               arrows
@@ -136,7 +143,7 @@ module Rubyplot
         end
 
         def check_lims_sizes
-          
+
         end
 
         def check_err_sizes

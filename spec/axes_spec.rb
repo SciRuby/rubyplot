@@ -780,7 +780,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @x = [1,2,3,4,5,6]
       @y = [3,4,5,6,7,8]
     end
-    
+
     it "adds a simple xerr to error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -798,7 +798,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.error_bar! do |p|
         p.data @x, @y
         p.xerr = [0.1,0.3,0.5,0.1,0.2,0.4]
-      end      
+        p.color = :red
+      end
     end
 
     it "adds a simple yerr to the error bar plot" do
@@ -818,7 +819,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.error_bar! do |p|
         p.data @x, @y
         p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
-      end      
+        p.color = :green
+      end
     end
 
     it "adds an asymmetric collection of yerr to the error bar plot" do
@@ -850,7 +852,24 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do 
+    it "adds both xerr and yerr to the error bar plot with colour and width" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr and yerr."
+      axes.error_bar! do |p|
+        p.data [1,2,3,4], [1,4,9,16]
+        p.xerr = [0.5,1.0,1.5,0.3]
+        p.yerr = [0.6,0.2,0.8,0.1]
+        p.line_width = 5
+        p.xerr_width = 2
+        p.yerr_width = 2
+        p.xerr_color = :blue
+        p.yerr_color = :red
+        p.color = :yellow
+      end
+    end
+
+    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Error bar plot with lots of options"
