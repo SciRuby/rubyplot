@@ -739,6 +739,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.highs = [140, 150, 160, 170, 160, 150]
         p.opens = [110, 120, 130, 140, 130, 120]
         p.closes = [130, 140, 150, 160, 150, 140]
+        p.color = :yellow
+        p.border_color = :white
       end
       axes.title = "Simple candle stick plot."
     end
