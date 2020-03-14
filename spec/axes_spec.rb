@@ -901,6 +901,26 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.y_title = "bar"
     end
 
+    it "adds a simple box plot with outliers" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "A simple box plot."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]
+        ]
+        p.whiskers = 0.1
+        p.outlier_marker_type = :diamond
+        p.outlier_marker_size = 3.0
+        p.outlier_marker_color = :red
+        p.median_width = 4.0
+      end
+      axes.x_title = "foo"
+      axes.y_title = "bar"
+    end
+
     it "adds a simple horizontal box plot" do
       skip "Leave for after initial box plot setup is complete."
     end
@@ -913,7 +933,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.data [
           [-48, 2,60,70,80,70,50],
           [4,100,40,20,80,70],
-          [1,30, 10]          
+          [1,30, 10]
         ]
       end
       axes.box_plot! do |p|
@@ -935,7 +955,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.data [
           [-48,60,70,80,70,50],
           [4,100,40,20,80,70],
-          [1,30, 10]          
+          [1,30, 10]
         ]
         p.whiskers = 0.3
       end
@@ -954,25 +974,25 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
   context "#top_margin=" do
     it "sets the top margin in pixels" do
-      
+
     end
   end
 
   context "#left_margin=" do
     it "sets the left margin in pixels" do
-      
+
     end
   end
 
   context "#bottom_margin=" do
     it "sets the bottom margin in pixels" do
-      
+
     end
   end
 
   context "#right_margin=" do
     it "sets the right margin in pixels" do
-      
+
     end
   end
 
@@ -988,4 +1008,3 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end # context "#x_ticks="
 end # Rubyplot::Axes
-

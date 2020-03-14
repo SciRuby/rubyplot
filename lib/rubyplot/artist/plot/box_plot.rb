@@ -14,15 +14,17 @@ module Rubyplot
         attr_accessor :outlier_marker_type
         attr_accessor :outlier_marker_color
         attr_accessor :outlier_marker_size
-        
+        attr_accessor :median_width
+
         def initialize(*)
           super
           @whiskers = 1.5
           @x_left_box = []
-          @median_color = :yellow
+          @median_color = :black
           @outlier_marker_type = :plus
           @outlier_marker_color = nil
           @outlier_marker_size = 1.0
+          @median_width = 3.0
         end
 
         def process_data
@@ -45,7 +47,7 @@ module Rubyplot
             draw_box x_left, i
             draw_whiskers x_left, i
             draw_outliers x_left, i
-            draw_median x_left, i    
+            draw_median x_left, i
           end
         end
 
@@ -111,7 +113,7 @@ module Rubyplot
 
         def first_max_outlier_index vector, max
           return nil if vector.last >= max
-          vector.size.times do |i| 
+          vector.size.times do |i|
             if vector[i] > max
               return i
             end
@@ -131,7 +133,8 @@ module Rubyplot
           Rubyplot::Artist::Line2D.new(self,
             x: [x_left, x_left + @box_width],
             y: [@medians[index], @medians[index]],
-            color: @median_color
+            color: @median_color,
+            width: @median_width
           ).draw
         end
 
@@ -141,7 +144,7 @@ module Rubyplot
           @medians = []
           @mins = []
           @maxs = []
-          
+
           @vectors.each do |sorted_vec|
             m = get_percentile 50, sorted_vec
             q1 = get_percentile 25, sorted_vec
