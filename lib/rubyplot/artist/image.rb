@@ -27,7 +27,6 @@ module Rubyplot
       end
 
       def export_pixels(x, y, columns, rows, map)
-        # TODO: set offset
         @pixel_array = []
         map.size.times do
           @pixel_array.push([])
@@ -35,7 +34,7 @@ module Rubyplot
         flat_pix_array = Rubyplot.backend.export_pixels(@image, x, y, columns, rows, map)
         map.size.times do |channel|
           rows.times do |row|
-            @pixel_array[channel].push(flat_pix_array[channel*@rows*@columns+@columns*row,@columns])
+            @pixel_array[channel].push(flat_pix_array[(channel*rows*columns)+(columns*row),columns])
           end
         end
         @pixel_array.flatten!(1) if map.size==1
@@ -43,7 +42,7 @@ module Rubyplot
       end
 
       def import_pixels(x, y, columns, rows, map, pixels)
-        Rubyplot.backend.import_pixels(@image, x, y, columns, rows, map, pixels.flatten)
+        Rubyplot.backend.import_pixels(@image, x, y, columns, rows, map, pixels.to_a.flatten)
       end
     end # class Image
   end # module Artist
