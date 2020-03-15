@@ -16,8 +16,8 @@ module Rubyplot
         end
 
         def data x_values, y_values, z_values
-          super(x_values, y_values)
-          @data[:z_values] = z_values
+          super(x_values.to_a, y_values.to_a)
+          @data[:z_values] = z_values.to_a
         end
 
         def draw

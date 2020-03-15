@@ -3,7 +3,7 @@ module Rubyplot
     module Plot
       class Histogram < Artist::Plot::Base
         # Values that need to be shown as a histogram.
-        attr_accessor :x
+        attr_reader :x
         # Array of bins into which the data should be subdivided.
         attr_accessor :bins
         # Width of each bar.
@@ -13,8 +13,12 @@ module Rubyplot
           super
         end
 
+        def x=(xvals)
+          @x = xvals.to_a
+        end
+
         def data x_values
-          @x = x_values
+          @x = x_values.to_a
         end
 
         def process_data

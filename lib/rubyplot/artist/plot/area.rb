@@ -15,7 +15,7 @@ module Rubyplot
         end
 
         def data x_values, y_values
-          x_values, y_values = x_values.zip(y_values).sort.transpose if @sort_data
+          x_values, y_values = x_values.to_a.zip(y_values.to_a).sort.transpose if @sort_data
           super(x_values, y_values)
         end
 

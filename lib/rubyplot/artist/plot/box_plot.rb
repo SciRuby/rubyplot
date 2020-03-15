@@ -39,7 +39,13 @@ module Rubyplot
         end
 
         def data vectors
-          @vectors = vectors
+          # @vectors = vectors.to_a unless vectors.is_a? Array
+          if vectors.is_a? Array
+            vectors.each_with_index { |_, idx| vectors[idx] = vectors[idx].to_a}
+            @vectors = vectors
+          else
+            @vectors = vectors.to_a
+          end
         end
 
         def draw

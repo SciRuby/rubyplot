@@ -2,7 +2,8 @@ module Rubyplot
   module Artist
     module Plot
       class ErrorBar < Artist::Plot::Base
-        attr_accessor :xerr, :yerr, :xuplims, :xlolims, :yuplims, :ylolims, :line_width, :xerr_width, :yerr_width, :xerr_color, :yerr_color
+        attr_accessor :xuplims, :xlolims, :yuplims, :ylolims, :line_width, :xerr_width, :yerr_width, :xerr_color, :yerr_color
+        attr_reader :xerr, :yerr
 
         def initialize(*)
           super
@@ -11,6 +12,22 @@ module Rubyplot
           @yerr_width = 1.0
           @xerr_color = nil
           @yerr_color = nil
+        end
+
+        def xerr=(xerror)
+          if (xerror.is_a?(Float) || xerror.is_a?(Integer))
+            @xerr = xerror
+          else
+            @xerr = xerror.to_a
+          end
+        end
+
+        def yerr=(yerror)
+          if (yerror.is_a?(Float) || yerror.is_a?(Integer))
+            @yerr = yerror
+          else
+            @yerr = yerror.to_a
+          end
         end
 
         def process_data
