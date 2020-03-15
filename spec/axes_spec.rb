@@ -974,30 +974,31 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
   context "#top_margin=" do
     it "sets the top margin in pixels" do
-
+      skip "do this later."
     end
   end
 
   context "#left_margin=" do
     it "sets the left margin in pixels" do
-
+      skip "do this later."
     end
   end
 
   context "#bottom_margin=" do
     it "sets the bottom margin in pixels" do
-
+      skip "do this later."
     end
   end
 
   context "#right_margin=" do
     it "sets the right margin in pixels" do
-
+      skip "do this later."
     end
   end
 
   context "#x_ticks=" do
     it "assigns strings to X ticks" do
+      skip "do this later."
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
