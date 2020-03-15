@@ -30,7 +30,7 @@ module Rubyplot
     :double_dot,
     :triple_dot,
   ].freeze
-  
+
   MARKER_TYPES = [
     :dot,
     :plus,
@@ -162,6 +162,12 @@ module Rubyplot
       @iruby_inline = false
     end
 
+    def QuantumRange
+      # Setting Backend to Magick as Image is only implemented for Magick backend
+      @backend = Rubyplot::Backend::MagickWrapper.new
+      Rubyplot.backend.QuantumRange
+    end
+
     def set_backend b
       case b
       when :magick
@@ -172,4 +178,3 @@ module Rubyplot
     end
   end
 end # module Rubyplot
-

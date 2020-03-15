@@ -42,6 +42,10 @@ module Rubyplot
       @columns = ncols
     end
 
+    def QuantumRange
+      @image.QuantumRange
+    end
+
     def pixel_array
       @image.pixel_array
     end

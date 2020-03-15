@@ -3,12 +3,14 @@ module Rubyplot
     class Image
 
       attr_accessor :rows, :columns, :pixel_array
+      attr_reader :QuantumRange
 
       def initialize(columns,rows)
         @rows = rows
         @columns = columns
         @pixel_array = []
         @image = Rubyplot.backend.init_image(columns,rows)
+        @QuantumRange = Rubyplot.backend.QuantumRange
       end
 
       def imread(path)

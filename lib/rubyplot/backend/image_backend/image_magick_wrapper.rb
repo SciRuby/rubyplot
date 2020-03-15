@@ -27,6 +27,10 @@ module Rubyplot
         img.write(file_name)
       end
 
+      def QuantumRange
+        Magick::QuantumRange
+      end
+
       def export_pixels(img, x, y, columns, rows, map)
         img.export_pixels(x, y, columns, rows, map)
       end
