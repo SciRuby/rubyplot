@@ -2,10 +2,10 @@ module Rubyplot
   module Artist
     module Plot
       class CandleStick < Artist::Plot::Base
-        attr_accessor :lows
-        attr_accessor :highs
-        attr_accessor :opens
-        attr_accessor :closes
+        attr_reader :lows
+        attr_reader :highs
+        attr_reader :opens
+        attr_reader :closes
         attr_accessor :bar_width
         attr_accessor :x_left_candle
         attr_accessor :x_low_stick
@@ -22,6 +22,22 @@ module Rubyplot
           @x_left_candle = []
           @x_low_stick = []
           @border_color = :black
+        end
+
+        def lows=(lows_arr)
+          @lows = lows_arr.to_a
+        end
+
+        def highs=(highs_arr)
+          @highs = highs_arr.to_a
+        end
+
+        def opens=(opens_arr)
+          @opens = opens_arr.to_a
+        end
+
+        def closes=(closes_arr)
+          @closes = closes_arr.to_a
         end
 
         def process_data

@@ -39,8 +39,8 @@ module Rubyplot
         end
 
         def data(x_values, y_values)
-          @data[:x_values] = x_values
-          @data[:y_values] = y_values
+          @data[:x_values] = x_values.to_a
+          @data[:y_values] = y_values.to_a
         end
 
         def process_data

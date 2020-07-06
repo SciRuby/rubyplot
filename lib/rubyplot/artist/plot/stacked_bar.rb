@@ -21,7 +21,7 @@ module Rubyplot
         end
 
         def data y_values
-          super(Array(0...(y_values.size)), y_values)
+          super(Array(0...(y_values.to_a.size)), y_values.to_a)
         end
 
         def y_values

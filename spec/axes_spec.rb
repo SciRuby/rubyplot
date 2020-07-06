@@ -12,6 +12,33 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
   end
 
   context "#stacked_bar!" do
+    it "plots a stacked bar graph" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.stacked_bar! do |p|
+        p.data [20, 10, 5, 12, 11, 6, 10, 7]
+        p.label = "Charles"
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+    end
+
+    it "plots a stacked bar graph with thin bars" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.stacked_bar! do |p|
+        p.data [20, 10, 5, 12, 11, 6, 10, 7]
+        p.label = "Charles"
+        p.spacing_ratio = 0.5
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+    end
+  end
+
+  context "#multi_stacked_bar!" do
     it "plots multiple stacked bar graphs with default colors" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -23,7 +50,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         axes.stacked_bar! do |p|
           p.data data
           p.label = label
-        end          
+        end
       end
       axes.title = "Income."
       axes.x_title = "X title"
@@ -33,85 +60,157 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.y_ticks = ['5', '10', '15', '20', '25', '30']
     end
 
-    it "plots stacked bar in a small size" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+    it "plots stacked bar with thin bars" do
+      @figure = Rubyplot::Figure.new(height: 20, width: 20)
       axes = @figure.add_subplot! 0,0
       [
         ["Car", [25, 36, 86, 39]],
         ["Bus", [80, 54, 67, 54]],
         ["Train", [22, 29, 35, 38]]
       ].each do |label, data|
-        axes.stacked_bar! do |p| 
+        axes.stacked_bar! do |p|
           p.data data
           p.label = label
+          p.spacing_ratio = 0.6
         end
       end
       axes.title = "stacked bar."
     end
+
+    it "plots multiple stacked bar graphs with custom colors" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      [
+        ["Charles", [20, 10, 5, 12, 11, 6, 10, 7], :silver],
+        ["Adam", [5, 10, 20, 6, 9, 12, 14, 8], :black],
+        ["Daniel", [19, 9, 6, 11, 12, 7, 15, 8], :orangeish]
+      ].each do |label, data, color|
+        axes.stacked_bar! do |p|
+          p.data data
+          p.label = label
+          p.color = color
+        end
+      end
+      axes.title = "Income."
+      axes.x_title = "X title"
+      axes.y_title = "Y title"
+      axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
+                      'August', 'September', 'October', 'November', 'December']
+      axes.y_ticks = ['5', '10', '15', '20', '25', '30']
+    end
   end
 
   context "#plot!" do
-    it "plots a simple scatter plot with dot marker" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+    it "plots a simple scatter plot with circle marker" do
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       axes = @figure.add_subplot! 0,0
-      axes.plot! do |p| 
-        p.marker = :dot
-        p.data (0..150).to_a, (-100..50).to_a
+      axes.plot! do |p|
+        p.marker_type = :circle
+        p.data (0..15).to_a, (-10..5).to_a
+        p.marker_size = 1.5
       end
       axes.title = "simple plot with dots."
     end
 
     it "plots a simple line plot" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       axes = @figure.add_subplot! 0,0
-      axes.plot! do |p| 
-        p.marker = :solid_line
-        d = (0..360).step(30).to_a
-        p.data d, d.map { |a| Math.sin(a) }
+      axes.plot! do |p|
+        d = (0..360).step(5).to_a
         p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+        p.line_type = :solid
+        p.line_width = 3
+        p.label = "sine"
       end
       axes.title = "Simple sine wave plot."
     end
 
     it "plots a simple dashed line plot" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 400)
+      @figure = Rubyplot::Figure.new(height: 40, width: 40)
       x = (0..100).to_a
       y = (0..100).to_a
       axes = @figure.add_subplot! 0,0
-      
-      axes.plot! do |p| 
-        p.marker = :dashed_line
+      axes.plot! do |p|
+        p.line_type = :dashed
         p.data x, y
-        p.color = :orange
+        p.label = "line"
       end
     end
 
-    it "plots a simple dash dot line plot" do
-      @figure = Rubyplot::Figure.new
-      axes = @figure.add_subplot! 0,0
-
-      axes.plot! do |p| 
-        p.marker = :dashed_dotted_line
-        d = (0..360).step(30).to_a
-        p.data d, d.map { |a| Math.sin(a) }
-        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
-        p.color = :green
-      end
-    end
-
-    it "plots a simple plot with plus marker of green color" do
+    it "plots a simple plot with diamond marker of yellow color" do
       @figure = Rubyplot::Figure.new
       x = (0..100).to_a
       y = (0..100).to_a
       axes = @figure.add_subplot! 0,0
-
-      axes.plot! do |p| 
-        p.marker = :plus
-        d = (0..360).step(30).to_a
+      axes.plot! do |p|
+        p.marker_type = :diamond
+        d = (0..360).step(15).to_a
         p.data d, d.map { |a| Math.cos(a) }
         p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
-        p.color = :green
+        p.marker_fill_color = :yellow
+        p.marker_size = 1.5
       end
+    end
+
+    it "plots line plot with markers" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+      d = (0..360).step(5).to_a
+      p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+      p.marker_type = :circle
+      p.marker_fill_color = :blue
+      p.marker_size = 0.5
+      p.marker_border_color = :orangeish
+      p.line_type = :solid
+      p.line_color = :black
+      p.line_width = 2
+      p.label = "sine"
+    end
+    axes.title = "A plot function example"
+    axes.x_title = "X-axis"
+    axes.y_title = "Y-axis"
+    end
+
+    it "plots line plot using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+        d = (0..360).step(5).to_a
+        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+        p.fmt='-k'
+        p.label = "sine"
+        axes.x_title = "X-axis"
+        axes.y_title = "Y-axis"
+      end
+    end
+
+    it "plots scatter plot using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+        d = (0..360).step(10).to_a
+        p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
+        p.fmt='sg'
+        p.label = "cosine"
+      end
+      axes.x_title = "X-axis"
+      axes.y_title = "Y-axis"
+    end
+
+    it "plots line plot with markers using fmt argument" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.plot! do |p|
+      d = (0..360).step(5).to_a
+      p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
+      p.fmt = 's-g'
+      p.line_width = 2
+      p.label = "cosine"
+    end
+    axes.title = "A plot function example"
+    axes.x_title = "X-axis"
+    axes.y_title = "Y-axis"
     end
   end
 
@@ -162,16 +261,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.title = "simple bubble plot."
     end
 
-    it "plots multiple bubble plots on same axes." do 
+    it "plots multiple bubble plots on same axes." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.bubble! do |p|
         p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
         p.label = "apples"
+        p.fill_opacity = 1
       end
       axes.bubble! do |p|
         p.data [20, 30, -6, -3], [-1, 5, -27, -3], [10.3, 10.0, 20.0, 10.0]
         p.label = "peaches"
+        p.border_width = 3
+        p.fill_opacity = 0.2
       end
       axes.title = "simple bubble plot."
     end
@@ -182,8 +284,20 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.area! do |p|
-        p.data [25, 36, 86, 39, 25, 31, 79, 88]
+        p.data (0...8).to_a, [25, 36, 86, 39, 25, 31, 79, 88]
         p.label = "Jimmy"
+      end
+      axes.title = "Visual simple area graph test."
+      axes.x_ticks = ['0', '22', '44', '66', '88']
+    end
+
+    it "plots a single simple Area graph with opaicty 1" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.area! do |p|
+        p.data (0...8).to_a, [20, 24, 36, 39, 18, 60, 79, 45]
+        p.label = "Marvin"
+        p.fill_opacity = 1
       end
       axes.title = "Visual simple area graph test."
       axes.x_ticks = ['0', '22', '44', '66', '88']
@@ -193,21 +307,41 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       [
-        ["Jimmy", [25, 36, 86, 39, 25, 31, 79, 88]],
-        ["Charles", [80, 54, 67, 54, 68, 70, 90, 95]],
-        ["Julie", [22, 29, 35, 38, 36, 40, 46, 57]],
-        ["Jane", [3, 95, 95, 90, 85, 80, 88, 100]]
-      ].each do |n, data|
+        ["Jimmy", (0...8).to_a, [28, 36, 86, 39, 40, 45, 79, 88], 0.3],
+        ["Charles", (0...8).to_a, [80, 54, 67, 54, 68, 70, 90, 95], 0.3],
+        ["Julie", (0...8).to_a, [22, 29, 35, 38, 36, 40, 46, 57], 1]
+      ].each do |n, datax, datay, op|
         axes.area! do |p|
-          p.data data
+          p.data datax, datay
           p.label = n
+          p.fill_opacity = op
         end
       end
       axes.title = "Multiple area plots on same axes."
       axes.x_ticks = ['0', '2', '4', '6']
     end
+
+    it "plots multiple stacked area plots on the same Axes" do
+      @figure = Rubyplot::Figure.new(width: 20, height: 20)
+      axes = @figure.add_subplot! 0,0
+      axes.area! do |p|
+        p.data [1, 2, 3, 4, 5, 6], [3, 2, 5, 5, 7, 4]
+        p.color = :black
+        p.label = "Stock A"
+        p.stacked true
+      end
+      axes.area! do |p|
+        p.data [1, 2, 3, 4, 5, 6], [2, 1, 3, 3, 6, 1]
+        p.color = :yellow
+        p.label = "Stock B"
+        p.stacked true
+      end
+      axes.title = "An area plot"
+      axes.x_title = "Time"
+      axes.y_title = "Value"
+    end
   end
-  
+
   context "#line!" do
     it "makes a simple line plot" do
       @figure = Rubyplot::Figure.new
@@ -215,7 +349,21 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.line! do |p|
         p.data [2, 4, 7, 9], [1,2,3,4]
         p.label = "Marco"
-        p.color = :blue
+        p.line_width = 3
+        p.line_color = :yellow
+      end
+      axes.title = "A line graph."
+    end
+
+    it "makes a simple line plot with dashed_dotted line type" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.line! do |p|
+        p.data [2, 4, 7, 9], [1,2,3,4]
+        p.label = "Marco"
+        p.line_type = :dashed_dotted
+        p.line_width = 3
+        p.line_color = :red
       end
       axes.title = "A line graph."
     end
@@ -224,12 +372,12 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.line! do |p|
-        p.data [3, 5, 10, 15]
+        p.data (0...4).to_a, [3, 5, 10, 15]
         p.label = "Marco"
         p.color = :blue
       end
       axes.line! do |p|
-        p.data [1, 9, 13, 28]
+        p.data (0...4).to_a, [1, 9, 13, 28]
         p.label = "John"
         p.color = :green
       end
@@ -237,12 +385,12 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
 
     it "tests very small plot" do
-      @figure = Rubyplot::Figure.new
+      @figure = Rubyplot::Figure.new(height: 200, width: 200, figsize_unit: :pixel)
       axes = @figure.add_subplot! 0,0
       axes.title = "very small line chart 200px"
       @planet_data.each do |name, d|
         axes.line! do |p|
-          p.data d
+          p.data (0...d.size).to_a, d
           p.label = name
         end
       end
@@ -253,7 +401,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "hand value graph test"
       axes.line! do |p|
-        p.data [0,0,100]
+        p.data (0...3).to_a, [0,0,100]
+        p.line_width = 10
         p.label = "test"
       end
     end
@@ -263,11 +412,11 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes = @figure.add_subplot! 0,0
       axes.title = "small values"
       [
-        [[0.1, 0.14356, 0.0, 0.5674839, 0.456], "small"],
+        [[0.1, 0.14356, 0.0, 0.5674839, 0.456], "small1"],
         [[0.2, 0.3, 0.1, 0.05, 0.9], "small2"]
       ].each do |d, label|
         axes.line! do |p|
-          p.data d
+          p.data (0...d.size).to_a, d
           p.label = label
         end
       end
@@ -282,7 +431,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         [[1, 2, 3, 4, 5], "normal"]
       ].each do |data, name|
         axes.line! do |p|
-          p.data data
+          p.data (0...data.size).to_a, data
           p.label = name
         end
       end
@@ -300,7 +449,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       ].each do |name, data|
         axes.line! do |p|
           p.line_width = 3
-          p.data data
+          p.data (0...data.size).to_a, data
           p.label = name
         end
       end
@@ -325,10 +474,23 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "adds a simple bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.bar! do |p| 
+      axes.bar! do |p|
         p.data [5,12,9,6,7]
         p.label = "data"
         p.color = :yellow
+      end
+      axes.x_ticks = ["five", "twelve", "nine", "six", "seven"]
+      axes.title = "Random bar numbers"
+    end
+
+    it "adds a simple bar plot with thin bars" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bar! do |p|
+        p.data [14, 3, 7, 11, 25, 0, 20, 19]
+        p.label = "data"
+        p.color = :red
+        p.spacing_ratio = 0.5
       end
       axes.x_ticks = ["five", "twelve", "nine", "six", "seven"]
       axes.title = "Random bar numbers"
@@ -372,10 +534,10 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
 
     it "adds multiple bar plots for wide graph" do
-      @figure = Rubyplot::Figure.new(height: 400, width: 800)
+      @figure = Rubyplot::Figure.new(height: 40, width: 80)
       axes = @figure.add_subplot! 0,0
       @planet_data.each do |name, nums|
-        axes.bar! do |p| 
+        axes.bar! do |p|
           p.data nums
           p.label = name
         end
@@ -453,7 +615,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @x1 = [1, 2, 3, 4, 5]
       @y1 = [11, 2, 33, 4, 65]
     end
-    
+
     it "adds a simple scatter plot." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -464,6 +626,53 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.marker_type = :circle
       end
       axes.title = "Nice plot"
+      axes.x_title = "X data"
+      axes.y_title = "Y data"
+    end
+
+    it "adds a simple scatter plot with diamond marker" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.scatter! do |p|
+        p.data @x1, @y1
+        p.label = "data1"
+        p.marker_size = 3
+        p.marker_fill_color = :electric_lime
+        p.marker_border_color = :black
+        p.marker_type = :diamond
+      end
+      axes.title = "Nice plot"
+      axes.x_title = "X data"
+      axes.y_title = "Y data"
+    end
+
+    it "adds multiple scatter plots on same axes" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.scatter! do |p|
+        p.data [2,4,3], [6,2,10]
+        p.label = "data1"
+        p.marker_size = 3
+        p.marker_fill_color = :blue
+        p.marker_border_color = :yellow
+        p.marker_type = :solid_plus
+      end
+      axes.scatter! do |p|
+        p.data [5,7,2,5], [12,4,7,9]
+        p.label = "data2"
+        p.marker_size = 2
+        p.marker_fill_color = :yellow
+        p.marker_border_color = :black
+        p.marker_type = :bowtie
+      end
+      axes.scatter! do |p|
+        p.data [7,3], [9, 4]
+        p.label = "data3"
+        p.marker_size = 4
+        p.marker_fill_color = :red
+        p.marker_type = :diagonal_cross
+      end
+      axes.title = "multiple scatter plots"
       axes.x_title = "X data"
       axes.y_title = "Y data"
     end
@@ -493,18 +702,19 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     it "adds a single histogram with default bins" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
-      axes.histogram! do |p| 
+      axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
       end
     end
 
     it "adds a single histogram with custom bins" do
-      skip "GR does not currently support custom tick marks."
+      # skip "GR does not currently support custom tick marks."
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = [1, 4, 7, 10]
+        p.color = :red
       end
     end
 
@@ -514,6 +724,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.histogram! do |p|
         p.x = 100.times.map{ rand(10) }
         p.bins = 5
+        p.color = :silver
       end
     end
   end
@@ -528,6 +739,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.highs = [140, 150, 160, 170, 160, 150]
         p.opens = [110, 120, 130, 140, 130, 120]
         p.closes = [130, 140, 150, 160, 150, 140]
+        p.color = :yellow
+        p.border_color = :white
       end
       axes.title = "Simple candle stick plot."
     end
@@ -567,7 +780,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @x = [1,2,3,4,5,6]
       @y = [3,4,5,6,7,8]
     end
-    
+
     it "adds a simple xerr to error bar plot" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
@@ -585,7 +798,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.error_bar! do |p|
         p.data @x, @y
         p.xerr = [0.1,0.3,0.5,0.1,0.2,0.4]
-      end      
+        p.color = :red
+      end
     end
 
     it "adds a simple yerr to the error bar plot" do
@@ -605,7 +819,8 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.error_bar! do |p|
         p.data @x, @y
         p.yerr = [0.6,0.5,0.1,0.8,0.3,0.1]
-      end      
+        p.color = :green
+      end
     end
 
     it "adds an asymmetric collection of yerr to the error bar plot" do
@@ -637,7 +852,24 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       end
     end
 
-    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do 
+    it "adds both xerr and yerr to the error bar plot with colour and width" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "Simple error bar plot with collection xerr and yerr."
+      axes.error_bar! do |p|
+        p.data [1,2,3,4], [1,4,9,16]
+        p.xerr = [0.5,1.0,1.5,0.3]
+        p.yerr = [0.6,0.2,0.8,0.1]
+        p.line_width = 5
+        p.xerr_width = 2
+        p.yerr_width = 2
+        p.xerr_color = :blue
+        p.yerr_color = :red
+        p.color = :yellow
+      end
+    end
+
+    it "adds error bar with upper limit and lower limit with collection xerr & yerr" do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.title = "Error bar plot with lots of options"
@@ -669,6 +901,26 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       axes.y_title = "bar"
     end
 
+    it "adds a simple box plot with outliers" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.title = "A simple box plot."
+      axes.box_plot! do |p|
+        p.data [
+          [60,70,80,70,50],
+          [100,40,20,80,70],
+          [30, 10]
+        ]
+        p.whiskers = 0.1
+        p.outlier_marker_type = :diamond
+        p.outlier_marker_size = 3.0
+        p.outlier_marker_color = :red
+        p.median_width = 4.0
+      end
+      axes.x_title = "foo"
+      axes.y_title = "bar"
+    end
+
     it "adds a simple horizontal box plot" do
       skip "Leave for after initial box plot setup is complete."
     end
@@ -681,7 +933,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.data [
           [-48, 2,60,70,80,70,50],
           [4,100,40,20,80,70],
-          [1,30, 10]          
+          [1,30, 10]
         ]
       end
       axes.box_plot! do |p|
@@ -703,7 +955,7 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
         p.data [
           [-48,60,70,80,70,50],
           [4,100,40,20,80,70],
-          [1,30, 10]          
+          [1,30, 10]
         ]
         p.whiskers = 0.3
       end
@@ -722,30 +974,31 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
 
   context "#top_margin=" do
     it "sets the top margin in pixels" do
-      
+      skip "do this later."
     end
   end
 
   context "#left_margin=" do
     it "sets the left margin in pixels" do
-      
+      skip "do this later."
     end
   end
 
   context "#bottom_margin=" do
     it "sets the bottom margin in pixels" do
-      
+      skip "do this later."
     end
   end
 
   context "#right_margin=" do
     it "sets the right margin in pixels" do
-      
+      skip "do this later."
     end
   end
 
   context "#x_ticks=" do
     it "assigns strings to X ticks" do
+      skip "do this later."
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.scatter! do |p|
@@ -756,4 +1009,3 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
     end
   end # context "#x_ticks="
 end # Rubyplot::Axes
-

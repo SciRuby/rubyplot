@@ -7,12 +7,13 @@ require 'rmagick'
 SPEC_ROOT = File.dirname(__FILE__) + "/"
 TEMP_DIR = SPEC_ROOT + "temp/"
 FIXTURES_DIR = SPEC_ROOT + "fixtures/"
+display_img = nil
 
 backend = ENV['RUBYPLOT_BACKEND']
 
 if backend == "GR"
-  ENV['GRDIR'] = "/home/sameer/Downloads/gr"
-  ENV['GKS_FONTPATH'] = "/home/sameer/Downloads/gr"
+  ENV['GRDIR'] = "/usr/local/gr"
+  ENV['GKS_FONTPATH'] = "/usr/local/gr"
   Rubyplot.set_backend :gr
 elsif backend == "MAGICK"
   Rubyplot.set_backend :magick
@@ -50,9 +51,21 @@ RSpec.configure do |config|
   config.before(:suite) do
     FileUtils.mkdir_p TEMP_DIR
     FileUtils.mkdir_p FIXTURES_DIR
+    $stdout.puts 'Do you want to display the image? [y/n]'
+    display_img = $stdin.gets.chomp.strip[0].downcase
+    while display_img != "y" && display_img != "n"
+      $stdout.puts 'Please enter y or n'
+      display_img = $stdin.gets.chomp.strip[0].downcase
+    end
+    if display_img == "y"
+      display_img = true
+    else
+      display_img = false
+    end
   end
-  
-  config.after(:example) do |example| 
+
+  config.after(:example) do |example|
+    @figure.show if display_img
     if @figure.is_a?(Rubyplot::Artist::Figure)
       plot_name = example.description.split.join("_") + ".png"
       base_image = TEMP_DIR + plot_name

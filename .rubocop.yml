@@ -13,7 +13,7 @@ AllCops:
     - 'tmp/*'
     - '*.so'
   DisplayCopNames: true
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3+
 
 # Preferred codebase style ---------------------------------------------
 Layout/ExtraSpacing:
@@ -34,7 +34,7 @@ Layout/SpaceInsideBlockBraces:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Style/EmptyElse:
@@ -128,6 +128,3 @@ Style/MethodDefParentheses:
 
 # Bans methods like `has_missing_data?`, `is_number?` and so on - started
 # with unnecessary has_ or is_.
-
-
-

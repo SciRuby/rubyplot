@@ -34,7 +34,7 @@ module Rubyplot
 
         # Set Bar plot data.
         def data y_values
-          super(Array.new(y_values.size) { |i| i }, y_values)
+          super(Array.new(y_values.to_a.size) { |i| i }, y_values.to_a)
         end
 
         # Number of bars in this Bar plot

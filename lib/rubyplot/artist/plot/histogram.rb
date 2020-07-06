@@ -3,7 +3,7 @@ module Rubyplot
     module Plot
       class Histogram < Artist::Plot::Base
         # Values that need to be shown as a histogram.
-        attr_accessor :x
+        attr_reader :x
         # Array of bins into which the data should be subdivided.
         attr_accessor :bins
         # Width of each bar.
@@ -13,8 +13,12 @@ module Rubyplot
           super
         end
 
+        def x=(xvals)
+          @x = xvals.to_a
+        end
+
         def data x_values
-          @x = x_values
+          @x = x_values.to_a
         end
 
         def process_data
@@ -28,13 +32,13 @@ module Rubyplot
               raise RangeError, "Histogram bins must be consecutive"
             end
           elsif @bins.is_a?(Integer)
-            subdivisions = (unique_nums.max - unique_nums.min) / @bins
-            subdivisions = 1 if subdivisions == 0 
+            subdivisions = ((unique_nums.max - unique_nums.min).to_f / @bins).ceil
+            subdivisions = 1 if subdivisions.zero?
             @bins = Range.new(unique_nums.min, unique_nums.max).step(subdivisions).to_a
             @bins << unique_nums.last + subdivisions
           end
           combined_freqs = []
-          
+
           @bins.each_cons(2) do |start, stop|
             sum = 0
             unique_nums.each_with_index do |num, i|

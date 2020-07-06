@@ -20,7 +20,7 @@ module Rubyplot
         end
 
         def data(x_values, y_values)
-          super x_values, y_values
+          super x_values.to_a, y_values.to_a
         end
 
         def draw

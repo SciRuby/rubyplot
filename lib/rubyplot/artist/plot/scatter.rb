@@ -7,12 +7,12 @@ module Rubyplot
         # Rubyplot::MARKER_TYPES.
         attr_accessor :marker_type
         # Set a color from Rubyplot::Color::COLOR_INDEX as the color of the
-        # fill of the marker.        
+        # fill of the marker.
         attr_accessor :marker_fill_color
         # Set a color from Rubyplot::Color::COLOR_INDEX as the color of the
         # border of the marker.
         attr_accessor :marker_border_color
-        
+
         def initialize(*)
           super
           @marker_size = 1.0

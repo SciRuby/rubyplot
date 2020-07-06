@@ -1,6 +1,6 @@
 require 'mkmf'
 
-$CFLAGS << ' -I/home/sameer/Downloads/gr/include '
-$LDFLAGS << ' -L/home/sameer/Downloads/gr/lib -lGR -lm -Wl,-rpath,/home/sameer/Downloads/gr/lib '
+$CFLAGS << ' -I/usr/local/gr/include '
+$LDFLAGS << ' -L/usr/local/gr/lib -lGR -lm -Wl,-rpath,/usr/local/gr/lib '
 
 create_makefile('grruby/grruby')

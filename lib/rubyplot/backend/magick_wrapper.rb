@@ -1,4 +1,5 @@
 require 'rmagick'
+require_relative './image_backend/image_magick_wrapper.rb'
 
 module Rubyplot
   module Backend
@@ -11,6 +12,7 @@ module Rubyplot
     #   functions are used for this purpose.
     class MagickWrapper < Base
       include ::Magick
+      include ImageMagickWrapper
 
       NOMINAL_FACTOR_MARKERS = 15
       NOMINAL_FACTOR_CIRCLE = 27.5
@@ -34,7 +36,7 @@ module Rubyplot
         inch: 96,
         cm: 39.7953,
         pixel: 1,
-        point: 4/3 # Point is the unit if measurement for the size of font in ImageMagick
+        point: 4/3 # Point is the unit of measurement for the size of font in ImageMagick
       }.freeze
 
       MARKER_TYPES = {
@@ -727,7 +729,7 @@ module Rubyplot
               @text.pointsize TICK_FONT_SIZE
               @text.font_weight TICK_LABEL_FONT_WEIGHT
               # Changed X and Y coordinates of label for better appearance
-              @text.text((transform_x(x: x_major_tick.coord) - TICK_FONT_SIZE*PIXEL_MULTIPLIERS[:point]),(transform_y(y: v[:y_origin]) + TICK_LABEL_COORD_X_MULTIPLIER*TICK_SIZE_MULTIPLIER*x_major_tick.tick_size), x_major_tick.label)
+              @text.text((transform_x(x: x_major_tick.coord) - TICK_FONT_SIZE*PIXEL_MULTIPLIERS[:point]),(transform_y(y: v[:y_origin]) + TICK_LABEL_COORD_X_MULTIPLIER*TICK_SIZE_MULTIPLIER*x_major_tick.tick_size), x_major_tick.label) unless ( x_major_tick.label.nil? || x_major_tick.label=='')
               @text.font_weight NormalWeight
               # @axes.opacity 1
             end
@@ -746,7 +748,7 @@ module Rubyplot
               @text.pointsize TICK_FONT_SIZE
               @text.font_weight TICK_LABEL_FONT_WEIGHT
               # Changed X and Y coordinates of label for better appearance
-              @text.text((transform_x(x: v[:x_origin]) - TICK_LABEL_COORD_Y_MULTIPLIER*TICK_SIZE_MULTIPLIER*y_major_tick.tick_size),(transform_y(y: y_major_tick.coord) + TICK_FONT_SIZE/3*PIXEL_MULTIPLIERS[:point]), y_major_tick.label)
+              @text.text((transform_x(x: v[:x_origin]) - TICK_LABEL_COORD_Y_MULTIPLIER*TICK_SIZE_MULTIPLIER*y_major_tick.tick_size),(transform_y(y: y_major_tick.coord) + TICK_FONT_SIZE/3*PIXEL_MULTIPLIERS[:point]), y_major_tick.label) unless ( y_major_tick.label.nil? || y_major_tick.label=='')
               @text.font_weight NormalWeight
               # @axes.opacity 1
             end
