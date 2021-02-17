@@ -7,6 +7,9 @@ module Rubyplot
 
       attr_accessor :active_axes, :figure, :output_device
 
+      # Only needed by some backends
+      attr_accessor :show_context
+
       # Write text anywhere on the canvas. abs_x and abs_y should be specified in terms
       #   of Rubyplot Artist Co-ordinates.
       #

@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'parallel_tests'
 
   spec.add_runtime_dependency 'rmagick',  '>= 2.13.4'
+  spec.add_runtime_dependency "tk", "~> 0.3.0"
 end

@@ -174,6 +174,8 @@ module Rubyplot
         @backend = Rubyplot::Backend::MagickWrapper.new
       when :gr
         @backend = Rubyplot::Backend::GRWrapper.new
+      when :tk_canvas
+        @backend = Rubyplot::Backend::TkCanvasWrapper.new
       end
     end
   end
