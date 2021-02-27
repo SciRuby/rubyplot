@@ -41,6 +41,28 @@ plot_window(true) do |figure|
 end
 
 plot_window do |figure|
+  axes = figure.add_subplot! 0,0
+  [
+    ["Charles", [20, 10, 5, 12, 11, 6, 10, 7], :silver],
+    ["Adam", [5, 10, 20, 6, 9, 12, 14, 8], :black],
+    ["Daniel", [19, 9, 6, 11, 12, 7, 15, 8], :orangeish]
+  ].each do |label, data, color|
+    axes.stacked_bar! do |p|
+      p.data data
+      p.label = label
+      p.color = color
+      p.spacing_ratio = 0.6
+    end
+  end
+  axes.title = "Income."
+  axes.x_title = "X title"
+  axes.y_title = "Y title"
+  axes.x_ticks = ['Jan', 'Feb', 'March', 'April', 'May', 'June',  'July',
+                  'August', 'September', 'October', 'November', 'December']
+  axes.y_ticks = ['5', '10', '15', '20', '25', '30']
+end
+
+plot_window do |figure|
   axes00 = figure.add_subplot! 0,0
   axes00.area! do |p|
     p.data [1, 2, 3, 4, 5, 6], [3, 2, 5, 5, 7, 4] # Data as height of consecutive points i.e. y coordinates

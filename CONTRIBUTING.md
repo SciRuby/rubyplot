@@ -125,3 +125,58 @@ Name of output file in case of wanting to write to file.
 ```
 export GKS_FILEPATH="hello.png"
 ```
+
+# Tk Canvas backend notes
+
+Tk is a multiplatform GUI toolkit that works with Ruby, in addition to
+TCL, Python and Perl.
+
+Tk allows to create multiplatform GUI applications that need little or
+no code changes to run in UNIX, macOS and Windows.
+
+You can learn more about using Tk with Ruby in
+[TkDocs](https://tkdocs.com).
+
+If you want to have a more modern way of interacting with Tk from
+Ruby, you can use
+[TkComponent](https://github.com/josepegea/tk_component) and
+[TkInspect](https://github.com/josepegea/tk_inspect).
+
+## Installing Tk
+
+In addition to install the `tk` gem in your project, you need to
+install the Tcl/Tk runtime in your system. The instructions depending
+on the OS but it is a safe bet to install the Community Edition of
+Active Tcl from https://www.activestate.com/
+
+You have more details about installing Tk in different systems in the
+excelent [TkDocs](https://tkdocs.com/tutorial/install.html) website.
+
+## Units
+
+Given that this backend only works with screen output, all measures
+are interpreted as pixels.
+
+## Limitations of Tk
+
+Some rendering features of ruby_plot are not available in Tk. When
+those are used, the results are downgraded as gracefully as possible.
+
+Right now these are the unsuported features:
+
+- Opacity: Tk doesn't support opacity. It does support "stipple" which
+  is a set of different density fill patterns, that don't completely
+  overwrite the background. TkCanvas tries to adapt the required
+  opacity to the nearest stipple for the closest result. Take into
+  account, though, that not all Tk implementations support
+  stipple. For instance, macOS implementations ignore it and always
+  use 100% opacity.
+
+- Marker types: Tk doesn't support all the marker types defined in
+  ruby_plot. They could be generated manually, but right now only
+  those that are a 1-to-1 match are implemented.
+
+## Testing
+
+Given that this backend doesn't generate image files and are meant to
+generate interactive images, the current tests don't apply.
