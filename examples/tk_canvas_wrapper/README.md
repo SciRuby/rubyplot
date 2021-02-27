@@ -6,4 +6,4 @@ using the TkCanvasWrapper.
 ## Running
 
     bundle exec tk_plot_demo.rb
-    
+
