@@ -38,6 +38,18 @@ export RUBYPLOT_BACKEND="GR"
 
 # Installing Tk
 
+This gem is not including `tk` in its dependencies so you don't have
+to install it if you're not going to use the `tk_canvas` backend.
+
+If you will need to use this backend, you will need to add a reference
+to `tk` in your `Gemfile` in addition to referring to `rubyplot`.
+
+``` ruby
+gem 'tk'
+```
+
+Running `bundle install` after this change will install it.
+
 In addition to install the `tk` gem in your project, you need to
 install the Tcl/Tk runtime in your system. The instructions depending
 on the OS but it is a safe bet to install the Community Edition of
