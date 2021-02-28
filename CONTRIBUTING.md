@@ -144,6 +144,17 @@ Ruby, you can use
 
 ## Installing Tk
 
+The `Gemfile` includes the `tk` gem inside an `optional` group, in
+order to not force users not interested in TkCanvas to deal with the
+installation of Tk.
+
+If you do want to use TkCanvas while developing this gem, you'll need
+to run `bundle install` specifying the `tk_canvas` group explicitly:
+
+```ruby
+bundle install --with tk_canvas
+```
+
 In addition to install the `tk` gem in your project, you need to
 install the Tcl/Tk runtime in your system. The instructions depending
 on the OS but it is a safe bet to install the Community Edition of

@@ -7,6 +7,6 @@ group :test do
 	gem 'rspec'
 end
 
-group :development do
+group :tk_canvas, optional: true do
   gem 'tk'
 end
