@@ -8,7 +8,7 @@ Rubyplot::DESCRIPTION = "An advanced plotting library for Ruby."
 Gem::Specification.new do |spec|
   spec.name          = 'rubyplot'
   spec.version       = Rubyplot::VERSION
-  spec.authors       = ['Arafat Khan', 'Pranav Garg', 'John Woods', 'Pjotr Prins', 'Sameer Deshmukh']
+  spec.authors       = ['Arafat Khan', 'Pranav Garg', 'John Woods', 'Pjotr Prins', 'Sameer Deshmukh', 'Josep Egea']
   spec.email         = ['sameer.deshmukh93@gmail.com'] # add other author ids 
   spec.summary       = %q{An advaced plotting library for Ruby.}
   spec.description   = Rubyplot::DESCRIPTION

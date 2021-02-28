@@ -5,7 +5,26 @@ An advanced plotting library for Ruby.
 
 It aims to allow you to visualize anything, anywhere with a flexible, extensible, Ruby-like API.
 
-# Usage
+# Backends
+
+Rubyplot can use different backends to render its plots:
+
+- `magick` Using ImageMagick
+- `gr` Using the GR framework
+- `tk_canvas` Interactive drawing in a Canvas object using Ruby/Tk
+
+Call `Rubyplot.set_backend` at the start of your program to select
+the desired backend.
+
+Pick the desired one:
+
+``` ruby
+Rubyplot.set_backend(:magick)
+Rubyplot.set_backend(:gr)
+Rubyplot.set_backend(:tk_canvas)
+```
+
+# Installing GR
 
 Install the GR framework from the [website](https://gr-framework.org/c.html).
 
@@ -16,6 +35,37 @@ export GRDIR="/home/sameer/Downloads/gr"
 export GKS_FONTPATH="/home/sameer/Downloads/gr"
 export RUBYPLOT_BACKEND="GR"
 ```
+
+# Installing Tk
+
+This gem is not including `tk` in its dependencies so you don't have
+to install it if you're not going to use the `tk_canvas` backend.
+
+If you will need to use this backend, you will need to add a reference
+to `tk` in your `Gemfile` in addition to referring to `rubyplot`.
+
+``` ruby
+gem 'tk'
+```
+
+Running `bundle install` after this change will install it.
+
+In addition to install the `tk` gem in your project, you need to
+install the Tcl/Tk runtime in your system. The instructions depending
+on the OS but it is a safe bet to install the Community Edition of
+Active Tcl from https://www.activestate.com/
+
+You have more details about installing Tk in different systems in the
+excelent [TkDocs](https://tkdocs.com/tutorial/install.html) website.
+
+If you want to have a more modern way of interacting with Tk from
+Ruby, you can use
+[TkComponent](https://github.com/josepegea/tk_component) and
+[TkInspect](https://github.com/josepegea/tk_inspect).
+
+# Examples
+
+See the [examples](./examples) to see some how-to code.
 
 # Short term priorities
 

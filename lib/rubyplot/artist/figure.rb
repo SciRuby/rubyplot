@@ -98,8 +98,9 @@ module Rubyplot
         print_on_device(file_name, device)
       end
 
-      def show
+      def show(show_context = nil)
         Rubyplot.backend.output_device = Rubyplot.iruby_inline ? :iruby : :window
+        Rubyplot.backend.show_context = show_context
         print_on_device(nil, Rubyplot.backend.output_device)
       end
 
