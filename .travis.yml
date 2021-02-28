@@ -1,6 +1,9 @@
 language:
   ruby
 
+addons:
+  apt:
+    packages: tk-dev
 rvm:
   - '2.0'
   - '2.1'
