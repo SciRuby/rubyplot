@@ -156,20 +156,20 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.plot! do |p|
-      d = (0..360).step(5).to_a
-      p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
-      p.marker_type = :circle
-      p.marker_fill_color = :blue
-      p.marker_size = 0.5
-      p.marker_border_color = :orangeish
-      p.line_type = :solid
-      p.line_color = :black
-      p.line_width = 2
-      p.label = "sine"
-    end
-    axes.title = "A plot function example"
-    axes.x_title = "X-axis"
-    axes.y_title = "Y-axis"
+        d = (0..360).step(5).to_a
+        p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+        p.marker_type = :circle
+        p.marker_fill_color = :blue
+        p.marker_size = 0.5
+        p.marker_border_color = :orangeish
+        p.line_type = :solid
+        p.line_color = :black
+        p.line_width = 2
+        p.label = "sine"
+      end
+      axes.title = "A plot function example"
+      axes.x_title = "X-axis"
+      axes.y_title = "Y-axis"
     end
 
     it "plots line plot using fmt argument" do
@@ -202,15 +202,15 @@ describe "Rubyplot::Axes b: #{Rubyplot.backend}." do
       @figure = Rubyplot::Figure.new
       axes = @figure.add_subplot! 0,0
       axes.plot! do |p|
-      d = (0..360).step(5).to_a
-      p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
-      p.fmt = 's-g'
-      p.line_width = 2
-      p.label = "cosine"
-    end
-    axes.title = "A plot function example"
-    axes.x_title = "X-axis"
-    axes.y_title = "Y-axis"
+        d = (0..360).step(5).to_a
+        p.data d, d.map { |a| Math.cos(a * Math::PI / 180) }
+        p.fmt = 's-g'
+        p.line_width = 2
+        p.label = "cosine"
+      end
+      axes.title = "A plot function example"
+      axes.x_title = "X-axis"
+      axes.y_title = "Y-axis"
     end
   end
 
